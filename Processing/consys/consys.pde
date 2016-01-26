@@ -59,19 +59,32 @@ void setup() {
   hphlogo = loadImage("hphlogo720res30pp.png");
   
   // GUI Element :: Label :: Student ID Label
+  int txtLabelWidth = 200;
+  int txtLabelHeight = 50;
+  int correctedSpacing_1 = 5; // Hard-coded spacing to align label with text field element
   cp5.addTextlabel("studentIDLabel") // title object
      .setBroadcast(false)
-     .setSize(200,100)
-     .setPosition(width/4,50) // set position of the title label
-     .setText("Student ID") // title text
+     .setSize(txtLabelWidth,txtLabelHeight)
+     .setPosition(width/2-txtLabelWidth-correctedSpacing_1,height/2-(1.50)*txtLabelHeight) // set position of the title label
+     .setText("Standard Patient ID") // title text
      .setFont(labelfont) // set title font :: using lable font and size
      .setColor(gold)
      .setBroadcast(true)
-     .getCaptionLabel().align(CENTER,CENTER)
-     ;
+     ; 
      
   // GUI Control :: Text Field
-  
+  int txtFieldWidth = 200;
+  int txtFieldHeight = 50;
+  cp5.addTextfield("") // No text to be displayed below the field
+     .setBroadcast(false)
+     .setText("Enter SP Name or ID Number")
+     .setPosition(width/2-txtFieldWidth,height/2-txtFieldHeight/2)
+     .setSize(txtFieldWidth,txtFieldHeight)
+     .setFont(textfont)
+     .setFocus(true)
+     .setColor(gray)
+     ;
+     
   // GUI Control :: Button :: Begin Exercise
   cp5.addButton("beginTest")
      .setBroadcast(false) // Avoids the immediate execution of the button
@@ -80,13 +93,6 @@ void setup() {
      .setSize(200,19)
      ;
 
-  PImage[] imgs = {loadImage("button_a.png"),loadImage("button_b.png"),loadImage("button_c.png")};
-  cp5.addButton("play")
-     .setValue(128)
-     .setPosition(140,300)
-     .setImages(imgs)
-     .updateSize()
-     ;
 
 } // End of void-setup loop
 
