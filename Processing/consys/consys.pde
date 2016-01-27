@@ -221,6 +221,7 @@ public String controlEvent(ControlEvent theEvent) {
     println("controlEvent: accessing a string from controller '" + eventName+"': " + textFieldInput);
     cp5.get(Textlabel.class,"currentInput").setText("Current Input = " + textFieldInput);
     cp5.get(Button.class,"selectScenario").setVisible(true);
+    //cp5.get(Button.class,"selectScenario").setBroadcast(true);
   } else {
     println(theEvent.getController().getName());
   }
@@ -230,21 +231,25 @@ public String controlEvent(ControlEvent theEvent) {
 // GUI Element :: Button :: Begin Test
 // Pressing this button will execute:
 // > Writing of standard patient information to file
-public void selectScenario(int Nscenarios) {
-  
-  println("hols");
-  
-  // Set scenario buttons visible for the user
-  for (int i = 0; i < Nscenarios; i++) {
-    
-    String controllerName = "sc" + i;
-    cp5.get(Button.class,controllerName).setVisible(true);
-    
-  } // End of for-loop --Loop around scenario buttons
-  
+public void selectScenario(int theValue) {
+ 
+  println("hola");
+  scenarioButtonVisibilitySwitch(Nscenarios);
   
 }
 
 /* ========================================
  * FUNCTIONS
- ======================================= */ 
+ ======================================= */
+ 
+public void scenarioButtonVisibilitySwitch(int Nscenarios) {
+   
+  // Set scenario buttons visible for the user
+  for (int i = 1; i <= Nscenarios; i++) {
+    
+    String controllerName = "sc" + i;
+    cp5.get(Button.class,controllerName).setVisible(true);
+    
+  } // End of for-loop --Loop around scenario buttons
+   
+} // End of function scenarioButtonVisibilitySwitch
