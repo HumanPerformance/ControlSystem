@@ -56,7 +56,7 @@ void setup() {
   PFont pfont_1 = createFont("Arial Rounded MT Bold",20,true);
   ControlFont titlefont = new ControlFont(pfont_1,28); // label font and size
   ControlFont labelfont = new ControlFont(pfont_1, 14); // label font and size
-  ControlFont buttonfont = new ControlFont(pfont_1,12); // button font and size
+  ControlFont buttonfont = new ControlFont(pfont_1,14); // button font and size
   
   PFont pfont_2 = createFont("Consolas",20,true);
   ControlFont textfont = new ControlFont(pfont_2,14); // button font and size
@@ -128,24 +128,113 @@ void setup() {
      ;
      
   // GUI Control :: Button :: Scenario #1
-  int buttonWidth = 100;
-  int buttonHeight = 50;
+  int buttonWidth = 125;
+  int buttonHeight = 25;
   int buttonXPos_1 = leftMargin;
-  int buttonYPos_1 = 400;
+  int buttonYPos_1 = 300;
+  int buttonSpacing = 10;
   cp5.addButton("sc1")
      .setBroadcast(false) // Avoids the immediate execution of the button
      //.setVisible(false)
      .setValue(0)
      .setPosition(buttonXPos_1,buttonYPos_1)
      .setSize(buttonWidth,buttonHeight)
-     .setLabel("START")
+     .setLabel("Scenario #1")
      .setColorCaptionLabel(black)
      .setColorBackground(gold)
      .setColorForeground(gray)
      .setBroadcast(true)
      ;
      
-  cp5.getController("selectScenario")
+  cp5.getController("sc1")
+     .getCaptionLabel()
+     .setFont(buttonfont)
+     .toUpperCase(false)
+     ;
+     
+  // GUI Control :: Button :: Scenario #2
+  int buttonXPos_2 = leftMargin;
+  int buttonYPos_2 = buttonYPos_1 + buttonHeight + buttonSpacing;
+  cp5.addButton("sc2")
+     .setBroadcast(false) // Avoids the immediate execution of the button
+     //.setVisible(false)
+     .setValue(0)
+     .setPosition(buttonXPos_2,buttonYPos_2)
+     .setSize(buttonWidth,buttonHeight)
+     .setLabel("Scenario #2")
+     .setColorCaptionLabel(black)
+     .setColorBackground(gold)
+     .setColorForeground(gray)
+     .setBroadcast(true)
+     ;
+     
+  cp5.getController("sc2")
+     .getCaptionLabel()
+     .setFont(buttonfont)
+     .toUpperCase(false)
+     ;
+     
+  // GUI Control :: Button :: Scenario #3
+  int buttonXPos_3 = leftMargin;
+  int buttonYPos_3 = buttonYPos_2 + buttonHeight + buttonSpacing;
+  cp5.addButton("sc3")
+     .setBroadcast(false) // Avoids the immediate execution of the button
+     //.setVisible(false)
+     .setValue(0)
+     .setPosition(buttonXPos_3,buttonYPos_3)
+     .setSize(buttonWidth,buttonHeight)
+     .setLabel("Scenario #3")
+     .setColorCaptionLabel(black)
+     .setColorBackground(gold)
+     .setColorForeground(gray)
+     .setBroadcast(true)
+     ;
+     
+  cp5.getController("sc3")
+     .getCaptionLabel()
+     .setFont(buttonfont)
+     .toUpperCase(false)
+     ;
+     
+   // GUI Control :: Button :: Scenario #4
+  int buttonXPos_4 = leftMargin;
+  int buttonYPos_4 = buttonYPos_3 + buttonHeight + buttonSpacing;
+  cp5.addButton("sc4")
+     .setBroadcast(false) // Avoids the immediate execution of the button
+     //.setVisible(false)
+     .setValue(0)
+     .setPosition(buttonXPos_4,buttonYPos_4)
+     .setSize(buttonWidth,buttonHeight)
+     .setLabel("Scenario #4")
+     .setColorCaptionLabel(black)
+     .setColorBackground(gold)
+     .setColorForeground(gray)
+     .setBroadcast(true)
+     ;
+     
+  cp5.getController("sc4")
+     .getCaptionLabel()
+     .setFont(buttonfont)
+     .toUpperCase(false)
+     ;
+     
+  // GUI Control :: Button :: Scenario #5
+  int buttonXPos_5 = leftMargin;
+  int buttonYPos_5 = buttonYPos_4 + buttonHeight + buttonSpacing;
+  cp5.addButton("sc5")
+     .setBroadcast(false) // Avoids the immediate execution of the button
+     //.setVisible(false)
+     .setValue(0)
+     .setPosition(buttonXPos_5,buttonYPos_5)
+     .setSize(buttonWidth,buttonHeight)
+     .setLabel("Scenario #5")
+     .setColorCaptionLabel(black)
+     .setColorBackground(gold)
+     .setColorForeground(gray)
+     .setBroadcast(true)
+     ;
+     
+  cp5.getController("sc5")
      .getCaptionLabel()
      .setFont(buttonfont)
      .toUpperCase(false)
