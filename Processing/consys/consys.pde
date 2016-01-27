@@ -42,7 +42,7 @@ int white = color(255,255,255);
 
 // Technical Variables
 // Number of scenarios
-int Nscenarios = 12;
+int Nscenarios = 5;
 
 /* ========================================
  * VOID SETUP LOOP
@@ -236,7 +236,7 @@ public void selectScenario(int theValue) {
   println("hola");
   scenarioButtonVisibilitySwitch(Nscenarios);
   
-}
+} // End of selectScenario button call
 
 /* ========================================
  * FUNCTIONS
