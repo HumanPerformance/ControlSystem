@@ -127,33 +127,39 @@ void setup() {
      .toUpperCase(false)
      ;
   
+  /* ----------------------------------------
+   * SCENARIO SELECTION
+   *
+   * This section creates the scenario buttons.
+   * Each button refers to a scenario file.
+   *
+   --------------------------------------- */
   
-  int Nscenarios = 2;
-  
+  // Variables
+  int Nscenarios = 12;
   int buttonWidth = 125;
   int buttonHeight = 25;
   int buttonXPos_1 = leftMargin;
+  int buttonYPos0 = 250;
   int[] buttonYPos = new int[Nscenarios+1];
   int buttonSpacing = 10;
   
-  for (int i = 0; i < 3; i++) {
+  // Creator Loop
+  for (int i = 0; i < Nscenarios; i++) {
     
-    String buttonName = "sc" + i + 1;
-    String buttonLabelText = "Scenario #" + i + 1;
+    String buttonName = "sc" + (i + 1); // Controller Name or ID
+    String buttonLabelText = "Scenario #" + (i + 1); // Button Label
     
     if (i == 0) {
       
-      buttonYPos[i] = 300;
-      
+      buttonYPos[i] = buttonYPos0;  
 
     } else if (i > 0) {
       
       buttonYPos[i] = buttonYPos[i-1] + buttonHeight + buttonSpacing;
-      
-      
+        
     } // End of if-statement
     
-    printArray(buttonYPos);
     
     cp5.addButton(buttonName)
         .setBroadcast(false) // Avoids the immediate execution of the button
