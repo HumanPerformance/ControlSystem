@@ -133,6 +133,7 @@ void setup() {
   int buttonXPos_1 = leftMargin;
   int buttonYPos_1 = 300;
   int buttonSpacing = 10;
+  
   cp5.addButton("sc1")
      .setBroadcast(false) // Avoids the immediate execution of the button
      //.setVisible(false)
@@ -152,93 +153,6 @@ void setup() {
      .toUpperCase(false)
      ;
      
-  // GUI Control :: Button :: Scenario #2
-  int buttonXPos_2 = leftMargin;
-  int buttonYPos_2 = buttonYPos_1 + buttonHeight + buttonSpacing;
-  cp5.addButton("sc2")
-     .setBroadcast(false) // Avoids the immediate execution of the button
-     //.setVisible(false)
-     .setValue(0)
-     .setPosition(buttonXPos_2,buttonYPos_2)
-     .setSize(buttonWidth,buttonHeight)
-     .setLabel("Scenario #2")
-     .setColorCaptionLabel(black)
-     .setColorBackground(gold)
-     .setColorForeground(gray)
-     .setBroadcast(true)
-     ;
-     
-  cp5.getController("sc2")
-     .getCaptionLabel()
-     .setFont(buttonfont)
-     .toUpperCase(false)
-     ;
-     
-  // GUI Control :: Button :: Scenario #3
-  int buttonXPos_3 = leftMargin;
-  int buttonYPos_3 = buttonYPos_2 + buttonHeight + buttonSpacing;
-  cp5.addButton("sc3")
-     .setBroadcast(false) // Avoids the immediate execution of the button
-     //.setVisible(false)
-     .setValue(0)
-     .setPosition(buttonXPos_3,buttonYPos_3)
-     .setSize(buttonWidth,buttonHeight)
-     .setLabel("Scenario #3")
-     .setColorCaptionLabel(black)
-     .setColorBackground(gold)
-     .setColorForeground(gray)
-     .setBroadcast(true)
-     ;
-     
-  cp5.getController("sc3")
-     .getCaptionLabel()
-     .setFont(buttonfont)
-     .toUpperCase(false)
-     ;
-     
-   // GUI Control :: Button :: Scenario #4
-  int buttonXPos_4 = leftMargin;
-  int buttonYPos_4 = buttonYPos_3 + buttonHeight + buttonSpacing;
-  cp5.addButton("sc4")
-     .setBroadcast(false) // Avoids the immediate execution of the button
-     //.setVisible(false)
-     .setValue(0)
-     .setPosition(buttonXPos_4,buttonYPos_4)
-     .setSize(buttonWidth,buttonHeight)
-     .setLabel("Scenario #4")
-     .setColorCaptionLabel(black)
-     .setColorBackground(gold)
-     .setColorForeground(gray)
-     .setBroadcast(true)
-     ;
-     
-  cp5.getController("sc4")
-     .getCaptionLabel()
-     .setFont(buttonfont)
-     .toUpperCase(false)
-     ;
-     
-  // GUI Control :: Button :: Scenario #5
-  int buttonXPos_5 = leftMargin;
-  int buttonYPos_5 = buttonYPos_4 + buttonHeight + buttonSpacing;
-  cp5.addButton("sc5")
-     .setBroadcast(false) // Avoids the immediate execution of the button
-     //.setVisible(false)
-     .setValue(0)
-     .setPosition(buttonXPos_5,buttonYPos_5)
-     .setSize(buttonWidth,buttonHeight)
-     .setLabel("Scenario #5")
-     .setColorCaptionLabel(black)
-     .setColorBackground(gold)
-     .setColorForeground(gray)
-     .setBroadcast(true)
-     ;
-     
-  cp5.getController("sc5")
-     .getCaptionLabel()
-     .setFont(buttonfont)
-     .toUpperCase(false)
-     ;
      
 } // End of void-setup loop
 
