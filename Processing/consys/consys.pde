@@ -53,25 +53,27 @@ void setup() {
   cp5 = new ControlP5(this);
   
   // GUI Formatting :: Fonts
-  PFont pfont = createFont("Arial Rounded MT Bold",20,true);
-  ControlFont titlefont = new ControlFont(pfont,48); // label font and size
-  ControlFont labelfont = new ControlFont(pfont, 28); // label font and size
-  ControlFont textfont = new ControlFont(pfont,12); // button font and size
-  ControlFont buttonfont = new ControlFont(pfont,12); // button font and size
+  PFont pfont_1 = createFont("Arial Rounded MT Bold",20,true);
+  ControlFont titlefont = new ControlFont(pfont_1,28); // label font and size
+  ControlFont labelfont = new ControlFont(pfont_1, 14); // label font and size
+  ControlFont buttonfont = new ControlFont(pfont_1,12); // button font and size
+  
+  PFont pfont_2 = createFont("Consolas",20,true);
+  ControlFont textfont = new ControlFont(pfont_2,14); // button font and size
   
   // GUI Elements :: Images :: Logos
   hphlogo = loadImage("hphlogo720res30pp.png");
   
   // GUI Element :: Label :: Student ID Label
-  int txtLabelWidth = 275;
-  int txtLabelHeight = 50;
-  int indentCorrection4Label = 5;
+  int txtLabelWidth_1 = 275;
+  int txtLabelHeight_1 = 50;
+  int indentCorrection4Label_1 = 5;
   cp5.addTextlabel("studentIDLabel") // title object
      .setBroadcast(false)
-     .setSize(txtLabelWidth,txtLabelHeight)
-     .setPosition(100 - indentCorrection4Label, 200) // set position of the title label
+     .setSize(txtLabelWidth_1,txtLabelHeight_1)
+     .setPosition(100 - indentCorrection4Label_1, 200) // set position of the title label
      .setText("Standard Patient ID") // title text
-     .setFont(labelfont) // set title font :: using lable font and size
+     .setFont(titlefont) // set title font :: using lable font and size
      .setColor(gold)
      .setBroadcast(true)
      ; 
@@ -80,21 +82,44 @@ void setup() {
   int txtFieldWidth = 275;
   int txtFieldHeight = 25;
   cp5.addTextfield("") // No text to be displayed below the field
-     .setBroadcast(false)
      .setText("Enter SP Name or ID Number")
      .setPosition(100,250)
      .setSize(txtFieldWidth,txtFieldHeight)
      .setFont(textfont)
-     .setFocus(true)
      .setColor(gray)
      ;
+     
+  // GUI Element :: Label :: Current Input
+  int txtLabelWidth_2 = 200;
+  int txtLabelHeight_2 = 50;
+  int indentCorrection4Label_2 = 5;
+  cp5.addTextlabel("currentInput") // title object
+     .setBroadcast(false)
+     .setSize(txtLabelWidth_2,txtLabelHeight_2)
+     .setPosition(100 - indentCorrection4Label_2, 285) // set position of the title label
+     .setText("Current Input = ") // title text
+     .setFont(textfont) // set title font :: using lable font and size
+     .setColor(white)
+     .setBroadcast(true)
+     ; 
      
   // GUI Control :: Button :: Begin Exercise
   cp5.addButton("beginTest")
      .setBroadcast(false) // Avoids the immediate execution of the button
      .setValue(0)
-     .setPosition(100,100)
-     .setSize(200,19)
+     .setPosition(100,325)
+     .setSize(200,25)
+     .setLabel("START")
+     .setColorCaptionLabel(black)
+     .setColorBackground(gold)
+     .setColorForeground(gray)
+     .setBroadcast(true)
+     ;
+     
+  cp5.getController("beginTest")
+     .getCaptionLabel()
+     .setFont(buttonfont)
+     .toUpperCase(false)
      ;
 
 
@@ -111,14 +136,18 @@ void draw() {
   // Place Images
   image(hphlogo,lenX-180,lenY-90);
   
+  
 } // End of void-draw loop
 
 /* ========================================
  * INTERFACE BUTTONS
  ======================================= */ 
 
-public void controlEvent(ControlEvent theEvent) {
-  println(theEvent.getController().getName());
+void controlEvent(ControlEvent theEvent) {
+  if(theEvent.isAssignableFrom(Textfield.class)) {
+    println("controlEvent: accessing a string from controller '" + theEvent.getName()+"': " + theEvent.getStringValue());
+    cp5.get(Textlabel.class,"currentInput").setText("Current Input = " + theEvent.getStringValue());
+  }
 }
 
 // function colorA will receive changes from 
