@@ -34,13 +34,15 @@ int topMargin = 50; // pixels
 int rightMargin = 50; // pixels
 int bottomMargin = 50; // pixels
 int leftMargin = 100; // pixels
-
-
-// Colors
+// > Colors
 int black = color(0,0,0);
 int gray = color(214,214,214);
 int gold = color(255,204,0);
 int white = color(255,255,255);
+
+// Technical Variables
+// Number of scenarios
+int Nscenarios = 12;
 
 /* ========================================
  * VOID SETUP LOOP
@@ -65,7 +67,7 @@ void setup() {
   hphlogo = loadImage("hphlogo720res30pp.png");
   
   // GUI Element :: Label :: Student ID Label
-  int txtLabelWidth_1 = 275;
+  int txtLabelWidth_1 = 250;
   int txtLabelHeight_1 = 50;
   int indentCorrection4Label_1 = 5;
   int textLabelYPos_1 = 50 + topMargin;
@@ -101,20 +103,24 @@ void setup() {
      .setBroadcast(false)
      .setSize(txtLabelWidth_2,txtLabelHeight_2)
      .setPosition(100 - indentCorrection4Label_2, txtLabelYPos_2) // set position of the title label
-     .setText("Enter SP ID and hit Enter/Return on your keyboard") // title text
+     .setText("Enter SP ID and press Enter/Return") // title text
      .setFont(textfont) // set title font :: using lable font and size
      .setColor(white)
      .setBroadcast(true)
      ; 
      
-  // GUI Control :: Button :: Begin Exercise
+  // GUI Control :: Button :: Select Scenario
+  int selectButtonWidth = 200;
+  int selectButtonHeight = txtFieldHeight;
+  int selectButtonXPos = leftMargin + txtFieldWidth + 25;
+  int selectButtonYPos = txtFieldYPos;
   cp5.addButton("selectScenario")
      .setBroadcast(false) // Avoids the immediate execution of the button
      .setVisible(false)
      .setValue(0)
-     .setPosition(100,325)
-     .setSize(200,25)
-     .setLabel("START")
+     .setPosition(selectButtonXPos,selectButtonYPos)
+     .setSize(selectButtonWidth,selectButtonHeight)
+     .setLabel("Select Scenario")
      .setColorCaptionLabel(black)
      .setColorBackground(gold)
      .setColorForeground(gray)
@@ -136,9 +142,9 @@ void setup() {
    --------------------------------------- */
   
   // Variables
-  int Nscenarios = 12;
-  int buttonWidth = 125;
-  int buttonHeight = 25;
+  // int Nscenarios = 12; -- This function was made global
+  int scenarioButtonWidth = 125;
+  int scenarioButtonHeight = 25;
   int buttonXPos_1 = leftMargin;
   int buttonYPos0 = 250;
   int[] buttonYPos = new int[Nscenarios+1];
@@ -156,17 +162,17 @@ void setup() {
 
     } else if (i > 0) {
       
-      buttonYPos[i] = buttonYPos[i-1] + buttonHeight + buttonSpacing;
+      buttonYPos[i] = buttonYPos[i-1] + scenarioButtonHeight + buttonSpacing;
         
     } // End of if-statement
     
-    
+    // GUI Controller :: Button :: Scenario #i
     cp5.addButton(buttonName)
         .setBroadcast(false) // Avoids the immediate execution of the button
-        //.setVisible(false)
+        .setVisible(false)
         .setValue(0)
         .setPosition(buttonXPos_1,buttonYPos[i])
-        .setSize(buttonWidth,buttonHeight)
+        .setSize(scenarioButtonWidth,scenarioButtonHeight)
         .setLabel(buttonLabelText)
         .setColorCaptionLabel(black)
         .setColorBackground(gold)
@@ -215,6 +221,8 @@ public String controlEvent(ControlEvent theEvent) {
     println("controlEvent: accessing a string from controller '" + eventName+"': " + textFieldInput);
     cp5.get(Textlabel.class,"currentInput").setText("Current Input = " + textFieldInput);
     cp5.get(Button.class,"selectScenario").setVisible(true);
+  } else {
+    println(theEvent.getController().getName());
   }
   return textFieldInput;
 }
@@ -222,6 +230,21 @@ public String controlEvent(ControlEvent theEvent) {
 // GUI Element :: Button :: Begin Test
 // Pressing this button will execute:
 // > Writing of standard patient information to file
-public void selectScenario(int theValue) {
+public void selectScenario(int Nscenarios) {
+  
+  println("hols");
+  
+  // Set scenario buttons visible for the user
+  for (int i = 0; i < Nscenarios; i++) {
+    
+    String controllerName = "sc" + i;
+    cp5.get(Button.class,controllerName).setVisible(true);
+    
+  } // End of for-loop --Loop around scenario buttons
+  
   
 }
+
+/* ========================================
+ * FUNCTIONS
+ ======================================= */ 
