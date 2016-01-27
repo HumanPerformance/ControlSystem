@@ -126,32 +126,55 @@ void setup() {
      .setFont(buttonfont)
      .toUpperCase(false)
      ;
-     
-  // GUI Control :: Button :: Scenario #1
+  
+  
+  int Nscenarios = 2;
+  
   int buttonWidth = 125;
   int buttonHeight = 25;
   int buttonXPos_1 = leftMargin;
-  int buttonYPos_1 = 300;
+  int[] buttonYPos = new int[Nscenarios+1];
   int buttonSpacing = 10;
   
-  cp5.addButton("sc1")
-     .setBroadcast(false) // Avoids the immediate execution of the button
-     //.setVisible(false)
-     .setValue(0)
-     .setPosition(buttonXPos_1,buttonYPos_1)
-     .setSize(buttonWidth,buttonHeight)
-     .setLabel("Scenario #1")
-     .setColorCaptionLabel(black)
-     .setColorBackground(gold)
-     .setColorForeground(gray)
-     .setBroadcast(true)
-     ;
-     
-  cp5.getController("sc1")
-     .getCaptionLabel()
-     .setFont(buttonfont)
-     .toUpperCase(false)
-     ;
+  for (int i = 0; i < 3; i++) {
+    
+    String buttonName = "sc" + i + 1;
+    String buttonLabelText = "Scenario #" + i + 1;
+    
+    if (i == 0) {
+      
+      buttonYPos[i] = 300;
+      
+
+    } else if (i > 0) {
+      
+      buttonYPos[i] = buttonYPos[i-1] + buttonHeight + buttonSpacing;
+      
+      
+    } // End of if-statement
+    
+    printArray(buttonYPos);
+    
+    cp5.addButton(buttonName)
+        .setBroadcast(false) // Avoids the immediate execution of the button
+        //.setVisible(false)
+        .setValue(0)
+        .setPosition(buttonXPos_1,buttonYPos[i])
+        .setSize(buttonWidth,buttonHeight)
+        .setLabel(buttonLabelText)
+        .setColorCaptionLabel(black)
+        .setColorBackground(gold)
+        .setColorForeground(gray)
+        .setBroadcast(true)
+        ;
+         
+     cp5.getController(buttonName)
+        .getCaptionLabel()
+        .setFont(buttonfont)
+        .toUpperCase(false)
+        ;
+       
+  } // End of for-loop --Scenario button creation
      
      
 } // End of void-setup loop
