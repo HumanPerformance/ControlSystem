@@ -1,4 +1,4 @@
-/**
+/*
  * Control System Front End
  *
  * This script represents the Front End of the Raspberry Pi-powered Control System.
@@ -24,13 +24,17 @@ ControlP5 cp5;
 PImage hphlogo;
 
 // GUI Layout Variables
+// > GUI Dimensions
 int lenX = 600; // pixels
 int lenY = 600; // pixels
 int midX = lenX/2; // pixels
 int midY = lenY/2; // pixels
+// > Margins
+int topMargin = 50; // pixels
+int rightMargin = 50; // pixels
+int bottomMargin = 50; // pixels
+int leftMargin = 100; // pixels
 
-// Labels
-Textlabel studentIDLabel;
 
 // Colors
 int black = color(0,0,0);
@@ -51,7 +55,7 @@ void setup() {
   // GUI Formatting :: Fonts
   PFont pfont = createFont("Arial Rounded MT Bold",20,true);
   ControlFont titlefont = new ControlFont(pfont,48); // label font and size
-  ControlFont labelfont = new ControlFont(pfont,28); // label font and size
+  ControlFont labelfont = new ControlFont(pfont, 28); // label font and size
   ControlFont textfont = new ControlFont(pfont,12); // button font and size
   ControlFont buttonfont = new ControlFont(pfont,12); // button font and size
   
@@ -59,13 +63,13 @@ void setup() {
   hphlogo = loadImage("hphlogo720res30pp.png");
   
   // GUI Element :: Label :: Student ID Label
-  int txtLabelWidth = 200;
+  int txtLabelWidth = 275;
   int txtLabelHeight = 50;
-  int correctedSpacing_1 = 5; // Hard-coded spacing to align label with text field element
+  int indentCorrection4Label = 5;
   cp5.addTextlabel("studentIDLabel") // title object
      .setBroadcast(false)
      .setSize(txtLabelWidth,txtLabelHeight)
-     .setPosition(width/2-txtLabelWidth-correctedSpacing_1,height/2-(1.50)*txtLabelHeight) // set position of the title label
+     .setPosition(100 - indentCorrection4Label, 200) // set position of the title label
      .setText("Standard Patient ID") // title text
      .setFont(labelfont) // set title font :: using lable font and size
      .setColor(gold)
@@ -73,12 +77,12 @@ void setup() {
      ; 
      
   // GUI Control :: Text Field
-  int txtFieldWidth = 200;
-  int txtFieldHeight = 50;
+  int txtFieldWidth = 275;
+  int txtFieldHeight = 25;
   cp5.addTextfield("") // No text to be displayed below the field
      .setBroadcast(false)
      .setText("Enter SP Name or ID Number")
-     .setPosition(width/2-txtFieldWidth,height/2-txtFieldHeight/2)
+     .setPosition(100,250)
      .setSize(txtFieldWidth,txtFieldHeight)
      .setFont(textfont)
      .setFocus(true)
