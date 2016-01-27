@@ -25,8 +25,8 @@ PImage hphlogo;
 
 // GUI Layout Variables
 // > GUI Dimensions
-int lenX = 600; // pixels
-int lenY = 600; // pixels
+int lenX = width; // pixels
+int lenY = height; // pixels
 int midX = lenX/2; // pixels
 int midY = lenY/2; // pixels
 // > Margins
@@ -48,7 +48,7 @@ int white = color(255,255,255);
 void setup() {
   
   // GUI size
-  size(600,600); // These are equivalent to lenX and lenY
+  size(800,800); // These are equivalent to lenX and lenY
   noStroke();
   cp5 = new ControlP5(this);
   
@@ -68,10 +68,12 @@ void setup() {
   int txtLabelWidth_1 = 275;
   int txtLabelHeight_1 = 50;
   int indentCorrection4Label_1 = 5;
+  int textLabelYPos_1 = 50 + topMargin;
+  int elementSpacing_1 = 5;
   cp5.addTextlabel("studentIDLabel") // title object
      .setBroadcast(false)
      .setSize(txtLabelWidth_1,txtLabelHeight_1)
-     .setPosition(100 - indentCorrection4Label_1, 200) // set position of the title label
+     .setPosition(100 - indentCorrection4Label_1, textLabelYPos_1) // set position of the title label
      .setText("Standard Patient ID") // title text
      .setFont(titlefont) // set title font :: using lable font and size
      .setColor(gold)
@@ -81,9 +83,10 @@ void setup() {
   // GUI Control :: Text Field
   int txtFieldWidth = 275;
   int txtFieldHeight = 25;
+  int txtFieldYPos = textLabelYPos_1 + txtLabelHeight_1 + elementSpacing_1;
+  int elementSpacing_2 = 10;
   cp5.addTextfield("") // No text to be displayed below the field
-     .setText("Enter SP Name or ID Number")
-     .setPosition(100,250)
+     .setPosition(100,txtFieldYPos)
      .setSize(txtFieldWidth,txtFieldHeight)
      .setFont(textfont)
      .setColor(gray)
@@ -92,20 +95,22 @@ void setup() {
   // GUI Element :: Label :: Current Input
   int txtLabelWidth_2 = 200;
   int txtLabelHeight_2 = 50;
+  int txtLabelYPos_2 = txtFieldYPos + txtFieldHeight + elementSpacing_2;
   int indentCorrection4Label_2 = 5;
   cp5.addTextlabel("currentInput") // title object
      .setBroadcast(false)
      .setSize(txtLabelWidth_2,txtLabelHeight_2)
-     .setPosition(100 - indentCorrection4Label_2, 285) // set position of the title label
-     .setText("Current Input = ") // title text
+     .setPosition(100 - indentCorrection4Label_2, txtLabelYPos_2) // set position of the title label
+     .setText("Enter SP ID and hit Enter/Return on your keyboard") // title text
      .setFont(textfont) // set title font :: using lable font and size
      .setColor(white)
      .setBroadcast(true)
      ; 
      
   // GUI Control :: Button :: Begin Exercise
-  cp5.addButton("beginTest")
+  cp5.addButton("selectScenario")
      .setBroadcast(false) // Avoids the immediate execution of the button
+     .setVisible(false)
      .setValue(0)
      .setPosition(100,325)
      .setSize(200,25)
@@ -116,13 +121,36 @@ void setup() {
      .setBroadcast(true)
      ;
      
-  cp5.getController("beginTest")
+  cp5.getController("selectScenario")
      .getCaptionLabel()
      .setFont(buttonfont)
      .toUpperCase(false)
      ;
-
-
+     
+  // GUI Control :: Button :: Scenario #1
+  int buttonWidth = 100;
+  int buttonHeight = 50;
+  int buttonXPos_1 = leftMargin;
+  int buttonYPos_1 = 400;
+  cp5.addButton("sc1")
+     .setBroadcast(false) // Avoids the immediate execution of the button
+     //.setVisible(false)
+     .setValue(0)
+     .setPosition(buttonXPos_1,buttonYPos_1)
+     .setSize(buttonWidth,buttonHeight)
+     .setLabel("START")
+     .setColorCaptionLabel(black)
+     .setColorBackground(gold)
+     .setColorForeground(gray)
+     .setBroadcast(true)
+     ;
+     
+  cp5.getController("selectScenario")
+     .getCaptionLabel()
+     .setFont(buttonfont)
+     .toUpperCase(false)
+     ;
+     
 } // End of void-setup loop
 
 /* ========================================
@@ -134,7 +162,7 @@ void draw() {
   background(black);
   
   // Place Images
-  image(hphlogo,lenX-180,lenY-90);
+  image(hphlogo,width-180,height-90);
   
   
 } // End of void-draw loop
@@ -143,15 +171,25 @@ void draw() {
  * INTERFACE BUTTONS
  ======================================= */ 
 
-void controlEvent(ControlEvent theEvent) {
+public String controlEvent(ControlEvent theEvent) {
+  
+  // Variables
+  String eventName = "";
+  String textFieldInput = "";
+  
   if(theEvent.isAssignableFrom(Textfield.class)) {
-    println("controlEvent: accessing a string from controller '" + theEvent.getName()+"': " + theEvent.getStringValue());
-    cp5.get(Textlabel.class,"currentInput").setText("Current Input = " + theEvent.getStringValue());
+    eventName = theEvent.getName();
+    textFieldInput = theEvent.getStringValue();
+    println("controlEvent: accessing a string from controller '" + eventName+"': " + textFieldInput);
+    cp5.get(Textlabel.class,"currentInput").setText("Current Input = " + textFieldInput);
+    cp5.get(Button.class,"selectScenario").setVisible(true);
   }
+  return textFieldInput;
 }
 
-// function colorA will receive changes from 
-// controller with name colorA
-public void colorA(int theValue) {
-  println("a button event from colorA: "+theValue);
+// GUI Element :: Button :: Begin Test
+// Pressing this button will execute:
+// > Writing of standard patient information to file
+public void selectScenario(int theValue) {
+  
 }
