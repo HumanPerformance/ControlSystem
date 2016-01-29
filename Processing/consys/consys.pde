@@ -154,8 +154,8 @@ void setup() {
   // Creator Loop
   for (int i = 0; i < Nscenarios; i++) {
     
-    String buttonName;
-    String buttonLabelText;
+    String buttonName = " ";
+    String buttonLabelText = " ";
     
     if (i < 10) {
       
