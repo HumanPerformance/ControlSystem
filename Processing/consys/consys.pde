@@ -211,8 +211,7 @@ void setup() {
      .setColorBackground(verydarkgray)
      .setColorForeground(white)
      .setText("hola me llamo jamon")
-     ;
-  
+     ; 
      
 } // End of void-setup loop
 
