@@ -266,23 +266,37 @@ public String controlEvent(ControlEvent theEvent) {
      
      if (buttonTypeID.equals(expected)) {
        
-       /* ----------------------------------------
-       * SCENARIO DETAILS
-       *
-       * This section creates a text area containing the details of the selected scenario.
-       * The information referring to each scenario will be imported from a configuration file.
-       *
-       --------------------------------------- */
-  
-       String descriptionFilename = "description.txt";
-       String descriptionPath = "scenario/" + eventName + "/" + descriptionFilename;
-       
-       String[] scenarioDescription = loadStrings(descriptionPath);
-       String concatDescription = join(scenarioDescription," ");
-       println(concatDescription);
-       
-       cp5.get(Textarea.class,"scenarioDetails").setVisible(true);
-       cp5.get(Textarea.class,"scenarioDetails").setText(concatDescription);
+       if (eventName.equals("sc03")) {
+         
+         // Will place an image here!
+         println("An image will be embeded here!");
+         
+       } else if (eventName.equals("sc04")) {
+         
+         // Will palce a video here
+         println("A video will be embeded here!");
+         
+       } else {
+         
+         /* ----------------------------------------
+         * SCENARIO DETAILS
+         *
+         * This section creates a text area containing the details of the selected scenario.
+         * The information referring to each scenario will be imported from a configuration file.
+         *
+         --------------------------------------- */
+    
+         String descriptionFilename = "description.txt";
+         String descriptionPath = "scenario/" + eventName + "/" + descriptionFilename;
+         
+         String[] scenarioDescription = loadStrings(descriptionPath);
+         String concatDescription = join(scenarioDescription," ");
+         println(concatDescription);
+         
+         cp5.get(Textarea.class,"scenarioDetails").setVisible(true);
+         cp5.get(Textarea.class,"scenarioDetails").setText(concatDescription);
+         
+       } // End of if-statement "Specific Button Verification"
        
      } // End of if-statement "Button Type Verification"
     
