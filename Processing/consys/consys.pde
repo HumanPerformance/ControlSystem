@@ -42,7 +42,7 @@ int white = color(255,255,255);
 
 // Technical Variables
 // Number of scenarios
-int Nscenarios = 5;
+int Nscenarios = 10;
 
 /* ========================================
  * VOID SETUP LOOP
