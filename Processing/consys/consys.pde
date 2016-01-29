@@ -154,20 +154,11 @@ void setup() {
   // Creator Loop
   for (int i = 0; i < Nscenarios; i++) {
     
-    String buttonName = " ";
-    String buttonLabelText = " ";
-    
-    if (i < 10) {
-      
-      buttonName = "sc0" + (i + 1); // Controller Name or ID
-      buttonLabelText = "Scenario #0" + (i + 1); // Button Label
-      
-    } else if (i >= 10) {
-      
-      buttonName = "sc0" + (i + 1); // Controller Name or ID
-      buttonLabelText = "Scenario #0" + (i + 1); // Button Label
-      
-    } // End of if-statement "Single Digit Correction"
+    int counter = i+1;
+    String buttonNamePrefix = "sc";
+    String buttonLabelTextPrefix = "Scenario #";
+    String buttonName = singleDigitCorrection(buttonNamePrefix, counter);
+    String buttonLabelText = singleDigitCorrection(buttonLabelTextPrefix, counter);
     
     if (i == 0) {
       
@@ -306,7 +297,6 @@ public String controlEvent(ControlEvent theEvent) {
 // > Writing of standard patient information to file
 public void selectScenario(int theValue) {
  
-  println("hola");
   scenarioButtonVisibilitySwitch(Nscenarios);
   
 } // End of selectScenario button call
@@ -320,9 +310,29 @@ public void scenarioButtonVisibilitySwitch(int Nscenarios) {
   // Set scenario buttons visible for the user
   for (int i = 1; i <= Nscenarios; i++) {
     
-    String controllerName = "sc" + i;
+    String prefix = "sc";
+    String controllerName = singleDigitCorrection(prefix, i);
+    println(controllerName);
     cp5.get(Button.class,controllerName).setVisible(true);
     
   } // End of for-loop --Loop around scenario buttons
    
 } // End of function scenarioButtonVisibilitySwitch
+
+public String singleDigitCorrection(String prefix, int counter) {
+  
+  String outString = "";
+  
+  if (counter < 10) {
+    
+    outString = prefix + "0" + Integer.toString(counter);
+    
+  } else if (counter >= 10) {
+    
+    outString = prefix + Integer.toString(counter);
+    
+  }
+  
+  return outString;
+  
+} // End of singleDigitCorrection function
