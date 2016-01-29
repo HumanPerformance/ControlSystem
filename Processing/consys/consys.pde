@@ -43,7 +43,7 @@ int white = color(255,255,255);
 
 // Technical Variables
 // Number of scenarios
-int Nscenarios = 10;
+int Nscenarios = 12;
 
 /* ========================================
  * VOID SETUP LOOP
@@ -77,7 +77,7 @@ void setup() {
      .setBroadcast(false)
      .setSize(txtLabelWidth_1,txtLabelHeight_1)
      .setPosition(100 - indentCorrection4Label_1, textLabelYPos_1) // set position of the title label
-     .setText("Standard Patient ID") // title text
+     .setText("Standardize Patient ID") // title text
      .setFont(titlefont) // set title font :: using lable font and size
      .setColor(gold)
      .setBroadcast(true)
@@ -205,10 +205,10 @@ void setup() {
      .setVisible(false)
      .setPosition(txtareaXPos,txtareaYPos)
      .setSize(txtareaXlen,txtareaYlen)
-     .setFont(createFont("arial",12))
+     .setFont(textfont)
      .setLineHeight(14)
      .setColor(white)
-     .setColorBackground(verydarkgray)
+     .setColorBackground(black)
      .setColorForeground(white)
      //.setText("hola me llamo jamon")
      ; 
