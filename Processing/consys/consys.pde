@@ -71,7 +71,7 @@ void setup() {
   int txtLabelWidth_1 = 250;
   int txtLabelHeight_1 = 50;
   int indentCorrection4Label_1 = 5;
-  int textLabelYPos_1 = 50 + topMargin;
+  int textLabelYPos_1 = topMargin + 25;
   int elementSpacing_1 = 5;
   cp5.addTextlabel("studentIDLabel") // title object
      .setBroadcast(false)
@@ -97,7 +97,7 @@ void setup() {
      
   // GUI Element :: Label :: Current Input
   int txtLabelWidth_2 = 200;
-  int txtLabelHeight_2 = 50;
+  int txtLabelHeight_2 = 25;
   int txtLabelYPos_2 = txtFieldYPos + txtFieldHeight + elementSpacing_2;
   int indentCorrection4Label_2 = 5;
   cp5.addTextlabel("currentInput") // title object
@@ -147,7 +147,7 @@ void setup() {
   int scenarioButtonWidth = 125;
   int scenarioButtonHeight = 25;
   int buttonXPos_1 = leftMargin;
-  int buttonYPos0 = 250;
+  int buttonYPos0 = txtLabelYPos_2 + txtLabelHeight_2 + 25;
   int[] buttonYPos = new int[Nscenarios+1];
   int buttonSpacing = 10;
   
