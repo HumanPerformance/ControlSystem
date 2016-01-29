@@ -37,6 +37,7 @@ int leftMargin = 100; // pixels
 // > Colors
 int black = color(0,0,0);
 int gray = color(214,214,214);
+int verydarkgray = color(5,5,5);
 int gold = color(255,204,0);
 int white = color(255,255,255);
 
@@ -64,7 +65,7 @@ void setup() {
   ControlFont textfont = new ControlFont(pfont_2,14); // button font and size
   
   // GUI Elements :: Images :: Logos
-  hphlogo = loadImage("hphlogo720res30pp.png");
+  hphlogo = loadImage("media/hphlogo720res30pp.png");
   
   // GUI Element :: Label :: Student ID Label
   int txtLabelWidth_1 = 250;
@@ -201,14 +202,15 @@ void setup() {
   int txtareaYlen = height - txtareaYPos - 125;
   
   cp5.addTextarea("scenarioDetails")
-     .setVisible(false)
+     //.setVisible(false)
      .setPosition(txtareaXPos,txtareaYPos)
      .setSize(txtareaXlen,txtareaYlen)
      .setFont(createFont("arial",12))
      .setLineHeight(14)
-     .setColor(color(128))
-     .setColorBackground(color(255,100))
-     .setColorForeground(color(255,100));
+     .setColor(white)
+     .setColorBackground(verydarkgray)
+     .setColorForeground(white)
+     .setText("hola me llamo jamon")
      ;
   
      
