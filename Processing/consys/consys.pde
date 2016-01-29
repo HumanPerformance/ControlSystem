@@ -154,8 +154,20 @@ void setup() {
   // Creator Loop
   for (int i = 0; i < Nscenarios; i++) {
     
-    String buttonName = "sc" + (i + 1); // Controller Name or ID
-    String buttonLabelText = "Scenario #" + (i + 1); // Button Label
+    String buttonName;
+    String buttonLabelText;
+    
+    if (i < 10) {
+      
+      buttonName = "sc0" + (i + 1); // Controller Name or ID
+      buttonLabelText = "Scenario #0" + (i + 1); // Button Label
+      
+    } else if (i >= 10) {
+      
+      buttonName = "sc0" + (i + 1); // Controller Name or ID
+      buttonLabelText = "Scenario #0" + (i + 1); // Button Label
+      
+    } // End of if-statement "Single Digit Correction"
     
     if (i == 0) {
       
@@ -257,8 +269,7 @@ public String controlEvent(ControlEvent theEvent) {
      char c1 = eventName.charAt(0);
      char c2 = eventName.charAt(1);
      String buttonTypeID = str(c1) + str(c2);
-     
-     
+         
      // Scenario Button Type Verification
      String expected = "sc";
      
