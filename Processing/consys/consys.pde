@@ -319,6 +319,14 @@ public void selectScenario(int theValue) {
  * FUNCTIONS
  ======================================= */
  
+/* ---------------------------------------
+ * Scenario Button Visibility
+ *
+ * This function changes the visibility of the scenario buttons to "true".
+ *
+ * Fluvio L. Lobo Fenoglietto 01/28/2016
+ --------------------------------------- */ 
+ 
 public void scenarioButtonVisibilitySwitch(int Nscenarios) {
    
   // Set scenario buttons visible for the user
@@ -333,9 +341,19 @@ public void scenarioButtonVisibilitySwitch(int Nscenarios) {
    
 } // End of function scenarioButtonVisibilitySwitch
 
+
+/* ---------------------------------------
+ * Single Digit Correction
+ *
+ * This function was built with the purpose of adding 0s to the left of single digits.
+ * This process is important for the sake of comparing strings.
+ *
+ * Fluvio L. Lobo Fenoglietto 01/29/2016
+ --------------------------------------- */
+
 public String singleDigitCorrection(String prefix, int counter) {
   
-  String outString = "";
+  String outString = ""; // Definng output string
   
   if (counter < 10) {
     
@@ -345,7 +363,7 @@ public String singleDigitCorrection(String prefix, int counter) {
     
     outString = prefix + Integer.toString(counter);
     
-  }
+  } // End of if-statement "Single digit input detection"
   
   return outString;
   
