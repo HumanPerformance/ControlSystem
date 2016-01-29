@@ -202,7 +202,7 @@ void setup() {
   int txtareaYlen = height - txtareaYPos - 125;
   
   cp5.addTextarea("scenarioDetails")
-     //.setVisible(false)
+     .setVisible(false)
      .setPosition(txtareaXPos,txtareaYPos)
      .setSize(txtareaXlen,txtareaYlen)
      .setFont(createFont("arial",12))
@@ -210,7 +210,7 @@ void setup() {
      .setColor(white)
      .setColorBackground(verydarkgray)
      .setColorForeground(white)
-     .setText("hola me llamo jamon")
+     //.setText("hola me llamo jamon")
      ; 
      
 } // End of void-setup loop
@@ -249,17 +249,28 @@ public String controlEvent(ControlEvent theEvent) {
     
   } else if (theEvent.isAssignableFrom(Button.class)) {
     
-      
-  /* ----------------------------------------
-   * SCENARIO DETAILS
-   *
-   * This section creates a text area containing the details of the selected scenario.
-   * The information referring to each scenario will be imported from a configuration file.
-   *
-   --------------------------------------- */
+     // First, the algorithm reads the name of the button.
+     eventName = theEvent.getName();
+     println(eventName + "button pressed");
     
-    eventName = theEvent.getName();
-    println(eventName);
+    /* ----------------------------------------
+     * SCENARIO DETAILS
+     *
+     * This section creates a text area containing the details of the selected scenario.
+     * The information referring to each scenario will be imported from a configuration file.
+     *
+     --------------------------------------- */
+
+     String descriptionFilename = "description.txt";
+     String descriptionPath = "scenario/" + eventName + "/" + descriptionFilename;
+     
+     String[] scenarioDescription = loadStrings(descriptionPath);
+     String concatDescription = join(scenarioDescription," ");
+     println(concatDescription);
+     
+     cp5.get(Button.class,eventName).setVisible(true);
+     //cp5.get(Button.class,eventName).setText(concatDescription);
+    
     
   }
   return textFieldInput;
