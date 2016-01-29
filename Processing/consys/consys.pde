@@ -187,7 +187,7 @@ void setup() {
         ;
        
   } // End of for-loop --Scenario button creation
-     
+
      
 } // End of void-setup loop
 
@@ -216,14 +216,27 @@ public String controlEvent(ControlEvent theEvent) {
   String textFieldInput = "";
   
   if(theEvent.isAssignableFrom(Textfield.class)) {
+    
     eventName = theEvent.getName();
     textFieldInput = theEvent.getStringValue();
     println("controlEvent: accessing a string from controller '" + eventName+"': " + textFieldInput);
     cp5.get(Textlabel.class,"currentInput").setText("Current Input = " + textFieldInput);
     cp5.get(Button.class,"selectScenario").setVisible(true);
-    //cp5.get(Button.class,"selectScenario").setBroadcast(true);
-  } else {
-    println(theEvent.getController().getName());
+    
+  } else if (theEvent.isAssignableFrom(Button.class)) {
+    
+      
+  /* ----------------------------------------
+   * SCENARIO DETAILS
+   *
+   * This section creates a text area containing the details of the selected scenario.
+   * The information referring to each scenario will be imported from a configuration file.
+   *
+   --------------------------------------- */
+    
+    eventName = theEvent.getName();
+    println(eventName);
+    
   }
   return textFieldInput;
 }
