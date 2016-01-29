@@ -279,8 +279,8 @@ public String controlEvent(ControlEvent theEvent) {
        String concatDescription = join(scenarioDescription," ");
        println(concatDescription);
        
-       cp5.get(Button.class,eventName).setVisible(true);
-       //cp5.get(Button.class,eventName).setText(concatDescription);
+       cp5.get(Textarea.class,"scenarioDetails").setVisible(true);
+       cp5.get(Textarea.class,"scenarioDetails").setText(concatDescription);
        
      } // End of if-statement "Button Type Verification"
     
