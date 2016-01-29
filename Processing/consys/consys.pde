@@ -187,7 +187,30 @@ void setup() {
         ;
        
   } // End of for-loop --Scenario button creation
-
+  
+  /* ----------------------------------------
+   * SCENARIO DETAILS
+   *
+   * This section creates a text area containing the details of the selected scenario.
+   *
+   --------------------------------------- */
+  
+  int txtareaXPos = leftMargin + scenarioButtonWidth + 50;
+  int txtareaYPos = buttonYPos0;
+  int txtareaXlen = width - txtareaXPos - 50;
+  int txtareaYlen = height - txtareaYPos - 125;
+  
+  cp5.addTextarea("scenarioDetails")
+     .setVisible(false)
+     .setPosition(txtareaXPos,txtareaYPos)
+     .setSize(txtareaXlen,txtareaYlen)
+     .setFont(createFont("arial",12))
+     .setLineHeight(14)
+     .setColor(color(128))
+     .setColorBackground(color(255,100))
+     .setColorForeground(color(255,100));
+     ;
+  
      
 } // End of void-setup loop
 
