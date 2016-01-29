@@ -252,25 +252,37 @@ public String controlEvent(ControlEvent theEvent) {
      // First, the algorithm reads the name of the button.
      eventName = theEvent.getName();
      println(eventName + "button pressed");
-    
-    /* ----------------------------------------
-     * SCENARIO DETAILS
-     *
-     * This section creates a text area containing the details of the selected scenario.
-     * The information referring to each scenario will be imported from a configuration file.
-     *
-     --------------------------------------- */
-
-     String descriptionFilename = "description.txt";
-     String descriptionPath = "scenario/" + eventName + "/" + descriptionFilename;
      
-     String[] scenarioDescription = loadStrings(descriptionPath);
-     String concatDescription = join(scenarioDescription," ");
-     println(concatDescription);
+     // Button recognition routine
+     char c1 = eventName.charAt(0);
+     char c2 = eventName.charAt(1);
+     String buttonTypeID = str(c1) + str(c2);
      
-     cp5.get(Button.class,eventName).setVisible(true);
-     //cp5.get(Button.class,eventName).setText(concatDescription);
-    
+     
+     // Scenario Button Type Verification
+     String expected = "sc";
+     
+     if (buttonTypeID.equals(expected)) {
+       
+       /* ----------------------------------------
+       * SCENARIO DETAILS
+       *
+       * This section creates a text area containing the details of the selected scenario.
+       * The information referring to each scenario will be imported from a configuration file.
+       *
+       --------------------------------------- */
+  
+       String descriptionFilename = "description.txt";
+       String descriptionPath = "scenario/" + eventName + "/" + descriptionFilename;
+       
+       String[] scenarioDescription = loadStrings(descriptionPath);
+       String concatDescription = join(scenarioDescription," ");
+       println(concatDescription);
+       
+       cp5.get(Button.class,eventName).setVisible(true);
+       //cp5.get(Button.class,eventName).setText(concatDescription);
+       
+     } // End of if-statement "Button Type Verification"
     
   }
   return textFieldInput;
