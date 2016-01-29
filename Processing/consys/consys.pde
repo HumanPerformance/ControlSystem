@@ -284,9 +284,11 @@ public String controlEvent(ControlEvent theEvent) {
        
      } // End of if-statement "Button Type Verification"
     
-  }
+  } // End of if-statemnt "Controller Type Verification"
+  
   return textFieldInput;
-}
+  
+} // End of Control Event Routine
 
 // GUI Element :: Button :: Begin Test
 // Pressing this button will execute:
