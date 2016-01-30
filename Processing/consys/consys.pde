@@ -50,6 +50,11 @@ int Nscenarios = 12;
  ======================================= */ 
 void setup() {
   
+  // Create Dated Output Directory
+  // Here, the program creates the output subdirectory corresponding to the date of the execution
+  String timeStamp = timeStamp("calendar");
+  println(timeStamp);
+  
   // GUI size
   size(800,800); // These are equivalent to lenX and lenY
   noStroke();
@@ -318,6 +323,115 @@ public void selectScenario(int theValue) {
 /* ========================================
  * FUNCTIONS
  ======================================= */
+ 
+/* ---------------------------------------
+ * Time Stamp
+ *
+ * The following function was designed to simplify the need for specifying the time-stamp throughout the code.
+ * Additionally, the function corrects for single digit values.
+ * 
+ * The function takes the input "style" (String), which may be either:
+ *     > "calendar" outputs date in the format "mm/dd/yyyy hh:mm:ss"
+ *     > "clock" outputs time in the format "hh:mm:ss"
+ *
+ -------------------------------------- */
+ 
+public String timeStamp(String style) {
+  
+  // Variables
+  String month;
+  String day;
+  String year;
+  String hour;
+  String minute;
+  String second;
+  String timeStamp = "";
+ 
+  // Define month
+  int mm = month();
+  // Correct for single digits
+  String prefix = "";
+  month = singleDigitCorrection(prefix, mm);
+  //if (mm < 10) {
+
+  //  month = "0" + mm;
+    
+  //} else {
+    
+  //  month = Integer.toString(mm);
+    
+  //} // End of conditional statement
+  
+  // Define day
+  int dd = day();
+  
+  // Correct for single digits
+  if (dd < 10) {
+    
+    day = "0" + dd;
+    
+  } else {
+    
+    day = Integer.toString(dd);
+    
+  } // End of conditional statement
+  
+  // Define year
+  year = Integer.toString(year());
+  
+  // Define hour
+  int hh = hour();
+  
+  if (hh < 10) {
+    
+    hour = "0" + hh;
+    
+  } else {
+    
+    hour = Integer.toString(hh);
+    
+  } // End of conditional Statement
+  
+  // Define minute
+  int mi = minute();
+  
+  if (mi < 10) {
+    
+    minute = "0" + mi;
+    
+  } else {
+    
+    minute = Integer.toString(mi);
+    
+  } // End of conditional Statement
+  
+  // Define second
+  int ss = second();
+  
+  if (ss < 10) {
+    
+    second = "0" + ss;
+    
+  } else {
+    
+    second = Integer.toString(ss);
+    
+  } // End of conditional Statement
+  
+  
+  if (style.equals("calendar")) {
+    
+    timeStamp = month + "/" + day + "/" + year + " " + hour + ":" + minute + ":" + second;
+    
+  } else if (style.equals("clock")) {
+    
+    timeStamp = hour + ":" + minute + ":" + second;
+    
+  } // End of conditional statement
+    
+  return timeStamp;
+  
+} // End of timeStamp function
  
 /* ---------------------------------------
  * Scenario Button Visibility
