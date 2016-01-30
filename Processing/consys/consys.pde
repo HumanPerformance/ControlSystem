@@ -374,7 +374,15 @@ public String timeStamp(String style) {
     
     timeStamp = hour + ":" + minute + ":" + second;
     
-  } // End of conditional statement
+  } else if (style.equals("dated-folder")) {
+   
+    timeStamp = month + day + year;
+    
+  } else if (style.equals("timed-filename")) {
+   
+    timeStamp = month + day + year + "-" + hour + minute + second;
+    
+  }// End of conditional statement
     
   return timeStamp;
   
