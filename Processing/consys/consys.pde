@@ -368,23 +368,16 @@ public String timeStamp(String style) {
   // Conditional statement for output type (calendar vs. clock)
   switch (style) {
     
-    case "calendar":
-    
+    case "calendar":    
       timeStamp = month + "/" + day + "/" + year + " " + hour + ":" + minute + ":" + second;
-      break;
-      
-    case "clock":
-    
+      break;      
+    case "clock":    
       timeStamp = hour + ":" + minute + ":" + second;
-      break;
-      
-    case "dated-folder":
-    
+      break;      
+    case "dated-folder":    
       timeStamp = month + day + year;
-      break;
-      
+      break;      
     case "timed-filename":
-    
       timeStamp = month + day + year + "-" + hour + minute + second;
       break;
       
