@@ -52,7 +52,7 @@ void setup() {
   
   // Create Dated Output Directory
   // Here, the program creates the output subdirectory corresponding to the date of the execution
-  String timeStamp = timeStamp("calendar");
+  String timeStamp = timeStamp("dated-folder");
   println(timeStamp);
   
   // GUI size
@@ -366,23 +366,29 @@ public String timeStamp(String style) {
   second = singleDigitCorrection(prefix, ss);
   
   // Conditional statement for output type (calendar vs. clock)
-  if (style.equals("calendar")) {
+  switch (style) {
     
-    timeStamp = month + "/" + day + "/" + year + " " + hour + ":" + minute + ":" + second;
+    case "calendar":
     
-  } else if (style.equals("clock")) {
+      timeStamp = month + "/" + day + "/" + year + " " + hour + ":" + minute + ":" + second;
+      break;
+      
+    case "clock":
     
-    timeStamp = hour + ":" + minute + ":" + second;
+      timeStamp = hour + ":" + minute + ":" + second;
+      break;
+      
+    case "dated-folder":
     
-  } else if (style.equals("dated-folder")) {
-   
-    timeStamp = month + day + year;
+      timeStamp = month + day + year;
+      break;
+      
+    case "timed-filename":
     
-  } else if (style.equals("timed-filename")) {
-   
-    timeStamp = month + day + year + "-" + hour + minute + second;
-    
-  }// End of conditional statement
+      timeStamp = month + day + year + "-" + hour + minute + second;
+      break;
+      
+  } // End of switch
     
   return timeStamp;
   
