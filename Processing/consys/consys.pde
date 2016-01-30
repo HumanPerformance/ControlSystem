@@ -339,86 +339,33 @@ public void selectScenario(int theValue) {
 public String timeStamp(String style) {
   
   // Variables
+  // Input Variables --Processing functions
+  int mm = month();
+  int dd = day();
+  int hh = hour();
+  int mi = minute();
+  int ss = second();
+  
+  // Internal Variables
   String month;
   String day;
-  String year;
+  String year = Integer.toString(year()); // Does not require correction
   String hour;
   String minute;
   String second;
+  
+  // Output Variables --To be returned by the function
   String timeStamp = "";
  
-  // Define month
-  int mm = month();
   // Correct for single digits
   String prefix = "";
   month = singleDigitCorrection(prefix, mm);
-  //if (mm < 10) {
-
-  //  month = "0" + mm;
-    
-  //} else {
-    
-  //  month = Integer.toString(mm);
-    
-  //} // End of conditional statement
+  day = singleDigitCorrection(prefix, dd);
+  hour = singleDigitCorrection(prefix, hh);
+  minute = singleDigitCorrection(prefix, mi);
+  second = singleDigitCorrection(prefix, ss);
   
-  // Define day
-  int dd = day();
-  
-  // Correct for single digits
-  if (dd < 10) {
-    
-    day = "0" + dd;
-    
-  } else {
-    
-    day = Integer.toString(dd);
-    
-  } // End of conditional statement
-  
-  // Define year
-  year = Integer.toString(year());
-  
-  // Define hour
-  int hh = hour();
-  
-  if (hh < 10) {
-    
-    hour = "0" + hh;
-    
-  } else {
-    
-    hour = Integer.toString(hh);
-    
-  } // End of conditional Statement
-  
-  // Define minute
-  int mi = minute();
-  
-  if (mi < 10) {
-    
-    minute = "0" + mi;
-    
-  } else {
-    
-    minute = Integer.toString(mi);
-    
-  } // End of conditional Statement
-  
-  // Define second
-  int ss = second();
-  
-  if (ss < 10) {
-    
-    second = "0" + ss;
-    
-  } else {
-    
-    second = Integer.toString(ss);
-    
-  } // End of conditional Statement
-  
-  
+  // Conditional statement for output type (calendar vs. clock)
   if (style.equals("calendar")) {
     
     timeStamp = month + "/" + day + "/" + year + " " + hour + ":" + minute + ":" + second;
