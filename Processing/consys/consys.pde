@@ -20,6 +20,9 @@ import controlP5.*;
 // Variables
 ControlP5 cp5;
 
+// Writers
+
+
 // Images
 PImage hphlogo;
 
@@ -52,8 +55,57 @@ void setup() {
   
   // Create Dated Output Directory
   // Here, the program creates the output subdirectory corresponding to the date of the execution
-  String timeStamp = timeStamp("dated-folder");
-  println(timeStamp);
+  String timeStampFolder = timeStamp("dated-folder");
+  String logFile = "ExecutionLog.txt";
+  String exeLogFilePath = "data/output/" + timeStampFolder + "/" + logFile;
+ 
+  // use the reader function with a try-catch statement to verify existance of the file.
+  // once working, compile within sub-function.
+  
+  // Read Execution Log File
+  String[] logFileLines = loadStrings(exeLogFilePath);
+  
+  printArray(logFileLines);
+  
+  //
+
+  if (logFileLines == null) {
+    
+    createOutput(exeLogFilePath);
+    String[] outString = {"", ""};
+    outString[0] = "Execution Log for consys.pde";
+    String exeTimeStamp = timeStamp("clock");
+    outString[1] = "1, " + exeTimeStamp;
+    saveStrings(exeLogFilePath, outString);
+    
+    
+  } else {
+    
+    int Nlines = logFileLines.length;
+    println(Nlines);
+    String[] outString = new String[Nlines+1];
+    
+    for (int i = 0; i <= Nlines; i++) {
+      
+      if (i < Nlines) {
+        
+        outString[i] = logFileLines[i];
+        
+      } else if (i == Nlines) {
+
+        String exeTimeStamp = timeStamp("clock");
+        outString[i] = Integer.toString(Nlines) + ", " + exeTimeStamp;
+        saveStrings(exeLogFilePath, outString);
+        
+      }
+      
+      printArray(outString);
+    
+    }
+    
+  }
+ 
+  
   
   // GUI size
   size(800,800); // These are equivalent to lenX and lenY
