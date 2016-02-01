@@ -253,7 +253,24 @@ void setup() {
      .getCaptionLabel()
      .setFont(buttonfont)
      .toUpperCase(false)
-     ;  
+     ;
+     
+     
+  // GUI Element :: Label :: Current Input --Confirmation
+  int confirmationLabelWidth = 200;
+  int confirmationLabelHeight = 25;
+  int confirmationLabelXPos = leftMargin + confirmSelectionButtonWidth + 25;
+  int confirmationLabelYPos = confirmSelectionButtonYPos;
+  // int indent4ConfirmationLabel = 5;
+  cp5.addTextlabel("currentInput") // title object
+     .setBroadcast(false)
+     .setSize(confirmationLabelWidth, confirmationLabelHeight)
+     .setPosition(confirmationLabelXPos, confirmationLabelYPos) // set position of the title label
+     //.setText("Enter SP ID and press Enter/Return") // title text
+     .setFont(textfont) // set title font :: using lable font and size
+     .setColor(white)
+     .setBroadcast(true)
+     ; 
   
      
 } // End of void-setup loop
