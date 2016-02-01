@@ -20,9 +20,6 @@ import controlP5.*;
 // Variables
 ControlP5 cp5;
 
-// Writers
-
-
 // Images
 PImage hphlogo;
 
@@ -77,7 +74,7 @@ void setup() {
   int txtLabelWidth_1 = 250;
   int txtLabelHeight_1 = 50;
   int indentCorrection4Label_1 = 5;
-  int textLabelYPos_1 = topMargin + 25;
+  int textLabelYPos_1 = topMargin;
   int elementSpacing_1 = 5;
   cp5.addTextlabel("studentIDLabel") // title object
      .setBroadcast(false)
@@ -220,7 +217,44 @@ void setup() {
      .setColorBackground(black)
      .setColorForeground(white)
      //.setText("hola me llamo jamon")
-     ; 
+     ;
+     
+  /* ----------------------------------------
+   * CONFIRMATION 
+   *
+   * This section creates a text label which summarizes the standardize patient information and his/her scenario selection.
+   * If the user is not sure of the information, he/she can change selections at will.
+   * The user will see the information changes displayed on the status label.
+   *
+   * Fluvio L Lobo Fenoglietto 02/01/2016
+   *
+   --------------------------------------- */
+   
+  // GUI Control :: Button :: Confirm Selection
+  
+  int confirmSelectionButtonWidth = 200;
+  int confirmSelectionButtonHeight = 25;
+  int confirmSelectionButtonXPos = leftMargin;
+  int confirmSelectionButtonYPos = buttonYPos[Nscenarios-1] + scenarioButtonHeight + 50;
+  cp5.addButton("confirmSelection")
+     .setBroadcast(false) // Avoids the immediate execution of the button
+     //.setVisible(false)
+     .setValue(0)
+     .setPosition(confirmSelectionButtonXPos,confirmSelectionButtonYPos)
+     .setSize(confirmSelectionButtonWidth,confirmSelectionButtonHeight)
+     .setLabel("Confirm Selection")
+     .setColorCaptionLabel(black)
+     .setColorBackground(gold)
+     .setColorForeground(gray)
+     .setBroadcast(true)
+     ;
+     
+  cp5.getController("confirmSelection")
+     .getCaptionLabel()
+     .setFont(buttonfont)
+     .toUpperCase(false)
+     ;  
+  
      
 } // End of void-setup loop
 
