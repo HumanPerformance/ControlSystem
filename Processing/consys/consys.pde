@@ -91,7 +91,7 @@ void setup() {
   int txtFieldHeight = 25;
   int txtFieldYPos = textLabelYPos_1 + txtLabelHeight_1 + elementSpacing_1;
   int elementSpacing_2 = 10;
-  cp5.addTextfield("") // No text to be displayed below the field
+  cp5.addTextfield("userID") // No text to be displayed below the field
      .setPosition(100,txtFieldYPos)
      .setSize(txtFieldWidth,txtFieldHeight)
      .setFont(textfont)
@@ -295,16 +295,16 @@ void draw() {
 public void controlEvent(ControlEvent theEvent) {
   
   // Variables
-  String eventName = "";
-  String textFieldInput = "";
+  //String eventName = "";
+  //String textFieldInput = "";
   
   // In the case the active control is a TextField
   if(theEvent.isAssignableFrom(Textfield.class)) {
     
     // Textfield :: Variables
-    eventName = theEvent.getName();
+    String eventName = theEvent.getName();
     //textFieldInput = theEvent.getStringValue();
-    textFieldInput = theEvent.getStringValue();
+    String textFieldInput = theEvent.getStringValue();
     
     // Textfield :: Output messages
     println("controlEvent: accessing a string from controller '" + eventName+"': " + textFieldInput);
@@ -317,7 +317,7 @@ public void controlEvent(ControlEvent theEvent) {
   } else if (theEvent.isAssignableFrom(Button.class)) {
 
      // First, the algorithm reads the name of the button.
-     eventName = theEvent.getName();
+     String eventName = theEvent.getName();
      println(eventName + "button pressed");
      
      // Button recognition routine
@@ -362,6 +362,7 @@ public void controlEvent(ControlEvent theEvent) {
         cp5.get(Textarea.class,"scenarioDetails").setVisible(true);
         cp5.get(Textarea.class,"scenarioDetails").setText(concatDescription);
         cp5.get(Button.class,"confirmSelection").setVisible(true);
+        //cp5.get(Textlabel.class,"confirmCurrentInput").setText("User " + textFieldInput + ", selected scenario " + eventName);
          
       } // End of if-statement "Specific Button Verification"
        
@@ -374,6 +375,8 @@ public void controlEvent(ControlEvent theEvent) {
 /* ----------------------------------------
  * BUTTONS
  ---------------------------------------- */
+ 
+// public void 
 
 // Select scenarios button
 public void selectScenario(int theValue) {
