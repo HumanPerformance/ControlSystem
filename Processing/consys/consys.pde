@@ -289,25 +289,36 @@ void draw() {
 } // End of void-draw loop
 
 /* ========================================
- * INTERFACE BUTTONS
+ * CONTROL EVENTS
  ======================================= */ 
 
-public String controlEvent(ControlEvent theEvent) {
+public void controlEvent(ControlEvent theEvent) {
   
   // Variables
   String eventName = "";
   String textFieldInput = "";
   
+  // Variables --Output
+  String outString = "";
+  
+  // In the case the active control is a TextField
   if(theEvent.isAssignableFrom(Textfield.class)) {
     
+    // Textfield :: Variables
     eventName = theEvent.getName();
+    //textFieldInput = theEvent.getStringValue();
     textFieldInput = theEvent.getStringValue();
+    
+    // Textfield :: Output messages
     println("controlEvent: accessing a string from controller '" + eventName+"': " + textFieldInput);
+    
+    // Textfield :: Actions
     cp5.get(Textlabel.class,"currentInput").setText("Current Input = " + textFieldInput);
     cp5.get(Button.class,"selectScenario").setVisible(true);
     
+    // In the case the active control is a Button
   } else if (theEvent.isAssignableFrom(Button.class)) {
-    
+
      // First, the algorithm reads the name of the button.
      eventName = theEvent.getName();
      println(eventName + "button pressed");
@@ -322,7 +333,7 @@ public String controlEvent(ControlEvent theEvent) {
      
      if (buttonTypeID.equals(expected)) {
        
-      String selectedScenario = eventName;
+      //selectedScenario = eventName;
        
       if (eventName.equals("sc03")) {
          
@@ -356,28 +367,30 @@ public String controlEvent(ControlEvent theEvent) {
          
       } // End of if-statement "Specific Button Verification"
        
-     } else if (eventName.equals("confirmSelection")) {
-       
-       
-       cp5.get(Textlabel.class,"confirmSelection").setText();
-       
-       
-     } // End of if-statement "Button Type Verification"
+     } // End if-statemnt "Button Type Verification"
     
   } // End of if-statemnt "Controller Type Verification"
   
-  return textFieldInput;
-  
 } // End of Control Event Routine
 
-// GUI Element :: Button :: Begin Test
-// Pressing this button will execute:
-// > Writing of standard patient information to file
+/* ----------------------------------------
+ * BUTTONS
+ ---------------------------------------- */
+
+// Select scenarios button
 public void selectScenario(int theValue) {
  
   scenarioButtonVisibilitySwitch(Nscenarios);
   
 } // End of selectScenario button call
+
+
+// Confirm selection
+public void confirmSelection(int theValue) {
+ 
+  cp5.get(Textlabel.class,"confirmCurrentInput").setText("hola");
+  
+}
 
 /* ========================================
  * FUNCTIONS
