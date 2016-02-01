@@ -458,7 +458,6 @@ public void exeLogFile() {
   // Here, the program reads such directory looking for the execution log
   // This, of course, may fail if the file has not been created
   String[] logFileLines = loadStrings(exeLogFilePath);
-  printArray(logFileLines); // Print the lines of the execution log if, in fact, exists.
   
   // Conditional statement around the existence of the execution log
   if (logFileLines == null) {
