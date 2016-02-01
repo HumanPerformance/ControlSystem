@@ -230,8 +230,7 @@ void setup() {
    *
    --------------------------------------- */
    
-  // GUI Control :: Button :: Confirm Selection
-  
+  // GUI Control :: Button :: Confirm Selection  
   int confirmSelectionButtonWidth = 200;
   int confirmSelectionButtonHeight = 25;
   int confirmSelectionButtonXPos = leftMargin;
@@ -262,7 +261,7 @@ void setup() {
   int confirmationLabelXPos = leftMargin + confirmSelectionButtonWidth + 25;
   int confirmationLabelYPos = confirmSelectionButtonYPos;
   // int indent4ConfirmationLabel = 5;
-  cp5.addTextlabel("currentInput") // title object
+  cp5.addTextlabel("confirmCurrentInput") // title object
      .setBroadcast(false)
      .setSize(confirmationLabelWidth, confirmationLabelHeight)
      .setPosition(confirmationLabelXPos, confirmationLabelYPos) // set position of the title label
@@ -317,43 +316,51 @@ public String controlEvent(ControlEvent theEvent) {
      char c1 = eventName.charAt(0);
      char c2 = eventName.charAt(1);
      String buttonTypeID = str(c1) + str(c2);
-         
+     
      // Scenario Button Type Verification
      String expected = "sc";
      
      if (buttonTypeID.equals(expected)) {
        
-       if (eventName.equals("sc03")) {
+      String selectedScenario = eventName;
+       
+      if (eventName.equals("sc03")) {
          
-         // Will place an image here!
-         println("An image will be embeded here!");
+        // Will place an image here!
+        println("An image will be embeded here!");
          
-       } else if (eventName.equals("sc04")) {
+      } else if (eventName.equals("sc04")) {
          
-         // Will palce a video here
-         println("A video will be embeded here!");
+        // Will palce a video here
+        println("A video will be embeded here!");
          
-       } else {
+      } else {
          
-         /* ----------------------------------------
-         * SCENARIO DETAILS
-         *
-         * This section creates a text area containing the details of the selected scenario.
-         * The information referring to each scenario will be imported from a configuration file.
-         *
-         --------------------------------------- */
+        /* ----------------------------------------
+        * SCENARIO DETAILS
+        *
+        * This section creates a text area containing the details of the selected scenario.
+        * The information referring to each scenario will be imported from a configuration file.
+        *
+        --------------------------------------- */
     
-         String descriptionFilename = "description.txt";
-         String descriptionPath = "scenario/" + eventName + "/" + descriptionFilename;
+        String descriptionFilename = "description.txt";
+        String descriptionPath = "scenario/" + eventName + "/" + descriptionFilename;
          
-         String[] scenarioDescription = loadStrings(descriptionPath);
-         String concatDescription = join(scenarioDescription," ");
-         println(concatDescription);
+        String[] scenarioDescription = loadStrings(descriptionPath);
+        String concatDescription = join(scenarioDescription," ");
+        println(concatDescription);
          
-         cp5.get(Textarea.class,"scenarioDetails").setVisible(true);
-         cp5.get(Textarea.class,"scenarioDetails").setText(concatDescription);
+        cp5.get(Textarea.class,"scenarioDetails").setVisible(true);
+        cp5.get(Textarea.class,"scenarioDetails").setText(concatDescription);
          
-       } // End of if-statement "Specific Button Verification"
+      } // End of if-statement "Specific Button Verification"
+       
+     } else if (eventName.equals("confirmSelection")) {
+       
+       
+       cp5.get(Textlabel.class,"confirmSelection").setText();
+       
        
      } // End of if-statement "Button Type Verification"
     
@@ -385,6 +392,8 @@ public void selectScenario(int theValue) {
  * The function takes the input "style" (String), which may be either:
  *     > "calendar" outputs date in the format "mm/dd/yyyy hh:mm:ss"
  *     > "clock" outputs time in the format "hh:mm:ss"
+ *
+ * Fluvio L. Lobo Fenoglietto 01/28/2016
  *
  -------------------------------------- */
  
@@ -522,7 +531,6 @@ public void exeLogFile() {
     String exeTimeStamp = timeStamp("clock");
     outString[1] = "1, " + exeTimeStamp;
     saveStrings(exeLogFilePath, outString);
-    
     
   } else {
     
