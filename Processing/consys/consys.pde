@@ -53,10 +53,8 @@ int Nscenarios = 12;
  ======================================= */ 
 void setup() {
   
-  
+  // Execution Log File
   exeLogFile();
- 
-  
   
   // GUI size
   size(800,800); // These are equivalent to lenX and lenY
@@ -440,28 +438,35 @@ public String singleDigitCorrection(String prefix, int counter) {
   
 } // End of singleDigitCorrection function
 
+/* ---------------------------------------
+ * Execution Log File
+ *
+ * This function was built with the purpose of creating and updating an execution log file
+ * An execution log file consist of a text file containing the iteration and time the consys.pde program was executed
+ *
+ * Fluvio L. Lobo Fenoglietto 01/31/2016
+ --------------------------------------- */
 
 public void exeLogFile() {
   
-  // Create Dated Output Directory
-  // Here, the program creates the output subdirectory corresponding to the date of the execution
+  // First, the program generates the path for the execution file
+  // In the process, the program generates a directory using the CPU date
   String timeStampFolder = timeStamp("dated-folder");
   String logFile = "ExecutionLog.txt";
   String exeLogFilePath = "data/output/" + timeStampFolder + "/" + logFile;
- 
-  // use the reader function with a try-catch statement to verify existance of the file.
-  // once working, compile within sub-function.
   
-  // Read Execution Log File
+  // Here, the program reads such directory looking for the execution log
+  // This, of course, may fail if the file has not been created
   String[] logFileLines = loadStrings(exeLogFilePath);
+  printArray(logFileLines); // Print the lines of the execution log if, in fact, exists.
   
-  printArray(logFileLines);
-  
-  //
-
+  // Conditional statement around the existence of the execution log
   if (logFileLines == null) {
     
-    createOutput(exeLogFilePath);
+    // In the case the file does not exist, the program creates one.
+    createOutput(exeLogFilePath); // Generating execution log file
+    
+    // The initial strings are a combination of headers and the first execution time
     String[] outString = {"", ""};
     outString[0] = "Execution Log for consys.pde";
     String exeTimeStamp = timeStamp("clock");
@@ -471,10 +476,11 @@ public void exeLogFile() {
     
   } else {
     
+    // In the case the filke exists, the code must read he lines in order to find where to print the next stamp
     int Nlines = logFileLines.length;
-    println(Nlines);
     String[] outString = new String[Nlines+1];
     
+    // If the file exists, the program must reprint the previous strings plus the new stamp. The following for loop ensures that.
     for (int i = 0; i <= Nlines; i++) {
       
       if (i < Nlines) {
@@ -487,13 +493,10 @@ public void exeLogFile() {
         outString[i] = Integer.toString(Nlines) + ", " + exeTimeStamp;
         saveStrings(exeLogFilePath, outString);
         
-      }
-      
-      printArray(outString);
+      } // End of if-statement
+
+    } // End of for-loop
     
-    }
-    
-  }
-  
+  } // End of if-statement
   
 } // End of exeLogFile function
