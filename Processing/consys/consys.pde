@@ -237,7 +237,7 @@ void setup() {
   int confirmSelectionButtonYPos = buttonYPos[Nscenarios-1] + scenarioButtonHeight + 50;
   cp5.addButton("confirmSelection")
      .setBroadcast(false) // Avoids the immediate execution of the button
-     //.setVisible(false)
+     .setVisible(false)
      .setValue(0)
      .setPosition(confirmSelectionButtonXPos,confirmSelectionButtonYPos)
      .setSize(confirmSelectionButtonWidth,confirmSelectionButtonHeight)
@@ -297,9 +297,6 @@ public void controlEvent(ControlEvent theEvent) {
   // Variables
   String eventName = "";
   String textFieldInput = "";
-  
-  // Variables --Output
-  String outString = "";
   
   // In the case the active control is a TextField
   if(theEvent.isAssignableFrom(Textfield.class)) {
@@ -364,6 +361,7 @@ public void controlEvent(ControlEvent theEvent) {
          
         cp5.get(Textarea.class,"scenarioDetails").setVisible(true);
         cp5.get(Textarea.class,"scenarioDetails").setText(concatDescription);
+        cp5.get(Button.class,"confirmSelection").setVisible(true);
          
       } // End of if-statement "Specific Button Verification"
        
@@ -388,7 +386,7 @@ public void selectScenario(int theValue) {
 // Confirm selection
 public void confirmSelection(int theValue) {
  
-  cp5.get(Textlabel.class,"confirmCurrentInput").setText("hola");
+  // cp5.get(Textlabel.class,"confirmCurrentInput").setText("hola");
   
 }
 
