@@ -480,7 +480,7 @@ public void scenarioButtonVisibilitySwitch(int Nscenarios) {
     
     String prefix = "sc";
     String controllerName = singleDigitCorrection(prefix, i);
-    println(controllerName);
+    // println(controllerName);
     cp5.get(Button.class,controllerName).setVisible(true);
     
   } // End of for-loop --Loop around scenario buttons
