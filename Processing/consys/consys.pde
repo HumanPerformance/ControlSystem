@@ -297,11 +297,7 @@ void draw() {
 
 public String[] controlEvent(ControlEvent theEvent) {
   
-  // Variables
-  //String eventName = "";
-  //String textFieldInput = "";
-  
-  
+
   // In the case the active control is a TextField
   if(theEvent.isAssignableFrom(Textfield.class)) {
     
@@ -367,10 +363,12 @@ public String[] controlEvent(ControlEvent theEvent) {
          
         cp5.get(Textarea.class,"scenarioDetails").setVisible(true);
         cp5.get(Textarea.class,"scenarioDetails").setText(concatDescription);
-        cp5.get(Button.class,"confirmSelection").setVisible(true);
-        //cp5.get(Textlabel.class,"confirmCurrentInput").setText("User " + textFieldInput + ", selected scenario " + eventName);
+        
          
       } // End of if-statement "Specific Button Verification"
+      
+      cp5.get(Button.class,"confirmSelection").setVisible(true);
+      cp5.get(Textlabel.class,"confirmCurrentInput").setText("User " + configInfo[1] + ", selected scenario " + configInfo[2]);
        
     } // End if-statemnt "Button Type Verification"
     
