@@ -98,6 +98,8 @@ void setup() {
      .setColor(gray)
      ;
      
+  cp5.getController("userID").getCaptionLabel().setVisible(false);
+     
   // GUI Element :: Label :: Current Input
   int txtLabelWidth_2 = 200;
   int txtLabelHeight_2 = 25;
