@@ -45,6 +45,9 @@ int white = color(255,255,255);
 // Number of scenarios
 int Nscenarios = 12;
 
+// Output Variables
+String[] configInfo = new String[3];
+
 /* ========================================
  * VOID SETUP LOOP
  ======================================= */ 
@@ -218,7 +221,6 @@ void setup() {
      .setColor(white)
      .setColorBackground(black)
      .setColorForeground(white)
-     //.setText("hola me llamo jamon")
      ;
      
   /* ----------------------------------------
@@ -255,8 +257,7 @@ void setup() {
      .setFont(buttonfont)
      .toUpperCase(false)
      ;
-     
-     
+
   // GUI Element :: Label :: Current Input --Confirmation
   int confirmationLabelWidth = 200;
   int confirmationLabelHeight = 25;
@@ -294,11 +295,12 @@ void draw() {
  * CONTROL EVENTS
  ======================================= */ 
 
-public void controlEvent(ControlEvent theEvent) {
+public String[] controlEvent(ControlEvent theEvent) {
   
   // Variables
   //String eventName = "";
   //String textFieldInput = "";
+  
   
   // In the case the active control is a TextField
   if(theEvent.isAssignableFrom(Textfield.class)) {
@@ -315,24 +317,26 @@ public void controlEvent(ControlEvent theEvent) {
     cp5.get(Textlabel.class,"currentInput").setText("Current Input = " + textFieldInput);
     cp5.get(Button.class,"selectScenario").setVisible(true);
     
+    configInfo[1] = textFieldInput;
+    
     // In the case the active control is a Button
   } else if (theEvent.isAssignableFrom(Button.class)) {
-
-     // First, the algorithm reads the name of the button.
-     String eventName = theEvent.getName();
-     println(eventName + "button pressed");
+    
+    // First, the algorithm reads the name of the button.
+    String eventName = theEvent.getName();
+    println(eventName + " button pressed");
      
-     // Button recognition routine
-     char c1 = eventName.charAt(0);
-     char c2 = eventName.charAt(1);
-     String buttonTypeID = str(c1) + str(c2);
+    // Button recognition routine
+    char c1 = eventName.charAt(0);
+    char c2 = eventName.charAt(1);
+    String buttonTypeID = str(c1) + str(c2);
      
-     // Scenario Button Type Verification
-     String expected = "sc";
+    // Scenario Button Type Verification
+    String expected = "sc";
      
-     if (buttonTypeID.equals(expected)) {
-       
-      //selectedScenario = eventName;
+    if (buttonTypeID.equals(expected)) {
+      
+      configInfo[2] = eventName;
        
       if (eventName.equals("sc03")) {
          
@@ -368,9 +372,12 @@ public void controlEvent(ControlEvent theEvent) {
          
       } // End of if-statement "Specific Button Verification"
        
-     } // End if-statemnt "Button Type Verification"
+    } // End if-statemnt "Button Type Verification"
     
   } // End of if-statemnt "Controller Type Verification"
+  
+  printArray(configInfo);
+  return configInfo;
   
 } // End of Control Event Routine
 
