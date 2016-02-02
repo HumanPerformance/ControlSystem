@@ -104,7 +104,9 @@ void setup() {
      .setPosition(100,txtFieldYPos)
      .setSize(txtFieldWidth,txtFieldHeight)
      .setFont(textfont)
-     .setColor(gray)
+     .setColor(white)
+     .setColorBackground(black)
+     .setColorForeground(gray)
      ;
      
   cp5.getController("userID").getCaptionLabel().setVisible(false);
