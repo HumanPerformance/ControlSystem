@@ -267,8 +267,7 @@ void setup() {
   cp5.addTextlabel("confirmCurrentInput") // title object
      .setBroadcast(false)
      .setSize(confirmationLabelWidth, confirmationLabelHeight)
-     .setPosition(confirmationLabelXPos, confirmationLabelYPos) // set position of the title label
-     //.setText("Enter SP ID and press Enter/Return") // title text
+     .setPosition(confirmationLabelXPos, confirmationLabelYPos)
      .setFont(textfont) // set title font :: using lable font and size
      .setColor(white)
      .setBroadcast(true)
@@ -302,7 +301,6 @@ public String[] controlEvent(ControlEvent theEvent) {
     
     // Textfield :: Variables
     String eventName = theEvent.getName();
-    //textFieldInput = theEvent.getStringValue();
     String textFieldInput = theEvent.getStringValue();
     
     // Textfield :: Output messages
@@ -376,7 +374,13 @@ public String[] controlEvent(ControlEvent theEvent) {
       // For either scenario button selection, the program sets the confirm selection button visible and provides a visial update of the must current scenario and user id input.
       cp5.get(Button.class,"confirmSelection").setVisible(true);
       cp5.get(Textlabel.class,"confirmCurrentInput").setText("User " + configInfo[1] + ", selected scenario " + configInfo[2]);
-       
+    
+      // In the case the confirmation button is pressed 
+    } else if (eventName.equals("confirmSelection")) {
+      
+      // First, the program creates 
+      
+      
     } // End if-statemnt "Button Type Verification"
     
   } // End of if-statemnt "Controller Type Verification"
@@ -400,11 +404,15 @@ public void selectScenario(int theValue) {
 } // End of selectScenario button call
 
 
-// Confirm selection
+/* 
+* Confirm selection
+* The following button acomplishes the tasks:
+* > Creates sub-directory, using user ID, to store data
+* > Executes external, data acquisition program
+* > Closes current program
+*/
 public void confirmSelection(int theValue) {
- 
-  // cp5.get(Textlabel.class,"confirmCurrentInput").setText("hola");
-  
+
 }
 
 /* ========================================
@@ -425,7 +433,7 @@ public void confirmSelection(int theValue) {
  *
  -------------------------------------- */
  
-public String timeStamp(String style) {
+public void timeStamp(String style) {
   
   // Variables
   // Input Variables --Processing functions
@@ -471,8 +479,6 @@ public String timeStamp(String style) {
       break;
       
   } // End of switch
-    
-  return timeStamp;
   
 } // End of timeStamp function
  
@@ -535,7 +541,7 @@ public String singleDigitCorrection(String prefix, int counter) {
  * Fluvio L. Lobo Fenoglietto 01/31/2016
  --------------------------------------- */
 
-public void exeLogFile() {
+public String exeLogFile() {
   
   // First, the program generates the path for the execution file
   // In the process, the program generates a directory using the CPU date
@@ -584,5 +590,7 @@ public void exeLogFile() {
     } // End of for-loop
     
   } // End of if-statement
+  
+  return exeLogFilePath;
   
 } // End of exeLogFile function
