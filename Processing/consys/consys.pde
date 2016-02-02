@@ -17,6 +17,12 @@
 // Import Libraries
 import controlP5.*;
 
+// Paths for input/output files
+// > Execution Log File
+String timeStampFolder = timeStamp("dated-folder");
+String logFile = "ExecutionLog.txt";
+String exeLogFilePath = "data/output/" + timeStampFolder + "/" + logFile;
+
 // Variables
 ControlP5 cp5;
 
@@ -54,7 +60,7 @@ String[] configInfo = new String[3];
 void setup() {
   
   // Execution Log File
-  exeLogFile();
+  exeLogFile(exeLogFilePath);
   
   // GUI size
   size(800,800); // These are equivalent to lenX and lenY
@@ -375,11 +381,6 @@ public String[] controlEvent(ControlEvent theEvent) {
       cp5.get(Button.class,"confirmSelection").setVisible(true);
       cp5.get(Textlabel.class,"confirmCurrentInput").setText("User " + configInfo[1] + ", selected scenario " + configInfo[2]);
     
-      // In the case the confirmation button is pressed 
-    } else if (eventName.equals("confirmSelection")) {
-      
-      // First, the program creates 
-      
       
     } // End if-statemnt "Button Type Verification"
     
@@ -412,6 +413,14 @@ public void selectScenario(int theValue) {
 * > Closes current program
 */
 public void confirmSelection(int theValue) {
+  
+  // First, the button generates the new path
+  String userInfoFolder = "data/output/" + timeStampFolder + "/" + configInfo[1] + "/";
+  String userInfoFile = "Info.txt";
+  String userInfoPath = userInfoFolder + userInfoFile;
+  
+  // The program creates the output file
+  createOutput(userInfoPath);
 
 }
 
@@ -433,7 +442,7 @@ public void confirmSelection(int theValue) {
  *
  -------------------------------------- */
  
-public void timeStamp(String style) {
+public String timeStamp(String style) {
   
   // Variables
   // Input Variables --Processing functions
@@ -479,6 +488,8 @@ public void timeStamp(String style) {
       break;
       
   } // End of switch
+    
+  return timeStamp;
   
 } // End of timeStamp function
  
@@ -541,13 +552,13 @@ public String singleDigitCorrection(String prefix, int counter) {
  * Fluvio L. Lobo Fenoglietto 01/31/2016
  --------------------------------------- */
 
-public String exeLogFile() {
+public void exeLogFile(String exeLogFilePath) {
   
-  // First, the program generates the path for the execution file
-  // In the process, the program generates a directory using the CPU date
-  String timeStampFolder = timeStamp("dated-folder");
-  String logFile = "ExecutionLog.txt";
-  String exeLogFilePath = "data/output/" + timeStampFolder + "/" + logFile;
+  //// First, the program generates the path for the execution file
+  //// In the process, the program generates a directory using the CPU date
+  //String timeStampFolder = timeStamp("dated-folder");
+  //String logFile = "ExecutionLog.txt";
+  //String exeLogFilePath = "data/output/" + timeStampFolder + "/" + logFile;
   
   // Here, the program reads such directory looking for the execution log
   // This, of course, may fail if the file has not been created
@@ -590,7 +601,5 @@ public String exeLogFile() {
     } // End of for-loop
     
   } // End of if-statement
-  
-  return exeLogFilePath;
   
 } // End of exeLogFile function
