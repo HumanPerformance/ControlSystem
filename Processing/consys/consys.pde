@@ -80,15 +80,13 @@ void setup() {
   hphlogo = loadImage("media/hphlogo720res30pp.png");
   
   // GUI Element :: Label :: Student ID Label
-  int txtLabelWidth_1 = 250;
-  int txtLabelHeight_1 = 50;
-  int indentCorrection4Label_1 = 5;
-  int textLabelYPos_1 = topMargin;
-  int elementSpacing_1 = 5;
+  int titleLabelWidth = 250;
+  int titleLabelHeight = 50;
+  int titleLabelYPos = topMargin;
   cp5.addTextlabel("studentIDLabel") // title object
      .setBroadcast(false)
-     .setSize(txtLabelWidth_1,txtLabelHeight_1)
-     .setPosition(100 - indentCorrection4Label_1, textLabelYPos_1) // set position of the title label
+     .setSize(titleLabelWidth,titleLabelHeight)
+     .setPosition(leftMargin - 5, titleLabelYPos) // set position of the title label
      .setText("Standardize Patient ID") // title text
      .setFont(titlefont) // set title font :: using lable font and size
      .setColor(gold)
@@ -96,10 +94,9 @@ void setup() {
      ; 
      
   // GUI Control :: Text Field
-  int txtFieldWidth = 275;
+  int txtFieldWidth = 300;
   int txtFieldHeight = 25;
-  int txtFieldYPos = textLabelYPos_1 + txtLabelHeight_1 + elementSpacing_1;
-  int elementSpacing_2 = 10;
+  int txtFieldYPos = titleLabelYPos + titleLabelHeight + 5;
   cp5.addTextfield("userID") // No text to be displayed below the field
      .setPosition(100,txtFieldYPos)
      .setSize(txtFieldWidth,txtFieldHeight)
@@ -112,14 +109,13 @@ void setup() {
   cp5.getController("userID").getCaptionLabel().setVisible(false);
      
   // GUI Element :: Label :: Current Input
-  int txtLabelWidth_2 = 200;
-  int txtLabelHeight_2 = 25;
-  int txtLabelYPos_2 = txtFieldYPos + txtFieldHeight + elementSpacing_2;
-  int indentCorrection4Label_2 = 5;
+  int currentLabelWidth = 200;
+  int currentLabelHeight = 25;
+  int currentLabelYPos = txtFieldYPos + txtFieldHeight + 10;
   cp5.addTextlabel("currentInput") // title object
      .setBroadcast(false)
-     .setSize(txtLabelWidth_2,txtLabelHeight_2)
-     .setPosition(100 - indentCorrection4Label_2, txtLabelYPos_2) // set position of the title label
+     .setSize(currentLabelWidth,currentLabelHeight)
+     .setPosition(leftMargin - 5,currentLabelYPos) // set position of the title label
      .setText("Enter SP ID and press Enter/Return") // title text
      .setFont(textfont) // set title font :: using lable font and size
      .setColor(white)
@@ -138,9 +134,9 @@ void setup() {
   // int Nscenarios = 12; -- This function was made global
   int scenarioButtonWidth = 125;
   int scenarioButtonHeight = 25;
-  int buttonXPos_1 = leftMargin;
-  int buttonYPos0 = txtLabelYPos_2 + txtLabelHeight_2 + 25;
-  int[] buttonYPos = new int[Nscenarios+1];
+  int scenarioButtonXPos = leftMargin;
+  int scenarioButtonYPos0 = currentLabelYPos + currentLabelHeight + 25;
+  int[] scenarioButtonYPos = new int[Nscenarios+1];
   int buttonSpacing = 10;
   
   // Creator Loop
@@ -154,11 +150,11 @@ void setup() {
     
     if (i == 0) {
       
-      buttonYPos[i] = buttonYPos0;  
+      scenarioButtonYPos[i] = scenarioButtonYPos0;  
 
     } else if (i > 0) {
       
-      buttonYPos[i] = buttonYPos[i-1] + scenarioButtonHeight + buttonSpacing;
+      scenarioButtonYPos[i] = scenarioButtonYPos[i-1] + scenarioButtonHeight + buttonSpacing;
         
     } // End of if-statement
     
@@ -167,7 +163,7 @@ void setup() {
         .setBroadcast(false) // Avoids the immediate execution of the button
         .setVisible(false)
         .setValue(0)
-        .setPosition(buttonXPos_1,buttonYPos[i])
+        .setPosition(scenarioButtonXPos,scenarioButtonYPos[i])
         .setSize(scenarioButtonWidth,scenarioButtonHeight)
         .setLabel(buttonLabelText)
         .setColorCaptionLabel(black)
@@ -192,7 +188,7 @@ void setup() {
    --------------------------------------- */
   
   int txtareaXPos = leftMargin + scenarioButtonWidth + 50;
-  int txtareaYPos = buttonYPos0;
+  int txtareaYPos = scenarioButtonYPos0;
   int txtareaXlen = width - txtareaXPos - 50;
   int txtareaYlen = height - txtareaYPos - 125;
   
@@ -222,7 +218,7 @@ void setup() {
   int confirmSelectionButtonWidth = 200;
   int confirmSelectionButtonHeight = 25;
   int confirmSelectionButtonXPos = leftMargin;
-  int confirmSelectionButtonYPos = buttonYPos[Nscenarios-1] + scenarioButtonHeight + 50;
+  int confirmSelectionButtonYPos = scenarioButtonYPos[Nscenarios-1] + scenarioButtonHeight + 50;
   cp5.addButton("confirmSelection")
      .setBroadcast(false) // Avoids the immediate execution of the button
      .setVisible(false)
