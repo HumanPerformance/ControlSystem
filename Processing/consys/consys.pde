@@ -621,4 +621,15 @@ public void exeLogFile(String exeLogFilePath) {
    // The program creates the output file
    createOutput(userInfoPath);
    
+   // The program writes information to the Info file
+   String[] outString = new String[4];
+   String timeStamp = timeStamp("clock");
+   outString[0] = "User Input Summary (Info.txt)";
+   outString[1] = "User ID = " + configInfo[1];
+   outString[2] = "Scenario = " + configInfo[2];
+   outString[3] = "Execution Time = " + timeStamp;
+   
+   // Write strings to file
+   saveStrings(userInfoPath, outString);
+   
  }
