@@ -17,6 +17,12 @@
 // Import Libraries
 import controlP5.*;
 
+// Paths for input/output files
+// > Execution Log File
+String timeStampFolder = timeStamp("dated-folder");
+String logFile = "ExecutionLog.txt";
+String exeLogFilePath = "data/output/" + timeStampFolder + "/" + logFile;
+
 // Variables
 ControlP5 cp5;
 
@@ -45,13 +51,16 @@ int white = color(255,255,255);
 // Number of scenarios
 int Nscenarios = 12;
 
+// Output Variables
+String[] configInfo = new String[3];
+
 /* ========================================
  * VOID SETUP LOOP
  ======================================= */ 
 void setup() {
   
   // Execution Log File
-  exeLogFile();
+  exeLogFile(exeLogFilePath);
   
   // GUI size
   size(800,800); // These are equivalent to lenX and lenY
@@ -91,12 +100,14 @@ void setup() {
   int txtFieldHeight = 25;
   int txtFieldYPos = textLabelYPos_1 + txtLabelHeight_1 + elementSpacing_1;
   int elementSpacing_2 = 10;
-  cp5.addTextfield("") // No text to be displayed below the field
+  cp5.addTextfield("userID") // No text to be displayed below the field
      .setPosition(100,txtFieldYPos)
      .setSize(txtFieldWidth,txtFieldHeight)
      .setFont(textfont)
      .setColor(gray)
      ;
+     
+  cp5.getController("userID").getCaptionLabel().setVisible(false);
      
   // GUI Element :: Label :: Current Input
   int txtLabelWidth_2 = 200;
@@ -216,7 +227,6 @@ void setup() {
      .setColor(white)
      .setColorBackground(black)
      .setColorForeground(white)
-     //.setText("hola me llamo jamon")
      ;
      
   /* ----------------------------------------
@@ -230,15 +240,14 @@ void setup() {
    *
    --------------------------------------- */
    
-  // GUI Control :: Button :: Confirm Selection
-  
+  // GUI Control :: Button :: Confirm Selection  
   int confirmSelectionButtonWidth = 200;
   int confirmSelectionButtonHeight = 25;
   int confirmSelectionButtonXPos = leftMargin;
   int confirmSelectionButtonYPos = buttonYPos[Nscenarios-1] + scenarioButtonHeight + 50;
   cp5.addButton("confirmSelection")
      .setBroadcast(false) // Avoids the immediate execution of the button
-     //.setVisible(false)
+     .setVisible(false)
      .setValue(0)
      .setPosition(confirmSelectionButtonXPos,confirmSelectionButtonYPos)
      .setSize(confirmSelectionButtonWidth,confirmSelectionButtonHeight)
@@ -254,19 +263,17 @@ void setup() {
      .setFont(buttonfont)
      .toUpperCase(false)
      ;
-     
-     
+
   // GUI Element :: Label :: Current Input --Confirmation
   int confirmationLabelWidth = 200;
   int confirmationLabelHeight = 25;
   int confirmationLabelXPos = leftMargin + confirmSelectionButtonWidth + 25;
-  int confirmationLabelYPos = confirmSelectionButtonYPos;
+  int confirmationLabelYPos = confirmSelectionButtonYPos + 5;
   // int indent4ConfirmationLabel = 5;
-  cp5.addTextlabel("currentInput") // title object
+  cp5.addTextlabel("confirmCurrentInput") // title object
      .setBroadcast(false)
      .setSize(confirmationLabelWidth, confirmationLabelHeight)
-     .setPosition(confirmationLabelXPos, confirmationLabelYPos) // set position of the title label
-     //.setText("Enter SP ID and press Enter/Return") // title text
+     .setPosition(confirmationLabelXPos, confirmationLabelYPos)
      .setFont(textfont) // set title font :: using lable font and size
      .setColor(white)
      .setBroadcast(true)
@@ -290,87 +297,130 @@ void draw() {
 } // End of void-draw loop
 
 /* ========================================
- * INTERFACE BUTTONS
+ * CONTROL EVENTS
  ======================================= */ 
 
-public String controlEvent(ControlEvent theEvent) {
+public String[] controlEvent(ControlEvent theEvent) {
   
-  // Variables
-  String eventName = "";
-  String textFieldInput = "";
-  
+  // In the case the active control is a TextField
   if(theEvent.isAssignableFrom(Textfield.class)) {
     
-    eventName = theEvent.getName();
-    textFieldInput = theEvent.getStringValue();
+    // Textfield :: Variables
+    String eventName = theEvent.getName();
+    String textFieldInput = theEvent.getStringValue();
+    
+    // Textfield :: Output messages
     println("controlEvent: accessing a string from controller '" + eventName+"': " + textFieldInput);
+    
+    // Textfield :: Actions
     cp5.get(Textlabel.class,"currentInput").setText("Current Input = " + textFieldInput);
     cp5.get(Button.class,"selectScenario").setVisible(true);
     
+    configInfo[1] = textFieldInput;
+    
+    // The following conditional statement was built to allow for the user to view latest user id changes on the confirmation label
+    if (configInfo[2] == null) {
+      // Here, the array is incomplete so the program cannot update the confirmation label
+    } else {
+      cp5.get(Textlabel.class,"confirmCurrentInput").setText("User " + configInfo[1] + ", selected scenario " + configInfo[2]);
+    } // End of if-statement
+    
+    // In the case the active control is a Button
   } else if (theEvent.isAssignableFrom(Button.class)) {
     
-     // First, the algorithm reads the name of the button.
-     eventName = theEvent.getName();
-     println(eventName + "button pressed");
+    // First, the algorithm reads the name of the button.
+    String eventName = theEvent.getName();
+    println(eventName + " button pressed");
      
-     // Button recognition routine
-     char c1 = eventName.charAt(0);
-     char c2 = eventName.charAt(1);
-     String buttonTypeID = str(c1) + str(c2);
-         
-     // Scenario Button Type Verification
-     String expected = "sc";
+    // Button recognition routine
+    char c1 = eventName.charAt(0);
+    char c2 = eventName.charAt(1);
+    String buttonTypeID = str(c1) + str(c2);
      
-     if (buttonTypeID.equals(expected)) {
+    // Scenario Button Type Verification
+    String expected = "sc";
+     
+    if (buttonTypeID.equals(expected)) {
+      
+      configInfo[2] = eventName;
        
-       if (eventName.equals("sc03")) {
+      if (eventName.equals("sc03")) {
          
-         // Will place an image here!
-         println("An image will be embeded here!");
+        // Will place an image here!
+        println("An image will be embeded here!");
          
-       } else if (eventName.equals("sc04")) {
+      } else if (eventName.equals("sc04")) {
          
-         // Will palce a video here
-         println("A video will be embeded here!");
+        // Will palce a video here
+        println("A video will be embeded here!");
          
-       } else {
+      } else {
          
-         /* ----------------------------------------
-         * SCENARIO DETAILS
-         *
-         * This section creates a text area containing the details of the selected scenario.
-         * The information referring to each scenario will be imported from a configuration file.
-         *
-         --------------------------------------- */
+        /* ----------------------------------------
+        * SCENARIO DETAILS
+        *
+        * This section creates a text area containing the details of the selected scenario.
+        * The information referring to each scenario will be imported from a configuration file.
+        *
+        --------------------------------------- */
     
-         String descriptionFilename = "description.txt";
-         String descriptionPath = "scenario/" + eventName + "/" + descriptionFilename;
+        String descriptionFilename = "description.txt";
+        String descriptionPath = "scenario/" + eventName + "/" + descriptionFilename;
          
-         String[] scenarioDescription = loadStrings(descriptionPath);
-         String concatDescription = join(scenarioDescription," ");
-         println(concatDescription);
+        String[] scenarioDescription = loadStrings(descriptionPath);
+        String concatDescription = join(scenarioDescription," ");
+        println(concatDescription);
          
-         cp5.get(Textarea.class,"scenarioDetails").setVisible(true);
-         cp5.get(Textarea.class,"scenarioDetails").setText(concatDescription);
+        cp5.get(Textarea.class,"scenarioDetails").setVisible(true);
+        cp5.get(Textarea.class,"scenarioDetails").setText(concatDescription);
+        
          
-       } // End of if-statement "Specific Button Verification"
-       
-     } // End of if-statement "Button Type Verification"
+      } // End of if-statement "Specific Button Verification"
+      
+      // For either scenario button selection, the program sets the confirm selection button visible and provides a visial update of the must current scenario and user id input.
+      cp5.get(Button.class,"confirmSelection").setVisible(true);
+      cp5.get(Textlabel.class,"confirmCurrentInput").setText("User " + configInfo[1] + ", selected scenario " + configInfo[2]);
+    
+      
+    } // End if-statemnt "Button Type Verification"
     
   } // End of if-statemnt "Controller Type Verification"
   
-  return textFieldInput;
+  // printArray(configInfo); // Use for debugging
+  return configInfo;
   
 } // End of Control Event Routine
 
-// GUI Element :: Button :: Begin Test
-// Pressing this button will execute:
-// > Writing of standard patient information to file
+/* ----------------------------------------
+ * BUTTONS
+ ---------------------------------------- */
+ 
+// public void 
+
+// Select scenarios button
 public void selectScenario(int theValue) {
  
   scenarioButtonVisibilitySwitch(Nscenarios);
   
 } // End of selectScenario button call
+
+
+/* 
+* Confirm selection
+* The following button acomplishes the tasks:
+* > Creates sub-directory, using user ID, to store data
+* > Executes external, data acquisition program
+* > Closes current program
+*/
+public void confirmSelection(int theValue) {
+  
+  // First, the button triggers the creation of user-input specific folders and files
+  userInfoFile();
+  
+  // Finally, the button commands the termination oof consys
+  exit();
+
+}
 
 /* ========================================
  * FUNCTIONS
@@ -385,6 +435,8 @@ public void selectScenario(int theValue) {
  * The function takes the input "style" (String), which may be either:
  *     > "calendar" outputs date in the format "mm/dd/yyyy hh:mm:ss"
  *     > "clock" outputs time in the format "hh:mm:ss"
+ *
+ * Fluvio L. Lobo Fenoglietto 01/28/2016
  *
  -------------------------------------- */
  
@@ -498,13 +550,13 @@ public String singleDigitCorrection(String prefix, int counter) {
  * Fluvio L. Lobo Fenoglietto 01/31/2016
  --------------------------------------- */
 
-public void exeLogFile() {
+public void exeLogFile(String exeLogFilePath) {
   
-  // First, the program generates the path for the execution file
-  // In the process, the program generates a directory using the CPU date
-  String timeStampFolder = timeStamp("dated-folder");
-  String logFile = "ExecutionLog.txt";
-  String exeLogFilePath = "data/output/" + timeStampFolder + "/" + logFile;
+  //// First, the program generates the path for the execution file
+  //// In the process, the program generates a directory using the CPU date
+  //String timeStampFolder = timeStamp("dated-folder");
+  //String logFile = "ExecutionLog.txt";
+  //String exeLogFilePath = "data/output/" + timeStampFolder + "/" + logFile;
   
   // Here, the program reads such directory looking for the execution log
   // This, of course, may fail if the file has not been created
@@ -522,7 +574,6 @@ public void exeLogFile() {
     String exeTimeStamp = timeStamp("clock");
     outString[1] = "1, " + exeTimeStamp;
     saveStrings(exeLogFilePath, outString);
-    
     
   } else {
     
@@ -550,3 +601,24 @@ public void exeLogFile() {
   } // End of if-statement
   
 } // End of exeLogFile function
+
+/* ---------------------------------------
+ * User Info Path
+ *
+ * This function creates the directory associated with the input user id
+ * The program also saves text file with information regarding the scenario selected
+ *
+ * Fluvio L. Lobo Fenoglietto 02/01/2016
+ --------------------------------------- */
+ 
+ public void userInfoFile() {
+   
+   // First, the button generates the new path
+   String userInfoFolder = "data/output/" + timeStampFolder + "/" + configInfo[1] + "/";
+   String userInfoFilename = "Info.txt";
+   String userInfoPath = userInfoFolder + userInfoFilename;
+  
+   // The program creates the output file
+   createOutput(userInfoPath);
+   
+ }
