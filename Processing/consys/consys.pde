@@ -124,30 +124,6 @@ void setup() {
      .setBroadcast(true)
      ; 
      
-  // GUI Control :: Button :: Select Scenario
-  int selectButtonWidth = 200;
-  int selectButtonHeight = txtFieldHeight;
-  int selectButtonXPos = leftMargin + txtFieldWidth + 25;
-  int selectButtonYPos = txtFieldYPos;
-  cp5.addButton("selectScenario")
-     .setBroadcast(false) // Avoids the immediate execution of the button
-     .setVisible(false)
-     .setValue(0)
-     .setPosition(selectButtonXPos,selectButtonYPos)
-     .setSize(selectButtonWidth,selectButtonHeight)
-     .setLabel("Select Scenario")
-     .setColorCaptionLabel(black)
-     .setColorBackground(gold)
-     .setColorForeground(gray)
-     .setBroadcast(true)
-     ;
-     
-  cp5.getController("selectScenario")
-     .getCaptionLabel()
-     .setFont(buttonfont)
-     .toUpperCase(false)
-     ;
-  
   /* ----------------------------------------
    * SCENARIO SELECTION
    *
@@ -314,7 +290,7 @@ public String[] controlEvent(ControlEvent theEvent) {
     
     // Textfield :: Actions
     cp5.get(Textlabel.class,"currentInput").setText("Current Input = " + textFieldInput);
-    cp5.get(Button.class,"selectScenario").setVisible(true);
+    scenarioButtonVisibilitySwitch(Nscenarios);
     
     configInfo[1] = textFieldInput;
     
@@ -394,24 +370,8 @@ public String[] controlEvent(ControlEvent theEvent) {
 /* ----------------------------------------
  * BUTTONS
  ---------------------------------------- */
- 
-// public void 
 
-// Select scenarios button
-public void selectScenario(int theValue) {
- 
-  scenarioButtonVisibilitySwitch(Nscenarios);
-  
-} // End of selectScenario button call
-
-
-/* 
-* Confirm selection
-* The following button acomplishes the tasks:
-* > Creates sub-directory, using user ID, to store data
-* > Executes external, data acquisition program
-* > Closes current program
-*/
+// Confirm selection
 public void confirmSelection(int theValue) {
   
   // First, the button triggers the creation of user-input specific folders and files
