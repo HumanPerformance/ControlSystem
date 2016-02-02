@@ -262,7 +262,7 @@ void setup() {
   int confirmationLabelWidth = 200;
   int confirmationLabelHeight = 25;
   int confirmationLabelXPos = leftMargin + confirmSelectionButtonWidth + 25;
-  int confirmationLabelYPos = confirmSelectionButtonYPos;
+  int confirmationLabelYPos = confirmSelectionButtonYPos + 5;
   // int indent4ConfirmationLabel = 5;
   cp5.addTextlabel("confirmCurrentInput") // title object
      .setBroadcast(false)
@@ -297,7 +297,6 @@ void draw() {
 
 public String[] controlEvent(ControlEvent theEvent) {
   
-
   // In the case the active control is a TextField
   if(theEvent.isAssignableFrom(Textfield.class)) {
     
@@ -314,6 +313,13 @@ public String[] controlEvent(ControlEvent theEvent) {
     cp5.get(Button.class,"selectScenario").setVisible(true);
     
     configInfo[1] = textFieldInput;
+    
+    // The following conditional statement was built to allow for the user to view latest user id changes on the confirmation label
+    if (configInfo[2] == null) {
+      // Here, the array is incomplete so the program cannot update the confirmation label
+    } else {
+      cp5.get(Textlabel.class,"confirmCurrentInput").setText("User " + configInfo[1] + ", selected scenario " + configInfo[2]);
+    } // End of if-statement
     
     // In the case the active control is a Button
   } else if (theEvent.isAssignableFrom(Button.class)) {
@@ -367,6 +373,7 @@ public String[] controlEvent(ControlEvent theEvent) {
          
       } // End of if-statement "Specific Button Verification"
       
+      // For either scenario button selection, the program sets the confirm selection button visible and provides a visial update of the must current scenario and user id input.
       cp5.get(Button.class,"confirmSelection").setVisible(true);
       cp5.get(Textlabel.class,"confirmCurrentInput").setText("User " + configInfo[1] + ", selected scenario " + configInfo[2]);
        
@@ -374,7 +381,7 @@ public String[] controlEvent(ControlEvent theEvent) {
     
   } // End of if-statemnt "Controller Type Verification"
   
-  printArray(configInfo);
+  // printArray(configInfo); // Use for debugging
   return configInfo;
   
 } // End of Control Event Routine
