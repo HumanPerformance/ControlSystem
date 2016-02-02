@@ -414,13 +414,11 @@ public void selectScenario(int theValue) {
 */
 public void confirmSelection(int theValue) {
   
-  // First, the button generates the new path
-  String userInfoFolder = "data/output/" + timeStampFolder + "/" + configInfo[1] + "/";
-  String userInfoFile = "Info.txt";
-  String userInfoPath = userInfoFolder + userInfoFile;
+  // First, the button triggers the creation of user-input specific folders and files
+  userInfoFile();
   
-  // The program creates the output file
-  createOutput(userInfoPath);
+  // Finally, the button commands the termination oof consys
+  exit();
 
 }
 
@@ -603,3 +601,24 @@ public void exeLogFile(String exeLogFilePath) {
   } // End of if-statement
   
 } // End of exeLogFile function
+
+/* ---------------------------------------
+ * User Info Path
+ *
+ * This function creates the directory associated with the input user id
+ * The program also saves text file with information regarding the scenario selected
+ *
+ * Fluvio L. Lobo Fenoglietto 02/01/2016
+ --------------------------------------- */
+ 
+ public void userInfoFile() {
+   
+   // First, the button generates the new path
+   String userInfoFolder = "data/output/" + timeStampFolder + "/" + configInfo[1] + "/";
+   String userInfoFilename = "Info.txt";
+   String userInfoPath = userInfoFolder + userInfoFilename;
+  
+   // The program creates the output file
+   createOutput(userInfoPath);
+   
+ }
