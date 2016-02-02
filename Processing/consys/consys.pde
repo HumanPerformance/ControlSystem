@@ -285,12 +285,26 @@ public String[] controlEvent(ControlEvent theEvent) {
     String eventName = theEvent.getName();
     String textFieldInput = theEvent.getStringValue();
     
-    // Textfield :: Output messages
-    println("controlEvent: accessing a string from controller '" + eventName+"': " + textFieldInput);
+    // The following conditional statement was designed to check the viability of the user input
+    String trimTextFieldInput = trim(textFieldInput);
+    int stringLength = trimTextFieldInput.length();
     
-    // Textfield :: Actions
-    cp5.get(Textlabel.class,"currentInput").setText("Current Input = " + textFieldInput);
-    scenarioButtonVisibilitySwitch(Nscenarios);
+    if (stringLength == 0) {
+      
+      // If the trimmed string has 0 length, the original string was composed of spaces (no characters).
+      // In this case, the program assumes the user did not provide a viable input and send a message to the user through the current input label
+      cp5.get(Textlabel.class,"currentInput").setText("Not a viable input! Enter SP ID and press Enter/Return"); 
+      
+    } else if (stringLength > 0) {
+      
+      // Textfield :: Output messages
+      println("controlEvent: accessing a string from controller '" + eventName+"': " + textFieldInput);
+    
+      // Textfield :: Actions
+      cp5.get(Textlabel.class,"currentInput").setText("Current Input = " + textFieldInput);
+      scenarioButtonVisibilitySwitch(Nscenarios);
+    
+    } // End of if-statement
     
     configInfo[1] = textFieldInput;
     
