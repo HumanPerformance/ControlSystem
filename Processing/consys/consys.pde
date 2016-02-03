@@ -15,6 +15,8 @@
  ======================================= */
  
 // Import Libraries
+import processing.serial.*;
+import cc.arduino.*;
 import controlP5.*;
 
 // Execution State Variables
@@ -65,6 +67,12 @@ String[] configInfo = new String[3];
 
 // Data Acquisition/Record Index
 int dataIndex = 1;
+
+// Data File Path 
+// Currently the same as userInfoFolder
+
+// Data File Writer
+PrintWriter dataFile;
 
 
 /* ========================================
@@ -617,9 +625,15 @@ public void exeLogFile(String exeLogFilePath) {
    String userInfoFolder = "data/output/" + timeStampFolder + "/" + configInfo[1] + "/";
    String userInfoFilename = "Info.txt";
    String userInfoPath = userInfoFolder + userInfoFilename;
+   
+   // Path to data output file --Arduino and other sensor data
+   String dataTimeStamp = timeStamp("timed-filename");
+   String dataFilename = "dataFile-" + dataTimeStamp + ".txt";
+   String dataFilePath = userInfoFolder + dataFilename;
   
    // The program creates the output file
    createOutput(userInfoPath);
+   createWriter(dataFilePath);
    
    // The program writes information to the Info file
    String[] outString = new String[4];
@@ -641,80 +655,80 @@ public void exeLogFile(String exeLogFilePath) {
   *
   */
  
- public void connect2Arduino() {
-   
-   // The "try-catch" statement works to identify a busy serial port
-   try {
+    //public void connect2Arduino() {
+       
+    //   // The "try-catch" statement works to identify a busy serial port
+    //   try {
+         
+    //    // Establiching serial connection
+    //    arduino = new Arduino(this, Arduino.list()[arduPort], 57600);
+        
+    //    // Validate connection
+    //    int ledPin = 9;
+    //    arduino.digitalWrite(ledPin, Arduino.HIGH);    
+        
+    //   } catch(RuntimeException e) {
+         
+    //     println("Serial Port Busy");
+         
+    //   } // End of try-catch statement
+       
+    // } // End of connect2Arduino function
      
-    // Establiching serial connection
-    arduino = new Arduino(this, Arduino.list()[arduPort], 57600);
-    
-    // Validate connection
-    int ledPin = 9;
-    arduino.digitalWrite(ledPin, Arduino.HIGH);    
-    
-   } catch(RuntimeException e) {
      
-     println("Serial Port Busy");
+    // /* readSensorData
+    //  *
+    //  * The following function reads the analog data measured by a specific sensor.
+    //  *
+    //  */
+      
+    //public void readSensorData(int dataIndex) {
+      
+    //    // Sensor read
+    //  int analogPin = 0;
+    //  int val = arduino.analogRead(analogPin);
+    //  println(val);
+      
+    //  // Writing data to file
+    //  //dataFile.println(val);
+    //  //dataFile.flush();
+    //  //dataFile.close();
+    //  writeSensorData2File(dataIndex, val);
+      
+      
+    //} // End of readSensorData function
+    
+    
+    ///* writeSensorData2File
+    // *
+    // * The following function writes the sensor data to a .txt file
+    // *
+    // */
      
-   } // End of try-catch statement
-   
- } // End of connect2Arduino function
- 
- 
- /* readSensorData
-  *
-  * The following function reads the analog data measured by a specific sensor.
-  *
-  */
-  
-public void readSensorData(int dataIndex) {
-  
-    // Sensor read
-  int analogPin = 0;
-  int val = arduino.analogRead(analogPin);
-  println(val);
-  
-  // Writing data to file
-  //dataFile.println(val);
-  //dataFile.flush();
-  //dataFile.close();
-  writeSensorData2File(dataIndex, val);
-  
-  
-} // End of readSensorData function
-
-
-/* writeSensorData2File
- *
- * The following function writes the sensor data to a .txt file
- *
- */
- 
-public void writeSensorData2File(int dataIndex, int val) {
-  
-  if (dataIndex == 0) {
-    
-    // Initial iteration :: Headers for dataFile
-    String timeStamp = timeStamp("calendar");
-    String headerString1 = "Time Stamp = " + timeStamp;
-    dataFile.println(headerString1);
-    String headerString2 = "Device Name = " + deviceName;
-    dataFile.println(headerString2);
-    String headerString3 = "Sensor (Analog/Digital Pin) = Proximity (A0)";
-    dataFile.println(headerString3);
-    String headerString4 = "=======================================================";
-    dataFile.println(headerString4);
-    
-    dataFile.flush();
-    
-  } else if (dataIndex > 0) {
-    
-    String timeStamp = timeStamp("clock");
-    String dataString = dataIndex + ", " + timeStamp + ", " + val;
-    dataFile.println(dataString);
-    dataFile.flush();
-  
-  } // End of conditional statement
-  
-} // End of writeSensorData2File function
+    //public void writeSensorData2File(int dataIndex, int val) {
+      
+    //  if (dataIndex == 0) {
+        
+    //    // Initial iteration :: Headers for dataFile
+    //    String timeStamp = timeStamp("calendar");
+    //    String headerString1 = "Time Stamp = " + timeStamp;
+    //    dataFile.println(headerString1);
+    //    String headerString2 = "Device Name = " + deviceName;
+    //    dataFile.println(headerString2);
+    //    String headerString3 = "Sensor (Analog/Digital Pin) = Proximity (A0)";
+    //    dataFile.println(headerString3);
+    //    String headerString4 = "=======================================================";
+    //    dataFile.println(headerString4);
+        
+    //    dataFile.flush();
+        
+    //  } else if (dataIndex > 0) {
+        
+    //    String timeStamp = timeStamp("clock");
+    //    String dataString = dataIndex + ", " + timeStamp + ", " + val;
+    //    dataFile.println(dataString);
+    //    dataFile.flush();
+      
+    //  } // End of conditional statement
+      
+    //} // End of writeSensorData2File function
