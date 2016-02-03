@@ -17,16 +17,19 @@
 // Import Libraries
 import controlP5.*;
 
+// Execution State Variables
+String executionState = "config"; // Configuration state set as default
+
+/* ----------------------------------------
+ * VARIABLES FOR CONFIGURATION STATE
+ --------------------------------------- */
+
 // Paths for input/output files
-// > Execution Log File
 String timeStampFolder = timeStamp("dated-folder");
 String logFile = "ExecutionLog.txt";
 String exeLogFilePath = "data/output/" + timeStampFolder + "/" + logFile;
 
-// Execution State Variables
-String executionState = "config";
-
-// Variables
+// Controllers
 ControlP5 cp5;
 
 // Images
@@ -50,12 +53,19 @@ int verydarkgray = color(5,5,5);
 int gold = color(255,204,0);
 int white = color(255,255,255);
 
-// Technical Variables
 // Number of scenarios
 int Nscenarios = 12;
 
 // Output Variables
 String[] configInfo = new String[3];
+
+/* ----------------------------------------
+ * VARIABLES FOR RECORD STATE
+ --------------------------------------- */
+
+// Data Acquisition/Record Index
+int dataIndex = 1;
+
 
 /* ========================================
  * VOID SETUP LOOP
@@ -265,15 +275,15 @@ void setup() {
 
 void draw() {
   
-  background(black);
-  
-  // Place Images
-  image(hphlogo,width-180,height-90);
-  
   // Execution State Switch
   switch (executionState) {
     
     case "config":
+    
+       background(black);
+  
+      // Place Images
+      image(hphlogo,width-180,height-90);
     
       println("Program currently in configuration state");
       break;
