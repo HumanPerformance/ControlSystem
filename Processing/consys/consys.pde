@@ -23,6 +23,9 @@ String timeStampFolder = timeStamp("dated-folder");
 String logFile = "ExecutionLog.txt";
 String exeLogFilePath = "data/output/" + timeStampFolder + "/" + logFile;
 
+// Execution State Variables
+String executionState = "config";
+
 // Variables
 ControlP5 cp5;
 
@@ -267,6 +270,21 @@ void draw() {
   // Place Images
   image(hphlogo,width-180,height-90);
   
+  // Execution State Switch
+  switch (executionState) {
+    
+    case "config":
+    
+      println("Program currently in configuration state");
+      break;
+      
+    case "record":
+    
+      println("Program currently in data record state");
+      break;
+      
+  } // End of switch
+  
   
 } // End of void-draw loop
 
@@ -389,8 +407,10 @@ public void confirmSelection(int theValue) {
   // First, the button triggers the creation of user-input specific folders and files
   userInfoFile();
   
+  executionState = "record";
+  
   // Finally, the button commands the termination oof consys
-  exit();
+  //exit();
 
 }
 
