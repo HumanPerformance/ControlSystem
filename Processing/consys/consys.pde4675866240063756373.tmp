@@ -25,9 +25,6 @@ String executionState = "config"; // Configuration state set as default
 /* ----------------------------------------
  * VARIABLES FOR CONFIGURATION STATE
  --------------------------------------- */
- 
-// Config Index
-int configIndex = 0;
 
 // Paths for input/output files
 String timeStampFolder = timeStamp("dated-folder");
@@ -74,10 +71,9 @@ Serial comPort;
 // Arduino variables
 Arduino arduino;
 int arduPort = 8; // Serial Port Number for the Arduino --This will change depending on the device
-String deviceName = "arduOTO";
 
 // Data Acquisition/Record Index
-int dataIndex = 0;
+int dataIndex = 1;
 
 // Data File Path 
 // Currently the same as userInfoFolder
@@ -303,34 +299,13 @@ void draw() {
   
       // Place Images
       image(hphlogo,width-180,height-90);
-      
-      if (configIndex == 0) {
-        println("Program STATE :: Configuration");
-        configIndex = 1;
-      } // End of if-statement
-      
+    
+      println("Program currently in configuration state");
       break;
       
     case "record":
     
-      if (dataIndex == 0) {
-        println("Program STATE :: Record");
-        
-        connect2Arduino();
-        readSensorData(dataIndex);
-  
-        // Updating Indeces
-        dataIndex = dataIndex + 1;
-        
-      } else {
-        
-        readSensorData(dataIndex);
-        
-        // Updating Indeces
-        dataIndex = dataIndex + 1;
-      
-      } // End of if-statement
-
+      println("Program currently in data record state");
       break;
       
   } // End of switch
@@ -665,7 +640,7 @@ public void exeLogFile(String exeLogFilePath) {
   
    // The program creates the output file
    createOutput(userInfoPath);
-   dataFile = createWriter(dataFilePath);
+   createWriter(dataFilePath);
    
    // The program writes information to the Info file
    String[] outString = new String[4];
@@ -720,7 +695,11 @@ public void readSensorData(int dataIndex) {
   int analogPin = 0;
   int val = arduino.analogRead(analogPin);
   println(val);
-
+    
+  // Writing data to file
+  //dataFile.println(val);
+  //dataFile.flush();
+  //dataFile.close();
   writeSensorData2File(dataIndex, val);  
     
 } // End of readSensorData function
