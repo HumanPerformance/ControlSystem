@@ -280,7 +280,7 @@ void draw() {
     
     case "config":
     
-       background(black);
+      background(black);
   
       // Place Images
       image(hphlogo,width-180,height-90);
