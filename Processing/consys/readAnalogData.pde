@@ -28,12 +28,10 @@ public void readAnalogData(int dataIndex, int Nports) {
     analogPin[i] = i; // Define analog pin in array 
     analogVal[i] = arduino.analogRead(analogPin[i]); // Read analog value of respective pin
     
-    // Writing analog data to file
-    
-    printArray(analogVal);
-    
   } // End of for-loop
-
-  writeSensorData2File(dataIndex, val);  
+  
+  // Writing analog data to file
+  writeAnalogData(dataIndex, analogVal); 
+  printArray(analogVal);
     
 } // End of readSensorData function

@@ -74,6 +74,7 @@ Serial comPort;
 // Arduino variables
 Arduino arduino;
 int arduPort = 8; // Serial Port Number for the Arduino --This will change depending on the device
+int Nports = 6;
 String deviceName = "arduOTO";
 
 // Data Acquisition/Record Index
@@ -317,14 +318,16 @@ void draw() {
         println("Program STATE :: Record");
         
         connect2Arduino();
-        readSensorData(dataIndex);
-  
+        //readSensorData(dataIndex);
+        readAnalogData(dataIndex, Nports);
+        
         // Updating Indeces
         dataIndex = dataIndex + 1;
         
       } else {
         
-        readSensorData(dataIndex);
+        //readSensorData(dataIndex);
+        readAnalogData(dataIndex, Nports);
         
         // Updating Indeces
         dataIndex = dataIndex + 1;

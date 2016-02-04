@@ -6,7 +6,7 @@
  * Fluvio L. Lobo Fenoglietto 02/04/2016
  ==================================== */
    
-public void writeAnalogData(int dataIndex, int Nports, int val) {
+public void writeAnalogData(int dataIndex, int[] analogVal) {
     
   if (dataIndex == 0) {
       
@@ -24,10 +24,13 @@ public void writeAnalogData(int dataIndex, int Nports, int val) {
     dataFile.flush();
       
   } else if (dataIndex > 0) {
+    
+    String analogValues = join(nf(analogVal, 0), ", ");
       
     String timeStamp = timeStamp("clock");
-    String dataString = dataIndex + ", " + timeStamp + ", " + val;
-    dataFile.println(dataString);
+    String outString = dataIndex + ", " + timeStamp + ", " + analogValues;
+    
+    dataFile.println(outString);
     dataFile.flush();
     
   } // End of conditional statement
