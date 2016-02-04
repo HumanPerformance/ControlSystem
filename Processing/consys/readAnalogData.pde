@@ -10,10 +10,8 @@
  *
  * > (int) dataIndex = counter for data indexing
  * > (int) Nports = number of analog ports to read from --more flexible than specifying the Arduino port
- * >
  *
-*/
-    
+*/  
     
 public void readAnalogData(int dataIndex, int Nports) {
   
