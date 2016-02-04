@@ -1,10 +1,11 @@
-/* ===================================
+/* ========================================
  * connect2Arduino
  *
  * The following function establishes a serial connection with an Arduino loaded with the StandardFirmata script.
  * The routine assumes the COM port is always the same.
  *
- ================================== */
+ * Fluvio L. Lobo Fenoglietto 02/04/2016
+ ======================================= */
  
 public void connect2Arduino() {
      
