@@ -16,10 +16,8 @@ public void writeAnalogData(int dataIndex, int[] analogVal) {
     dataFile.println(headerString1);
     String headerString2 = "Device Name = " + deviceName;
     dataFile.println(headerString2);
-    String headerString3 = "Sensor (Analog/Digital Pin) = Proximity (A0)";
+    String headerString3 = "=======================================================";
     dataFile.println(headerString3);
-    String headerString4 = "=======================================================";
-    dataFile.println(headerString4);
       
     dataFile.flush();
       
