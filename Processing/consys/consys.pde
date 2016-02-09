@@ -74,7 +74,8 @@ Serial comPort;
 // Arduino variables
 int Nardus = 2;
 Arduino[] arduino = new Arduino[Nardus];
-int arduPort = 8; // Serial Port Number for the Arduino --This will change depending on the device
+// arduPorts :: This variable will be used in case that desired rfcomm ports begin switching in the serial array
+
 int Nports = 6;
 String deviceName = "arduOTO";
 
@@ -321,7 +322,7 @@ void draw() {
         //connect2Arduino();
         connect2Arduinos(Nardus);
         //readSensorData(dataIndex);
-        readAnalogData(dataIndex, Nports);
+        // readAnalogData(dataIndex, Nports);
         
         // Updating Indeces
         dataIndex = dataIndex + 1;
@@ -329,7 +330,7 @@ void draw() {
       } else {
         
         //readSensorData(dataIndex);
-        readAnalogData(dataIndex, Nports);
+        //readAnalogData(dataIndex, Nports);
         
         // Updating Indeces
         dataIndex = dataIndex + 1;
