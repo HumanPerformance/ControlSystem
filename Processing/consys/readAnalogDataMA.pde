@@ -1,17 +1,12 @@
 /* =====================================
- * readSensorData
+ * readSensorDataMA
  *
- * The following function reads the analog data measured by a specific sensor.
+ * The following function reads the analog iput data from multiple arduino boards.
+ * The number of arduino boards to be accessed is specified by (int) "Nardus".
+ * The number of analog ports to be read is specified by (int) "Nports".
  *
- * Fluvio L. Lobo Fenoglietto 02/04/2016
+ * Fluvio L. Lobo Fenoglietto 02/09/2016
  ==================================== */
-
-/* The function readAnalogData() takes the following inputs
- *
- * > (int) dataIndex = counter for data indexing
- * > (int) Nports = number of analog ports to read from --more flexible than specifying the Arduino port
- *
-*/  
     
 public void readAnalogDataMA(int dataIndex, int Nardus, int Nports) {
   
