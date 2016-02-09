@@ -26,7 +26,8 @@ public void readAnalogDataMA(int dataIndex, int Nardus, int Nports) {
     } // End of for-loop "Analog Ports Loop"
     
     // Writing analog data to file
-    writeAnalogData(dataIndex, analogVal); 
+    int arduIndex = h;
+    writeAnalogDataMA(dataIndex, arduIndex, analogVal);
     printArray(analogVal);
   
   } // End of for-loop "Arduinos Loop"

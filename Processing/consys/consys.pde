@@ -462,7 +462,7 @@ public String[] controlEvent(ControlEvent theEvent) {
 public void confirmSelection(int theValue) {
   
   // First, the button triggers the creation of user-input specific folders and files
-  userInfoFile();
+  userInfoFileMA(Nardus);
   
   executionState = "record";
   
