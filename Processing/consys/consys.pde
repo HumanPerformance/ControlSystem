@@ -72,7 +72,8 @@ String[] configInfo = new String[3];
 Serial comPort;
 
 // Arduino variables
-Arduino arduino;
+int Nardus = 2;
+Arduino[] arduino = new Arduino[Nardus];
 int arduPort = 8; // Serial Port Number for the Arduino --This will change depending on the device
 int Nports = 6;
 String deviceName = "arduOTO";
@@ -317,7 +318,8 @@ void draw() {
       if (dataIndex == 0) {
         println("Program STATE :: Record");
         
-        connect2Arduino();
+        //connect2Arduino();
+        connect2Arduinos(Nardus);
         //readSensorData(dataIndex);
         readAnalogData(dataIndex, Nports);
         
