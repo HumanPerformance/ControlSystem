@@ -331,6 +331,7 @@ void draw() {
         
         //readSensorData(dataIndex);
         //readAnalogData(dataIndex, Nports);
+        readAnalogDataMA(dataIndex, Nardus, Nports);
         
         // Updating Indeces
         dataIndex = dataIndex + 1;
