@@ -86,7 +86,7 @@ int dataIndex = 0;
 // Currently the same as userInfoFolder
 
 // Data File Writer
-PrintWriter dataFile;
+PrintWriter[] dataFile = new PrintWriter[Nardus];
 
 
 /* ========================================
