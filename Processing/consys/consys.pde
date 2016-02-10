@@ -72,8 +72,9 @@ String[] configInfo = new String[3];
 Serial comPort;
 
 // Arduino variables
-int Nardus = 2;
+int Nardus = 1;
 Arduino[] arduino = new Arduino[Nardus];
+
 // arduPorts :: This variable will be used in case that desired rfcomm ports begin switching in the serial array
 
 int Nports = 6;
