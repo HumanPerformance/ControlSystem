@@ -2,18 +2,15 @@
  * Find Camera
  *
  * This function was designed to detect
- * and connect to a desired camera
+ * a desired camera
  *
  * Fluvio L. Lobo Fenoglietto 02/11/2016
  ==================================== */
  
-public int findCam(String name, String res, String fps) {
+public void findCam(String[] cameras, String name, String res, String fps, int camId) {
   
-  int camId = 0;
-  
-  String[] cameras = Capture.list();
   int Ncameras = cameras.length;
-  printArray(cameras);
+  // printArray(cameras);
   
   if (Ncameras == 0) {
     
@@ -32,18 +29,19 @@ public int findCam(String name, String res, String fps) {
       // Starting with matching the name...
       if (connectedCamInfo[0].equals(name)) {
         
-        println("Camera match");
+        // println("Camera match");
         
         // Followed by matching the resolution...
         if (connectedCamInfo[1].equals(res)) {
           
-          println("Resolution match");
+          // println("Resolution match");
           
           // And finishing with a match on the frame rate...
           if (connectedCamInfo[2].equals(fps)) {
             
-            println("Frame Rate match");
-            camId = i;  
+            println("Camera found");
+            camId = i;
+            break;
             
           } // End of if-statement "frame rate match"
           
@@ -54,7 +52,5 @@ public int findCam(String name, String res, String fps) {
     } // End of for-loop
     
   } // End of if-statement
-  
-  return camId;
    
 } // End of function findCam

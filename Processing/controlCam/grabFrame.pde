@@ -15,6 +15,8 @@ public void grabFrame(PGraphics pg, Capture cam, int imageIndex) {
     // The program reads a frame from the camera
     cam.read();
     
+  }
+    
     // This function uses the defined PGraphics object to draw and save images without displaying on the main window/screen
     // Note that this method is significantly slower than using the main window --unknown reason
     pg.beginDraw(); // Begin creating the graphics
@@ -26,10 +28,10 @@ public void grabFrame(PGraphics pg, Capture cam, int imageIndex) {
     
     pg.endDraw(); // End drawing on the graphics
     
-  } else {
+  //} else {
     
-    println("ERRORx002 :: Camera currently unavailable, check connection!");
+  //  println("ERRORx002 :: Camera currently unavailable, check connection!");
     
-  } // End of if-statement "Camera Availability Check"
+  //} // End of if-statement "Camera Availability Check"
   
 } // End of grabFrame function
