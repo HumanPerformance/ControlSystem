@@ -12,6 +12,7 @@ import processing.video.*;
 PGraphics pg;
 Capture cam;
 
+int imageIndex = 1;
 
  
 void setup() {
@@ -24,7 +25,9 @@ void setup() {
   //printArray(cameras);
   
   cam = new Capture(this, cameras[58]);
-  cam.start(); 
+  cam.start();
+  
+  
    
 } // End of void-setup loop
 
@@ -34,8 +37,11 @@ void draw() {
    cam.read();
   }
   pg.beginDraw();
-  pg.image(cam, 0, 0);
-  pg.save("pics/screen001.png");
+  //pg.image(cam, 0, 0);
+  pg.set(0, 0, cam);
+  String imagePath = "pics/screen" + imageIndex + ".png";
+  pg.save(imagePath);
+  imageIndex = imageIndex + 1;
   pg.endDraw();
   // The following does the same, and is faster when just drawing the image
   // without any additional resizing, transformations, or tint.
