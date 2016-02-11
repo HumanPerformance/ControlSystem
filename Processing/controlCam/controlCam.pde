@@ -30,21 +30,26 @@ void setup() {
 
 void draw() {
   
-  //if (cam.available() == true) {
-  //  cam.read();
-  //}
-  ////image(cam, 0, 0);
-  //// The following does the same, and is faster when just drawing the image
-  //// without any additional resizing, transformations, or tint.
-  //// set(0, 0, cam);
-  //saveFrame();
+  if (cam.available() == true) {
+   cam.read();
+  }
+  pg.beginDraw();
+  pg.image(cam, 0, 0);
+  pg.save("pics/screen001.png");
+  pg.endDraw();
+  // The following does the same, and is faster when just drawing the image
+  // without any additional resizing, transformations, or tint.
+  //pg.set(0, 0, cam);
+  //saveFrame("pics/screen-#####.png");
   
 } // End of void-draw loop
 
-void captureEvent(Capture c) {
+//void captureEvent(Capture c) {
   
-  c.read();
-  set(0, 0, pg);
-  saveFrame("pics/screen-#####.png");
+//  c.read();
+//  pg.beginDraw();
+//  pg.image(cam, 0, 0);
+//  pg.endDraw();
+//  saveFrame("pics/screen-#####.png");
   
-} // End of captureEvent function 
+//} // End of captureEvent function 
