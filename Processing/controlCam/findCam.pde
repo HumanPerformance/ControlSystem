@@ -7,7 +7,9 @@
  * Fluvio L. Lobo Fenoglietto 02/11/2016
  ==================================== */
  
-public void findCam(String[] cameras, String name, String res, String fps, int camId) {
+public int findCam(String[] cameras, String name, String res, String fps) {
+  
+  int camId = 0;
   
   int Ncameras = cameras.length;
   // printArray(cameras);
@@ -52,5 +54,7 @@ public void findCam(String[] cameras, String name, String res, String fps, int c
     } // End of for-loop
     
   } // End of if-statement
+  
+  return camId;
    
 } // End of function findCam
