@@ -97,8 +97,9 @@ void setup() {
   exeLogFile(exeLogFilePath);
   
   // GUI size
-  size(800,800); // These are equivalent to lenX and lenY
-  noStroke();
+  fullScreen(1);
+  //size(800,800); // These are equivalent to lenX and lenY
+  //noStroke();
   cp5 = new ControlP5(this);
   
   // GUI Formatting :: Fonts
