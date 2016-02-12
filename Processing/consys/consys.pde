@@ -125,10 +125,10 @@ void setup() {
    --------------------------------------- */
    
   // GUI Control :: Button :: Exit Application  
-  int exitButtonWidth = 100;
+  int exitButtonWidth = 75;
   int exitButtonHeight = 25;
-  int exitButtonXPos = width - exitButtonWidth - 25;
-  int exitButtonYPos = 25;
+  int exitButtonXPos = width - exitButtonWidth - 10;
+  int exitButtonYPos = 10;
   cp5.addButton("exitApplication")
      .setBroadcast(false) // Avoids the immediate execution of the button
      .setValue(0)
@@ -295,8 +295,8 @@ void setup() {
    --------------------------------------- */
    
   // GUI Control :: Button :: Confirm Selection  
-  int confirmSelectionButtonWidth = 200;
-  int confirmSelectionButtonHeight = 15;
+  int confirmSelectionButtonWidth = scenarioButtonWidth;
+  int confirmSelectionButtonHeight = 20;
   int confirmSelectionButtonXPos = leftMargin;
   int confirmSelectionButtonYPos = scenarioButtonYPos[Nscenarios-1] + scenarioButtonHeight + 50;
   cp5.addButton("confirmSelection")
@@ -321,7 +321,8 @@ void setup() {
   // GUI Element :: Label :: Current Input --Confirmation
   int confirmationLabelWidth = 200;
   int confirmationLabelHeight = 25;
-  int confirmationLabelXPos = leftMargin + confirmSelectionButtonWidth + 25;
+  //int confirmationLabelXPos = leftMargin + confirmSelectionButtonWidth + 25;
+  int confirmationLabelXPos = txtareaXPos;
   int confirmationLabelYPos = confirmSelectionButtonYPos;
   // int indent4ConfirmationLabel = 5;
   cp5.addTextlabel("confirmCurrentInput") // title object
@@ -332,7 +333,6 @@ void setup() {
      .setColor(white)
      .setBroadcast(true)
      ; 
-  
      
 } // End of void-setup loop
 
