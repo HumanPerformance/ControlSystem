@@ -112,7 +112,7 @@ void setup() {
   ControlFont textfont = new ControlFont(pfont_2,14); // button font and size
   
   // GUI Elements :: Images :: Logos
-  hphlogo = loadImage("media/hphlogo720res30pp.png");
+  hphlogo = loadImage("media/hphlogo720res.png");
   
   /* ----------------------------------------
    * GENERAL CONTROLS
@@ -350,7 +350,7 @@ void draw() {
       background(black);
   
       // Place Images
-      image(hphlogo,width-180,height-90);
+      image(hphlogo,width-110,height-60);
       
       if (configIndex == 0) {
         println("Program STATE :: Configuration");
