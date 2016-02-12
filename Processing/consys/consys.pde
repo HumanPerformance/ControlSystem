@@ -47,10 +47,10 @@ int lenY = height; // pixels
 int midX = lenX/2; // pixels
 int midY = lenY/2; // pixels
 // > Margins
-int topMargin = 50; // pixels
-int rightMargin = 50; // pixels
-int bottomMargin = 50; // pixels
-int leftMargin = 100; // pixels
+int topMargin = 25; // pixels
+int rightMargin = 25; // pixels
+int bottomMargin = 25; // pixels
+int leftMargin = 25; // pixels
 // > Colors
 int black = color(0,0,0);
 int gray = color(214,214,214);
@@ -98,14 +98,15 @@ void setup() {
   exeLogFile(exeLogFilePath);
   
   // GUI size
-  fullScreen(1);
+  //fullScreen(1);
+  size(800,480); // These are the dimensions of the RasPi screen
   cp5 = new ControlP5(this);
   
   // GUI Formatting :: Fonts
   PFont pfont_1 = createFont("Arial Rounded MT Bold",20,true);
-  ControlFont titlefont = new ControlFont(pfont_1,28); // label font and size
-  ControlFont labelfont = new ControlFont(pfont_1, 14); // label font and size
-  ControlFont buttonfont = new ControlFont(pfont_1,14); // button font and size
+  ControlFont titlefont = new ControlFont(pfont_1,24); // label font and size
+  ControlFont labelfont = new ControlFont(pfont_1, 12); // label font and size
+  ControlFont buttonfont = new ControlFont(pfont_1,12); // button font and size
   
   PFont pfont_2 = createFont("Consolas",20,true);
   ControlFont textfont = new ControlFont(pfont_2,14); // button font and size
@@ -159,11 +160,12 @@ void setup() {
   // GUI Element :: Label :: Student ID Label
   int titleLabelWidth = 250;
   int titleLabelHeight = 50;
+  int titleLabelXPos = leftMargin;
   int titleLabelYPos = topMargin;
   cp5.addTextlabel("studentIDLabel") // title object
      .setBroadcast(false)
      .setSize(titleLabelWidth,titleLabelHeight)
-     .setPosition(leftMargin - 5, titleLabelYPos) // set position of the title label
+     .setPosition(titleLabelXPos - 5, titleLabelYPos) // set position of the title label
      .setText("Standardize Patient ID") // title text
      .setFont(titlefont) // set title font :: using lable font and size
      .setColor(gold)
@@ -173,9 +175,10 @@ void setup() {
   // GUI Control :: Text Field
   int txtFieldWidth = 300;
   int txtFieldHeight = 25;
-  int txtFieldYPos = titleLabelYPos + titleLabelHeight + 5;
+  int txtFieldXPos = leftMargin;
+  int txtFieldYPos = titleLabelYPos + titleLabelHeight - 10;
   cp5.addTextfield("userID") // No text to be displayed below the field
-     .setPosition(100,txtFieldYPos)
+     .setPosition(txtFieldXPos,txtFieldYPos)
      .setSize(txtFieldWidth,txtFieldHeight)
      .setFont(textfont)
      .setColor(white)
@@ -210,9 +213,9 @@ void setup() {
   // Variables
   // int Nscenarios = 12; -- This function was made global
   int scenarioButtonWidth = 125;
-  int scenarioButtonHeight = 25;
+  int scenarioButtonHeight = 15;
   int scenarioButtonXPos = leftMargin;
-  int scenarioButtonYPos0 = currentLabelYPos + currentLabelHeight + 25;
+  int scenarioButtonYPos0 = currentLabelYPos + currentLabelHeight + 5;
   int[] scenarioButtonYPos = new int[Nscenarios+1];
   int buttonSpacing = 10;
   
@@ -293,9 +296,9 @@ void setup() {
    
   // GUI Control :: Button :: Confirm Selection  
   int confirmSelectionButtonWidth = 200;
-  int confirmSelectionButtonHeight = 25;
+  int confirmSelectionButtonHeight = 15;
   int confirmSelectionButtonXPos = leftMargin;
-  int confirmSelectionButtonYPos = scenarioButtonYPos[Nscenarios-1] + scenarioButtonHeight + 50;
+  int confirmSelectionButtonYPos = scenarioButtonYPos[Nscenarios-1] + scenarioButtonHeight + 10;
   cp5.addButton("confirmSelection")
      .setBroadcast(false) // Avoids the immediate execution of the button
      .setVisible(false)
@@ -319,7 +322,7 @@ void setup() {
   int confirmationLabelWidth = 200;
   int confirmationLabelHeight = 25;
   int confirmationLabelXPos = leftMargin + confirmSelectionButtonWidth + 25;
-  int confirmationLabelYPos = confirmSelectionButtonYPos + 5;
+  int confirmationLabelYPos = confirmSelectionButtonYPos;
   // int indent4ConfirmationLabel = 5;
   cp5.addTextlabel("confirmCurrentInput") // title object
      .setBroadcast(false)
