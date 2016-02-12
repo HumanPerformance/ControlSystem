@@ -40,6 +40,7 @@ ControlP5 cp5;
 // Images
 PImage hphlogo;
 PImage otoim;
+int scenario3ImageSwitch = 0;
 
 // GUI Layout Variables
 // > GUI Dimensions
@@ -307,6 +308,12 @@ void draw() {
       // Place Images
       image(hphlogo,width-180,height-90);
       
+      if (scenario3ImageSwitch == 1) {
+       
+        image(otoim,200,250);
+        
+      }
+      
       if (configIndex == 0) {
         println("Program STATE :: Configuration");
         configIndex = 1;
@@ -409,13 +416,13 @@ public String[] controlEvent(ControlEvent theEvent) {
       configInfo[2] = eventName;
        
       if (eventName.equals("sc03")) {
-         
-        // Will place an image here!
+
+        cp5.get(Textarea.class,"scenarioDetails").setVisible(false); 
         String imageDir = "scenario/" + eventName + "/";
-        String imageName = "oto001.lpg";
+        String imageName = "oto001.jpg";
         String imagePath = imageDir + imageName;
         otoim = loadImage(imagePath);
-        println("An image will be embeded here!");
+        scenario3ImageSwitch = 1;
          
       } else if (eventName.equals("sc04")) {
          
