@@ -74,7 +74,6 @@ Serial comPort;
 // Arduino variables
 int Nardus = 1;
 Arduino[] arduino = new Arduino[Nardus];
-
 // arduPorts :: This variable will be used in case that desired rfcomm ports begin switching in the serial array
 
 int Nports = 6;
@@ -88,7 +87,6 @@ int dataIndex = 0;
 
 // Data File Writer
 PrintWriter[] dataFile = new PrintWriter[Nardus];
-
 
 /* ========================================
  * VOID SETUP LOOP
@@ -318,6 +316,7 @@ void draw() {
     case "record":
     
       if (dataIndex == 0) {
+        
         println("Program STATE :: Record");
         
         //connect2Arduino();
@@ -463,7 +462,7 @@ public String[] controlEvent(ControlEvent theEvent) {
 public void confirmSelection(int theValue) {
   
   // First, the button triggers the creation of user-input specific folders and files
-  userInfoFileMA(Nardus);
+  userInfoFile(Nardus);
   
   executionState = "record";
   

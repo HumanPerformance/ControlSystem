@@ -7,7 +7,7 @@
  * Fluvio L. Lobo Fenoglietto 02/09/2016
  ==================================== */
  
-public void userInfoFileMA(int Nardus) {
+public void userInfoFile(int Nardus) {
   
   for (int h = 0; h < Nardus; h ++) {
     
