@@ -57,6 +57,7 @@ int gray = color(214,214,214);
 int verydarkgray = color(5,5,5);
 int gold = color(255,204,0);
 int white = color(255,255,255);
+int red = color(232,97,82);
 
 // Number of scenarios
 int Nscenarios = 12;
@@ -113,12 +114,45 @@ void setup() {
   hphlogo = loadImage("media/hphlogo720res30pp.png");
   
   /* ----------------------------------------
+   * GENERAL CONTROLS
+   *
+   * This section has been dedicated to the
+   * creating of general purpose controls for
+   * the gui. For instance, and {EXIT} button
+   * to scape from the application
+   *
+   --------------------------------------- */
+   
+  // GUI Control :: Button :: Exit Application  
+  int exitButtonWidth = 100;
+  int exitButtonHeight = 25;
+  int exitButtonXPos = width - exitButtonWidth - 25;
+  int exitButtonYPos = 25;
+  cp5.addButton("exitApplication")
+     .setBroadcast(false) // Avoids the immediate execution of the button
+     .setValue(0)
+     .setPosition(exitButtonXPos,exitButtonYPos)
+     .setSize(exitButtonWidth,exitButtonHeight)
+     .setLabel("EXIT")
+     .setColorCaptionLabel(black)
+     .setColorBackground(red)
+     .setColorForeground(gray)
+     .setBroadcast(true)
+     ;
+     
+  cp5.getController("exitApplication")
+     .getCaptionLabel()
+     .setFont(buttonfont)
+     .toUpperCase(false)
+     ;
+  
+  
+  /* ----------------------------------------
    * STANDARDIZE PATIENT ID
    *
    * This section creates the text field, and
    * associated labels, for the SP to input
    * his/her information
-   * 
    *
    --------------------------------------- */
   
@@ -403,6 +437,14 @@ public String[] controlEvent(ControlEvent theEvent) {
     // First, the algorithm reads the name of the button.
     String eventName = theEvent.getName();
     println(eventName + " button pressed");
+    
+    if (eventName.equals("exitApplication")) {
+      
+      // This button triggers the closure of the consys program
+      exit();
+      
+    } // End of if-statement "exitApplication" --button press
+    
      
     // Button recognition routine
     char c1 = eventName.charAt(0);
