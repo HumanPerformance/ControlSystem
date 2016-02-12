@@ -39,6 +39,7 @@ ControlP5 cp5;
 
 // Images
 PImage hphlogo;
+PImage otoim;
 
 // GUI Layout Variables
 // > GUI Dimensions
@@ -410,6 +411,10 @@ public String[] controlEvent(ControlEvent theEvent) {
       if (eventName.equals("sc03")) {
          
         // Will place an image here!
+        String imageDir = "scenario/" + eventName + "/";
+        String imageName = "oto001.lpg";
+        String imagePath = imageDir + imageName;
+        otoim = loadImage(imagePath);
         println("An image will be embeded here!");
          
       } else if (eventName.equals("sc04")) {
