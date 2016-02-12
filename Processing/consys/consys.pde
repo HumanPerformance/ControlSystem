@@ -434,17 +434,22 @@ public String[] controlEvent(ControlEvent theEvent) {
     // In the case the active control is a Button
   } else if (theEvent.isAssignableFrom(Button.class)) {
     
-    // First, the algorithm reads the name of the button.
+    // Reading button event information
     String eventName = theEvent.getName();
     println(eventName + " button pressed");
     
-    if (eventName.equals("exitApplication")) {
-      
+    /* ----------------------------------------
+     * GENERAL PURPOSE BUTTONS
+     --------------------------------------- */
+    
+    if (eventName.equals("exitApplication")) {     
       // This button triggers the closure of the consys program
-      exit();
-      
+      exit();    
     } // End of if-statement "exitApplication" --button press
     
+    /* ----------------------------------------
+     * SCENARIO BUTTONS
+     --------------------------------------- */
      
     // Button recognition routine
     char c1 = eventName.charAt(0);
@@ -496,7 +501,7 @@ public String[] controlEvent(ControlEvent theEvent) {
       cp5.get(Textlabel.class,"confirmCurrentInput").setText("User " + configInfo[1] + ", selected scenario " + configInfo[2]);
     
       
-    } // End if-statemnt "Button Type Verification"
+    } // End if-statemnt "Scenario Buttons"
     
   } // End of if-statemnt "Controller Type Verification"
   
