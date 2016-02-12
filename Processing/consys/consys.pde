@@ -98,8 +98,6 @@ void setup() {
   
   // GUI size
   fullScreen(1);
-  //size(800,800); // These are equivalent to lenX and lenY
-  //noStroke();
   cp5 = new ControlP5(this);
   
   // GUI Formatting :: Fonts
@@ -113,6 +111,16 @@ void setup() {
   
   // GUI Elements :: Images :: Logos
   hphlogo = loadImage("media/hphlogo720res30pp.png");
+  
+  /* ----------------------------------------
+   * STANDARDIZE PATIENT ID
+   *
+   * This section creates the text field, and
+   * associated labels, for the SP to input
+   * his/her information
+   * 
+   *
+   --------------------------------------- */
   
   // GUI Element :: Label :: Student ID Label
   int titleLabelWidth = 250;
