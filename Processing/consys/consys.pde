@@ -217,7 +217,7 @@ void setup() {
   int scenarioButtonXPos = leftMargin;
   int scenarioButtonYPos0 = currentLabelYPos + currentLabelHeight + 5;
   int[] scenarioButtonYPos = new int[Nscenarios+1];
-  int buttonSpacing = 10;
+  int buttonSpacing = 5;
   
   // Creator Loop
   for (int i = 0; i < Nscenarios; i++) {
@@ -298,7 +298,7 @@ void setup() {
   int confirmSelectionButtonWidth = 200;
   int confirmSelectionButtonHeight = 15;
   int confirmSelectionButtonXPos = leftMargin;
-  int confirmSelectionButtonYPos = scenarioButtonYPos[Nscenarios-1] + scenarioButtonHeight + 10;
+  int confirmSelectionButtonYPos = scenarioButtonYPos[Nscenarios-1] + scenarioButtonHeight + 50;
   cp5.addButton("confirmSelection")
      .setBroadcast(false) // Avoids the immediate execution of the button
      .setVisible(false)
