@@ -37,10 +37,11 @@ String exeLogFilePath = "data/output/" + timeStampFolder + "/" + logFile;
 // Controllers
 ControlP5 cp5;
 
-// Images
+// Media
 PImage hphlogo;
 PImage otoim;
 int scenario3ImageSwitch = 0;
+int scenario4ImageSwitch = 0;
 
 // GUI Layout Variables
 // > GUI Dimensions
@@ -354,9 +355,16 @@ void draw() {
       // Place Images
       image(hphlogo,width-110,height-60);
       
+      /* -----------------------------
+       * Scenario Media
+       ---------------------------- */
+      
       if (scenario3ImageSwitch == 1) {
        
         image(otoim,200,250);
+        
+      } else if (scenario4ImageSwitch == 1) {
+        
         
       }
       
@@ -485,8 +493,12 @@ public String[] controlEvent(ControlEvent theEvent) {
          
       } else if (eventName.equals("sc04")) {
          
-        // Will palce a video here
-        println("A video will be embeded here!");
+        cp5.get(Textarea.class,"scenarioDetails").setVisible(false); 
+        String imageDir = "scenario/" + eventName + "/";
+        String imageName = "oto001.jpg";
+        String imagePath = imageDir + imageName;
+        otoim = loadImage(imagePath);
+        scenario4ImageSwitch = 1;
          
       } else {
          
@@ -497,6 +509,9 @@ public String[] controlEvent(ControlEvent theEvent) {
         * The information referring to each scenario will be imported from a configuration file.
         *
         --------------------------------------- */
+        
+        scenario3ImageSwitch = 0;
+        scenario4ImageSwitch = 0;
     
         String descriptionFilename = "description.txt";
         String descriptionPath = "scenario/" + eventName + "/" + descriptionFilename;
