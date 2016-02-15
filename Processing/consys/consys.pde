@@ -78,7 +78,7 @@ String[] configInfo = new String[3];
 Serial comPort;
 
 // Arduino variables
-int Nardus = 1;
+int Nardus = 2;
 Arduino[] arduino = new Arduino[Nardus];
 // arduPorts :: This variable will be used in case that desired rfcomm ports begin switching in the serial array
 
@@ -393,21 +393,15 @@ void draw() {
         
         println("Program STATE :: Record");
         
-        //connect2Arduino();
         connect2Arduinos(Nardus);
-        //readSensorData(dataIndex);
-        // readAnalogData(dataIndex, Nports);
         
         // Updating Indeces
         dataIndex = dataIndex + 1;
         
       } else {
         
-        //readSensorData(dataIndex);
-        //readAnalogData(dataIndex, Nports);
-        readAnalogDataMA(dataIndex, Nardus, Nports);
+        readAnalogData(dataIndex, Nardus, Nports);
         
-        // Updating Indeces
         dataIndex = dataIndex + 1;
       
       } // End of if-statement

@@ -8,7 +8,7 @@
  * Fluvio L. Lobo Fenoglietto 02/09/2016
  ==================================== */
     
-public void readAnalogDataMA(int dataIndex, int Nardus, int Nports) {
+public void readAnalogData(int dataIndex, int Nardus, int Nports) {
   
   for (int h = 0; h < Nardus; h ++) {
     
@@ -27,7 +27,7 @@ public void readAnalogDataMA(int dataIndex, int Nardus, int Nports) {
     
     // Writing analog data to file
     int arduIndex = h;
-    writeAnalogDataMA(dataIndex, arduIndex, analogVal);
+    writeAnalogData(dataIndex, arduIndex, analogVal);
     printArray(analogVal);
   
   } // End of for-loop "Arduinos Loop"

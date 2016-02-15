@@ -6,7 +6,7 @@
  * Fluvio L. Lobo Fenoglietto 02/09/2016
  ==================================== */
    
-public void writeAnalogDataMA(int dataIndex, int arduIndex, int[] analogVal) {
+public void writeAnalogData(int dataIndex, int arduIndex, int[] analogVal) {
 
   if (dataIndex == 0) {
       
