@@ -395,6 +395,8 @@ void draw() {
         
         connect2Arduinos(Nardus);
         
+        readAnalogData(dataIndex, Nardus, Nports);
+        
         // Updating Indeces
         dataIndex = dataIndex + 1;
         
