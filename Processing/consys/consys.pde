@@ -361,7 +361,11 @@ void draw() {
       
       if (scenario3ImageSwitch == 1) {
        
-        image(otoim,200,250);
+        int media1XPos = leftMargin + 175;
+        int media1YPos = 125;
+        int media1Xlen = 500;
+        int media1Ylen = 250;
+        image(otoim,media1XPos,media1YPos,media1Xlen,media1Ylen);
         
       } else if (scenario4ImageSwitch == 1) {
         
