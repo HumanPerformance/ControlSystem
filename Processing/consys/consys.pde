@@ -18,6 +18,7 @@
 import processing.serial.*;
 import cc.arduino.*;
 import controlP5.*;
+import processing.video.*;
 
 // Execution State Variables
 String executionState = "config"; // Configuration state set as default
@@ -41,7 +42,8 @@ ControlP5 cp5;
 PImage hphlogo;
 PImage otoim;
 int scenario3ImageSwitch = 0;
-int scenario4ImageSwitch = 0;
+Movie ophvid;
+int scenario4VideoSwitch = 0;
 
 // GUI Layout Variables
 // > GUI Dimensions
@@ -116,7 +118,7 @@ void setup() {
   
   // GUI Elements :: Images :: Logos
   hphlogo = loadImage("media/hphlogo720res.png");
-  
+
   /* ----------------------------------------
    * GENERAL CONTROLS
    *
@@ -367,9 +369,15 @@ void draw() {
         int media1Ylen = 250;
         image(otoim,media1XPos,media1YPos,media1Xlen,media1Ylen);
         
-      } else if (scenario4ImageSwitch == 1) {
+      } else if (scenario4VideoSwitch == 1) {
         
-        
+        int media1XPos = leftMargin + 175;
+        int media1YPos = 125;
+        int media1Xlen = 500;
+        int media1Ylen = 250;
+        image(ophvid,media1XPos,media1YPos,media1Xlen,media1Ylen);
+        ophvid.play();
+
       }
       
       if (configIndex == 0) {
@@ -494,15 +502,21 @@ public String[] controlEvent(ControlEvent theEvent) {
         String imagePath = imageDir + imageName;
         otoim = loadImage(imagePath);
         scenario3ImageSwitch = 1;
+        scenario4VideoSwitch = 0;
+        try {
+          ophvid.stop();
+        } catch (NullPointerException e) {
+        }
          
       } else if (eventName.equals("sc04")) {
          
-        cp5.get(Textarea.class,"scenarioDetails").setVisible(false); 
-        String imageDir = "scenario/" + eventName + "/";
-        String imageName = "oto001.jpg";
-        String imagePath = imageDir + imageName;
-        otoim = loadImage(imagePath);
-        scenario4ImageSwitch = 1;
+        cp5.get(Textarea.class,"scenarioDetails").setVisible(false);
+        String videoDir = "scenario/" + eventName + "/";
+        String videoName = "ophvid.mp4";
+        String videoPath = videoDir + videoName;
+        ophvid = new Movie(this, videoPath);
+        scenario4VideoSwitch = 1;
+        scenario3ImageSwitch = 0;
          
       } else {
          
@@ -515,7 +529,11 @@ public String[] controlEvent(ControlEvent theEvent) {
         --------------------------------------- */
         
         scenario3ImageSwitch = 0;
-        scenario4ImageSwitch = 0;
+        scenario4VideoSwitch = 0;
+        try {
+          ophvid.stop();
+        } catch (NullPointerException e) {
+        }
     
         String descriptionFilename = "description.txt";
         String descriptionPath = "scenario/" + eventName + "/" + descriptionFilename;
@@ -543,6 +561,14 @@ public String[] controlEvent(ControlEvent theEvent) {
   return configInfo;
   
 } // End of Control Event Routine
+
+void movieEvent(Movie ophvid) {
+  
+  if (scenario4VideoSwitch == 1) {
+    ophvid.read();
+  }
+  
+}
 
 /* ----------------------------------------
  * BUTTONS
