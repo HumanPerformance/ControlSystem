@@ -1,5 +1,5 @@
 /* =====================================
- * readSensorDataMA
+ * readSensorData
  *
  * The following function reads the analog iput data from multiple arduino boards.
  * The number of arduino boards to be accessed is specified by (int) "Nardus".
