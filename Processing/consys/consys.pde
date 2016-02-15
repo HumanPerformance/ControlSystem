@@ -49,16 +49,17 @@ int lenY = height; // pixels
 int midX = lenX/2; // pixels
 int midY = lenY/2; // pixels
 // > Margins
-int topMargin = 50; // pixels
-int rightMargin = 50; // pixels
-int bottomMargin = 50; // pixels
-int leftMargin = 100; // pixels
+int topMargin = 25; // pixels
+int rightMargin = 25; // pixels
+int bottomMargin = 25; // pixels
+int leftMargin = 25; // pixels
 // > Colors
 int black = color(0,0,0);
 int gray = color(214,214,214);
 int verydarkgray = color(5,5,5);
 int gold = color(255,204,0);
 int white = color(255,255,255);
+int red = color(232,97,82);
 
 // Number of scenarios
 int Nscenarios = 12;
@@ -99,30 +100,74 @@ void setup() {
   exeLogFile(exeLogFilePath);
   
   // GUI size
-  size(800,800); // These are equivalent to lenX and lenY
-  noStroke();
+  //fullScreen(1);
+  size(800,480); // These are the dimensions of the RasPi screen
   cp5 = new ControlP5(this);
   
   // GUI Formatting :: Fonts
   PFont pfont_1 = createFont("Arial Rounded MT Bold",20,true);
-  ControlFont titlefont = new ControlFont(pfont_1,28); // label font and size
-  ControlFont labelfont = new ControlFont(pfont_1, 14); // label font and size
-  ControlFont buttonfont = new ControlFont(pfont_1,14); // button font and size
+  ControlFont titlefont = new ControlFont(pfont_1,24); // label font and size
+  ControlFont labelfont = new ControlFont(pfont_1, 12); // label font and size
+  ControlFont buttonfont = new ControlFont(pfont_1,12); // button font and size
   
   PFont pfont_2 = createFont("Consolas",20,true);
   ControlFont textfont = new ControlFont(pfont_2,14); // button font and size
   
   // GUI Elements :: Images :: Logos
-  hphlogo = loadImage("media/hphlogo720res30pp.png");
+  hphlogo = loadImage("media/hphlogo720res.png");
+  
+  /* ----------------------------------------
+   * GENERAL CONTROLS
+   *
+   * This section has been dedicated to the
+   * creating of general purpose controls for
+   * the gui. For instance, and {EXIT} button
+   * to scape from the application
+   *
+   --------------------------------------- */
+   
+  // GUI Control :: Button :: Exit Application  
+  int exitButtonWidth = 75;
+  int exitButtonHeight = 25;
+  int exitButtonXPos = width - exitButtonWidth - 10;
+  int exitButtonYPos = 10;
+  cp5.addButton("exitApplication")
+     .setBroadcast(false) // Avoids the immediate execution of the button
+     .setValue(0)
+     .setPosition(exitButtonXPos,exitButtonYPos)
+     .setSize(exitButtonWidth,exitButtonHeight)
+     .setLabel("EXIT")
+     .setColorCaptionLabel(black)
+     .setColorBackground(red)
+     .setColorForeground(gray)
+     .setBroadcast(true)
+     ;
+     
+  cp5.getController("exitApplication")
+     .getCaptionLabel()
+     .setFont(buttonfont)
+     .toUpperCase(false)
+     ;
+  
+  
+  /* ----------------------------------------
+   * STANDARDIZE PATIENT ID
+   *
+   * This section creates the text field, and
+   * associated labels, for the SP to input
+   * his/her information
+   *
+   --------------------------------------- */
   
   // GUI Element :: Label :: Student ID Label
   int titleLabelWidth = 250;
   int titleLabelHeight = 50;
+  int titleLabelXPos = leftMargin;
   int titleLabelYPos = topMargin;
   cp5.addTextlabel("studentIDLabel") // title object
      .setBroadcast(false)
      .setSize(titleLabelWidth,titleLabelHeight)
-     .setPosition(leftMargin - 5, titleLabelYPos) // set position of the title label
+     .setPosition(titleLabelXPos - 5, titleLabelYPos) // set position of the title label
      .setText("Standardize Patient ID") // title text
      .setFont(titlefont) // set title font :: using lable font and size
      .setColor(gold)
@@ -132,9 +177,10 @@ void setup() {
   // GUI Control :: Text Field
   int txtFieldWidth = 300;
   int txtFieldHeight = 25;
-  int txtFieldYPos = titleLabelYPos + titleLabelHeight + 5;
+  int txtFieldXPos = leftMargin;
+  int txtFieldYPos = titleLabelYPos + titleLabelHeight - 10;
   cp5.addTextfield("userID") // No text to be displayed below the field
-     .setPosition(100,txtFieldYPos)
+     .setPosition(txtFieldXPos,txtFieldYPos)
      .setSize(txtFieldWidth,txtFieldHeight)
      .setFont(textfont)
      .setColor(white)
@@ -169,11 +215,11 @@ void setup() {
   // Variables
   // int Nscenarios = 12; -- This function was made global
   int scenarioButtonWidth = 125;
-  int scenarioButtonHeight = 25;
+  int scenarioButtonHeight = 15;
   int scenarioButtonXPos = leftMargin;
-  int scenarioButtonYPos0 = currentLabelYPos + currentLabelHeight + 25;
+  int scenarioButtonYPos0 = currentLabelYPos + currentLabelHeight + 5;
   int[] scenarioButtonYPos = new int[Nscenarios+1];
-  int buttonSpacing = 10;
+  int buttonSpacing = 5;
   
   // Creator Loop
   for (int i = 0; i < Nscenarios; i++) {
@@ -251,8 +297,8 @@ void setup() {
    --------------------------------------- */
    
   // GUI Control :: Button :: Confirm Selection  
-  int confirmSelectionButtonWidth = 200;
-  int confirmSelectionButtonHeight = 25;
+  int confirmSelectionButtonWidth = scenarioButtonWidth;
+  int confirmSelectionButtonHeight = 20;
   int confirmSelectionButtonXPos = leftMargin;
   int confirmSelectionButtonYPos = scenarioButtonYPos[Nscenarios-1] + scenarioButtonHeight + 50;
   cp5.addButton("confirmSelection")
@@ -277,8 +323,9 @@ void setup() {
   // GUI Element :: Label :: Current Input --Confirmation
   int confirmationLabelWidth = 200;
   int confirmationLabelHeight = 25;
-  int confirmationLabelXPos = leftMargin + confirmSelectionButtonWidth + 25;
-  int confirmationLabelYPos = confirmSelectionButtonYPos + 5;
+  //int confirmationLabelXPos = leftMargin + confirmSelectionButtonWidth + 25;
+  int confirmationLabelXPos = txtareaXPos;
+  int confirmationLabelYPos = confirmSelectionButtonYPos;
   // int indent4ConfirmationLabel = 5;
   cp5.addTextlabel("confirmCurrentInput") // title object
      .setBroadcast(false)
@@ -288,7 +335,6 @@ void setup() {
      .setColor(white)
      .setBroadcast(true)
      ; 
-  
      
 } // End of void-setup loop
 
@@ -306,7 +352,7 @@ void draw() {
       background(black);
   
       // Place Images
-      image(hphlogo,width-180,height-90);
+      image(hphlogo,width-110,height-60);
       
       if (scenario3ImageSwitch == 1) {
        
@@ -399,9 +445,22 @@ public String[] controlEvent(ControlEvent theEvent) {
     // In the case the active control is a Button
   } else if (theEvent.isAssignableFrom(Button.class)) {
     
-    // First, the algorithm reads the name of the button.
+    // Reading button event information
     String eventName = theEvent.getName();
     println(eventName + " button pressed");
+    
+    /* ----------------------------------------
+     * GENERAL PURPOSE BUTTONS
+     --------------------------------------- */
+    
+    if (eventName.equals("exitApplication")) {     
+      // This button triggers the closure of the consys program
+      exit();    
+    } // End of if-statement "exitApplication" --button press
+    
+    /* ----------------------------------------
+     * SCENARIO BUTTONS
+     --------------------------------------- */
      
     // Button recognition routine
     char c1 = eventName.charAt(0);
@@ -457,7 +516,7 @@ public String[] controlEvent(ControlEvent theEvent) {
       cp5.get(Textlabel.class,"confirmCurrentInput").setText("User " + configInfo[1] + ", selected scenario " + configInfo[2]);
     
       
-    } // End if-statemnt "Button Type Verification"
+    } // End if-statemnt "Scenario Buttons"
     
   } // End of if-statemnt "Controller Type Verification"
   
