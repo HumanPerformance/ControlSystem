@@ -391,18 +391,18 @@ void draw() {
     
       if (dataIndex == 0) {
         
-        println("Program STATE :: Record");
+        //println("Program STATE :: Record");
         
-        connect2Arduinos(Nardus);
+        //connect2Arduinos(Nardus);
         
-        readAnalogData(dataIndex, Nardus, Nports);
+        //readAnalogData(dataIndex, Nardus, Nports);
         
         // Updating Indeces
         dataIndex = dataIndex + 1;
         
       } else {
         
-        readAnalogData(dataIndex, Nardus, Nports);
+        //readAnalogData(dataIndex, Nardus, Nports);
         
         dataIndex = dataIndex + 1;
       
@@ -577,6 +577,8 @@ public void confirmSelection(int theValue) {
   userInfoFile(Nardus);
   
   executionState = "record";
+  
+  clearWindow();
   
 }
 
