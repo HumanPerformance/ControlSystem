@@ -389,6 +389,8 @@ void draw() {
       
     case "record":
     
+      background(black);
+      
       if (dataIndex == 0) {
         
         //println("Program STATE :: Record");
@@ -578,7 +580,7 @@ public void confirmSelection(int theValue) {
   
   executionState = "record";
   
-  clearWindow();
+  clearWindow(Nscenarios);
   
 }
 
