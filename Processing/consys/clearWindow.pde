@@ -12,7 +12,7 @@
 public void clearWindow(int Nscenarios) {
   
   // Hide all the current objects
-  // cp5.get(Button.class,"exitApplication").setVisible(false); // Exit Button
+  // cp5.get(Button.class,"exitApplication").setVisible(true); // Exit Button
   cp5.get(Textlabel.class,"studentIDLabel").setVisible(false); // Student ID Label/Title
   
   cp5.get(Textfield.class,"userID").setVisible(false); // User ID input
@@ -35,10 +35,10 @@ public void clearWindow(int Nscenarios) {
   
   cp5.get(Textarea.class,"scenarioDetails").setVisible(false); // Scenario details
   
-  cp5.get(Button.class,"confirmSelection").setVisible(false); // Selection confirmation button
-  
   cp5.get(Textlabel.class,"confirmCurrentInput").setVisible(false); // Current user input label
-
-
   
-}
+  cp5.get(Button.class,"confirmSelection").setColorCaptionLabel(black);
+  cp5.get(Button.class,"confirmSelection").setColorBackground(black);
+  cp5.get(Button.class,"confirmSelection").setColorForeground(black);
+
+} // End of clearWindow function
