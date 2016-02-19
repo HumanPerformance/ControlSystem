@@ -106,6 +106,7 @@ void setup() {
   // GUI size
   //fullScreen(1);
   size(800,480); // These are the dimensions of the RasPi screen
+  background(0);
   cp5 = new ControlP5(this);
   
   // GUI Formatting :: Fonts
@@ -600,6 +601,12 @@ public String[] controlEvent(ControlEvent theEvent) {
       executionState = "record";
 
     } // End if-statement "Confirm Selection Button"
+    
+    if (eventName.equals("restartApplication")) {
+      
+      setup();
+      
+    } // End if-statement "restartApplication"
     
   } // End of if-statemnt "Controller Type Verification"
   
