@@ -337,7 +337,41 @@ void setup() {
      .setFont(textfont) // set title font :: using lable font and size
      .setColor(white)
      .setBroadcast(true)
-     ; 
+     ;
+     
+  /* ----------------------------------------
+   * RESTART
+   *
+   * This section creates a button for the
+   * user to {RESTART} the consys application
+   *
+   * Fluvio L Lobo Fenoglietto 02/19/2016
+   *
+   --------------------------------------- */
+   
+  // GUI Control :: Button :: Confirm Selection  
+  int restartButtonWidth = exitButtonWidth;
+  int restartButtonHeight = exitButtonHeight;
+  int restartButtonXPos = exitButtonXPos;
+  int restartButtonYPos = exitButtonYPos;
+  cp5.addButton("confirmSelection")
+     .setBroadcast(false) // Avoids the immediate execution of the button
+     .setVisible(false)
+     .setValue(0)
+     .setPosition(restartButtonXPos,restartButtonYPos)
+     .setSize(restartButtonWidth,restartButtonHeight)
+     .setLabel("RESTART")
+     .setColorCaptionLabel(black)
+     .setColorBackground(gold)
+     .setColorForeground(gray)
+     .setBroadcast(true)
+     ;
+     
+  cp5.getController("confirmSelection")
+     .getCaptionLabel()
+     .setFont(buttonfont)
+     .toUpperCase(false)
+     ;
      
 } // End of void-setup loop
 
@@ -389,11 +423,12 @@ void draw() {
       
     case "record":
     
-      background(black);
+      // background(black);
+      waitClock();
       
       if (dataIndex == 0) {
         
-        //println("Program STATE :: Record");
+        println("Program STATE :: Record");
         
         //connect2Arduinos(Nardus);
         
@@ -401,12 +436,14 @@ void draw() {
         
         // Updating Indeces
         dataIndex = dataIndex + 1;
+        //println(dataIndex);
         
       } else {
         
         //readAnalogData(dataIndex, Nardus, Nports);
         
         dataIndex = dataIndex + 1;
+        //println(dataIndex);
       
       } // End of if-statement
 
@@ -551,7 +588,17 @@ public String[] controlEvent(ControlEvent theEvent) {
       cp5.get(Textlabel.class,"confirmCurrentInput").setText("User " + configInfo[1] + ", selected scenario " + configInfo[2]);
     
       
-    } // End if-statemnt "Scenario Buttons"
+    } // End if-statement "Scenario Buttons"
+    
+    if (eventName.equals("confirmSelection")) {
+      
+      userInfoFile(Nardus);
+      
+      clearWindow(Nscenarios);
+
+      executionState = "record";
+
+    } // End if-statement "Confirm Selection Button"
     
   } // End of if-statemnt "Controller Type Verification"
   
@@ -573,16 +620,16 @@ void movieEvent(Movie ophvid) {
  ---------------------------------------- */
 
 // Confirm selection
-public void confirmSelection(int theValue) {
+//public void confirmSelection(int theValue) {
   
-  // First, the button triggers the creation of user-input specific folders and files
-  userInfoFile(Nardus);
+//  // First, the button triggers the creation of user-input specific folders and files
+//  userInfoFile(Nardus);
   
-  executionState = "record";
+//  executionState = "record";
   
-  clearWindow(Nscenarios);
+//  clearWindow(Nscenarios);
   
-}
+//}
 
 /* ========================================
  * FUNCTIONS
