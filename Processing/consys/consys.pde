@@ -63,6 +63,7 @@ int verydarkgray = color(5,5,5);
 int gold = color(255,204,0);
 int white = color(255,255,255);
 int red = color(232,97,82);
+int green = color(56,222,43);
 
 // Number of scenarios
 int Nscenarios = 12;
@@ -354,7 +355,7 @@ void setup() {
   int restartButtonHeight = exitButtonHeight;
   int restartButtonXPos = exitButtonXPos;
   int restartButtonYPos = exitButtonYPos;
-  cp5.addButton("confirmSelection")
+  cp5.addButton("restartApplication")
      .setBroadcast(false) // Avoids the immediate execution of the button
      .setVisible(false)
      .setValue(0)
@@ -363,11 +364,11 @@ void setup() {
      .setLabel("RESTART")
      .setColorCaptionLabel(black)
      .setColorBackground(gold)
-     .setColorForeground(gray)
+     .setColorForeground(green)
      .setBroadcast(true)
      ;
      
-  cp5.getController("confirmSelection")
+  cp5.getController("restartApplication")
      .getCaptionLabel()
      .setFont(buttonfont)
      .toUpperCase(false)
