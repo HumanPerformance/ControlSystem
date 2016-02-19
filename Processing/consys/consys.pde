@@ -100,6 +100,8 @@ PrintWriter[] dataFile = new PrintWriter[Nardus];
  ======================================= */ 
 void setup() {
   
+  executionState = "config";
+  
   // Execution Log File
   exeLogFile(exeLogFilePath);
   
@@ -313,8 +315,7 @@ void setup() {
   int confirmSelectionButtonXPos = leftMargin;
   int confirmSelectionButtonYPos = scenarioButtonYPos[Nscenarios-1] + scenarioButtonHeight + 50;
   cp5.addButton("confirmSelection")
-     .setBroadcast(false) // Avoids the immediate execution of the button
-     .setValue(0)
+     .setBroadcast(false)
      .setPosition(confirmSelectionButtonXPos,confirmSelectionButtonYPos)
      .setSize(confirmSelectionButtonWidth,confirmSelectionButtonHeight)
      .setLabel("Confirm Selection")
@@ -364,8 +365,7 @@ void setup() {
   int restartButtonXPos = exitButtonXPos;
   int restartButtonYPos = exitButtonYPos;
   cp5.addButton("restartApplication")
-     .setBroadcast(false) // Avoids the immediate execution of the button
-     .setValue(0)
+     .setBroadcast(false)
      .setPosition(restartButtonXPos,restartButtonYPos)
      .setSize(restartButtonWidth,restartButtonHeight)
      .setLabel("RESTART")
@@ -393,81 +393,81 @@ void draw() {
   // Set the background of the window
   background(black);
   
-  // Execution State Switch
-  switch (executionState) {
+  //// Execution State Switch
+  //switch (executionState) {
     
-    case "config":
+  //  case "config":
     
-      // Set the backgrounf of the window
-      background(black);
+  //    // Set the backgrounf of the window
+  //    background(black);
   
-      // Place Images
-      image(hphlogo,width-110,height-60);
+  //    // Place Images
+  //    image(hphlogo,width-110,height-60);
       
-      /* -----------------------------
-       * Scenario Media
-       ---------------------------- */
+  //    /* -----------------------------
+  //     * Scenario Media
+  //     ---------------------------- */
       
-      if (scenario3ImageSwitch == 1) {
+  //    if (scenario3ImageSwitch == 1) {
        
-        int media1XPos = leftMargin + 175;
-        int media1YPos = 125;
-        int media1Xlen = 500;
-        int media1Ylen = 250;
-        image(otoim,media1XPos,media1YPos,media1Xlen,media1Ylen);
+  //      int media1XPos = leftMargin + 175;
+  //      int media1YPos = 125;
+  //      int media1Xlen = 500;
+  //      int media1Ylen = 250;
+  //      image(otoim,media1XPos,media1YPos,media1Xlen,media1Ylen);
         
-      } else if (scenario4VideoSwitch == 1) {
+  //    } else if (scenario4VideoSwitch == 1) {
         
-        int media1XPos = leftMargin + 175;
-        int media1YPos = 125;
-        int media1Xlen = 500;
-        int media1Ylen = 250;
-        image(ophvid,media1XPos,media1YPos,media1Xlen,media1Ylen);
-        ophvid.play();
+  //      int media1XPos = leftMargin + 175;
+  //      int media1YPos = 125;
+  //      int media1Xlen = 500;
+  //      int media1Ylen = 250;
+  //      image(ophvid,media1XPos,media1YPos,media1Xlen,media1Ylen);
+  //      ophvid.play();
 
-      }
+  //    }
       
-      if (configIndex == 0) {
-        println("Program STATE :: Configuration");
-        configIndex = 1;
-      } // End of if-statement
+  //    if (configIndex == 0) {
+  //      println("Program STATE :: Configuration");
+  //      configIndex = 1;
+  //    } // End of if-statement
       
-      break;
+  //    break;
       
-    case "record":
+  //  case "record":
     
-      // Set the backgrounf of the window
-      background(black);
+  //    // Set the backgrounf of the window
+  //    background(black);
       
-      // Place Images
-      image(hphlogo,width-110,height-60);
+  //    // Place Images
+  //    image(hphlogo,width-110,height-60);
       
-      //waitClock();
+  //    //waitClock();
       
-      if (dataIndex == 0) {
+  //    if (dataIndex == 0) {
         
-        println("Program STATE :: Record");
+  //      println("Program STATE :: Record");
         
-        //connect2Arduinos(Nardus);
+  //      //connect2Arduinos(Nardus);
         
-        //readAnalogData(dataIndex, Nardus, Nports);
+  //      //readAnalogData(dataIndex, Nardus, Nports);
         
-        // Updating Indeces
-        dataIndex = dataIndex + 1;
-        println(dataIndex);
+  //      // Updating Indeces
+  //      dataIndex = dataIndex + 1;
+  //      println(dataIndex);
         
-      } else {
+  //    } else {
         
-        //readAnalogData(dataIndex, Nardus, Nports);
+  //      //readAnalogData(dataIndex, Nardus, Nports);
         
-        dataIndex = dataIndex + 1;
-        println(dataIndex);
+  //      dataIndex = dataIndex + 1;
+  //      println(dataIndex);
       
-      } // End of if-statement
+  //    } // End of if-statement
 
-      break;
+  //    break;
       
-  } // End of switch
+  //} // End of switch
   
   
 } // End of void-draw loop
@@ -476,7 +476,7 @@ void draw() {
  * CONTROL EVENTS
  ======================================= */ 
 
-public String[] controlEvent(ControlEvent theEvent) {
+public void controlEvent(ControlEvent theEvent) {
   
   // In the case the active control is a TextField
   if(theEvent.isAssignableFrom(Textfield.class)) {
@@ -605,7 +605,6 @@ public String[] controlEvent(ControlEvent theEvent) {
       cp5.get(Button.class,"confirmSelection").setVisible(true);
       cp5.get(Textlabel.class,"confirmCurrentInput").setVisible(true);
       cp5.get(Textlabel.class,"confirmCurrentInput").setText("User " + configInfo[1] + ", selected scenario " + configInfo[2]);
-    
       
     } // End if-statement "Scenario Buttons"
     
@@ -621,16 +620,12 @@ public String[] controlEvent(ControlEvent theEvent) {
     
     if (eventName.equals("restartApplication")) {
       
-      executionState = "config";
-      
+      //cp5.get(Button.class,"confirmSelection").setVisible(false);
       setup();
       
     } // End if-statement "restartApplication"
     
   } // End of if-statemnt "Controller Type Verification"
-  
-  // printArray(configInfo); // Use for debugging
-  return configInfo;
   
 } // End of Control Event Routine
 
