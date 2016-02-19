@@ -43,6 +43,6 @@ public void clearWindow(int Nscenarios) {
   cp5.get(Button.class,"confirmSelection").setColorBackground(black);
   cp5.get(Button.class,"confirmSelection").setColorForeground(black);
   
-  cp5.get(Button.class,"restartApplication").setVisible(true);
+  cp5.get(Button.class,"restartApplication").setVisible(true); // Restart button
 
 } // End of clearWindow function

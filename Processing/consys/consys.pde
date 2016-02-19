@@ -152,6 +152,7 @@ void setup() {
      .getCaptionLabel()
      .setFont(buttonfont)
      .toUpperCase(false)
+     .setVisible(true)
      ;
   
   
@@ -177,6 +178,7 @@ void setup() {
      .setFont(titlefont) // set title font :: using lable font and size
      .setColor(gold)
      .setBroadcast(true)
+     .setVisible(true)
      ;
      
   // GUI Control :: Text Field
@@ -185,12 +187,15 @@ void setup() {
   int txtFieldXPos = leftMargin;
   int txtFieldYPos = titleLabelYPos + titleLabelHeight - 10;
   cp5.addTextfield("userID") // No text to be displayed below the field
+     .setBroadcast(false)
      .setPosition(txtFieldXPos,txtFieldYPos)
      .setSize(txtFieldWidth,txtFieldHeight)
      .setFont(textfont)
      .setColor(white)
      .setColorBackground(black)
      .setColorForeground(gray)
+     .setBroadcast(true)
+     .setVisible(true)
      ;
      
   cp5.getController("userID").getCaptionLabel().setVisible(false);
@@ -207,6 +212,7 @@ void setup() {
      .setFont(textfont) // set title font :: using lable font and size
      .setColor(white)
      .setBroadcast(true)
+     .setVisible(true)
      ; 
      
   /* ----------------------------------------
@@ -308,7 +314,6 @@ void setup() {
   int confirmSelectionButtonYPos = scenarioButtonYPos[Nscenarios-1] + scenarioButtonHeight + 50;
   cp5.addButton("confirmSelection")
      .setBroadcast(false) // Avoids the immediate execution of the button
-     .setVisible(false)
      .setValue(0)
      .setPosition(confirmSelectionButtonXPos,confirmSelectionButtonYPos)
      .setSize(confirmSelectionButtonWidth,confirmSelectionButtonHeight)
@@ -317,6 +322,7 @@ void setup() {
      .setColorBackground(gold)
      .setColorForeground(gray)
      .setBroadcast(true)
+     .setVisible(false)
      ;
      
   cp5.getController("confirmSelection")
@@ -339,9 +345,6 @@ void setup() {
      .setFont(textfont) // set title font :: using lable font and size
      .setColor(white)
      .setBroadcast(true)
-     ;
-  
-  cp5.getController("confirmCurrentInput")
      .setVisible(false)
      ;
      
@@ -362,7 +365,6 @@ void setup() {
   int restartButtonYPos = exitButtonYPos;
   cp5.addButton("restartApplication")
      .setBroadcast(false) // Avoids the immediate execution of the button
-     .setVisible(false)
      .setValue(0)
      .setPosition(restartButtonXPos,restartButtonYPos)
      .setSize(restartButtonWidth,restartButtonHeight)
@@ -371,6 +373,7 @@ void setup() {
      .setColorBackground(gold)
      .setColorForeground(green)
      .setBroadcast(true)
+     .setVisible(false)
      ;
      
   cp5.getController("restartApplication")
@@ -387,12 +390,16 @@ void setup() {
 
 void draw() {
   
+  // Set the background of the window
   background(black);
   
   // Execution State Switch
   switch (executionState) {
     
     case "config":
+    
+      // Set the backgrounf of the window
+      background(black);
   
       // Place Images
       image(hphlogo,width-110,height-60);
@@ -429,7 +436,12 @@ void draw() {
       
     case "record":
     
+      // Set the backgrounf of the window
       background(black);
+      
+      // Place Images
+      image(hphlogo,width-110,height-60);
+      
       waitClock();
       
       if (dataIndex == 0) {
@@ -612,7 +624,6 @@ public String[] controlEvent(ControlEvent theEvent) {
       executionState = "config";
       
       setup();
-      //restartApplication();
       
     } // End if-statement "restartApplication"
     
