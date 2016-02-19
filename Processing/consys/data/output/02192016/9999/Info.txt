@@ -1,4 +1,4 @@
 User Input Summary (Info.txt)
-User ID = 01245
+User ID = 9999
 Scenario = sc02
-Execution Time = 14:21:50
+Execution Time = 14:22:07

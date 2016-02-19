@@ -442,7 +442,7 @@ void draw() {
       // Place Images
       image(hphlogo,width-110,height-60);
       
-      waitClock();
+      //waitClock();
       
       if (dataIndex == 0) {
         
