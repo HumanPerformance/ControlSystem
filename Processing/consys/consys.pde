@@ -106,14 +106,14 @@ void setup() {
   // GUI size
   //fullScreen(1);
   size(800,480); // These are the dimensions of the RasPi screen
-  background(0);
+  background(black);
   cp5 = new ControlP5(this);
   
   // GUI Formatting :: Fonts
   PFont pfont_1 = createFont("Arial Rounded MT Bold",20,true);
   ControlFont titlefont = new ControlFont(pfont_1,24); // label font and size
   ControlFont labelfont = new ControlFont(pfont_1, 12); // label font and size
-  ControlFont buttonfont = new ControlFont(pfont_1,12); // button font and size
+  ControlFont buttonfont = new ControlFont(pfont_1,12); // button font and size  
   
   PFont pfont_2 = createFont("Consolas",20,true);
   ControlFont textfont = new ControlFont(pfont_2,14); // button font and size
@@ -177,7 +177,7 @@ void setup() {
      .setFont(titlefont) // set title font :: using lable font and size
      .setColor(gold)
      .setBroadcast(true)
-     ; 
+     ;
      
   // GUI Control :: Text Field
   int txtFieldWidth = 300;
@@ -340,6 +340,10 @@ void setup() {
      .setColor(white)
      .setBroadcast(true)
      ;
+  
+  cp5.getController("confirmCurrentInput")
+     .setVisible(false)
+     ;
      
   /* ----------------------------------------
    * RESTART
@@ -383,12 +387,12 @@ void setup() {
 
 void draw() {
   
+  background(black);
+  
   // Execution State Switch
   switch (executionState) {
     
     case "config":
-    
-      background(black);
   
       // Place Images
       image(hphlogo,width-110,height-60);
@@ -425,7 +429,7 @@ void draw() {
       
     case "record":
     
-      // background(black);
+      background(black);
       waitClock();
       
       if (dataIndex == 0) {
@@ -438,14 +442,14 @@ void draw() {
         
         // Updating Indeces
         dataIndex = dataIndex + 1;
-        //println(dataIndex);
+        println(dataIndex);
         
       } else {
         
         //readAnalogData(dataIndex, Nardus, Nports);
         
         dataIndex = dataIndex + 1;
-        //println(dataIndex);
+        println(dataIndex);
       
       } // End of if-statement
 
@@ -587,6 +591,7 @@ public String[] controlEvent(ControlEvent theEvent) {
       
       // For either scenario button selection, the program sets the confirm selection button visible and provides a visial update of the must current scenario and user id input.
       cp5.get(Button.class,"confirmSelection").setVisible(true);
+      cp5.get(Textlabel.class,"confirmCurrentInput").setVisible(true);
       cp5.get(Textlabel.class,"confirmCurrentInput").setText("User " + configInfo[1] + ", selected scenario " + configInfo[2]);
     
       
@@ -604,7 +609,10 @@ public String[] controlEvent(ControlEvent theEvent) {
     
     if (eventName.equals("restartApplication")) {
       
+      executionState = "config";
+      
       setup();
+      //restartApplication();
       
     } // End if-statement "restartApplication"
     
