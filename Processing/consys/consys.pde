@@ -457,14 +457,12 @@ void draw() {
         
        // Updating Indeces
        dataIndex = dataIndex + 1;
-       println(dataIndex);
         
      } else {
         
        readAnalogData(dataIndex, Nardus, Nports);
         
        dataIndex = dataIndex + 1;
-       println(dataIndex);
       
      } // End of if-statement
 
