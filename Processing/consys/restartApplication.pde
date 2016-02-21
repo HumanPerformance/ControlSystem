@@ -1,11 +1,15 @@
-
-
+/* =====================================
+ * Restart Application
+ *
+ * The following function, executed by the restart button, restores the visibility of the primary gui objects.
+ * By doing this, the entire script is restarted.
+ *
+ * Fluvio L. Lobo Fenoglietto 02/19/2016
+ ==================================== */
 
 public void restartApplication() {
   
   // When pressed, the button recovers the hidden buttons and labels taken down by clearWindow()
-  
-  
   cp5.get(Button.class,"exitApplication").setVisible(true); // Exit Button
   cp5.get(Textlabel.class,"studentIDLabel").setVisible(true); // Student ID Label/Title
   
