@@ -156,7 +156,39 @@ void setup() {
      .toUpperCase(false)
      .setVisible(true)
      ;
-  
+     
+     
+  /* ----------------------------------------
+   * RESTART
+   *
+   * This section creates a button for the
+   * user to {RESTART} the consys application
+   *
+   * Fluvio L Lobo Fenoglietto 02/19/2016
+   *
+   --------------------------------------- */
+   
+  // GUI Control :: Button :: Confirm Selection  
+  int restartButtonWidth = exitButtonWidth;
+  int restartButtonHeight = exitButtonHeight;
+  int restartButtonXPos = exitButtonXPos - exitButtonWidth - 10;
+  int restartButtonYPos = exitButtonYPos;
+  cp5.addButton("restartApplication")
+     .setBroadcast(false)
+     .setPosition(restartButtonXPos,restartButtonYPos)
+     .setSize(restartButtonWidth,restartButtonHeight)
+     .setLabel("RESTART")
+     .setColorCaptionLabel(black)
+     .setColorBackground(gold)
+     .setColorForeground(green)
+     .setBroadcast(true)
+     ;
+     
+  cp5.getController("restartApplication")
+     .getCaptionLabel()
+     .setFont(buttonfont)
+     .toUpperCase(false)
+     ;
   
   /* ----------------------------------------
    * STANDARDIZE PATIENT ID
@@ -349,38 +381,7 @@ void setup() {
      .setVisible(false)
      ;
      
-  /* ----------------------------------------
-   * RESTART
-   *
-   * This section creates a button for the
-   * user to {RESTART} the consys application
-   *
-   * Fluvio L Lobo Fenoglietto 02/19/2016
-   *
-   --------------------------------------- */
-   
-  // GUI Control :: Button :: Confirm Selection  
-  int restartButtonWidth = exitButtonWidth;
-  int restartButtonHeight = exitButtonHeight;
-  int restartButtonXPos = exitButtonXPos;
-  int restartButtonYPos = exitButtonYPos;
-  cp5.addButton("restartApplication")
-     .setBroadcast(false)
-     .setPosition(restartButtonXPos,restartButtonYPos)
-     .setSize(restartButtonWidth,restartButtonHeight)
-     .setLabel("RESTART")
-     .setColorCaptionLabel(black)
-     .setColorBackground(gold)
-     .setColorForeground(green)
-     .setBroadcast(true)
-     .setVisible(false)
-     ;
-     
-  cp5.getController("restartApplication")
-     .getCaptionLabel()
-     .setFont(buttonfont)
-     .toUpperCase(false)
-     ;
+  
      
 } // End of void-setup loop
 
