@@ -28,7 +28,7 @@ public void waitClock() {
   cy = height / 2;
   
   // Draw the clock background
-  fill(80);
+  fill(0,0,0);
   noStroke();
   ellipse(cx, cy, clockDiameter, clockDiameter);
   
@@ -54,7 +54,21 @@ public void waitClock() {
     float angle = radians(a);
     float x = cx + cos(angle) * secondsRadius;
     float y = cy + sin(angle) * secondsRadius;
-    vertex(x, y);
+    
+    textSize(24);
+    fill(255,255,255);
+    if (a == 0) {  
+      text("3", x+5, y-2.5);
+    } else if (a == 90) {
+      text("6", x, y+5);
+    } else if (a == 180) {
+      text("9", x-5, y-2.5);
+    } else if (a == 270) {
+      text("12", x, y-10);
+    } else {
+      vertex(x, y);
+    }
+    textAlign(CENTER, CENTER);
   }
   endShape();
   
