@@ -398,6 +398,9 @@ void draw() {
   switch (executionState) {
     
    case "config":
+   
+     // Re-define indeces for Restart
+     dataIndex = 0;
     
      // Set the backgrounf of the window
      background(black);
