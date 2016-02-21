@@ -451,9 +451,9 @@ void draw() {
         
        println("Program STATE :: Record");
         
-       //connect2Arduinos(Nardus);
+       connect2Arduinos(Nardus);
         
-       //readAnalogData(dataIndex, Nardus, Nports);
+       readAnalogData(dataIndex, Nardus, Nports);
         
        // Updating Indeces
        dataIndex = dataIndex + 1;
@@ -461,7 +461,7 @@ void draw() {
         
      } else {
         
-       //readAnalogData(dataIndex, Nardus, Nports);
+       readAnalogData(dataIndex, Nardus, Nports);
         
        dataIndex = dataIndex + 1;
        println(dataIndex);
