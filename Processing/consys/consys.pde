@@ -459,7 +459,8 @@ void draw() {
      } else {
         
        readAnalogData(dataIndex, Nardus, Nports);
-        
+       
+       // Updating Indeces 
        dataIndex = dataIndex + 1;
       
      } // End of if-statement
@@ -611,6 +612,7 @@ public void controlEvent(ControlEvent theEvent) {
     if (eventName.equals("confirmSelection")) {
       
       executionState = "record";
+      userInfoFile(Nardus);
       clearWindow(Nscenarios);
       
     }
