@@ -398,8 +398,6 @@ void draw() {
   switch (executionState) {
     
    case "config":
-   
-     dataIndex = 1;
     
      // Set the backgrounf of the window
      background(black);
@@ -452,7 +450,7 @@ void draw() {
        println("Program STATE :: Record");
         
        connect2Arduinos(Nardus);
-        
+       
        readAnalogData(dataIndex, Nardus, Nports);
         
        // Updating Indeces
