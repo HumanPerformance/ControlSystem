@@ -79,7 +79,7 @@ String[] configInfo = new String[3];
 Serial comPort;
 
 // Arduino variables
-int Nardus = 2;
+int Nardus = 1;
 Arduino[] arduino = new Arduino[Nardus];
 // arduPorts :: This variable will be used in case that desired rfcomm ports begin switching in the serial array
 
@@ -156,7 +156,39 @@ void setup() {
      .toUpperCase(false)
      .setVisible(true)
      ;
-  
+     
+     
+  /* ----------------------------------------
+   * RESTART
+   *
+   * This section creates a button for the
+   * user to {RESTART} the consys application
+   *
+   * Fluvio L Lobo Fenoglietto 02/19/2016
+   *
+   --------------------------------------- */
+   
+  // GUI Control :: Button :: Confirm Selection  
+  int restartButtonWidth = exitButtonWidth;
+  int restartButtonHeight = exitButtonHeight;
+  int restartButtonXPos = exitButtonXPos - exitButtonWidth - 10;
+  int restartButtonYPos = exitButtonYPos;
+  cp5.addButton("restartApplication")
+     .setBroadcast(false)
+     .setPosition(restartButtonXPos,restartButtonYPos)
+     .setSize(restartButtonWidth,restartButtonHeight)
+     .setLabel("RESTART")
+     .setColorCaptionLabel(black)
+     .setColorBackground(gold)
+     .setColorForeground(green)
+     .setBroadcast(true)
+     ;
+     
+  cp5.getController("restartApplication")
+     .getCaptionLabel()
+     .setFont(buttonfont)
+     .toUpperCase(false)
+     ;
   
   /* ----------------------------------------
    * STANDARDIZE PATIENT ID
@@ -349,38 +381,7 @@ void setup() {
      .setVisible(false)
      ;
      
-  /* ----------------------------------------
-   * RESTART
-   *
-   * This section creates a button for the
-   * user to {RESTART} the consys application
-   *
-   * Fluvio L Lobo Fenoglietto 02/19/2016
-   *
-   --------------------------------------- */
-   
-  // GUI Control :: Button :: Confirm Selection  
-  int restartButtonWidth = exitButtonWidth;
-  int restartButtonHeight = exitButtonHeight;
-  int restartButtonXPos = exitButtonXPos;
-  int restartButtonYPos = exitButtonYPos;
-  cp5.addButton("restartApplication")
-     .setBroadcast(false)
-     .setPosition(restartButtonXPos,restartButtonYPos)
-     .setSize(restartButtonWidth,restartButtonHeight)
-     .setLabel("RESTART")
-     .setColorCaptionLabel(black)
-     .setColorBackground(gold)
-     .setColorForeground(green)
-     .setBroadcast(true)
-     .setVisible(false)
-     ;
-     
-  cp5.getController("restartApplication")
-     .getCaptionLabel()
-     .setFont(buttonfont)
-     .toUpperCase(false)
-     ;
+  
      
 } // End of void-setup loop
 
@@ -398,7 +399,8 @@ void draw() {
     
    case "config":
    
-     dataIndex = 1;
+     // Re-define indeces for Restart
+     dataIndex = 0;
     
      // Set the backgrounf of the window
      background(black);
@@ -444,26 +446,25 @@ void draw() {
      // Place Images
      image(hphlogo,width-110,height-60);
       
-     //waitClock();
+     waitClock();
       
      if (dataIndex == 0) {
         
        println("Program STATE :: Record");
         
-       //connect2Arduinos(Nardus);
-        
-       //readAnalogData(dataIndex, Nardus, Nports);
+       connect2Arduinos(Nardus);
+       
+       readAnalogData(dataIndex, Nardus, Nports);
         
        // Updating Indeces
        dataIndex = dataIndex + 1;
-       println(dataIndex);
         
      } else {
         
-       //readAnalogData(dataIndex, Nardus, Nports);
-        
+       readAnalogData(dataIndex, Nardus, Nports);
+       
+       // Updating Indeces 
        dataIndex = dataIndex + 1;
-       println(dataIndex);
       
      } // End of if-statement
 
@@ -614,6 +615,7 @@ public void controlEvent(ControlEvent theEvent) {
     if (eventName.equals("confirmSelection")) {
       
       executionState = "record";
+      userInfoFile(Nardus);
       clearWindow(Nscenarios);
       
     }

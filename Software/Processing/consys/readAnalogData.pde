@@ -28,7 +28,7 @@ public void readAnalogData(int dataIndex, int Nardus, int Nports) {
     // Writing analog data to file
     int arduIndex = h;
     writeAnalogData(dataIndex, arduIndex, analogVal);
-    printArray(analogVal);
+    //printArray(analogVal);
   
   } // End of for-loop "Arduinos Loop"
     
