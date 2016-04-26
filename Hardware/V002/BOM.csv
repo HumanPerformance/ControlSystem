@@ -1,5 +1,5 @@
 Component,Manufacturer or Distributor,ID,Type ,Description,Justification,Link,Unit Cost,Quantity,Total Cost
-Raspberry Pi 3,Adafruit,ADA-3055,Computer,,Needed to control all modules and sensors from the instrument panel,https://www.adafruit.com/products/3055?gclid=Cj0KEQjwo_y4BRD0nMnfoqqnxtEBEiQAWdA121s-M0fUr7A8fmC8-pWs8nI4W51A7ZSC-brj_HU6IiAaAoqy8P8HAQ,$39.95 ,1,$39.95 
+Raspberry Pi 3,Adafruit,ADA-3055,Computer,,Needed to control all modules and sensors from the instrument panel,https://www.adafruit.com/products/3055,$39.95 ,1,$39.95 
 Pi Foundation Touch Screen,Adafruit,ADA-2718,Screen,"Touch - 7""",Needed to interface with the control system,https://www.adafruit.com/products/2718,$79.95 ,1,$79.95 
 Raspberry Pi Camera,Adafruit,ADA-1367,Camera,5MP,Needed to capture images or record video,https://www.adafruit.com/products/1367,$19.95 ,1,$19.95 
 Perma-Proto Breadboard PCB,Adafruit,ADA-1609,Breadboard ,PCB - 1/2 Sized Breadboard,Needed to connect additional circuitry to the Raspberry Pi,https://www.adafruit.com/products/1609,$4.50 ,1,$4.50 
@@ -8,4 +8,4 @@ LiPo Battery Pack,Adafruit,ADA-353,Battery,3.7V - 6600 mAh,Needed to power the c
 Miniature Wireless USB Keyboard with Trackpad,Adafruit,ADA-922,Keyboard,Wireless - w. Trackpad,Neede dto interface the Raspbian OS,https://www.adafruit.com/products/922,$49.95 ,1,$49.95 
 ,,,,,,,,,$0.00 
 ,,,,,,,,,$0.00 
-,,,,,,,Total,7.00 ,$243.75 
+,,,,,,,Total,7,$243.75 
