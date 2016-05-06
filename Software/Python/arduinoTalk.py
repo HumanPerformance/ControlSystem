@@ -12,4 +12,26 @@
 # a) The 'nanpy-firmaware' must have been installed on the Arduino board to be used as a slave
 
 
-print('hola')
+#
+# Import libraries and/or Modules
+
+from nanpy import SerialManager
+from nanpy import ArduinoApi
+
+
+#
+# Creating Serial Object
+connection = SerialManager(device='/dev/ttyUSB0')
+
+
+#
+# Creating Arduino object
+a = ArduinoApi(connection=connection)
+
+#
+# Signaling successful connection
+a.pinMode(8, a.OUTPUT)
+a.digitalWrite(8, a.HIGH)
+
+
+
