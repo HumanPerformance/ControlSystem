@@ -12,4 +12,17 @@
 # a) The 'nanpy-firmaware' must have been installed on the Arduino board to be used as a slave
 
 
-print('hola')
+import sys
+import glob
+import serial
+
+def serialPorts():
+    """ List of serial port names
+
+        :returns:
+            The list of serial ports available on the system
+            
+    """
+    if sys.platform.startswith('win'):
+        ports = ['COM%s' % (i + 1) for i in range(256)]
+    elif sys.platform.startswith('linux') or sys.platform.starts
