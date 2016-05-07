@@ -15,6 +15,7 @@ from nanpy import ArduinoApi
 import matplotlib.pyplot as plt
 from drawnow import *
 import numpy
+import time
 
 
 #
@@ -31,10 +32,7 @@ a.pinMode(8, a.OUTPUT)
 a.digitalWrite(8, a.HIGH)
 
 
-
-
-counter = []
-i = 0
+readTime = []
 analogVals = []
 
 
@@ -46,12 +44,13 @@ def makeFig():
 
 
 flag = 0
+tic = time.time()
 while flag == 0:
    analogVals.append(a.analogRead(0))
-   counter.append(i)
-   i = i + 1
-   drawnow(makeFig)
-   plt.pause(0.000001)
+   readTime.append(time.time() - tic)
+   
+   #drawnow(makeFig)
+   #plt.pause(0.000001)
        
 
 connection.close()
