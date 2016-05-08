@@ -40,7 +40,11 @@ analogVals = []
 # Plotting function
 plt.ion()
 def makeFig():
-   plt.plot(analogVals)
+   plt.title('Sensor Analog Input')
+   plt.xlabel('Time (s)')
+   plt.ylabel('Voltage (mV)')
+   plt.grid(True)
+   plt.plot(readTime, analogVals, 'ro-')
 
 
 flag = 0
@@ -49,8 +53,8 @@ while flag == 0:
    analogVals.append(a.analogRead(0))
    readTime.append(time.time() - tic)
    
-   #drawnow(makeFig)
-   #plt.pause(0.000001)
+   drawnow(makeFig)
+   plt.pause(0.000001)
        
 
 connection.close()
