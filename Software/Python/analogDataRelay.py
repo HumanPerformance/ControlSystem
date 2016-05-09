@@ -25,7 +25,8 @@ arduDataList = []
 while True:
     while (arduObj.inWaiting()==0):
         pass
-    arduDataList.append(arduObj.readline())
+    arduDataList.append(int(arduObj.readline()))
+    
     
 
 """

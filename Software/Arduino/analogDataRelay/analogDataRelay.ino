@@ -19,6 +19,6 @@
    analogVal = analogRead(analogPin);
    Serial.print(analogVal);
    Serial.print("\n");
-   delay(250);
+   delay(100);
  } // End of void loop
  
