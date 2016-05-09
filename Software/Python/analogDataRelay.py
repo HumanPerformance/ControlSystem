@@ -27,6 +27,13 @@ while True:
     arduDataString = arduObj.readline()
     print arduDataString
 
+"""
+References
+
+1- http://www.toptechboy.com/tutorial/python-with-arduino-lesson-11-plotting-and-graphing-live-data-from-arduino-with-matplotlib/
+
+"""
+
 
 
 
