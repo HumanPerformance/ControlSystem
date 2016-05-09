@@ -21,11 +21,12 @@ IRmeas = []
 
 
 # Operating Loop
+arduDataList = []
 while True:
     while (arduObj.inWaiting()==0):
         pass
-    arduDataString = arduObj.readline()
-    print arduDataString
+    arduDataList.append(arduObj.readline())
+    
 
 """
 References
