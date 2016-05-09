@@ -10,6 +10,7 @@
  // Variable Definitions
  String state = "idle";
  String arduID = "oto";
+ String inString;
  
  void setup() {
    
@@ -27,7 +28,7 @@
      
      if (Serial.available() > 0) {
        
-       inString = Serial.read();
+       inString = Serial.readString();
        
        if (inString.equals("GO")) {
          
@@ -38,6 +39,5 @@
      } // End of if statement :: serial port check
      
    } // End of while loop :: state check
-   
    
  } // End of void loop
