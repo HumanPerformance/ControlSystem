@@ -41,7 +41,7 @@ def dataPlot():
 counter = 0 # Start counter for data storage
 startTime = time.time() # Start timer - using CPU clock
 currentTime = 0 # time measurement made at the end of each loop
-stopTime = 20 # time at which loop must terminate
+stopTime = 50 # time at which loop must terminate
 while currentTime < stopTime:
     while (arduObj.inWaiting()==0):
         pass
