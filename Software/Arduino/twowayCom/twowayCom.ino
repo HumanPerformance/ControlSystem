@@ -15,6 +15,7 @@
  void setup() {
    
    Serial.begin(115200); // Default baudrate for the communication with the raspberry pi
+   pinMode(8, OUTPUT);
    
  } // End of void setup
  
@@ -33,6 +34,7 @@
        if (inString.equals("GO")) {
          
          state = "active";
+         digitalWrite(8, HIGH);
          
        } // End of if statement :: message check
        
