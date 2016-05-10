@@ -70,7 +70,9 @@
        if (inString.equals("STOP")) {
   
          state = "idle";
-         digitalWrite(ledComPin, LOW);       
+         digitalWrite(ledComPin, LOW);
+  
+       } // End of if statement :: message check       
        
      } // End of if statement :: serial port check
      
