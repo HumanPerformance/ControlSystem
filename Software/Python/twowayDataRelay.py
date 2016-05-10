@@ -1,9 +1,7 @@
 """
-twowayCom.py
+twowayDataRelay.py
 
-Two-way communication was design to establish bidirectional communication between the arduinos and raspberry pi (control system)
-
-Fluvio L. Lobo Fenoglietto 05/09/2016
+Fluvio L. Lobo Fenoglietto 05/10/2016
 """
 
 # Import Modules
@@ -17,7 +15,12 @@ stateSwitch = ''
 # Creating Serial Object
 arduObj = serial.Serial('/dev/ttyUSB0',115200)
 
+
 arduState = 'unpaired'
+
+#
+# unpaired state loop (idle state loop)
+#
 while arduState == 'unpaired':
     inString = arduObj.readline()
     if inString == arduID:
@@ -26,7 +29,9 @@ while arduState == 'unpaired':
         arduObj.write('GO')
         arduState = 'paired'
 
-
-
-
-
+#
+# paired state loop (active state loop)
+#
+arduDataList = []
+while arduState == 'paired':
+    arduDataList.append(int(arduObj.readline()))
