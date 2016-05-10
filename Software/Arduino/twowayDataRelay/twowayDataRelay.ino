@@ -12,6 +12,9 @@
  String arduID = "oto";
  String inString;
  
+ int ledComPin = 8;
+ int analogDataPin = 0;
+ 
  void setup() {
    
    Serial.begin(115200); // Default baudrate for the communication with the raspberry pi
@@ -22,7 +25,7 @@
  void loop() {
    
    /*
-    * Communication state check loop
+    * idle state loop
     */
    while (state.equals("idle")) {
      
@@ -30,6 +33,9 @@
      Serial.print("\n");
      delay(250);
      
+     /*
+      * serial port check
+      */
      if (Serial.available() > 0) {
        
        inString = Serial.readString();
@@ -37,21 +43,37 @@
        if (inString.equals("GO")) {
          
          state = "active";
-         digitalWrite(8, HIGH);
+         digitalWrite(ledComPin, HIGH);
          
        } // End of if statement :: message check
        
      } // End of if statement :: serial port check
      
-   } // End of while loop :: state check
+   } // End of while loop :: state check - idle loop
    
-   // Recording cue
-   digitalWrite(8, LOW);
-   delay(500);
-   digitalWrite(8, HIGH);
-   delay(500);
-   digitalWrite(8, LOW);
-   delay(500);
-   digitalWrite(8, HIGH);
+   /*
+    * active state loop
+    */
+   while (state.equals("active")) {
+     
+     int analogVal = analogRead(analogDataPin);
+     Serial.print(analogVal);
+     Serial.print("\n");
+     
+     /*
+      * serial port check
+      */
+     if (Serial.available() > 0 ) {
+
+       inString = Serial.readString();
+
+       if (inString.equals("STOP")) {
+  
+         state = "idle";
+         digitalWrite(ledComPin, LOW);       
+       
+     } // End of if statement :: serial port check
+     
+   } // End of while loop :: state check - active loop
    
  } // End of void loop
