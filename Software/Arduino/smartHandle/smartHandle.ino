@@ -31,7 +31,6 @@ LSM9DS1 imu;
  // IMU
 #define LSM9DS1_M	0x1E // Would be 0x1C if SDO_M is LOW
 #define LSM9DS1_AG	0x6B // Would be 0x6A if SDO_AG is LOW
-#define PRINT_CALCULATED
 // Earth's magnetic field varies by location. Add or subtract 
 // a declination to get a more accurate heading. Calculate 
 // your's here:
@@ -102,95 +101,86 @@ void loop() {
   printAttitude(imu.ax, imu.ay, imu.az, -imu.my, -imu.mx, imu.mz);
   Serial.println();
   
-  delay(250);
+  //Get Ambient Light level and report in LUX
+  Serial.print("Ambient Light Level (Lux) = ");
   
-}
+  //Input GAIN for light levels, 
+  // GAIN_20     // Actual ALS Gain of 20
+  // GAIN_10     // Actual ALS Gain of 10.32
+  // GAIN_5      // Actual ALS Gain of 5.21
+  // GAIN_2_5    // Actual ALS Gain of 2.60
+  // GAIN_1_67   // Actual ALS Gain of 1.72
+  // GAIN_1_25   // Actual ALS Gain of 1.28
+  // GAIN_1      // Actual ALS Gain of 1.01
+  // GAIN_40     // Actual ALS Gain of 40
+  
+  Serial.println( sensor.getAmbientLight(GAIN_1) );
 
-void printGyro() {
-  // To read from the gyroscope, you must first call the
-  // readGyro() function. When this exits, it'll update the
-  // gx, gy, and gz variables with the most current data.
-  imu.readGyro();
+  //Get Distance and report in mm
+  Serial.print("Distance measured (mm) = ");
+  Serial.println( sensor.getDistance() ); 
   
+  delay(1000);
+  
+} // End of void loop
+
+/*
+ * Functions
+ * - IMU
+ *   - printGyro()
+ *   - printAccel()
+ *   - printMag()
+ *   - printAttitude()
+ * - ToF Range Finder
+ *   - printIdentification()
+ */
+
+// The following version of printGyro() has been modified from the original SparkFun
+// This version prints calculated gyroscope values automatically
+void printGyro() {
+  // Reading raw data from gyroscope
+  imu.readGyro(); // (imu.gx, ...gy, ...gz) [deg/s] 
   // Now we can use the gx, gy, and gz variables as we please.
   // Either print them as raw ADC values, or calculated in DPS.
-  Serial.print("G: ");
-#ifdef PRINT_CALCULATED
-  // If you want to print calculated values, you can use the
-  // calcGyro helper function to convert a raw ADC value to
-  // DPS. Give the function the value that you want to convert.
+  Serial.print("GYR,");
+  // Converting raw ADC values to DPS before printing
   Serial.print(imu.calcGyro(imu.gx), 2);
-  Serial.print(", ");
+  Serial.print(",");
   Serial.print(imu.calcGyro(imu.gy), 2);
-  Serial.print(", ");
+  Serial.print(",");
   Serial.print(imu.calcGyro(imu.gz), 2);
-  Serial.println(" deg/s");
-#elif defined PRINT_RAW
-  Serial.print(imu.gx);
-  Serial.print(", ");
-  Serial.print(imu.gy);
-  Serial.print(", ");
-  Serial.println(imu.gz);
-#endif
-
+  Serial.print(",");
 } // End of function - printGyro()
 
-void printAccel() {
-  // To read from the accelerometer, you must first call the
-  // readAccel() function. When this exits, it'll update the
-  // ax, ay, and az variables with the most current data.
-  imu.readAccel();
-  
-  // Now we can use the ax, ay, and az variables as we please.
-  // Either print them as raw ADC values, or calculated in g's.
-  Serial.print("A: ");
-#ifdef PRINT_CALCULATED
-  // If you want to print calculated values, you can use the
-  // calcAccel helper function to convert a raw ADC value to
-  // g's. Give the function the value that you want to convert.
-  Serial.print(imu.calcAccel(imu.ax), 2);
-  Serial.print(", ");
-  Serial.print(imu.calcAccel(imu.ay), 2);
-  Serial.print(", ");
-  Serial.print(imu.calcAccel(imu.az), 2);
-  Serial.println(" g");
-#elif defined PRINT_RAW 
-  Serial.print(imu.ax);
-  Serial.print(", ");
-  Serial.print(imu.ay);
-  Serial.print(", ");
-  Serial.println(imu.az);
-#endif
 
+// The following version of printAccel() has been modified from the original SparkFun
+// This version prints calculated accelerometer values automatically
+void printAccel() {
+  // Reading raw data from accelerometer
+  imu.readAccel(); // (imu.ax, ...ay, ...az) [g]
+  Serial.print("ACC,");
+  // Converting ADC values to Gs before printing
+  Serial.print(imu.calcAccel(imu.ax), 2);
+  Serial.print(",");
+  Serial.print(imu.calcAccel(imu.ay), 2);
+  Serial.print(",");
+  Serial.print(imu.calcAccel(imu.az), 2);
+  Serial.print(",");
 } // End of function - printAccel()
 
+// The following version of printMag() has been modified from the original SparkFun
+// This version prints calculated magnetometer values automatically
 void printMag() {
-  // To read from the magnetometer, you must first call the
-  // readMag() function. When this exits, it'll update the
-  // mx, my, and mz variables with the most current data.
-  imu.readMag();
-  
-  // Now we can use the mx, my, and mz variables as we please.
-  // Either print them as raw ADC values, or calculated in Gauss.
-  Serial.print("M: ");
-#ifdef PRINT_CALCULATED
-  // If you want to print calculated values, you can use the
-  // calcMag helper function to convert a raw ADC value to
-  // Gauss. Give the function the value that you want to convert.
+  // Reading raw data from magnetometer
+  imu.readMag(); // (imu.mx, ...my, ...mz) [gauss]
+  Serial.print("MAG,");
+  // Converting ADC values to Bs before printing
   Serial.print(imu.calcMag(imu.mx), 2);
-  Serial.print(", ");
+  Serial.print(",");
   Serial.print(imu.calcMag(imu.my), 2);
-  Serial.print(", ");
+  Serial.print(",");
   Serial.print(imu.calcMag(imu.mz), 2);
-  Serial.println(" gauss");
-#elif defined PRINT_RAW
-  Serial.print(imu.mx);
-  Serial.print(", ");
-  Serial.print(imu.my);
-  Serial.print(", ");
-  Serial.println(imu.mz);
-#endif
-
+  Serial.print(",");
 } // End of function - printMag()
 
 // Calculate pitch, roll, and heading.
@@ -219,40 +209,16 @@ void printAttitude(float ax, float ay, float az, float mx, float my, float mz) {
   pitch *= 180.0 / PI;
   roll  *= 180.0 / PI;
   
-  Serial.print("Pitch, Roll: ");
+  Serial.print("PIT,");
   Serial.print(pitch, 2);
-  Serial.print(", ");
-  Serial.println(roll, 2);
-  Serial.print("Heading: "); Serial.println(heading, 2);
+  Serial.print("ROL,");
+  Serial.print(roll, 2);
+  Serial.print("HEA,");
+  Serial.print(heading, 2);
+  Serial.print(",");
   
 } // End of function - printAttitude()
 
-
-
-
-void loop() {
-
-  //Get Ambient Light level and report in LUX
-  Serial.print("Ambient Light Level (Lux) = ");
-  
-  //Input GAIN for light levels, 
-  // GAIN_20     // Actual ALS Gain of 20
-  // GAIN_10     // Actual ALS Gain of 10.32
-  // GAIN_5      // Actual ALS Gain of 5.21
-  // GAIN_2_5    // Actual ALS Gain of 2.60
-  // GAIN_1_67   // Actual ALS Gain of 1.72
-  // GAIN_1_25   // Actual ALS Gain of 1.28
-  // GAIN_1      // Actual ALS Gain of 1.01
-  // GAIN_40     // Actual ALS Gain of 40
-  
-  Serial.println( sensor.getAmbientLight(GAIN_1) );
-
-  //Get Distance and report in mm
-  Serial.print("Distance measured (mm) = ");
-  Serial.println( sensor.getDistance() ); 
-
-  delay(500);  
-};
 
 void printIdentification(struct VL6180xIdentification *temp){
   Serial.print("Model ID = ");
