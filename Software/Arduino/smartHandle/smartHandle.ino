@@ -90,37 +90,17 @@ void setup() {
  *   - Attitude: 
  */
 void loop() {
-  printGyro();  // Print "G: gx, gy, gz"
-  printAccel(); // Print "A: ax, ay, az"
-  printMag();   // Print "M: mx, my, mz"
   
-  // Print the heading and orientation for fun!
-  // Call print attitude. The LSM9DS1's magnetometer x and y
-  // axes are opposite to the accelerometer, so my and mx are
-  // substituted for each other.
-  printAttitude(imu.ax, imu.ay, imu.az, -imu.my, -imu.mx, imu.mz);
-  Serial.println();
+  // IMU
+  printGyro();                                                     // Print "GYR,gx,gy,gz,"
+  printAccel();                                                    // Print "ACC,ax,ay,az,"
+  printMag();                                                      // Print "MAG,mx,my,mz,"
+  printAttitude(imu.ax, imu.ay, imu.az, -imu.my, -imu.mx, imu.mz); // Print "PIT,pitch,ROL,roll,HEA,heading,"
+  // ToF Range Finder
+  printAmbientLight();                                             // Print "LUX,ambientlight,"
+  printProximity();                                                // Print "PRO,distance,"
   
-  //Get Ambient Light level and report in LUX
-  Serial.print("Ambient Light Level (Lux) = ");
-  
-  //Input GAIN for light levels, 
-  // GAIN_20     // Actual ALS Gain of 20
-  // GAIN_10     // Actual ALS Gain of 10.32
-  // GAIN_5      // Actual ALS Gain of 5.21
-  // GAIN_2_5    // Actual ALS Gain of 2.60
-  // GAIN_1_67   // Actual ALS Gain of 1.72
-  // GAIN_1_25   // Actual ALS Gain of 1.28
-  // GAIN_1      // Actual ALS Gain of 1.01
-  // GAIN_40     // Actual ALS Gain of 40
-  
-  Serial.println( sensor.getAmbientLight(GAIN_1) );
-
-  //Get Distance and report in mm
-  Serial.print("Distance measured (mm) = ");
-  Serial.println( sensor.getDistance() ); 
-  
-  delay(1000);
+  delay(1000); // 1sec. delay
   
 } // End of void loop
 
@@ -135,6 +115,8 @@ void loop() {
  *   - printIdentification()
  */
 
+
+// IMU Functions
 // The following version of printGyro() has been modified from the original SparkFun
 // This version prints calculated gyroscope values automatically
 void printGyro() {
@@ -211,14 +193,46 @@ void printAttitude(float ax, float ay, float az, float mx, float my, float mz) {
   
   Serial.print("PIT,");
   Serial.print(pitch, 2);
+  Serial.print(",");
   Serial.print("ROL,");
   Serial.print(roll, 2);
+  Serial.print(",");
   Serial.print("HEA,");
   Serial.print(heading, 2);
   Serial.print(",");
   
 } // End of function - printAttitude()
 
+
+// ToF Range Finder Functions
+// All functions beow were developed by our group to follow the same protocol used by SparkFun on their IMU function library.
+// These functions simplify the void loop process and make the development/editing process more efficient.
+void printAmbientLight() {
+  
+  // Read raw ambient light level and report in LUX
+  Serial.print("LUX,");
+  //Input GAIN for light levels, 
+  // GAIN_20     // Actual ALS Gain of 20
+  // GAIN_10     // Actual ALS Gain of 10.32
+  // GAIN_5      // Actual ALS Gain of 5.21
+  // GAIN_2_5    // Actual ALS Gain of 2.60
+  // GAIN_1_67   // Actual ALS Gain of 1.72
+  // GAIN_1_25   // Actual ALS Gain of 1.28
+  // GAIN_1      // Actual ALS Gain of 1.01
+  // GAIN_40     // Actual ALS Gain of 40
+  Serial.print(sensor.getAmbientLight(GAIN_1));
+  Serial.print(",");
+
+} // End of function - printAmbientLight()
+
+void printProximity() {
+  
+  // Read raw proximity data and report in millimeters (mm)
+  Serial.print("PRO,");
+  Serial.print(sensor.getDistance());
+  Serial.print(",");
+  
+} // End of function - printProximity()
 
 void printIdentification(struct VL6180xIdentification *temp){
   Serial.print("Model ID = ");
