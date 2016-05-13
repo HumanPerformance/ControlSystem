@@ -71,7 +71,7 @@ void setup() {
   
   // Initializing ToF Range Finder
   sensor.getIdentification(&identification); // Retrieve manufacture info from device memory
-  printIdentification(&identification); // Helper function to print all the Module information
+  //printIdentification(&identification); // Helper function to print all the Module information
 
   if(sensor.VL6180xInit() != 0) {
     Serial.println("FAILED TO INITALIZE"); //Initialize device and check for errors
@@ -98,9 +98,9 @@ void loop() {
   printAttitude(imu.ax, imu.ay, imu.az, -imu.my, -imu.mx, imu.mz); // Print "PIT,pitch,ROL,roll,HEA,heading,"
   // ToF Range Finder
   printAmbientLight();                                             // Print "LUX,ambientlight,"
-  printProximity();                                                // Print "PRO,distance,"
-  
-  delay(1000); // 1sec. delay
+  printProximity();                                                // Print "PRO,distance," 
+  Serial.println();                                                // Print-line "\n"
+  delay(250); // 1sec. delay
   
 } // End of void loop
 
