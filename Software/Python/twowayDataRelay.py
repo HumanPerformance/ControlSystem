@@ -23,6 +23,7 @@ arduState = 'unpaired'
 #
 while arduState == 'unpaired':
     inString = arduObj.readline()
+    print inString
     if inString == arduID:
         print 'Arduino OTO found!'
         print 'Sending GO message...'

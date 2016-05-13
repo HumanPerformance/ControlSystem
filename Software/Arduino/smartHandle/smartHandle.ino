@@ -119,7 +119,7 @@ void loop() {
   while (state.equals("idle")) {
     
     Serial.print(arduID);
-    Serial.println();
+    Serial.print("\n");
     delay(250); // 250 ms.
     
     /*
@@ -155,7 +155,7 @@ void loop() {
     // ToF Range Finder
     printAmbientLight();                                             // Print "LUX,ambientlight,"
     printProximity();                                                // Print "PRO,distance," 
-    Serial.println();                                                // Print-line "\n"
+    Serial.print("\n");                                                // Print-line "\n"
     delay(250);                                                      // 1sec. delay
     
     
