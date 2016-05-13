@@ -19,6 +19,16 @@
  */
 
 /*
+ * Arduino Variables
+ *
+ */
+String state = "idle";
+String arduID = "oto";
+String inString;
+int ledComPin = 13;
+int analogDataPin = 0;
+
+/*
  * Objects and/or Constructors
  */
 LSM9DS1 imu;
@@ -45,14 +55,19 @@ VL6180x sensor(VL6180X_ADDRESS);
 /*
  * Void Setup
  * - Serial Port Configuration
+ * - Arduino Configuration
  * - I2C Configuration
  * - IMU Configuration
  * - ToF Range Finder Configuration
  */
 void setup() {
   
+  // Serial Configuration
   Serial.begin(115200); // Start Serial Library
   Wire.begin(); // Start I2C Library
+  
+  // Arduino Configuration
+  pinMode(ledComPin, OUTPUT);
   
   // Initializing IMU
   imu.settings.device.commInterface = IMU_MODE_I2C;
@@ -83,24 +98,85 @@ void setup() {
 
 /*
  * Void Loop
+ * - Arduino
+ *   - Establish Serial Communication with Control System
+ *   - Trigger Sensor Data Acquisition
  * - IMU Data
  *   - Gyroscope Data
  *   - Accelerometer Data
  *   - Magnetometer Data
- *   - Attitude: 
+ *   - Attitude Data
+ * - ToF Range finder Data
+ *   - Ambient Light
+ *   - Proximity 
  */
 void loop() {
   
-  // IMU
-  printGyro();                                                     // Print "GYR,gx,gy,gz,"
-  printAccel();                                                    // Print "ACC,ax,ay,az,"
-  printMag();                                                      // Print "MAG,mx,my,mz,"
-  printAttitude(imu.ax, imu.ay, imu.az, -imu.my, -imu.mx, imu.mz); // Print "PIT,pitch,ROL,roll,HEA,heading,"
-  // ToF Range Finder
-  printAmbientLight();                                             // Print "LUX,ambientlight,"
-  printProximity();                                                // Print "PRO,distance," 
-  Serial.println();                                                // Print-line "\n"
-  delay(250); // 1sec. delay
+  // Arduino
+  /*
+   * idle state loop
+   */
+  while (state.equals("idle")) {
+    
+    Serial.print(arduID);
+    Serial.println();
+    delay(250); // 250 ms.
+    
+    /*
+     * Serial Port Check
+     */
+     
+     if (Serial.available() > 0) {
+       
+       inString = Serial.readString();
+       
+       if (inString.equals("GO")) {
+         
+         state = "active";
+         digitalWrite(ledComPin, HIGH);
+         
+       } // End of if statement - message check
+       
+     } // End of if statement - serial port check
+        
+  } // End of while loop - idle loop
+  
+  /*
+   * active state loop
+   */
+   
+  while (state.equals("active")) {
+    
+    // IMU
+    printGyro();                                                     // Print "GYR,gx,gy,gz,"
+    printAccel();                                                    // Print "ACC,ax,ay,az,"
+    printMag();                                                      // Print "MAG,mx,my,mz,"
+    printAttitude(imu.ax, imu.ay, imu.az, -imu.my, -imu.mx, imu.mz); // Print "PIT,pitch,ROL,roll,HEA,heading,"
+    // ToF Range Finder
+    printAmbientLight();                                             // Print "LUX,ambientlight,"
+    printProximity();                                                // Print "PRO,distance," 
+    Serial.println();                                                // Print-line "\n"
+    delay(250);                                                      // 1sec. delay
+    
+    
+    /*
+     * Serial Port Check
+     */
+     
+    if (Serial.available() > 0) {
+      
+      inString = Serial.readString();
+      
+      if (inString.equals("STOP")) {
+        
+        state = "idle";
+        digitalWrite(ledComPin, LOW);
+        
+      } // End of if statement - message check
+      
+    } // End of if statement - serial port check
+   
+  } // End of while loop - active loop
   
 } // End of void loop
 
