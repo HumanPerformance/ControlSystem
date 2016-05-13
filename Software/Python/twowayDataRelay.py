@@ -13,7 +13,7 @@ inString = ''
 stateSwitch = ''
 
 # Creating Serial Object
-arduObj = serial.Serial('/dev/ttyUSB0',115200)
+arduObj = serial.Serial('/dev/ttyUSB1',115200)
 
 
 arduState = 'unpaired'
