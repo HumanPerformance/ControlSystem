@@ -16,3 +16,11 @@ print outStatus
 
 if 'countdown' in outStatus:
     print "IT'S ALIVE!!"
+
+
+"""
+References:
+
+1- http://ubuntuforums.org/showthread.php?t=1101746
+
+"""
