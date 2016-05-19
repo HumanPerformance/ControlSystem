@@ -5,15 +5,13 @@
  */
  
  // Variables
- 
- // Data Directory and Files
+ // > Data Directory and Files
  String configFile = "countdownInit.txt";
  String[] configInfo;
  
- 
  // > Test Variables
  int testTimeMinutes; // 20 minutes
- int testTimeWarning = 5; // When 5 minutes are left on the clock, formatting changes to cue the tester
+ int testTimeWarning; // When 5 minutes are left on the clock, formatting changes to cue the tester
  int startTime = 0;
  int countDownMinutes;
  int countDownSeconds = 0;
@@ -37,26 +35,8 @@
    numFont = createFont("Consolas",100);
    pg = createGraphics(width,height,JAVA2D);
    
-   // Read Configuration File Data
-   configInfo = loadStrings(configFile);
-   printArray(configInfo);
-   
-   int Nlines = configInfo.length;
-   String[] splitString;
-   for (int i = 0; i < Nlines; i ++) {
-     
-     splitString = split(configInfo[i],':');
-     
-     if (splitString[i].equals("StartTime")) {
-       
-       testTimeMinutes = int(splitString[splitString.length-1]);
-       countDownMinutes = testTimeMinutes;
-       
-       println(testTimeMinutes);
-       println(countDownMinutes);
-     
-     }
-   }
+   // Read Data from Configuration File
+   readConfigFile();
    
    // Start Time
    // println(testTimeMinutes + ":00");
