@@ -47,26 +47,37 @@
      countDownMinutes = countDownMinutes - 1;
      startTime = millis();
    } // End of if statement - minutes check
-   countDownSeconds = 59 - (millis() - startTime)/1000;
-   String minString = singleDigitCorrection("",countDownMinutes);
-   String secString = singleDigitCorrection(":",countDownSeconds);
-   String timeString = minString + secString;
-   // println(timeString);
-   pg.beginDraw();
-   pg.smooth();
-   pg.background(0);
-   if (countDownMinutes <= testTimeWarning) {
+   if (countDownMinutes < 0) {
+     pg.beginDraw();
+     pg.smooth();
+     pg.background(0);
      pg.fill(red);
+     pg.textAlign(CENTER,CENTER);
+     pg.textFont(numFont, 100);
+     pg.text("GAME OVER!", width/2, height/2);
+     pg.endDraw();
+     image(pg,0,0);    
    } else {
-     pg.fill(green);
-   }
-   pg.textAlign(CENTER,CENTER);
-   pg.textFont(numFont, 200);
-   pg.text(timeString, width/2, height/2);
-   pg.endDraw();
-   image(pg,0,0);
-   delay(1000);
-   
+     countDownSeconds = 59 - (millis() - startTime)/1000;
+     String minString = singleDigitCorrection("",countDownMinutes);
+     String secString = singleDigitCorrection(":",countDownSeconds);
+     String timeString = minString + secString;
+     // println(timeString);
+     pg.beginDraw();
+     pg.smooth();
+     pg.background(0);
+     if (countDownMinutes <= testTimeWarning) {
+       pg.fill(red);
+     } else {
+       pg.fill(green);
+     }
+     pg.textAlign(CENTER,CENTER);
+     pg.textFont(numFont, 200);
+     pg.text(timeString, width/2, height/2);
+     pg.endDraw();
+     image(pg,0,0);
+     delay(1000); 
+   } 
  } // End of void draw loop
  
  
