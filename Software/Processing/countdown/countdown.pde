@@ -4,10 +4,6 @@
  * Fluvio L. Lobo Fenoglietto 05/18/2016
  */
  
- 
- // Importing Libraries
- 
- 
  // Variables
  // > Test Variables
  int testTimeMinutes = 20; // 20 minutes
@@ -56,7 +52,9 @@
      pg.textFont(numFont, 100);
      pg.text("GAME OVER!", width/2, height/2);
      pg.endDraw();
-     image(pg,0,0);    
+     image(pg,0,0);
+     // delay(20000);
+     // exit();
    } else {
      countDownSeconds = 59 - (millis() - startTime)/1000;
      String minString = singleDigitCorrection("",countDownMinutes);
@@ -70,14 +68,14 @@
        pg.fill(red);
      } else {
        pg.fill(green);
-     }
+     } // End of if statement - warning time check
      pg.textAlign(CENTER,CENTER);
      pg.textFont(numFont, 200);
      pg.text(timeString, width/2, height/2);
      pg.endDraw();
      image(pg,0,0);
      delay(1000); 
-   } 
+   } // End of if statement - test time limit check
  } // End of void draw loop
  
  
