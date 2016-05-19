@@ -11,7 +11,7 @@
  // Variables
  // > Test Variables
  int testTimeMinutes = 20; // 20 minutes
-
+ int testTimeWarning = 5; // When 5 minutes are left on the clock, formatting changes to cue the tester
  int startTime = 0;
  int countDownMinutes = testTimeMinutes;
  int countDownSeconds = 0;
@@ -22,6 +22,8 @@
 
  // > Colors
  int black = color(0,0,0);
+ int red = color(255, 0, 0);
+ int green = color(0, 255, 0);
  
  
  // Void Setup Loop
@@ -30,11 +32,11 @@
    //fullscreen(1) // The GUI will cover the entire screen regardless the dimensions
    size(800,400); // The GUI will cover an area of 800x400 pixels - this line can be used for debugging
    //background(black);
-   numFont = createFont("Verdana-24",50);
+   numFont = createFont("Consolas",100);
    pg = createGraphics(width,height,JAVA2D);
    
    // Start Time
-   println(testTimeMinutes + ":00");
+   // println(testTimeMinutes + ":00");
    
  } // End of void setup loop
  
@@ -53,9 +55,13 @@
    pg.beginDraw();
    pg.smooth();
    pg.background(0);
-   pg.fill(255);
+   if (countDownMinutes <= 5) {
+     pg.fill(red);
+   } else {
+     pg.fill(green);
+   }
    pg.textAlign(CENTER,CENTER);
-   pg.textFont(numFont, 50);
+   pg.textFont(numFont, 200);
    pg.text(timeString, width/2, height/2);
    pg.endDraw();
    image(pg,0,0);
