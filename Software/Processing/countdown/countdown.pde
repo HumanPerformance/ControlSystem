@@ -55,7 +55,7 @@
    pg.beginDraw();
    pg.smooth();
    pg.background(0);
-   if (countDownMinutes <= 5) {
+   if (countDownMinutes <= testTimeWarning) {
      pg.fill(red);
    } else {
      pg.fill(green);
