@@ -19,20 +19,20 @@
      
      splitString = split(configInfo[i],':');
      
-     if (splitString[0].equals("StartTime")) {
+     switch(splitString[0]) {
        
-       testTimeMinutes = int(splitString[splitString.length-1]);
-       countDownMinutes = testTimeMinutes;
+       case "StartTime":
        
-       println("Test Time : " + testTimeMinutes);
-       println("Countdown Time : " + countDownMinutes);
+         testTimeMinutes = int(splitString[splitString.length-1]);
+         countDownMinutes = testTimeMinutes;
+         println("Test Time : " + testTimeMinutes);
+         println("Countdown Time : " + countDownMinutes);
      
-     } else if (splitString[0].equals("WarningTime")) {
+      case "WarningTime":
+      
+        testTimeWarning = int(splitString[splitString.length-1]);
+         println("Warning Time : " + testTimeWarning);
        
-       testTimeWarning = int(splitString[splitString.length-1]);
-       
-       println("Warning Time : " + testTimeWarning);
-       
-     } // End of if statement - conditional around the content of the configuration file
+     } // End of switch statement - conditional around the content of the configuration file
    } // End of for loop - strings loaded from configuration file
  } // End of function - readConfigFile
