@@ -15,7 +15,7 @@ Fluvio L. Lobo Fenoglietto 05/19/2016
 
 # Import Libraries and/or Modules
 import sys
-from printMyString import printMyString
+from doubleDigitCorrection import doubleDigitCorrection
 
 # ==============================================
 # Operation
@@ -28,7 +28,10 @@ outString = "User Executed " + inputArg[0] + ", scenario #" + inputArg[1]
 print outString
 
 # 2.0 - Load configuration file based on server instruction
-printMyString("hola")
+# scenarioConfigFilePath = "/home/pi/csec/repos/ControlSystem/Software/Python/data/scenarios/"
+scenarioConfigFilePath = "/home/fluviolobo/csec/repos/ControlSystem/Software/Python/data/scenarios/"
+scenarioNumberString = doubleDigitCorrection(inputArg[1])
+scenarioConfigFileName = "sc" + scenarioNumberString
 
 
 """
