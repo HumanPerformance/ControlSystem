@@ -7,7 +7,8 @@ Fluvio L. Lobo Fenoglietto 05/20/2016
 """
 
 # Variables
-filePath = "/home/pi/csec/repos/ControlSystem/Software/Python/data/scenarios/"
+# filePath = "/home/pi/csec/repos/ControlSystem/Software/Python/data/scenarios/"
+filePath = "/home/fluviolobo/csec/repos/ControlSystem/Software/Python/data/scenarios/"
 fileName = "sc001.txt"
 
 filePathString = filePath + fileName
