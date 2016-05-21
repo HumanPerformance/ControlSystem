@@ -29,10 +29,17 @@ print outString
 
 # 2.0 - Load configuration file based on server instruction
 # scenarioConfigFilePath = "/home/pi/csec/repos/ControlSystem/Software/Python/data/scenarios/"
+## 2.1 - Define path of configuration file based on user input
 scenarioConfigFilePath = "/home/fluviolobo/csec/repos/ControlSystem/Software/Python/data/scenarios/"
 scenarioNumberString = doubleDigitCorrection(inputArg[1])
 scenarioConfigFileName = "sc" + scenarioNumberString + ".txt"
-print scenarioConfigFileName
+# print scenarioConfigFileName
+## 2.2 - Load configuration file
+scenarioConfigFile = scenarioConfigFilePath + scenarioConfigFileName
+configFileObj = open(scenarioConfigFile,'r+') # Creating file object with read and write capabilities (r+)
+for line in configFileObj:
+    print line
+
 
 """
 References
