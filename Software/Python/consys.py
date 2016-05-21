@@ -31,8 +31,8 @@ print outString
 # scenarioConfigFilePath = "/home/pi/csec/repos/ControlSystem/Software/Python/data/scenarios/"
 scenarioConfigFilePath = "/home/fluviolobo/csec/repos/ControlSystem/Software/Python/data/scenarios/"
 scenarioNumberString = doubleDigitCorrection(inputArg[1])
-scenarioConfigFileName = "sc" + scenarioNumberString
-
+scenarioConfigFileName = "sc" + scenarioNumberString + ".txt"
+print scenarioConfigFileName
 
 """
 References
