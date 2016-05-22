@@ -37,7 +37,7 @@ from doubleDigitCorrection import doubleDigitCorrection
 # ==============================================
 homeDir = expanduser("~")
 rootDir = "/root"
-if homeDir is rootDir:
+if homeDir == rootDir:
           homeDir = "/home/pi"
           # This check and correction is needed for raspbian
 consysPyDir = homeDir + "/csec/repos/ControlSystem/Software/Python"

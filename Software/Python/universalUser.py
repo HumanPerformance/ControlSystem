@@ -8,9 +8,13 @@ Fluvio L. Lobo Fenoglietto 05/22/2016
 
 from os.path import expanduser
 
+
 home = expanduser("~")
 print home
-
+rootDir = "/root"
+if home == rootDir:
+	home = "/home/pi"
+	print home
 
 """
 References
