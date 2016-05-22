@@ -9,7 +9,13 @@ The following program has been designed to control the following processes:
         Note: The program currently handles one (1) input - scalable
 2.0 - Load configuration file based on server instructions or input
     Note: Configuration file currently located locally - can be switched to the server
-    
+    2.1 - Define path of configuration file based on user input
+    2.2 - Load configuration file
+    2.3 - Save loaded data into program variables
+3.0 - Write loaded variables into downstream configuration file for parallel applications
+    Note: Dowstream parallel applications currently include:
+            - countdown.pde (Processing)
+            
 Fluvio L. Lobo Fenoglietto 05/19/2016
 """
 
@@ -36,9 +42,20 @@ scenarioConfigFileName = "sc" + scenarioNumberString + ".txt"
 # print scenarioConfigFileName
 ## 2.2 - Load configuration file
 scenarioConfigFile = scenarioConfigFilePath + scenarioConfigFileName
-configFileObj = open(scenarioConfigFile,'r+') # Creating file object with read and write capabilities (r+)
-for line in configFileObj:
-    print line
+with open(scenarioConfigFile,'r+') as scenarioConfigFileObj:
+    lines = scenarioConfigFileObj.readlines()
+## 2.3 - Save loaded data into program variables
+Nlines = len(lines)
+print Nlines
+scenarioConfigVariables = []
+scenarioConfigValues = []
+for i in range(0, Nlines-1):
+    scenarioConfigVariables.append(lines[i].split(":")[0])
+    scenarioConfigValues.append(lines[i].split(":")[1])
+print scenarioConfigVariables
+print int(scenarioConfigValues[1])
+
+# 3.0 - Write loaded variables into downstream configuration file for parallel applications
 
 
 """
