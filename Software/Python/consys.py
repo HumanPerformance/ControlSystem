@@ -26,6 +26,7 @@ Fluvio L. Lobo Fenoglietto 05/19/2016
 
 # Import Libraries and/or Modules
 import sys
+import os
 from doubleDigitCorrection import doubleDigitCorrection
 
 # ==============================================
@@ -40,8 +41,8 @@ print outString
 
 # 2.0 - Load configuration file based on server instruction
 ## 2.1 - Define path of configuration file based on user input
-# scenarioConfigFilePath = "/home/pi/csec/repos/ControlSystem/Software/Python/data/scenarios/"
-scenarioConfigFilePath = "/home/fluviolobo/csec/repos/ControlSystem/Software/Python/data/scenarios/"
+scenarioConfigFilePath = "/home/pi/csec/repos/ControlSystem/Software/Python/data/scenarios/"
+# scenarioConfigFilePath = "/home/fluviolobo/csec/repos/ControlSystem/Software/Python/data/scenarios/"
 scenarioNumberString = doubleDigitCorrection(inputArg[1])
 scenarioConfigFileName = "sc" + scenarioNumberString + ".txt"
 # print scenarioConfigFileName
@@ -62,8 +63,8 @@ print int(scenarioConfigValues[1])
 
 # 3.0 - Write loaded variables into downstream configuration file for parallel applications
 ## 3.1 - Define path of configuration file
-# countdownConfigFilePath = "/home/pi/csec/repos/ControlSystem/Software/Processing/countdown/data/"
-countdownConfigFilePath = "/home/fluviolobo/csec/repos/ControlSystem/Software/Processing/countdown/data/"
+countdownConfigFilePath = "/home/pi/csec/repos/ControlSystem/Software/Processing/countdown/data/"
+# countdownConfigFilePath = "/home/fluviolobo/csec/repos/ControlSystem/Software/Processing/countdown/data/"
 countdownConfigFileName = "countdownInit.txt"
 countdownConfigFile = countdownConfigFilePath + countdownConfigFileName
 ## 3.2 - Write configuration file
@@ -74,7 +75,7 @@ with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
 
 # 4.0 - Execution of downstream parallel applications
 ## 4.1 - Define path to program executeable
-countdownExeFilePath = "/home/pi/csec/repos/ControlSystem/Software/Processing/countdown/build/armvh6f"
+countdownExeFilePath = "/home/pi/csec/repos/ControlSystem/Software/Processing/countdown/build/armvh6f/"
 countdownExeFileName = "countdown"
 ## 4.2 - Execute application
 terminalCommand = "sh " + countdownExeFilePath + countdownExeFileName
@@ -85,5 +86,5 @@ os.system(terminalCommand)
 References
 1- Defining Functions in Python - http://www.tutorialspoint.com/python/python_functions.htm
 2- Calling Functions from other Python scripts - http://stackoverflow.com/questions/20309456/how-to-call-a-function-from-another-file-in-python
-3- "       "         "    "     "      "       - http://stackoverflow.com/questions/7701646/how-to-call-a-function-from-another-file
+3- "       "         "    "     "      "       - http://stackoverflow.com/questions/7701646/how-to-call-a-function-from-another-file 
 """
