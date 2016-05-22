@@ -73,6 +73,13 @@ with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
     countdownConfigFileObj.write(scenarioConfigVariables[2] + ":" + str(scenarioConfigValues[2]))
 
 # 4.0 - Execution of downstream parallel applications
+## 4.1 - Define path to program executeable
+countdownExeFilePath = "/home/pi/csec/repos/ControlSystem/Software/Processing/countdown/build/armvh6f"
+countdownExeFileName = "countdown"
+## 4.2 - Execute application
+terminalCommand = "sh " + countdownExeFilePath + countdownExeFileName
+os.system(terminalCommand)
+
 
 """
 References
