@@ -36,6 +36,10 @@ from doubleDigitCorrection import doubleDigitCorrection
 # Variables
 # ==============================================
 homeDir = expanduser("~")
+rootDir = "/root"
+if homeDir is rootDir:
+          homeDir = "/home/pi"
+          # This check and correction is needed for raspbian
 consysPyDir = homeDir + "/csec/repos/ControlSystem/Software/Python"
 consysPyDataDir = consysPyDir + "/data"
 countdownDir = homeDir + "/csec/repos/ControlSystem/Software/Processing/countdown/build/armvh6f"
