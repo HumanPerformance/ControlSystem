@@ -1,4 +1,5 @@
 Scenario:001
-Time:20
+StartTime:20
+WarningTime:5
 Instruments:OTO
 

@@ -34,8 +34,8 @@ outString = "User Executed " + inputArg[0] + ", scenario #" + inputArg[1]
 print outString
 
 # 2.0 - Load configuration file based on server instruction
-# scenarioConfigFilePath = "/home/pi/csec/repos/ControlSystem/Software/Python/data/scenarios/"
 ## 2.1 - Define path of configuration file based on user input
+# scenarioConfigFilePath = "/home/pi/csec/repos/ControlSystem/Software/Python/data/scenarios/"
 scenarioConfigFilePath = "/home/fluviolobo/csec/repos/ControlSystem/Software/Python/data/scenarios/"
 scenarioNumberString = doubleDigitCorrection(inputArg[1])
 scenarioConfigFileName = "sc" + scenarioNumberString + ".txt"
@@ -56,7 +56,18 @@ print scenarioConfigVariables
 print int(scenarioConfigValues[1])
 
 # 3.0 - Write loaded variables into downstream configuration file for parallel applications
-
+## 3.1 - Define path of configuration file
+# countdownConfigFilePath = "/home/pi/csec/repos/ControlSystem/Software/Processing/countdown/data/"
+countdownConfigFilePath = "/home/fluviolobo/csec/repos/ControlSystem/Software/Processing/countdown/data/"
+countdownConfigFileName = "countdownInit.txt"
+countdownConfigFile = countdownConfigFilePath + countdownConfigFileName
+## 3.2 - Writing configuration file
+with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
+    # Note: For the countdown application, only two inputs are currently needed: StartTime and WarningTime
+    countdownConfigFileObj.write(scenarioConfigVariables[1] + ":" + str(scenarioConfigValues[1]))
+    # countdownConfigFileObj.write("\n") # newline
+    countdownConfigFileObj.write(scenarioConfigVariables[2] + ":" + str(scenarioConfigValues[2]))
+    
 
 """
 References
