@@ -15,6 +15,11 @@ The following program has been designed to control the following processes:
 3.0 - Write loaded variables into downstream configuration file for parallel applications
     Note: Dowstream parallel applications currently include:
             - countdown.pde (Processing)
+    3.1 - Define path of configuration file
+    3.2 - Write configuration file
+4.0 - Execution of downstream parallel applications
+    Note: Dowstream parallel applications currently include:
+            - countdown.pde (Processing)
             
 Fluvio L. Lobo Fenoglietto 05/19/2016
 """
@@ -61,13 +66,13 @@ print int(scenarioConfigValues[1])
 countdownConfigFilePath = "/home/fluviolobo/csec/repos/ControlSystem/Software/Processing/countdown/data/"
 countdownConfigFileName = "countdownInit.txt"
 countdownConfigFile = countdownConfigFilePath + countdownConfigFileName
-## 3.2 - Writing configuration file
+## 3.2 - Write configuration file
 with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
     # Note: For the countdown application, only two inputs are currently needed: StartTime and WarningTime
     countdownConfigFileObj.write(scenarioConfigVariables[1] + ":" + str(scenarioConfigValues[1]))
-    # countdownConfigFileObj.write("\n") # newline
     countdownConfigFileObj.write(scenarioConfigVariables[2] + ":" + str(scenarioConfigValues[2]))
-    
+
+# 4.0 - Execution of downstream parallel applications
 
 """
 References
