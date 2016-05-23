@@ -30,7 +30,7 @@ Fluvio L. Lobo Fenoglietto 05/19/2016
 import sys
 import os
 from os.path import expanduser
-import commands
+import time
 from doubleDigitCorrection import doubleDigitCorrection
 
 # ==============================================
@@ -93,17 +93,26 @@ with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
 countdownExeFilePath = countdownDir
 countdownExeFileName = "/countdown"
 ## 4.2 - Execute application
-terminalCommand = "sh " + countdownExeFilePath + countdownExeFileName
+terminalCommand = "sh " + countdownExeFilePath + countdownExeFileName + " &"
 os.system(terminalCommand)
+time.sleep(5)
 
-# 5.0 - Creation of timed-loop controlled by the status of executed downstream application
-## 5.1 - Program status check
-## currentOperations = commands.getoutput('ps -A')
-## 5.2 - While loop
-#while 'countdown' in currentOperations:
-#        print "countdown.pde is currently running!"
-#else:
-#        print "countdown.pde is not running"
+# 5.0 - Creation of timed-loop to control the remainder of the program
+startTime = time.time()
+currentTime = 0
+stopTime = 60 # seconds
+
+while currentTime < stopTime:
+        #
+        # Operation
+        #
+        #
+
+        # Update time
+        currentTime = time.time() - startTime
+        print currentTime
+else:
+        print "Program Concluded"
 
 """
 References
