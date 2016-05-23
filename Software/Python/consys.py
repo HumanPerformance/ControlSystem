@@ -30,6 +30,7 @@ Fluvio L. Lobo Fenoglietto 05/19/2016
 import sys
 import os
 from os.path import expanduser
+import commands
 from doubleDigitCorrection import doubleDigitCorrection
 
 # ==============================================
@@ -95,6 +96,14 @@ countdownExeFileName = "/countdown"
 terminalCommand = "sh " + countdownExeFilePath + countdownExeFileName
 os.system(terminalCommand)
 
+# 5.0 - Creation of timed-loop controlled by the status of executed downstream application
+## 5.1 - Program status check
+## currentOperations = commands.getoutput('ps -A')
+## 5.2 - While loop
+#while 'countdown' in currentOperations:
+#        print "countdown.pde is currently running!"
+#else:
+#        print "countdown.pde is not running"
 
 """
 References
