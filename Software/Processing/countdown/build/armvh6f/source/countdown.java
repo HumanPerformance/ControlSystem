@@ -45,8 +45,8 @@ public class countdown extends PApplet {
  // Void Setup Loop
  public void setup() {
    
-   //fullscreen(1) // The GUI will cover the entire screen regardless the dimensions
-    // The GUI will cover an area of 800x400 pixels - this line can be used for debugging
+    // The GUI will cover the entire screen regardless the dimensions
+   //size(800,400); // The GUI will cover an area of 800x400 pixels - this line can be used for debugging
    //background(black);
    numFont = createFont("Consolas",100);
    pg = createGraphics(width,height,JAVA2D);
@@ -171,7 +171,7 @@ public String singleDigitCorrection(String prefix, int counter) {
   return outString;
   
 } // End of singleDigitCorrection function
-  public void settings() {  size(800,400); }
+  public void settings() {  fullScreen(1); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "countdown" };
     if (passedArgs != null) {

@@ -29,8 +29,8 @@
  // Void Setup Loop
  void setup() {
    
-   //fullscreen(1) // The GUI will cover the entire screen regardless the dimensions
-   size(800,400); // The GUI will cover an area of 800x400 pixels - this line can be used for debugging
+   fullScreen(1); // The GUI will cover the entire screen regardless the dimensions
+   //size(800,400); // The GUI will cover an area of 800x400 pixels - this line can be used for debugging
    //background(black);
    numFont = createFont("Consolas",100);
    pg = createGraphics(width,height,JAVA2D);
