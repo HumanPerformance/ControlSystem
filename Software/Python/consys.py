@@ -93,7 +93,7 @@ with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
 countdownExeFilePath = countdownDir
 countdownExeFileName = "/countdown"
 ## 4.2 - Execute application
-terminalCommand = "sh " + countdownExeFilePath + countdownExeFileName + " &"
+terminalCommand = "DISPLAY=:0.0; " + countdownExeFilePath + countdownExeFileName + " &"
 os.system(terminalCommand)
 time.sleep(5)
 
