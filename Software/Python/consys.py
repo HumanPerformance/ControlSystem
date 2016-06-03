@@ -43,8 +43,8 @@ if homeDir == rootDir:
           # This check and correction is needed for raspbian
 consysPyDir = homeDir + "/csec/repos/ControlSystem/Software/Python"
 consysPyDataDir = consysPyDir + "/data"
-countdownDir = homeDir + "/csec/repos/ControlSystem/Software/Processing/countdown/build/armvh6f"
-countdownDataDir = countdownDir + "/data"
+#countdownDir = homeDir + "/csec/repos/ControlSystem/Software/Processing/countdown/build/armvh6f"
+#countdownDataDir = countdownDir + "/data"
 
 # ==============================================
 # Operation
@@ -90,12 +90,12 @@ with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
 
 # 4.0 - Execution of downstream parallel applications
 ## 4.1 - Define path to program executeable
-countdownExeFilePath = countdownDir
-countdownExeFileName = "/countdown"
+#countdownExeFilePath = countdownDir
+#countdownExeFileName = "/countdown"
 ## 4.2 - Execute application
-terminalCommand = "DISPLAY=:0.0; " + countdownExeFilePath + countdownExeFileName + " &"
-os.system(terminalCommand)
-time.sleep(5)
+#terminalCommand = "DISPLAY=:0.0; " + countdownExeFilePath + countdownExeFileName + " &"
+#os.system(terminalCommand)
+#time.sleep(5)
 
 # 5.0 - Creation of timed-loop to control the remainder of the program
 startTime = time.time()
