@@ -43,8 +43,8 @@ if homeDir == rootDir:
           # This check and correction is needed for raspbian
 consysPyDir = homeDir + "/csec/repos/ControlSystem/Software/Python"
 consysPyDataDir = consysPyDir + "/data"
-#countdownDir = homeDir + "/csec/repos/ControlSystem/Software/Processing/countdown/build/armvh6f"
-#countdownDataDir = countdownDir + "/data"
+countdownDir = homeDir + "/csec/repos/ControlSystem/Software/Processing/countdown/build/armvh6f"
+countdownDataDir = countdownDir + "/data"
 
 # ==============================================
 # Operation
@@ -68,14 +68,14 @@ with open(scenarioConfigFile,'r+') as scenarioConfigFileObj:
     lines = scenarioConfigFileObj.readlines()
 ## 2.3 - Save loaded data into program variables
 Nlines = len(lines)
-print Nlines
+#print Nlines
 scenarioConfigVariables = []
 scenarioConfigValues = []
 for i in range(0, Nlines-1):
     scenarioConfigVariables.append(lines[i].split(":")[0])
     scenarioConfigValues.append(lines[i].split(":")[1])
-print scenarioConfigVariables
-print int(scenarioConfigValues[1])
+#print scenarioConfigVariables
+#print int(scenarioConfigValues[1])
 
 # 3.0 - Write loaded variables into downstream configuration file for parallel applications
 ## 3.1 - Define path of configuration file
@@ -95,7 +95,8 @@ with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
 ## 4.2 - Execute application
 #terminalCommand = "DISPLAY=:0.0; " + countdownExeFilePath + countdownExeFileName + " &"
 #os.system(terminalCommand)
-#time.sleep(5)
+print "User may execute countdown application now"
+time.sleep(5)
 
 # 5.0 - Creation of timed-loop to control the remainder of the program
 startTime = time.time()
