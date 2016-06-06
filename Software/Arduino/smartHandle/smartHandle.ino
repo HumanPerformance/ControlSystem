@@ -22,9 +22,14 @@
  * Arduino Variables
  *
  */
-String state = "idle";
+int state = 0;
+int inByte = 0;
+/*
+ * States:
+ * idle   (no communication)   = 0
+ * active (data communication) = 1
+ */
 String arduID = "oto";
-String inString;
 int ledComPin = 13;
 int analogDataPin = 0;
 
@@ -116,7 +121,7 @@ void loop() {
   /*
    * idle state loop
    */
-  while (state.equals("idle")) {
+  while (state == 0) {
     
     Serial.print(arduID);
     Serial.print("\n");
@@ -128,12 +133,13 @@ void loop() {
      
      if (Serial.available() > 0) {
        
-       inString = Serial.readString();
+       inByte = Serial.parseInt();
+       Serial.println(inByte);
        
-       if (inString.equals("GO")) {
+       if (inByte == 1) {
          
-         state = "active";
-         digitalWrite(ledComPin, HIGH);
+         state = 1; // active
+         // digitalWrite(ledComPin, HIGH);
          
        } // End of if statement - message check
        
@@ -145,7 +151,7 @@ void loop() {
    * active state loop
    */
    
-  while (state.equals("active")) {
+  while (state == 1) {
     
     // IMU
     printGyro();                                                     // Print "GYR,gx,gy,gz,"
@@ -165,12 +171,12 @@ void loop() {
      
     if (Serial.available() > 0) {
       
-      inString = Serial.readString();
+      inByte = Serial.parseInt();
       
-      if (inString.equals("STOP")) {
+      if (inByte == 0) {
         
-        state = "idle";
-        digitalWrite(ledComPin, LOW);
+        state = 0; // idle
+        // digitalWrite(ledComPin, LOW);
         
       } // End of if statement - message check
       
