@@ -134,12 +134,11 @@ void loop() {
      if (Serial.available() > 0) {
        
        inByte = Serial.parseInt();
-       Serial.println(inByte);
        
        if (inByte == 1) {
          
          state = 1; // active
-         // digitalWrite(ledComPin, HIGH);
+         digitalWrite(ledComPin, HIGH);
          
        } // End of if statement - message check
        
@@ -176,7 +175,7 @@ void loop() {
       if (inByte == 0) {
         
         state = 0; // idle
-        // digitalWrite(ledComPin, LOW);
+        digitalWrite(ledComPin, LOW);
         
       } // End of if statement - message check
       
