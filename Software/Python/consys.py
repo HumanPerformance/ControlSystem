@@ -77,28 +77,31 @@ for i in range(0, Nlines-1):
 #print scenarioConfigVariables
 #print int(scenarioConfigValues[1])
 
-# 3.0 - Write loaded variables into downstream configuration file for parallel applications
-## 3.1 - Define path of configuration file
+# X.0 - Detect and connect to Arduino modules
+
+
+# X.0 - Write loaded variables into downstream configuration file for parallel applications
+## X.1 - Define path of configuration file
 countdownConfigFilePath = countdownDataDir
 countdownConfigFileName = "/countdownInit.txt"
 countdownConfigFile = countdownConfigFilePath + countdownConfigFileName
-## 3.2 - Write configuration file
+## X.2 - Write configuration file
 with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
     # Note: For the countdown application, only two inputs are currently needed: StartTime and WarningTime
     countdownConfigFileObj.write(scenarioConfigVariables[1] + ":" + str(scenarioConfigValues[1]))
     countdownConfigFileObj.write(scenarioConfigVariables[2] + ":" + str(scenarioConfigValues[2]))
 
-# 4.0 - Execution of downstream parallel applications
-## 4.1 - Define path to program executeable
+# X.0 - Execution of downstream parallel applications
+## X.1 - Define path to program executeable
 #countdownExeFilePath = countdownDir
 #countdownExeFileName = "/countdown"
-## 4.2 - Execute application
+## X.2 - Execute application
 #terminalCommand = "DISPLAY=:0.0; " + countdownExeFilePath + countdownExeFileName + " &"
 #os.system(terminalCommand)
 print "User may execute countdown application now"
 time.sleep(5)
 
-# 5.0 - Creation of timed-loop to control the remainder of the program
+# X.0 - Creation of timed-loop to control the remainder of the program
 startTime = time.time()
 currentTime = 0
 stopTime = 60 # seconds
