@@ -31,7 +31,7 @@ with open(instrumentsConfigFile,'r+') as instrumentsConfigFileObj:
 Nlines = len(lines)
 instrumentNames = []
 instrumentBTAddress = []
-for i in range(0, Nlines-1):
+for i in range(0, Nlines):
     if lines[i][0] != "#": # This comparison allows for the code to skip the comments within the configuration file
         if lines[i][:10] == "Instrument":
             instrumentNames.append(lines[i].split(";")[1][:-1])
@@ -41,19 +41,20 @@ print instrumentNames
 print instrumentBTAddress
 ## Using Object Information to Create RFCOMM Ports
 Ndevices = len(instrumentNames)
-#for i in range(0,Ndevices):
-    
-## PORTS
-#port = "rfcomm0"
-## Device Address
-#address = "00:06:66:7D:98:58"
-## Talking to the terminal
-#cmd = "sudo rfcomm bind /dev/" + port + " " + address
-## Sending command
-#os.system(cmd)
+#print Ndevices
+for i in range(0, Ndevices):
+    terminalStringOne = "Connecting to " + instrumentNames[i]
+    print terminalStringOne
+    terminalStringTwo = "sudo rfcomm bind /dev/rfcomm" + str(i) + " " + instrumentBTAddress[i]
+    os.system(terminalStringTwo)
+    #print terminalStringTwo
 
-#arduObj = serial.Serial('/dev/rfcomm1',115200)
-
+## Creating Arduino Serial Object
+arduSerialObj = []
+for i in range(0, Ndevices):
+    rfcommPort = "/dev/rfcomm" + str(i)
+    serialObj = serial.Serial(rfcommPort,115200)
+    arduSerialObj.append(serialObj)
 
 #arduState = 'unpaired'
 
