@@ -1,0 +1,15 @@
+#
+# Instrument Configuration File
+#
+# The following text file has been designed to store identification information of the devices to be connected to the control system
+# Note that the information found in this file MUST be changed if any of the integrated instruments is replaced
+#
+# Fluvio L. Lobo Fenoglietto 06/07/2016
+#
+
+Instrument:oto
+BluetoothAddress:00:06:66:7D:98:58
+
+
+
+

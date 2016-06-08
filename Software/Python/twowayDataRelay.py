@@ -27,7 +27,7 @@ while arduState == 'unpaired':
     if inString == arduID:
         print 'Arduino OTO found!'
         print 'Sending GO message...'
-        arduObj.write('GO')
+        arduObj.write('1')
         arduState = 'paired'
 
 #
@@ -35,4 +35,4 @@ while arduState == 'unpaired':
 #
 arduDataList = []
 while arduState == 'paired':
-    arduDataList.append(int(arduObj.readline()))
+    arduDataList.append(arduObj.readline())
