@@ -106,8 +106,8 @@ void setup() {
   exeLogFile(exeLogFilePath);
   
   // GUI size
-  //fullScreen(1);
-  size(800,480); // These are the dimensions of the RasPi screen
+  fullScreen(1);
+  //size(800,480); // These are the dimensions of the RasPi screen
   background(black);
   cp5 = new ControlP5(this);
   
