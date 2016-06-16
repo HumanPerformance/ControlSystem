@@ -22,14 +22,10 @@
  * Arduino Variables
  *
  */
-int state = 0;
-int inByte = 0;
-/*
- * States:
- * idle   (no communication)   = 0
- * active (data communication) = 1
- */
+int bluePin = 2;
+String state = "idle";
 String arduID = "oto";
+char inChar;
 int ledComPin = 13;
 int analogDataPin = 0;
 
@@ -70,9 +66,13 @@ void setup() {
   // Serial Configuration
   Serial.begin(115200); // Start Serial Library
   Wire.begin(); // Start I2C Library
+
+  // Set-up bluetooth communication
+  digitalWrite(bluePin, HIGH);
   
   // Arduino Configuration
-  pinMode(ledComPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
+  // pinMode(ledComPin, OUTPUT);
   
   // Initializing IMU
   imu.settings.device.commInterface = IMU_MODE_I2C;
@@ -121,7 +121,7 @@ void loop() {
   /*
    * idle state loop
    */
-  while (state == 0) {
+  while (state.equals("idle")) {
     
     Serial.print(arduID);
     Serial.print("\n");
@@ -133,12 +133,13 @@ void loop() {
      
      if (Serial.available() > 0) {
        
-       inByte = Serial.parseInt();
+       inChar = Serial.read();
+       // Serial.println(inChar);
        
-       if (inByte == 1) {
+       if (inChar == 'g') {
          
-         state = 1; // active
-         digitalWrite(ledComPin, HIGH);
+         state = "active"; // active
+         // digitalWrite(ledComPin, HIGH);
          
        } // End of if statement - message check
        
@@ -150,7 +151,7 @@ void loop() {
    * active state loop
    */
    
-  while (state == 1) {
+  while (state.equals("active")) {
     
     // IMU
     printGyro();                                                     // Print "GYR,gx,gy,gz,"
@@ -170,12 +171,13 @@ void loop() {
      
     if (Serial.available() > 0) {
       
-      inByte = Serial.parseInt();
+      inChar = Serial.read();
+      // Serial.println(inChar);
       
-      if (inByte == 0) {
+      if (inChar == 's') {
         
-        state = 0; // idle
-        digitalWrite(ledComPin, LOW);
+        state = "idle"; // idle
+        // digitalWrite(ledComPin, LOW);
         
       } // End of if statement - message check
       
