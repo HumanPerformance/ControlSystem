@@ -22,6 +22,7 @@
  * Arduino Variables
  *
  */
+int bluePin = 2;
 String state = "idle";
 String arduID = "oto";
 char inChar;
@@ -65,9 +66,13 @@ void setup() {
   // Serial Configuration
   Serial.begin(115200); // Start Serial Library
   Wire.begin(); // Start I2C Library
+
+  // Set-up bluetooth communication
+  digitalWrite(bluePin, HIGH);
   
   // Arduino Configuration
-  pinMode(ledComPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
+  // pinMode(ledComPin, OUTPUT);
   
   // Initializing IMU
   imu.settings.device.commInterface = IMU_MODE_I2C;
@@ -134,7 +139,7 @@ void loop() {
        if (inChar == 'g') {
          
          state = "active"; // active
-         digitalWrite(ledComPin, HIGH);
+         // digitalWrite(ledComPin, HIGH);
          
        } // End of if statement - message check
        
@@ -172,7 +177,7 @@ void loop() {
       if (inChar == 's') {
         
         state = "idle"; // idle
-        digitalWrite(ledComPin, LOW);
+        // digitalWrite(ledComPin, LOW);
         
       } // End of if statement - message check
       
