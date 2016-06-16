@@ -8,7 +8,7 @@
 #
 
 Instrument;oto
-BluetoothAddress;00:06:66:7D:98:58
+BluetoothAddress;00:06:66:83:58:51
 
 
 

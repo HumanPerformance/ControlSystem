@@ -27,11 +27,15 @@ Fluvio L. Lobo Fenoglietto 05/19/2016
 # ==============================================
 # Import Libraries and/or Modules
 # ==============================================
+# Python modules
 import sys
 import os
 from os.path import expanduser
+import serial
 import time
+# Functions
 from doubleDigitCorrection import doubleDigitCorrection
+from definePaths import definePaths
 
 # ==============================================
 # Variables
@@ -41,10 +45,21 @@ rootDir = "/root"
 if homeDir == rootDir:
           homeDir = "/home/pi"
           # This check and correction is needed for raspbian
+# .../Python
 consysPyDir = homeDir + "/csec/repos/ControlSystem/Software/Python"
-consysPyDataDir = consysPyDir + "/data"
+# .../Python/data
+#consysPyDataDir = consysPyDir + "/data"
+# .../Python/instruments
+[definePaths()
+#instrumentsConfigFilePath = consysPyDataDir + "/instruments"
+instrumentsConfigFileName = "/instrumentconfig.txt"
+instrumentsConfigFile = instrumentsConfigFilePath + instrumentsConfigFileName
+# .../Processing/.../consys.sh
 countdownDir = homeDir + "/csec/repos/ControlSystem/Software/Processing/countdown/build/armvh6f"
+# .../Processing/.../consys/data
 countdownDataDir = countdownDir + "/data"
+
+
 
 # ==============================================
 # Operation
