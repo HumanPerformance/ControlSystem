@@ -86,7 +86,7 @@ label(pos=(0,0,-1),text="Z",box=0,opacity=0)
 # IMU object
 platform = box(length=1, height=0.05, width=1, color=color.red)
 p_line = box(length=1,height=0.08,width=0.1,color=color.yellow)
-plat_arrow = arrow(color=color.green,axis=(1,0,0), shaftwidth=0.06, fixedwidth=1)
+plat_arrow = arrow(color=color.green,axis=(0,1,0), shaftwidth=0.06, fixedwidth=1)
 
 # ===================================
 # Serial Connection
@@ -113,6 +113,11 @@ while 1:
             # print roll
             yaw = float(words[17])*grad2rad
             # print yaw
+
+            L1.text = str(float(words[15]))
+            L2.text = str(float(words[13]))
+            L3.text = str(float(words[17]))
+        
         except:
             print "Invalid line"
 
@@ -132,9 +137,7 @@ while 1:
         cil_pitch.axis=(0.2*cos(pitch),0.2*sin(pitch),0)
         cil_pitch2.axis=(-0.2*cos(pitch),-0.2*sin(pitch),0)
         arrow_course.axis=(0.2*sin(yaw),0.2*cos(yaw),0)
-        L1.text = str(float(words[15]))
-        L2.text = str(float(words[13]))
-        L3.text = str(float(words[17]))
+        
 ser.close
 f.close
 
