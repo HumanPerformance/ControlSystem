@@ -36,6 +36,7 @@ import time
 # Functions
 from doubleDigitCorrection import doubleDigitCorrection
 from pullInstruments import pullInstruments
+from connect2InstrumentBLUE import connect2InstrumentBLUE
 
 # ==============================================
 # Variables
@@ -112,21 +113,13 @@ with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
 # ----------------------------------------------
 # X.0 - Connect Instrument(s)
 # ----------------------------------------------
+# Pull instrument information from the instrument configuration file
 instrumentNames, instrumentBTAddress = pullInstruments(instrumentsConfigFile)
-#with open(instrumentsConfigFile,'r+') as instrumentsConfigFileObj:
-#    lines = instrumentsConfigFileObj.readlines()
-#    #print lines
-#Nlines = len(lines)
-#instrumentNames = []
-#instrumentBTAddress = []
-#for i in range(0, Nlines):
-#    if lines[i][0] != "#": # This comparison allows for the code to skip the comments within the configuration file
-#        if lines[i][:10] == "Instrument":
-#            instrumentNames.append(lines[i].split(";")[1][:-1])
-#        elif lines[i][:16] == "BluetoothAddress":
-#            instrumentBTAddress.append(lines[i].split(";")[1][:-1])
 print instrumentNames
 print instrumentBTAddress
+# Connect to instruments by creating bluetooth-serial (RFCOMM) ports
+arduSerialObj = connect2InstrumentBLUE(instrumentNames, instrumentBTAddress)
+print arduSerialObj
 
 # ----------------------------------------------
 # X.0 - Execute Parallel Application(s)
@@ -161,5 +154,6 @@ else:
 References
 1- Defining Functions in Python - http://www.tutorialspoint.com/python/python_functions.htm
 2- Calling Functions from other Python scripts - http://stackoverflow.com/questions/20309456/how-to-call-a-function-from-another-file-in-python
-3- "       "         "    "     "      "       - http://stackoverflow.com/questions/7701646/how-to-call-a-function-from-another-file 
+3- "       "         "    "     "      "       - http://stackoverflow.com/questions/7701646/how-to-call-a-function-from-another-file
+4- Returning multiple variables from python function/script - http://stackoverflow.com/questions/354883/how-do-you-return-multiple-values-in-python
 """
