@@ -35,7 +35,6 @@ import serial
 import time
 # Functions
 from doubleDigitCorrection import doubleDigitCorrection
-from definePaths import definePaths
 
 # ==============================================
 # Variables
@@ -48,17 +47,15 @@ if homeDir == rootDir:
 # .../Python
 consysPyDir = homeDir + "/csec/repos/ControlSystem/Software/Python"
 # .../Python/data
-#consysPyDataDir = consysPyDir + "/data"
+consysPyDataDir = consysPyDir + "/data"
 # .../Python/instruments
-[definePaths()
-#instrumentsConfigFilePath = consysPyDataDir + "/instruments"
+instrumentsConfigFilePath = consysPyDataDir + "/instruments"
 instrumentsConfigFileName = "/instrumentconfig.txt"
 instrumentsConfigFile = instrumentsConfigFilePath + instrumentsConfigFileName
 # .../Processing/.../consys.sh
-countdownDir = homeDir + "/csec/repos/ControlSystem/Software/Processing/countdown/build/armvh6f"
+countdownDir = homeDir + "/csec/repos/ControlSystem/Software/Processing/countdown/build/armv6hf"
 # .../Processing/.../consys/data
 countdownDataDir = countdownDir + "/data"
-
 
 
 # ==============================================
