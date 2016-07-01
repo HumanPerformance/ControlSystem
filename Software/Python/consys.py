@@ -98,8 +98,8 @@ scenarioConfigValues = []
 for i in range(0, Nlines-1):
     scenarioConfigVariables.append(lines[i].split(":")[0])
     scenarioConfigValues.append(lines[i].split(":")[1])
-print scenarioConfigVariables
-print int(scenarioConfigValues[1])
+# print scenarioConfigVariables
+# print int(scenarioConfigValues[1])
 
 # ----------------------------------------------
 # X.0 - Write Configuration File
@@ -115,11 +115,8 @@ with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
 # ----------------------------------------------
 # Pull instrument information from the instrument configuration file
 instrumentNames, instrumentBTAddress = pullInstruments(instrumentsConfigFile)
-print instrumentNames
-print instrumentBTAddress
 # Connect to instruments by creating bluetooth-serial (RFCOMM) ports
 arduSerialObj = connect2InstrumentBLUE(instrumentNames, instrumentBTAddress)
-print arduSerialObj
 
 # ----------------------------------------------
 # X.0 - Execute Parallel Application(s)
@@ -136,7 +133,7 @@ time.sleep(5)
 # ----------------------------------------------
 startTime = time.time()
 currentTime = 0
-stopTime = 60 # seconds
+stopTime = 10 # seconds
 
 while currentTime < stopTime:
         #
@@ -146,9 +143,9 @@ while currentTime < stopTime:
 
         # Update time
         currentTime = time.time() - startTime
-        print currentTime
-else:
-        print "Program Concluded"
+        # print currentTime
+
+print "Program Concluded"
 
 """
 References

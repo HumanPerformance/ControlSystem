@@ -28,10 +28,8 @@ def connect2InstrumentBLUE(instrumentNames, instrumentBTAddress):
         serialObj = serial.Serial(rfcommPort,115200)
         arduSerialObj.append(serialObj)# Create RFCOMM Ports
 
-        # Brief test connection with Arduino-powered instrument
-        #for i in range(0,20):
-        #        inString = arduSerialObj[0].readline()
-        #        print inString
+        # Verification of connected device
+        checkInstrument(arduSerialObj[i], instrumentNames[i])
 
     # Return variables
     return arduSerialObj
@@ -40,7 +38,28 @@ def connect2InstrumentBLUE(instrumentNames, instrumentBTAddress):
 def portRelease(portType, portNum):
     
     terminalStringZero = "Releasing " + portType + " port " + str(portNum)
-    print terminalStringZero
+    # print terminalStringZero
     terminalStringOne = "sudo " + portType + " release " + str(portNum)
-    print terminalStringOne
+    # print terminalStringOne
     os.system(terminalStringOne)
+
+def checkInstrument(arduSerialObj, instrumentName):
+
+    iterCheck = 20 # Number of iterations for device searching
+    # print instrumentNames
+    # print instrumentNames[0]
+    for j in range(0,iterCheck):
+        inString = arduSerialObj.readline()
+        # print inString[:-1]
+        # print instrumentNames[i]
+        if inString[:-1] == instrumentName:
+            print "Connected to " + instrumentName
+            break
+        elif (inString != instrumentName) and (j == iterCheck):
+            print instrumentName + " not found"
+
+
+"""
+References
+1- String Comparison in Python - http://stackoverflow.com/questions/2988017/string-comparison-in-python-is-vs
+"""
