@@ -38,6 +38,7 @@ from doubleDigitCorrection import doubleDigitCorrection
 from pullInstruments import pullInstruments
 from connect2InstrumentBLUE import connect2InstrumentBLUE
 from instrumentDataAcquisition import dataRead
+from instrumentDataAcquisition import dataWrite
 
 # ==============================================
 # Variables
@@ -136,6 +137,8 @@ startTime = time.time()
 currentTime = 0
 stopTime = 10 # seconds
 
+dataFile = open("data.txt", "w")
+
 while currentTime < stopTime:
         #
         # Operation
@@ -144,14 +147,18 @@ while currentTime < stopTime:
         for i in range(0,Ndevices):
 
             # Read data from device
-            dataRead(arduSerialObj[i])
-            
+            inString = dataRead(arduSerialObj[i])
+
+            # Write data from device
+            dataWrite(dataFile, inString)
 
         # Update time
         currentTime = time.time() - startTime
         # print currentTime
 
 print "Program Concluded"
+
+dataFile.close()
 
 """
 References

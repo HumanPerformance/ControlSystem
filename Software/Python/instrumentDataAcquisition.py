@@ -9,4 +9,9 @@ Fluvio L. Lobo Fenoglietto 07/04/2016
 def dataRead(arduSerialObj):
     inString = arduSerialObj.readline()
     print inString
+
+    return inString
     
+def dataWrite(dataFile, inString):
+    dataFile.write(inString)
+        
