@@ -138,8 +138,14 @@ stopTime = 10 # seconds
 while currentTime < stopTime:
         #
         # Operation
-        #
-        #
+
+        # Loop through all devices
+        for i in range(0,Ndevices):
+
+            # Read data from device
+            inString = arduSerialObj[i].readline()
+            print inString
+            
 
         # Update time
         currentTime = time.time() - startTime

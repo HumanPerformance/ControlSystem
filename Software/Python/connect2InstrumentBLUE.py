@@ -54,6 +54,7 @@ def checkInstrument(arduSerialObj, instrumentName):
         # print instrumentNames[i]
         if inString[:-1] == instrumentName:
             print "Connected to " + instrumentName
+            arduSerialObj.write('g') # trigger data collection
             break
         elif (inString != instrumentName) and (j == iterCheck):
             print instrumentName + " not found"
