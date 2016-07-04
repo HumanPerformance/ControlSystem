@@ -114,7 +114,7 @@ with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
 # X.0 - Connect Instrument(s)
 # ----------------------------------------------
 # Pull instrument information from the instrument configuration file
-instrumentNames, instrumentBTAddress = pullInstruments(instrumentsConfigFile)
+Ndevices, instrumentNames, instrumentBTAddress = pullInstruments(instrumentsConfigFile)
 # Connect to instruments by creating bluetooth-serial (RFCOMM) ports
 arduSerialObj = connect2InstrumentBLUE(instrumentNames, instrumentBTAddress)
 

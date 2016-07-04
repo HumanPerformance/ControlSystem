@@ -21,5 +21,6 @@ def pullInstruments(instrumentsConfigFile):
                 instrumentBTAddress.append(lines[i].split(";")[1][:-1])
     #print instrumentNames
     #print instrumentBTAddress
+    Ndevices = len(instrumentNames)
     
-    return instrumentNames, instrumentBTAddress
+    return Ndevices, instrumentNames, instrumentBTAddress
