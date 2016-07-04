@@ -64,6 +64,8 @@ scenarioConfigFilePath = consysPyDataDir + "/scenarios"
 instrumentsConfigFilePath = consysPyDataDir + "/instruments"
 instrumentsConfigFileName = "/instrumentconfig.txt"
 instrumentsConfigFile = instrumentsConfigFilePath + instrumentsConfigFileName
+# .../Python/data/output
+outputFilePath = consysPyDataDir + "/output"
 # .../Processing/.../countdown
 countdownDir = homeDir + "/csec/repos/ControlSystem/Software/Processing/countdown/build/armv6hf"
 # .../Processing/.../countdown/.../data
@@ -149,7 +151,7 @@ while currentTime < stopTime:
             inString = dataRead(arduSerialObj[i])
 
             # Write data from device
-            dataWrite(i, inString)
+            dataWrite(outputFilePath, i, inString)
 
         # Update time
         currentTime = time.time() - startTime
