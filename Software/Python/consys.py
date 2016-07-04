@@ -37,6 +37,7 @@ import time
 from doubleDigitCorrection import doubleDigitCorrection
 from pullInstruments import pullInstruments
 from connect2InstrumentBLUE import connect2InstrumentBLUE
+from instrumentDataAcquisition import dataRead
 
 # ==============================================
 # Variables
@@ -143,8 +144,7 @@ while currentTime < stopTime:
         for i in range(0,Ndevices):
 
             # Read data from device
-            inString = arduSerialObj[i].readline()
-            print inString
+            dataRead(arduSerialObj[i])
             
 
         # Update time
@@ -159,4 +159,5 @@ References
 2- Calling Functions from other Python scripts - http://stackoverflow.com/questions/20309456/how-to-call-a-function-from-another-file-in-python
 3- "       "         "    "     "      "       - http://stackoverflow.com/questions/7701646/how-to-call-a-function-from-another-file
 4- Returning multiple variables from python function/script - http://stackoverflow.com/questions/354883/how-do-you-return-multiple-values-in-python
+5- Writing to Serial on Python - http://playground.arduino.cc/Interfacing/Python
 """
