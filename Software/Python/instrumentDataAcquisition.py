@@ -12,6 +12,8 @@ def dataRead(arduSerialObj):
 
     return inString
     
-def dataWrite(dataFile, inString):
-    dataFile.write(inString)
+def dataWrite(i, inString):
+    dataFileName = "data" + str(i) + ".txt"
+    with open(dataFileName, "a") as dataFile:
+        dataFile.write(inString)
         

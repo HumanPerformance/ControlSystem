@@ -39,6 +39,7 @@ from pullInstruments import pullInstruments
 from connect2InstrumentBLUE import connect2InstrumentBLUE
 from instrumentDataAcquisition import dataRead
 from instrumentDataAcquisition import dataWrite
+#from instrumentDataAcquisition import createDataFile
 
 # ==============================================
 # Variables
@@ -137,8 +138,6 @@ startTime = time.time()
 currentTime = 0
 stopTime = 10 # seconds
 
-dataFile = open("data.txt", "w")
-
 while currentTime < stopTime:
         #
         # Operation
@@ -150,7 +149,7 @@ while currentTime < stopTime:
             inString = dataRead(arduSerialObj[i])
 
             # Write data from device
-            dataWrite(dataFile, inString)
+            dataWrite(i, inString)
 
         # Update time
         currentTime = time.time() - startTime
@@ -158,7 +157,6 @@ while currentTime < stopTime:
 
 print "Program Concluded"
 
-dataFile.close()
 
 """
 References
