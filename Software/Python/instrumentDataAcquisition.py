@@ -6,19 +6,35 @@ The following script/library/module will contain all routines/scripts/functions 
 Fluvio L. Lobo Fenoglietto 07/04/2016
 """
 
+# ===================================
+# Import Libraries/Modules
+# ===================================
+
 # Standard Modules/Libraries
 import os
 import os.path
-
 # Custom Modules/Libraries
 from timeStamp import *
 
+# ===================================
+# Functions
+# ===================================
+
+# -----------------------------------
+# dataRead()
+#   Read data from serial port
+# -----------------------------------
 def dataRead(arduSerialObj):
     inString = arduSerialObj.readline()
     print inString
 
     return inString
-    
+
+# -----------------------------------
+# dataWrite()
+#   Write data, read from serial, to
+#   an output/text file
+# -----------------------------------
 def dataWrite(outputFilePath, i, inString):
     dataFileDir = outputFilePath + stampedFolder()
 
@@ -33,7 +49,11 @@ def dataWrite(outputFilePath, i, inString):
     
     with open(dataFilePath, "a") as dataFile:
         dataFile.write(inString)
-
+        
+# -----------------------------------
+# createDataFile()
+#   Creates the output/text file
+# -----------------------------------
 def createDataFile(dataFilePath):
     with open(dataFilePath, "a") as dataFile:
         dataFile.write("===================== \n")
@@ -42,6 +62,11 @@ def createDataFile(dataFilePath):
         dataFile.write("This is a header line \n")
         dataFile.write("===================== \n")
 
+# -----------------------------------
+# createDataFolder()
+#   Creates the output/text file's
+#   directory/folder
+# -----------------------------------
 def createDataFolder(dataFileDir):
     os.makedirs(dataFileDir)
     
