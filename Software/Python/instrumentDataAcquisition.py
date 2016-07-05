@@ -6,8 +6,12 @@ The following script/library/module will contain all routines/scripts/functions 
 Fluvio L. Lobo Fenoglietto 07/04/2016
 """
 
+# Standard Modules/Libraries
 import os
 import os.path
+
+# Custom Modules/Libraries
+from timeStamp import *
 
 def dataRead(arduSerialObj):
     inString = arduSerialObj.readline()
@@ -16,7 +20,11 @@ def dataRead(arduSerialObj):
     return inString
     
 def dataWrite(outputFilePath, i, inString):
-    dataFileDir = outputFilePath
+    dataFileDir = outputFilePath + stampedFolder()
+
+    if os.path.exists(dataFileDir) == False:
+        createDataFolder(dataFileDir)
+    
     dataFileName = "/data" + str(i) + ".txt"
     dataFilePath = dataFileDir + dataFileName
 
@@ -33,6 +41,11 @@ def createDataFile(dataFilePath):
         dataFile.write("This is a header line \n")
         dataFile.write("This is a header line \n")
         dataFile.write("===================== \n")
+
+
+def createDataFolder(dataFileDir):
+    os.makedirs(dataFileDir)
+    
 """
 References
 1 - Print String to File - http://stackoverflow.com/questions/5214578/python-print-string-to-text-file
