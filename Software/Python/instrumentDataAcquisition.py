@@ -42,7 +42,6 @@ def createDataFile(dataFilePath):
         dataFile.write("This is a header line \n")
         dataFile.write("===================== \n")
 
-
 def createDataFolder(dataFileDir):
     os.makedirs(dataFileDir)
     
