@@ -79,11 +79,15 @@ def checkRFInstrument(arduSerialObj, instrumentName):
             print instrumentName + " not found"
 
 def triggerRFInstrument(arduRFObj, instrumentName):
-    inString = ""
-    while inString[:-1] == instrumentName:
-        arduRFObj.write('g') # trigger data collection, exit idle state
+    # arduRFObj.flushInput()
+    iterCheck = 20
+    for i in range(0,iterCheck):
         inString = arduRFObj.readline()
-        print inString + ", " + instrumentName
+        print inString + ", " + instrumentName 
+        if inString[:-1] == instrumentName:
+            arduRFObj.write('g') # trigger data collection, exit idle state
+            # inString = arduRFObj.readline()
+            break
 
 def triggerRFInstruments(arduRFObj, instrumentNames):
     Ndevices = len(instrumentNames)
