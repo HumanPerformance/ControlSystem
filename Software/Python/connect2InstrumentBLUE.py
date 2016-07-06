@@ -1,11 +1,33 @@
 """
-connect2InstrumentBLUE.py
+RFConnection.py
 
 Fluvio L. Lobo Fenoglietto 06/29/2016
 """
 
 import os
 import serial
+from timeStamp import *
+
+
+def createRFPort(instrumentNames, instrumentBTAddress):
+
+    Ndevices = len(instrumentNames)
+    arduRFObj = []
+    for i in range(0,Ndevices):
+        # Pre-release of RFCOMM port
+        print fullStamp() + " Releasing RFCOMM" + str(i)
+        portRelease("rfcomm",i)
+        # Open RFCOMM port for device
+        print fullStamp() + " Connecting device to RFCOMM" + str(i)
+        os.system("sudo rfcomm bind /dev/rfcomm" + str(i) + " " + instrumentBTAddress[i])
+        # Create Arduino RF-Serial Object
+        rfcommPort = "/dev/rfcomm" + str(i)
+        RFObj = serial.Serial(rfcommPort,115200) # Need error handle for the case in which the device is not available
+        arduRFObj.append(RFObj)
+        # Trigger data collection on instruments
+        triggerRFInstrument(arduRFObj[i], instrumentNames[i])
+
+    return arduRFObj
 
 def connect2InstrumentBLUE(instrumentNames, instrumentBTAddress):
     
@@ -43,7 +65,7 @@ def portRelease(portType, portNum):
     # print terminalStringOne
     os.system(terminalStringOne)
 
-def checkInstrument(arduSerialObj, instrumentName):
+def checkRFInstrument(arduSerialObj, instrumentName):
 
     iterCheck = 50 # Number of iterations for device searching
     for j in range(0,iterCheck):
@@ -56,13 +78,36 @@ def checkInstrument(arduSerialObj, instrumentName):
         elif (inString != instrumentName) and (j == iterCheck):
             print instrumentName + " not found"
 
-def releaseInstruments(arduSerialObj, instrumentNames):
+def triggerRFInstrument(arduRFObj, instrumentName):
+    inString = ""
+    while inString[:-1] == instrumentName:
+        arduRFObj.write('g') # trigger data collection, exit idle state
+        inString = arduRFObj.readline()
+        print inString + ", " + instrumentName
+
+def triggerRFInstruments(arduRFObj, instrumentNames):
     Ndevices = len(instrumentNames)
     for i in range(0,Ndevices):
         inString = ""
         while inString[:-1] != instrumentNames[i]:
-            arduSerialObj[i].write('s') # stop data collection, trigger idle state
-            inString = arduSerialObj[i].readline()
+            arduRFObj[i].write('g') # trigger data collection, exit idle state
+            inString = arduRFObj[i].readline()
+            print inString
+
+def stopRFInstrument(arduRFObj, instrumentName):
+    inString = ""
+    while inString[:-1] != instrumentName:
+        arduRFObj.write('s') # t stop data collection, trigger idle state
+        inString = arduRFObj.readline()
+        print inString
+
+def stopRFInstruments(arduRFObj, instrumentNames):
+    Ndevices = len(instrumentNames)
+    for i in range(0,Ndevices):
+        inString = ""
+        while inString[:-1] != instrumentNames[i]:
+            arduRFObj[i].write('s') # stop data collection, trigger idle state
+            inString = arduRFObj[i].readline()
             print inString
 
 """

@@ -127,7 +127,7 @@ with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
 # Pull instrument information from the instrument configuration file
 Ndevices, instrumentNames, instrumentBTAddress = pullInstruments(instrumentsConfigFile)
 # Connect to instruments by creating bluetooth-serial (RFCOMM) ports
-arduSerialObj = connect2InstrumentBLUE(instrumentNames, instrumentBTAddress)
+arduRFObj = createRFPort(instrumentNames, instrumentBTAddress)
 
 # ----------------------------------------------
 # X.0 - Execute Parallel Application(s)
@@ -154,7 +154,7 @@ while currentTime < stopTime:
         for i in range(0,Ndevices):
 
             # Read data from device
-            inString = dataRead(arduSerialObj[i])
+            inString = dataRead(arduRFObj[i])
 
             # Write data from device
             dataWrite(executionTimeStamp, currentTime, outputFilePath, instrumentNames[i], inString)
@@ -165,7 +165,7 @@ while currentTime < stopTime:
 
 print "Program Concluded"
 
-releaseInstruments(arduSerialObj, instrumentNames)
+stopRFInstruments(arduRFObj, instrumentNames)
 
 """
 References

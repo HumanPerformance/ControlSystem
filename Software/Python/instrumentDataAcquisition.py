@@ -24,8 +24,8 @@ from timeStamp import *
 # dataRead()
 #   Read data from serial port
 # -----------------------------------
-def dataRead(arduSerialObj):
-    inString = arduSerialObj.readline()
+def dataRead(arduRFObj):
+    inString = arduRFObj.readline()
     print inString
 
     return inString
