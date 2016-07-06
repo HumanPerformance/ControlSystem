@@ -13,9 +13,18 @@ def calendarStamp():
     timeStamp = time.strftime("%Y-%m-%d")
     return timeStamp
 
+def timeStamp():
+    timeStamp = time.strftime("%H-%M-%S")
+    return timeStamp
+
+def fullStamp():
+    timeStamp = time.strftime("%Y-%m-%d-%H-%M-%S")
+    return timeStamp
+    
 def stampedFolder():
-    folderName = "/" + calendarStamp()
+    folderName = "/" + fullStamp()
     return folderName
+
 
 """
 References

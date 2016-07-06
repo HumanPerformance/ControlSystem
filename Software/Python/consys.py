@@ -39,6 +39,7 @@ from pullInstruments import pullInstruments
 from connect2InstrumentBLUE import connect2InstrumentBLUE
 from instrumentDataAcquisition import dataRead
 from instrumentDataAcquisition import dataWrite
+from timeStamp import fullStamp
 #from instrumentDataAcquisition import createDataFile
 
 # ==============================================
@@ -46,7 +47,12 @@ from instrumentDataAcquisition import dataWrite
 # ==============================================
 
 # ----------------------------------------------
-# A) Path/Directory Variables
+# A) Timers
+# ----------------------------------------------
+executionTimeStamp = fullStamp()
+
+# ----------------------------------------------
+# B) Path/Directory Variables
 # ----------------------------------------------
 homeDir = expanduser("~")
 rootDir = "/root"
@@ -151,7 +157,7 @@ while currentTime < stopTime:
             inString = dataRead(arduSerialObj[i])
 
             # Write data from device
-            dataWrite(outputFilePath, i, inString)
+            dataWrite(executionTimeStamp, currentTime, outputFilePath, instrumentNames[i], inString)
 
         # Update time
         currentTime = time.time() - startTime
