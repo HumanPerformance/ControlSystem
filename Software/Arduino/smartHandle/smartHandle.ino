@@ -125,7 +125,7 @@ void loop() {
     
     Serial.print(arduID);
     Serial.print("\n");
-    delay(250); // 250 ms.
+    delay(250); // time delay in milliseconds.
     
     /*
      * Serial Port Check
@@ -162,7 +162,7 @@ void loop() {
     printAmbientLight();                                             // Print "LUX,ambientlight,"
     printProximity();                                                // Print "PRO,distance," 
     Serial.print("\n");                                                // Print-line "\n"
-    delay(250);                                                      // 1sec. delay
+    delay(10); // time delay in milliseconds.                                                     // 1sec. delay
     
     
     /*
