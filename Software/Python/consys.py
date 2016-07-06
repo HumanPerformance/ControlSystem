@@ -36,7 +36,7 @@ import time
 # Functions
 from doubleDigitCorrection import doubleDigitCorrection
 from pullInstruments import pullInstruments
-from connect2InstrumentBLUE import connect2InstrumentBLUE
+from connect2InstrumentBLUE import *
 from instrumentDataAcquisition import dataRead
 from instrumentDataAcquisition import dataWrite
 from timeStamp import fullStamp
@@ -165,6 +165,7 @@ while currentTime < stopTime:
 
 print "Program Concluded"
 
+releaseInstruments(arduSerialObj, instrumentNames)
 
 """
 References

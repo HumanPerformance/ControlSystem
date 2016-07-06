@@ -45,13 +45,10 @@ def portRelease(portType, portNum):
 
 def checkInstrument(arduSerialObj, instrumentName):
 
-    iterCheck = 20 # Number of iterations for device searching
-    # print instrumentNames
-    # print instrumentNames[0]
+    iterCheck = 50 # Number of iterations for device searching
     for j in range(0,iterCheck):
         inString = arduSerialObj.readline()
-        # print inString[:-1]
-        # print instrumentNames[i]
+        print inString[:-1]
         if inString[:-1] == instrumentName:
             print "Connected to " + instrumentName
             arduSerialObj.write('g') # trigger data collection
@@ -59,6 +56,14 @@ def checkInstrument(arduSerialObj, instrumentName):
         elif (inString != instrumentName) and (j == iterCheck):
             print instrumentName + " not found"
 
+def releaseInstruments(arduSerialObj, instrumentNames):
+    Ndevices = len(instrumentNames)
+    for i in range(0,Ndevices):
+        inString = ""
+        while inString[:-1] != instrumentNames[i]:
+            arduSerialObj[i].write('s') # stop data collection, trigger idle state
+            inString = arduSerialObj[i].readline()
+            print inString
 
 """
 References
