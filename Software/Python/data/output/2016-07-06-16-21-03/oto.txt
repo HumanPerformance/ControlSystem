@@ -1,0 +1,8 @@
+===================== 
+Scenario =  
+Instrument = oto
+This is a header line 
+===================== 
+TIM,0,otoo
+TIM,5.51155209541,ototoooo
+TIM,7.25873613358,ottooottoototo

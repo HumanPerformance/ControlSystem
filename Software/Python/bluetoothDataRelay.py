@@ -56,12 +56,10 @@ for i in range(0, Ndevices):
     serialObj = serial.Serial(rfcommPort,115200)
     arduSerialObj.append(serialObj)
 
-#arduState = 'unpaired'
+## Connecting to Arduino Serial Object
+arduState = 'unpaired'
 
-#
-# unpaired state loop (idle state loop)
-#
-#while arduState == 'unpaired':
- #   inString = arduObj.readline()
- #   print inString
+for i in range(0,20):
+        inString = arduSerialObj[0].readline()
+        print inString
 

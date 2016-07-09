@@ -27,100 +27,151 @@ Fluvio L. Lobo Fenoglietto 05/19/2016
 # ==============================================
 # Import Libraries and/or Modules
 # ==============================================
+# Python modules
 import sys
 import os
 from os.path import expanduser
+import serial
 import time
+# Functions
 from doubleDigitCorrection import doubleDigitCorrection
+from pullInstruments import pullInstruments
+from connect2InstrumentBLUE import *
+from instrumentDataAcquisition import dataRead
+from instrumentDataAcquisition import dataWrite
+from timeStamp import fullStamp
+#from instrumentDataAcquisition import createDataFile
 
 # ==============================================
 # Variables
 # ==============================================
+
+# ----------------------------------------------
+# A) Timers
+# ----------------------------------------------
+executionTimeStamp = fullStamp()
+
+# ----------------------------------------------
+# B) Path/Directory Variables
+# ----------------------------------------------
 homeDir = expanduser("~")
 rootDir = "/root"
 if homeDir == rootDir:
           homeDir = "/home/pi"
           # This check and correction is needed for raspbian
+# .../Python
 consysPyDir = homeDir + "/csec/repos/ControlSystem/Software/Python"
+# .../Python/data
 consysPyDataDir = consysPyDir + "/data"
-countdownDir = homeDir + "/csec/repos/ControlSystem/Software/Processing/countdown/build/armvh6f"
+# .../Python/data/scenarios
+scenarioConfigFilePath = consysPyDataDir + "/scenarios"
+# The exact scenario name is determined using the terminal input (Operation :: 1.0-2.0)
+# .../Python/data/instruments
+instrumentsConfigFilePath = consysPyDataDir + "/instruments"
+instrumentsConfigFileName = "/instrumentconfig.txt"
+instrumentsConfigFile = instrumentsConfigFilePath + instrumentsConfigFileName
+# .../Python/data/output
+outputFilePath = consysPyDataDir + "/output"
+# .../Processing/.../countdown
+countdownDir = homeDir + "/csec/repos/ControlSystem/Software/Processing/countdown/build/armv6hf"
+# .../Processing/.../countdown/.../data
 countdownDataDir = countdownDir + "/data"
+countdownConfigFilePath = countdownDataDir
+countdownConfigFileName = "/countdownInit.txt"
+countdownConfigFile = countdownConfigFilePath + countdownConfigFileName
 
 # ==============================================
 # Operation
 # ==============================================
 
-# 1.0 - Read and follow instructions from server
+# ----------------------------------------------
+# 1.0 - Read Terminal (local or SSH) Input
+# ----------------------------------------------
 inputArg = sys.argv
 selectedScenario = int(sys.argv[1])
 outString = "User Executed " + inputArg[0] + ", scenario #" + inputArg[1]
 print outString
 
-# 2.0 - Load configuration file based on server instruction
-## 2.1 - Define path of configuration file based on user input
-scenarioConfigFilePath = consysPyDataDir + "/scenarios"
+# ----------------------------------------------
+# 2.0 - Load Configuration File
+# ----------------------------------------------
+# Loading configuration file using terminal input
 scenarioNumberString = doubleDigitCorrection(inputArg[1])
 scenarioConfigFileName = "/sc" + scenarioNumberString + ".txt"
-# print scenarioConfigFileName
-## 2.2 - Load configuration file
 scenarioConfigFile = scenarioConfigFilePath + scenarioConfigFileName
 with open(scenarioConfigFile,'r+') as scenarioConfigFileObj:
     lines = scenarioConfigFileObj.readlines()
-## 2.3 - Save loaded data into program variables
+
+# Save loaded data into program variables
 Nlines = len(lines)
-#print Nlines
 scenarioConfigVariables = []
 scenarioConfigValues = []
 for i in range(0, Nlines-1):
     scenarioConfigVariables.append(lines[i].split(":")[0])
     scenarioConfigValues.append(lines[i].split(":")[1])
-#print scenarioConfigVariables
-#print int(scenarioConfigValues[1])
+# print scenarioConfigVariables
+# print int(scenarioConfigValues[1])
 
-# X.0 - Detect and connect to Arduino modules
-
-
-# X.0 - Write loaded variables into downstream configuration file for parallel applications
-## X.1 - Define path of configuration file
-countdownConfigFilePath = countdownDataDir
-countdownConfigFileName = "/countdownInit.txt"
-countdownConfigFile = countdownConfigFilePath + countdownConfigFileName
-## X.2 - Write configuration file
+# ----------------------------------------------
+# X.0 - Write Configuration File
+# ----------------------------------------------
+# Write configuration file for downstream parallel applications
 with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
     # Note: For the countdown application, only two inputs are currently needed: StartTime and WarningTime
     countdownConfigFileObj.write(scenarioConfigVariables[1] + ":" + str(scenarioConfigValues[1]))
     countdownConfigFileObj.write(scenarioConfigVariables[2] + ":" + str(scenarioConfigValues[2]))
 
-# X.0 - Execution of downstream parallel applications
-## X.1 - Define path to program executeable
+# ----------------------------------------------
+# X.0 - Connect Instrument(s)
+# ----------------------------------------------
+# Pull instrument information from the instrument configuration file
+Ndevices, instrumentNames, instrumentBTAddress = pullInstruments(instrumentsConfigFile)
+# Connect to instruments by creating bluetooth-serial (RFCOMM) ports
+arduRFObj = createRFPort(instrumentNames, instrumentBTAddress)
+
+# ----------------------------------------------
+# X.0 - Execute Parallel Application(s)
+# ----------------------------------------------
+print "User may execute countdown application now"
 #countdownExeFilePath = countdownDir
 #countdownExeFileName = "/countdown"
-## X.2 - Execute application
 #terminalCommand = "DISPLAY=:0.0; " + countdownExeFilePath + countdownExeFileName + " &"
 #os.system(terminalCommand)
-print "User may execute countdown application now"
 time.sleep(5)
 
-# X.0 - Creation of timed-loop to control the remainder of the program
+# ----------------------------------------------
+# X.0 - Data Acquisition Timed-Loop
+# ----------------------------------------------
 startTime = time.time()
 currentTime = 0
-stopTime = 60 # seconds
+stopTime = 10 # seconds
 
 while currentTime < stopTime:
         #
         # Operation
-        #
-        #
+
+        # Loop through all devices
+        for i in range(0,Ndevices):
+
+            # Read data from device
+            inString = dataRead(arduRFObj[i])
+
+            # Write data from device
+            dataWrite(executionTimeStamp, currentTime, outputFilePath, instrumentNames[i], inString)
 
         # Update time
         currentTime = time.time() - startTime
-        print currentTime
-else:
-        print "Program Concluded"
+        # print currentTime
+
+print "Program Concluded"
+
+stopRFInstruments(arduRFObj, instrumentNames)
 
 """
 References
 1- Defining Functions in Python - http://www.tutorialspoint.com/python/python_functions.htm
 2- Calling Functions from other Python scripts - http://stackoverflow.com/questions/20309456/how-to-call-a-function-from-another-file-in-python
-3- "       "         "    "     "      "       - http://stackoverflow.com/questions/7701646/how-to-call-a-function-from-another-file 
+3- "       "         "    "     "      "       - http://stackoverflow.com/questions/7701646/how-to-call-a-function-from-another-file
+4- Returning multiple variables from python function/script - http://stackoverflow.com/questions/354883/how-do-you-return-multiple-values-in-python
+5- Writing to Serial on Python - http://playground.arduino.cc/Interfacing/Python
 """
