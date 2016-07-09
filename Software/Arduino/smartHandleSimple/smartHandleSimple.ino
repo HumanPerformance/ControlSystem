@@ -100,7 +100,7 @@ void loop() {
   printAmbientLight();                                             // Print "LUX,ambientlight,"
   printProximity();                                                // Print "PRO,distance," 
   Serial.println();                                                // Print-line "\n"
-  delay(250); // 1sec. delay
+  delay(100); // 1sec. delay
   
 } // End of void loop
 
