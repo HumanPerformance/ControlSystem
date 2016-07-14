@@ -97,10 +97,10 @@ void loop() {
   printMag();                                                      // Print "MAG,mx,my,mz,"
   printAttitude(imu.ax, imu.ay, imu.az, -imu.my, -imu.mx, imu.mz); // Print "PIT,pitch,ROL,roll,HEA,heading,"
   // ToF Range Finder
-  //printAmbientLight();                                             // Print "LUX,ambientlight,"
-  //printProximity();                                                // Print "PRO,distance," 
+  printAmbientLight();                                             // Print "LUX,ambientlight,"
+  printProximity();                                                // Print "PRO,distance," 
   Serial.println();                                                // Print-line "\n"
-  delay(10); // 1sec. delay
+  delay(100); // 1sec. delay
   
 } // End of void loop
 
@@ -199,7 +199,7 @@ void printAttitude(float ax, float ay, float az, float mx, float my, float mz) {
   Serial.print(",");
   Serial.print("HEA,");
   Serial.print(heading, 2);
-  //Serial.print(",");
+  Serial.print(",");
   
 } // End of function - printAttitude()
 
