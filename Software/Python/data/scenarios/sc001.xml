@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<id>1</id> <!-- Identification number for scenario -->
-<title>Heart Murmur</title> <!-- Title of scenario -->
-<description>In this scenario, the SP presents symptoms that require an auscultation which reveal a heart murmur</description> <!-- Description of the scenario -->
-
+<data>
+	<id>1</id> <!-- Identification number for scenario -->
+	<title>Heart Murmur</title> <!-- Title of scenario -->
+	<description>In this scenario, the SP presents symptoms that require an auscultation which reveal a heart murmur</description> <!-- Description of the scenario -->
+</data>

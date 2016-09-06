@@ -23,4 +23,12 @@ import xml.etree.ElementTree as etree
 #   Input  :: path to configuration file (string)
 #   Output :: configuration file structure
 def readConfigFile(configFile):
-    
+    tree = etree.parse(configFile)
+    root = tree.getroot()
+    return tree, root
+
+"""
+References
+
+1- XML eTree elementTree - https://docs.python.org/2/library/xml.etree.elementtree.html
+"""
