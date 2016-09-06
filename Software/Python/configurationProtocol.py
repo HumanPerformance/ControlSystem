@@ -27,6 +27,9 @@ def readConfigFile(configFile):
     root = tree.getroot()
     return tree, root
 
+# Search Given Child (Group within tree)
+#   Searches for a specific "child" or section within the configuration file
+#   Input  :: {string} name of "child" or section
 """
 References
 
