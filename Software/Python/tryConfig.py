@@ -4,6 +4,7 @@ import sys
 import os
 from os.path import expanduser
 from configurationProtocol import *
+from bluetoothProtocol import *
 
 # Variables
 # ----------------------------------------------
@@ -28,3 +29,5 @@ configFile = scenarioConfigFilePath + "/" + scenarioFileName
 tree, root = readConfigFile(configFile)
 
 deviceName, deviceBTAddress = pullInstruments(tree, root)
+
+RFObject = createPort(deviceName, deviceBTAddress)

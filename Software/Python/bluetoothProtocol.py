@@ -13,7 +13,9 @@ List of functions ::
 X - Look for bluetooth device
 X - Pair bluetooth device
 X - Add paired device to the instrument list
-X - Connect to paired device
+X.X - Connect to paired device
+    X.X - Create RFComm Port
+    X.X - Release RFComm Port
 
 """
 
@@ -26,24 +28,25 @@ from timeStamp import *
 #   This function creates radio-frquency (bluetooth) communication ports for specific devices, using their corresponding address
 #   Input   ::  {array/list} "deviceName", "deviceBTAddress"
 #   Output  ::  {array/list} "btObjects"
-def createRFPort(deviceName, deviceBTAddress):
-    Ndevices = len(deviceName) # Determines the number of devices listed
-    RFObject = [] # Create RF object variable/list (in case of multiple devices)
-    for i in range(0,Ndevices):
-        
-        print fullStamp() + " Releasing RFCOMM" + str(i) # Pre-release of RFCOMM port
-        portRelease("rfcomm",i)
-        # Open RFCOMM port for device
-        print fullStamp() + " Connecting device to RFCOMM" + str(i)
-        os.system("sudo rfcomm bind /dev/rfcomm" + str(i) + " " + instrumentBTAddress[i])
-        # Create Arduino RF-Serial Object
-        rfcommPort = "/dev/rfcomm" + str(i)
-        RFObj = serial.Serial(rfcommPort,115200) # Need error handle for the case in which the device is not available
-        arduRFObj.append(RFObj)
-        # Trigger data collection on instruments
-        triggerRFInstrument(arduRFObj[i], instrumentNames[i])
+def createPort(deviceName, deviceBTAddress):
+    Ndevices = len(deviceName)                                                              # Determines the number of devices listed
+    RFObject = []                                                                           # Create RF object variable/list (in case of multiple devices)
+    for i in range(0,Ndevices):     
+        portRelease("rfcomm",i)                                                             # Release the RFComm port of interest
+        print fullStamp() + " Connecting device to RFCOMM" + str(i)                         # Terminal message, program status
+        os.system("sudo rfcomm bind /dev/rfcomm" + str(i) + " " + deviceBTAddress[i])       # Bind bluetooth device to control system
+        RFObject.append(serial.Serial("/dev/rfcomm" + str(i),115200))                       # Create and append RFComm port to the RFObject structure
+        #triggerRFInstrument(arduRFObj[i], instrumentNames[i])                              # Trigger data collection on instruments
+    return RFObject                                                                         # Return RFObject or list of objects
 
-    return arduRFObj
+
+# Port Release
+#   This function releases the specified communication port (serial) given the type and the number
+#   Input   ::  {string} "portType", {int} "portNumber"
+#   Output  ::  None -- Terminal messages
+def portRelease(portType, portNumber):
+    print fullStamp() + " Releasing RFCOMM" + str(portNumber)                               # Terminal message, program status
+    os.system("sudo " + portType + " release " + str(portNumber))                           # Releasing port through terminal commands
 
 # Connect to paired device
 #   Connects to the bluetooth devices specified by the scenario configuration file
