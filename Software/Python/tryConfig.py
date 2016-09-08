@@ -26,3 +26,5 @@ scenarioFileName = "sc001.xml"
 
 configFile = scenarioConfigFilePath + "/" + scenarioFileName
 tree, root = readConfigFile(configFile)
+
+deviceName, deviceBTAddress = pullInstruments(tree, root)

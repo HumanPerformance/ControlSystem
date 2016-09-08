@@ -1,6 +1,37 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Scenario configuration files have been structure using the following index;
+root...
+	[0]<id>
+	[1]<title>
+	[2]<description>
+	[3]<time>
+	[4]<instruments>
+		[0...n]<devices>
+			[0]<id>
+			[1]<bt_address>
+
+For more information, contact the administrator...
+
+Fluvio L Lobo Fenoglietto 09/08/2016
+-->
 <data>
 	<id>1</id> <!-- Identification number for scenario -->
 	<title>Heart Murmur</title> <!-- Title of scenario -->
 	<description>In this scenario, the SP presents symptoms that require an auscultation which reveal a heart murmur</description> <!-- Description of the scenario -->
+	<time>
+		<encounter_time>10</encounter_time><!-- Time of encounter -->
+		<setup_time>2</setup_time><!-- Time dedicated for equipment setup and data recording, prior to the begining of the encounter -->
+		<added_time>2</added_time><!-- Time for additional data recording after the conclusion of the encounter time -->
+	</time>
+	<instruments>
+		<device>
+			<id>oto</id>
+			<bt_address>00:06:66</bt_address>
+		</device>
+		<device>
+			<id>stet</id>
+			<bt_address>00:06:55</bt_address>
+		</device>
+	</instruments>
 </data>
