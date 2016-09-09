@@ -30,4 +30,4 @@ tree, root = readConfigFile(configFile)
 
 deviceName, deviceBTAddress = pullInstruments(tree, root)
 
-RFObject = createPort(deviceName, deviceBTAddress)
+rfObject = createPort(deviceName, deviceBTAddress)
