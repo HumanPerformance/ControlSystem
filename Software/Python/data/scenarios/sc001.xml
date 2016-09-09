@@ -29,9 +29,5 @@ Fluvio L Lobo Fenoglietto 09/08/2016
 			<id>oto</id>
 			<bt_address>00:06:66:7D:96:C4</bt_address>
 		</device>
-		<device>
-			<id>stet</id>
-			<bt_address>00:06:55</bt_address>
-		</device>
 	</instruments>
 </data>

@@ -34,7 +34,7 @@ def createPort(deviceName, deviceBTAddress):
     for i in range(0,Ndevices):     
         portRelease("rfcomm",i)                                                             # The program performs a port-release to ensure that the desired rf port is available
         portBind("rfcomm",i,deviceBTAddress[i])
-        RFObject.append(serial.Serial("/dev/rfcomm" + str(i),115200))                       # Create and append RFComm port to the RFObject structure
+        rfObject.append(serial.Serial("/dev/rfcomm" + str(i),115200))                       # Create and append RFComm port to the RFObject structure
         #triggerRFInstrument(arduRFObj[i], instrumentNames[i])                              # Trigger data collection on instruments
     return rfObject                                                                         # Return RFObject or list of objects
 

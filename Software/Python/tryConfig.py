@@ -31,3 +31,5 @@ tree, root = readConfigFile(configFile)
 deviceName, deviceBTAddress = pullInstruments(tree, root)
 
 rfObject = createPort(deviceName, deviceBTAddress)
+
+portRelease('rfcomm', 0) # Release port to avoid permanent connection
