@@ -44,7 +44,7 @@ def createPort(deviceName, deviceBTAddress):
 #   Input   ::  {string} port type, {int} port number, {string} bluetooth address of device
 #   Output  ::  None -- Terminal messages
 def portBind(portType, portNumber, deviceBTAddress):
-    print fullStamp() + " Connecting device to rfcomm" + str(portNumber)                    # Terminal message, program status
+    print fullStamp() + " Connecting device to " + portType + str(portNumber)                    # Terminal message, program status
     os.system("sudo " + portType + " bind /dev/" + portType + str(portNumber) + " " + deviceBTAddress)     # Bind bluetooth device to control system
 
 # Port Release
@@ -52,7 +52,7 @@ def portBind(portType, portNumber, deviceBTAddress):
 #   Input   ::  {string} "portType", {int} "portNumber"
 #   Output  ::  None -- Terminal messages
 def portRelease(portType, portNumber):
-    print fullStamp() + " Releasing rfcomm" + str(portNumber)                               # Terminal message, program status
+    print fullStamp() + " Releasing " + portType + str(portNumber)                               # Terminal message, program status
     os.system("sudo " + portType + " release " + str(portNumber))                           # Releasing port through terminal commands
 
 # Connect to paired device
