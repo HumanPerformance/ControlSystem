@@ -14,8 +14,9 @@ X - Look for bluetooth device
 X - Pair bluetooth device
 X - Add paired device to the instrument list
 X.X - Connect to paired device
-    X.X - Create RFComm Port
-    X.X - Release RFComm Port
+    X.X - Create rfcomm port
+    X.X - Bind rfcomm port
+    X.X - Release rfcomm port
 
 """
 

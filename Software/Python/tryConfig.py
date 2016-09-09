@@ -28,8 +28,12 @@ scenarioFileName = "sc001.xml"
 configFile = scenarioConfigFilePath + "/" + scenarioFileName
 tree, root = readConfigFile(configFile)
 
-deviceName, deviceBTAddress = pullInstruments(tree, root)
+# =========
+# OPERATION
+# =========
 
-rfObject = createPort(deviceName, deviceBTAddress)
+deviceName, deviceBTAddress = pullInstruments(tree, root)   # pull instrument information from configuration file
 
-portRelease('rfcomm', 0) # Release port to avoid permanent connection
+rfObject = createPort(deviceName, deviceBTAddress)          # create rfObjects/ports       
+
+portRelease('rfcomm', 0)                                    # Release port to avoid permanent connection
