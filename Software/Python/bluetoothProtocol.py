@@ -56,6 +56,25 @@ def portRelease(portType, portNumber):
     print fullStamp() + " Releasing " + portType + str(portNumber)                               # Terminal message, program status
     os.system("sudo " + portType + " release " + str(portNumber))                           # Releasing port through terminal commands
 
+# Port Message Check
+#   Reads serial port and checks for a specific input message
+#   Input   ::  {string} "inString" -- String to be compared
+
+# Send until Read
+#   Function sends message through serial port until a response is sent
+def sendUntilRead(rfObject,outString):
+    
+    inString = []
+    loopStatus = 0
+    while loopStatus == 0:
+        inString = rfObject.readline()
+        if inString == "ACK":
+            print "message approved"
+            loopStatus = 1
+        if inString == "NAK":
+            print "message denied"
+            loopStatus = 1
+
 # Connect to paired device
 #   Connects to the bluetooth devices specified by the scenario configuration file
 #   Input   ::  {array/list} "deviceName", "deviceBTAddress"
