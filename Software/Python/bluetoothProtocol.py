@@ -71,18 +71,20 @@ def sendUntilRead(rfObject,outString):
     comStatus = 0
     for h in range(0,iterCheck):                                # 1st Loop {for-loop} controls the number of communication attempts
         print "Communication attempt " + str(h) + "/" + str(iterCheck)
-        rfObject.write(byte(outString))                          # Write message to serial port
+        rfObject.write(chr(outString))                          # Write message to serial port
         #rfObject.write("\n")                                     # Write newline character to separate messages
+        #inChar = rfObject.read(rfObject.inWaiting())
+        #print inChar
         startTime = time.time()
-        while comStatus == 0 or (startTime - time.time()) < timeout:       # 2nd Loop {while-loop} creates a wait for receiver to response to message sent
+        while comStatus == 0 and (time.time() - startTime) < timeout:       # 2nd Loop {while-loop} creates a wait for receiver to response to message sent
             print "Time = " + str(startTime - time.time())
-            inString = rfObject.read()
+            inString = rfObject.readline(rfObject.inWaiting())
             print inString
-            if inString == "ACK":
-                print "message approved"
+            if inString == "F":
+                print "ENQ"
                 loopStatus = 1
-            elif inString == "NAK":
-                print "message denied"
+            elif inString == chr(0x06):
+                print "ACK"
                 loopStatus = 1
 
 # Connect to paired device
