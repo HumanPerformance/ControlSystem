@@ -34,6 +34,8 @@ tree, root = readConfigFile(configFile)
 
 deviceName, deviceBTAddress = pullInstruments(tree, root)   # pull instrument information from configuration file
 
-rfObject = createPort(deviceName, deviceBTAddress)          # create rfObjects/ports       
+rfObject = createPort(deviceName, deviceBTAddress)          # create rfObjects/ports
+
+sendUntilRead(rfObject[0],"REC")
 
 portRelease('rfcomm', 0)                                    # Release port to avoid permanent connection

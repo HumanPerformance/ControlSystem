@@ -23,6 +23,7 @@ X.X - Connect to paired device
 # Import Libraries and/or Modules
 import os
 import serial
+import time
 from timeStamp import *
 
 # Create RFComm Ports
@@ -62,18 +63,27 @@ def portRelease(portType, portNumber):
 
 # Send until Read
 #   Function sends message through serial port until a response is sent
+#   The function uses a timer and an iteration check to handle failed communication attempts
 def sendUntilRead(rfObject,outString):
-    
     inString = []
-    loopStatus = 0
-    while loopStatus == 0:
-        inString = rfObject.readline()
-        if inString == "ACK":
-            print "message approved"
-            loopStatus = 1
-        if inString == "NAK":
-            print "message denied"
-            loopStatus = 1
+    iterCheck = 5                                             # Maximum number of iterations or connection trials
+    timeout = 5                                               # Maximum amount of time before message is re-sent 
+    comStatus = 0
+    for h in range(0,iterCheck):                                # 1st Loop {for-loop} controls the number of communication attempts
+        print "Communication attempt " + str(h) + "/" + str(iterCheck)
+        rfObject.write(byte(outString))                          # Write message to serial port
+        #rfObject.write("\n")                                     # Write newline character to separate messages
+        startTime = time.time()
+        while comStatus == 0 or (startTime - time.time()) < timeout:       # 2nd Loop {while-loop} creates a wait for receiver to response to message sent
+            print "Time = " + str(startTime - time.time())
+            inString = rfObject.read()
+            print inString
+            if inString == "ACK":
+                print "message approved"
+                loopStatus = 1
+            elif inString == "NAK":
+                print "message denied"
+                loopStatus = 1
 
 # Connect to paired device
 #   Connects to the bluetooth devices specified by the scenario configuration file
