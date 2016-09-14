@@ -86,6 +86,21 @@ def sendUntilRead(rfObject,outString):
             elif inString == chr(0x06):
                 print "ACK"
                 break
+# Timed Read
+#   This function reads information from the serial port for a given amount of time
+#   Input   ::  {object} serial object, {int} time in seconds
+#   Output  ::  None - terminal printsouts  
+def timedRead(rfObject, timeout):
+    startTime = time.time()
+    while (time.time() - startTime) < timeout:
+        print "Time = " + str(time.time() - startTime)
+        inString = rfObject.read()
+        if inString == chr(0x05):
+            print "ENQ"
+            break
+        elif inString == chr(0x06):
+            print "ACK"
+            break
 
 # Connect to paired device
 #   Connects to the bluetooth devices specified by the scenario configuration file
