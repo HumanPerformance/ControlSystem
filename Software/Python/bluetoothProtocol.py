@@ -68,7 +68,6 @@ def sendUntilRead(rfObject,outString):
     inString = []
     iterCheck = 5                                             # Maximum number of iterations or connection trials
     timeout = 5                                               # Maximum amount of time before message is re-sent 
-    comStatus = 0
     for h in range(0,iterCheck):                                # 1st Loop {for-loop} controls the number of communication attempts
         print "Communication attempt " + str(h) + "/" + str(iterCheck)
         rfObject.write(chr(outString))                          # Write message to serial port
@@ -76,16 +75,17 @@ def sendUntilRead(rfObject,outString):
         #inChar = rfObject.read(rfObject.inWaiting())
         #print inChar
         startTime = time.time()
-        while comStatus == 0 and (time.time() - startTime) < timeout:       # 2nd Loop {while-loop} creates a wait for receiver to response to message sent
+        while (time.time() - startTime) < timeout:       # 2nd Loop {while-loop} creates a wait for receiver to response to message sent
             print "Time = " + str(startTime - time.time())
-            inString = rfObject.readline(rfObject.inWaiting())
-            print inString
-            if inString == "F":
+            # inString = rfObject.read(rfObject.inWaiting())
+            inString = rfObject.read()
+            # print inString
+            if inString == chr(0x05):
                 print "ENQ"
-                loopStatus = 1
+                break
             elif inString == chr(0x06):
                 print "ACK"
-                loopStatus = 1
+                break
 
 # Connect to paired device
 #   Connects to the bluetooth devices specified by the scenario configuration file
