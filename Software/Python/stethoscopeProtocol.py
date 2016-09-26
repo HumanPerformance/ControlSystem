@@ -34,8 +34,39 @@ import protocolDefinitions as definitions
 #       This function requests the status of then stethoscope
 #       Input   ::      None (uses ENQ 0x05)
 #       Output  ::      Stethoscope Status
-def statusEnquiry():
-        print definitions.ENQ
+def statusEnquiry(rfObject):
+        iterCount = 0
+        iterCheck = 5                                                                   # Maximum number of iterations or connection trials
+        timeout = 5                                                                   # Maximum amount of time before message is re-sent
+        startTime = time.time()
+        while (time.time() - startTime) < timeout and iterCount <= iterCheck:
+                print "Communication attempt " + str(iterCount) + "/" + str(iterCheck)
+                rfObject.write(definitions.ENQ)                                          # Write message to serial port
+                startTime = time.time()
+                inString = rfObject.read()
+                if inString == chr(0x05):
+                        print "ENQ"
+                elif inString == chr(0x06):
+                        print "ACK"
+                        break
+        #iterCount = iterCount + 1
+"""        
+        for h in range(0,iterCheck):                                                    # 1st Loop {for-loop} controls the number of communication attempts
+                print "Communication attempt " + str(h) + "/" + str(iterCheck)
+                rfObject.write(definitions.ENQ)                                          # Write message to serial port
+                startTime = time.time()
+                while (time.time() - startTime) < timeout:                              # 2nd Loop {while-loop} creates a wait for receiver to response to message sent
+                        print "Time = " + str(startTime - time.time())
+                        inString = rfObject.read()
+                        if inString == chr(0x05):
+                                print "ENQ"
+                                break
+                        elif inString == chr(0x06):
+                                print "ACK"
+                                h = iterCheck
+                                break
+                                """
+                                
 
 # Begin Recording
 #       This function will trigger the recording and storing of an audio signal by the Teensy board

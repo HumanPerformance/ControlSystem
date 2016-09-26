@@ -3,8 +3,10 @@
 import sys
 import os
 from os.path import expanduser
+import serial
 from configurationProtocol import *
 from bluetoothProtocol import *
+from stethoscopeProtocol import *
 
 # Variables
 # ----------------------------------------------
@@ -39,6 +41,12 @@ rfObject = createPort(deviceName, deviceBTAddress)          # create rfObjects/p
 
 #sendUntilRead(rfObject[0],0x05)
 
-timedRead(rfObject[0],5)
+statusEnquiry(rfObject[0])
+
+#timedRead(rfObject[0],5)
+
+#for i in range(0,50):
+#    rfObject[0].write(chr(0x05))
+#    print str(i)
 
 portRelease('rfcomm', 0)                                    # Release port to avoid permanent connection
