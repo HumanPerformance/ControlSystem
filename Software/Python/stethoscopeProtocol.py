@@ -28,6 +28,14 @@ import serial
 from timeStamp import *
 from configurationProtocol import *
 from bluetoothProtocol import *
+import protocolDefinitions as definitions
+
+# State Enquiry
+#       This function requests the status of then stethoscope
+#       Input   ::      None (uses ENQ 0x05)
+#       Output  ::      Stethoscope Status
+def statusEnquiry():
+        print definitions.ENQ
 
 # Begin Recording
 #       This function will trigger the recording and storing of an audio signal by the Teensy board
