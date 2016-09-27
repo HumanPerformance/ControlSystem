@@ -63,8 +63,15 @@ def systemCheck(rfObject):
                 print "Communication attempt " + str(iterCount) + "/" + str(iterCheck)
                 print str(time.time()-startTime)
                 rfObject.write(definitions.CHK)
-                inString = rfObject.readline()
-                print inString
+                
+                inByte = rfObject.read()
+                if inByte == definitions.ACK:
+                        print "ACK"
+                        break
+                elif inByte == definitions.NAK:
+                        print "NAK"
+                        break
+                
                 iterCount = iterCount + 1
                 """
                 if inString == chr(0x05):

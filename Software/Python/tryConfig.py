@@ -36,7 +36,7 @@ tree, root = readConfigFile(configFile)
 
 deviceName, deviceBTAddress = pullInstruments(tree, root)   # pull instrument information from configuration file
 #deviceName = ["hola"]
-#deviceBTAddress = ["00:06:66:7D:81:7D"]
+#deviceBTAddress = ["00:06:66:7D:80:CD"]
 rfObject = createPort(deviceName, deviceBTAddress)          # create rfObjects/ports
 
 #sendUntilRead(rfObject[0],0x05)
