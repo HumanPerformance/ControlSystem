@@ -49,7 +49,31 @@ def statusEnquiry(rfObject):
                 elif inString == chr(0x06):
                         print "ACK"
                         break
-        #iterCount = iterCount + 1
+
+# System Check
+#       This function commands the connected stethoscope to perform a "systems check", which may consist on a routine verification of remote features
+#       Input   ::      None (uses CHK 0x01)
+#       Output  ::      System Check Results
+def systemCheck(rfObject):
+        iterCount = 0
+        iterCheck = 5                                                                   # Maximum number of iterations or connection trials
+        timeout = 5                                                                   # Maximum amount of time before message is re-sent
+        startTime = time.time()
+        while (time.time() - startTime) < timeout and iterCount <= iterCheck:
+                print "Communication attempt " + str(iterCount) + "/" + str(iterCheck)
+                print str(time.time()-startTime)
+                rfObject.write(definitions.CHK)
+                inString = rfObject.readline()
+                print inString
+                iterCount = iterCount + 1
+                """
+                if inString == chr(0x05):
+                        print "ENQ"
+                elif inString == chr(0x06):
+                        print "ACK"
+                        break
+                        """
+
 """        
         for h in range(0,iterCheck):                                                    # 1st Loop {for-loop} controls the number of communication attempts
                 print "Communication attempt " + str(h) + "/" + str(iterCheck)
