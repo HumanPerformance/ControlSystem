@@ -101,11 +101,23 @@ def systemCheck(rfObject, timeout, iterCheck):
 
 # Begin Recording
 #       This function will trigger the recording and storing of an audio signal by the Teensy board
-#       Input   ::      None
-#       Output  ::      None
-def startRecording(rfObject):
+#       Input   ::      rfObject                {object}        serial object
+#                       timeout                 {int}           maximum wait time for serial communication
+#                       iterCheck               {int}           maximum number of iterations for serial communication
+#       Output  ::      terminal messages       {string}        terminal messages for logging
+def startRecording(rfObject, timeout, iterCheck):
         print fullStamp() + " startRecording()"                                                                 # Printing program name
-        iterCount = 0
-        startTime = time.time()                                                                                 # Initial time
-        #while 
-        
+        outByte = definitions.DC1_STRTREC                                                                       # Send DC1_STRTREC / Start Recording command - see protocolDefinitions.py
+        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK Stethoscope has begun recording"                                      # ACK, in this case, translates to RECORDING
+                print fullStemp() + " ACK Recording will be stored in the local SD card"                        # Reminder that the recording or audio file will be stored within the SD card
+        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " NAK Stethoscope CANNOT begin recording"                                   # NAK, in this case, translates to CANNOT RECORD
+
+
+
+
+
+
+
