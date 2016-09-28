@@ -62,11 +62,17 @@ def portRelease(portType, portNumber):
 #   Reads serial port and checks for a specific input message
 #   Input   ::  {string} "inString" -- String to be compared
 
-# Send until Read
-#   Function sends message through serial port until a response is sent
-#   The function uses a timer and an iteration check to handle failed communication attempts
+# Send Until ReaD
+#       This function sends an input command through the rfcomm port to the remote device
+#       The function sends such command persistently until a timeout or iteration check are met
+#       Input   ::      rfObject                {object}        serial object
+#                       outByte                 {chr}           command in characters/bytes
+#                       timeout                 {int}           maximum wait time for serial communication
+#                       iterCheck               {int}           maximum number of iterations for serial communication
+#       Output  ::      inByte                  {chr}           response from remote device in characters/bytes
+#                       terminal messages       {string}        terminal messages for logging      
 def sendUntilRead(rfObject, outByte, timeout, iterCheck):
-    print fullStamp() + " sendUntilRead()"                                                                 # Printing program name
+    print fullStamp() + " sendUntilRead()"                                                                  # Printing program name
     iterCount = 0
     startTime = time.time()                                                                                 # Initial time, instance before entering "while loop"
     while (time.time() - startTime) < timeout and iterCount <= iterCheck:                                   # While loop - will continue until either timeout or iteration check is reached
