@@ -36,13 +36,14 @@ import protocolDefinitions as definitions
 #       Output  ::      Stethoscope Status
 def statusEnquiry(rfObject):
         iterCount = 0
-        iterCheck = 5                                                                   # Maximum number of iterations or connection trials
-        timeout = 5                                                                   # Maximum amount of time before message is re-sent
+        iterCheck = 5                                                                           # Maximum number of iterations or connection trials
+        timeout = 5                                                                             # Maximum amount of time before message is re-sent
         startTime = time.time()
         while (time.time() - startTime) < timeout and iterCount <= iterCheck:
                 print "Communication attempt " + str(iterCount) + "/" + str(iterCheck)
-                rfObject.write(definitions.ENQ)                                          # Write message to serial port
+                rfObject.write(definitions.ENQ)                                                 # Write message to serial port
                 startTime = time.time()
+                
                 inString = rfObject.read()
                 if inString == chr(0x05):
                         print "ENQ"
@@ -56,17 +57,17 @@ def statusEnquiry(rfObject):
 #       Output  ::      System Check Results
 def systemCheck(rfObject):
         iterCount = 0
-        iterCheck = 5                                                                   # Maximum number of iterations or connection trials
-        timeout = 5                                                                   # Maximum amount of time before message is re-sent
-        startTime = time.time()
-        while (time.time() - startTime) < timeout and iterCount <= iterCheck:
-                print "Communication attempt " + str(iterCount) + "/" + str(iterCheck)
-                print str(time.time()-startTime)
-                rfObject.write(definitions.CHK)
-                
-                inByte = rfObject.read()
-                if inByte == definitions.ACK:
-                        print "ACK"
+        iterCheck = 5                                                                                           # Maximum number of iterations or connection trials
+        timeout = 5                                                                                             # Maximum amount of time before message is re-sent
+        startTime = time.time()                                                                                 # Initial time, instance before entering "while loop"
+        while (time.time() - startTime) < timeout and iterCount <= iterCheck:                                   # While loop - will continue until either timeout or iteration check is reached 
+                print fullStamp() + " systemCheck() "                                                           # Printing program status messages - helpful for debugging
+                print fullStamp() + "   Communication attempt " + str(iterCount) + "/" + str(iterCheck)
+                print fullStamp() + "   Time = " + str(time.time()-startTime)
+                rfObject.write(definitions.CHK)                                                                 # Send CHK / System Check request
+                inByte = rfObject.read()                                                                        # Read response from remote device
+                if inByte == definitions.ACK:                                                                   # If response equals ACK / Positive Acknowledgement
+                        print "ACK"                                                                             
                         break
                 elif inByte == definitions.NAK:
                         print "NAK"
