@@ -35,22 +35,21 @@ import protocolDefinitions as definitions
 #       This function requests the status of then stethoscope
 #       Input   ::      None (uses ENQ 0x05)
 #       Output  ::      Stethoscope Status
-def statusEnquiry(rfObject):
+def statusEnquiry(rfObject, timeout, iterCheck):
+        print fullStamp() + " statusEnquiry() "                                                                 # Printing program status messages - helpful for debugging
         iterCount = 0
-        iterCheck = 5                                                                           # Maximum number of iterations or connection trials
-        timeout = 5                                                                             # Maximum amount of time before message is re-sent
-        startTime = time.time()
-        while (time.time() - startTime) < timeout and iterCount <= iterCheck:
-                print "Communication attempt " + str(iterCount) + "/" + str(iterCheck)
-                rfObject.write(definitions.ENQ)                                                 # Write message to serial port
-                startTime = time.time()
-                
-                inString = rfObject.read()
-                if inString == chr(0x05):
-                        print "ENQ"
-                elif inString == chr(0x06):
-                        print "ACK"
-                        break
+        startTime = time.time()                                                                                 # Initial time, instance before entering "while loop"
+        while (time.time() - startTime) < timeout and iterCount <= iterCheck:                                   # While loop - will continue until either timeout or iteration check is reached 
+                print fullStamp() + "  Communication attempt " + str(iterCount) + "/" + str(iterCheck)
+                print fullStamp() + "  Time = " + str(time.time()-startTime)
+                rfObject.write(definitions.ENQ)                                                                 # Send CHK / System Check request
+                inByte = rfObject.read()                                                                        # Read response from remote device
+                if inByte == definitions.ACK:                                                                   # If response equals ACK / Positive Acknowledgement
+                        print fullStamp() + "  ACK :: Device Ready"                                             # Print terminal message, device READY / System Check Successful                                                                             
+                        break                                                                                   # Break out of the "while loop"
+                elif inByte == definitions.NAK:                                                                 # If response equals NAK / Negative Acknowledgement
+                        print fullStamp() + "  NAK :: Device NOT Ready"                                         # Print terminal message, device NOT READY / System Check Failed
+                        break                                                                                   # Break out of the "while loop"
 
 # System Check
 #       This function commands the connected stethoscope to perform a "systems check", which may consist on a routine verification of remote features
