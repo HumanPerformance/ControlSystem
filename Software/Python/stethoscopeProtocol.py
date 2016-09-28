@@ -24,6 +24,7 @@ SOREC     {string} Stop Recording
 
 # Import Libraries and/or Modules
 import os
+import sys
 import serial
 from timeStamp import *
 from configurationProtocol import *
@@ -53,34 +54,25 @@ def statusEnquiry(rfObject):
 
 # System Check
 #       This function commands the connected stethoscope to perform a "systems check", which may consist on a routine verification of remote features
-#       Input   ::      None (uses CHK 0x01)
-#       Output  ::      System Check Results
-def systemCheck(rfObject):
+#       Input   ::      rfObject                {object}        serial object
+#                       timeout                 {int}           maximum wait time for serial communication
+#                       iterCheck               {int}           maximum number of iterations for serial communication
+#       Output  ::      terminal messages       {string}        terminal messages for logging
+def systemCheck(rfObject, timeout, iterCheck):
+        print fullStamp() + " systemCheck() "                                                                   # Printing program status messages - helpful for debugging
         iterCount = 0
-        iterCheck = 5                                                                                           # Maximum number of iterations or connection trials
-        timeout = 5                                                                                             # Maximum amount of time before message is re-sent
         startTime = time.time()                                                                                 # Initial time, instance before entering "while loop"
         while (time.time() - startTime) < timeout and iterCount <= iterCheck:                                   # While loop - will continue until either timeout or iteration check is reached 
-                print fullStamp() + " systemCheck() "                                                           # Printing program status messages - helpful for debugging
-                print fullStamp() + "   Communication attempt " + str(iterCount) + "/" + str(iterCheck)
-                print fullStamp() + "   Time = " + str(time.time()-startTime)
+                print fullStamp() + "  Communication attempt " + str(iterCount) + "/" + str(iterCheck)
+                print fullStamp() + "  Time = " + str(time.time()-startTime)
                 rfObject.write(definitions.CHK)                                                                 # Send CHK / System Check request
                 inByte = rfObject.read()                                                                        # Read response from remote device
                 if inByte == definitions.ACK:                                                                   # If response equals ACK / Positive Acknowledgement
-                        print "ACK"                                                                             
-                        break
-                elif inByte == definitions.NAK:
-                        print "NAK"
-                        break
-                
-                iterCount = iterCount + 1
-                """
-                if inString == chr(0x05):
-                        print "ENQ"
-                elif inString == chr(0x06):
-                        print "ACK"
-                        break
-                        """
+                        print fullStamp() + "  ACK :: Device Ready"                                             # Print terminal message, device READY / System Check Successful                                                                             
+                        break                                                                                   # Break out of the "while loop"
+                elif inByte == definitions.NAK:                                                                 # If response equals NAK / Negative Acknowledgement
+                        print fullStamp() + "  NAK :: Device NOT Ready"                                         # Print terminal message, device NOT READY / System Check Failed
+                        break                                                                                   # Break out of the "while loop"
 
 """        
         for h in range(0,iterCheck):                                                    # 1st Loop {for-loop} controls the number of communication attempts
