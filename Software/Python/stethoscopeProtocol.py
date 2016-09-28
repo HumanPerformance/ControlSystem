@@ -33,8 +33,10 @@ import protocolDefinitions as definitions
 
 # State Enquiry
 #       This function requests the status of then stethoscope
-#       Input   ::      None (uses ENQ 0x05)
-#       Output  ::      Stethoscope Status
+#       Input   ::      rfObject                {object}        serial object
+#                       timeout                 {int}           maximum wait time for serial communication
+#                       iterCheck               {int}           maximum number of iterations for serial communication
+#       Output  ::      terminal messages       {string}        terminal messages for logging
 def statusEnquiry(rfObject, timeout, iterCheck):
         print fullStamp() + " statusEnquiry() "                                                                 # Printing program status messages - helpful for debugging
         iterCount = 0
@@ -67,9 +69,11 @@ def systemCheck(rfObject, timeout, iterCheck):
                 rfObject.write(definitions.CHK)                                                                 # Send CHK / System Check request
                 inByte = rfObject.read()                                                                        # Read response from remote device
                 if inByte == definitions.ACK:                                                                   # If response equals ACK / Positive Acknowledgement
+                        print fullStamp() + "  ACK :: SD Card Check Passed"                                     # CHK triggers an SD card check on the remote device
                         print fullStamp() + "  ACK :: Device Ready"                                             # Print terminal message, device READY / System Check Successful                                                                             
                         break                                                                                   # Break out of the "while loop"
                 elif inByte == definitions.NAK:                                                                 # If response equals NAK / Negative Acknowledgement
+                        print fullStamp() + "  NAK :: SD Card Check Failed"                                     # If the SD card check fails, the remote device sends a NAK
                         print fullStamp() + "  NAK :: Device NOT Ready"                                         # Print terminal message, device NOT READY / System Check Failed
                         break                                                                                   # Break out of the "while loop"
 
