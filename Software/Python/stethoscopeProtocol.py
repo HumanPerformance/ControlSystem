@@ -38,7 +38,16 @@ import protocolDefinitions as definitions
 #                       iterCheck               {int}           maximum number of iterations for serial communication
 #       Output  ::      terminal messages       {string}        terminal messages for logging
 def statusEnquiry(rfObject, timeout, iterCheck):
-        print fullStamp() + " statusEnquiry() "                                                                 # Printing program status messages - helpful for debugging
+        print fullStamp() + "statusEnquiry()"
+        outByte = definitions.ENQ
+        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)
+        if inByte == definitions.ACK:
+                print fullStamp() + "ACK Device READY"
+        elif inByte == definitions.NAK:
+                print fullStamp() + "NAK Device NOT READY"
+
+"""
+        print fullStamp() + " statusEnquiry() "                                                                 # Printing program name
         iterCount = 0
         startTime = time.time()                                                                                 # Initial time, instance before entering "while loop"
         while (time.time() - startTime) < timeout and iterCount <= iterCheck:                                   # While loop - will continue until either timeout or iteration check is reached 
@@ -52,6 +61,7 @@ def statusEnquiry(rfObject, timeout, iterCheck):
                 elif inByte == definitions.NAK:                                                                 # If response equals NAK / Negative Acknowledgement
                         print fullStamp() + "  NAK :: Device NOT Ready"                                         # Print terminal message, device NOT READY / System Check Failed
                         break                                                                                   # Break out of the "while loop"
+"""
 
 # System Check
 #       This function commands the connected stethoscope to perform a "systems check", which may consist on a routine verification of remote features
@@ -60,7 +70,7 @@ def statusEnquiry(rfObject, timeout, iterCheck):
 #                       iterCheck               {int}           maximum number of iterations for serial communication
 #       Output  ::      terminal messages       {string}        terminal messages for logging
 def systemCheck(rfObject, timeout, iterCheck):
-        print fullStamp() + " systemCheck() "                                                                   # Printing program status messages - helpful for debugging
+        print fullStamp() + " systemCheck() "                                                                   # Printing program name
         iterCount = 0
         startTime = time.time()                                                                                 # Initial time, instance before entering "while loop"
         while (time.time() - startTime) < timeout and iterCount <= iterCheck:                                   # While loop - will continue until either timeout or iteration check is reached 
@@ -75,30 +85,15 @@ def systemCheck(rfObject, timeout, iterCheck):
                 elif inByte == definitions.NAK:                                                                 # If response equals NAK / Negative Acknowledgement
                         print fullStamp() + "  NAK :: SD Card Check Failed"                                     # If the SD card check fails, the remote device sends a NAK
                         print fullStamp() + "  NAK :: Device NOT Ready"                                         # Print terminal message, device NOT READY / System Check Failed
-                        break                                                                                   # Break out of the "while loop"
-
-"""        
-        for h in range(0,iterCheck):                                                    # 1st Loop {for-loop} controls the number of communication attempts
-                print "Communication attempt " + str(h) + "/" + str(iterCheck)
-                rfObject.write(definitions.ENQ)                                          # Write message to serial port
-                startTime = time.time()
-                while (time.time() - startTime) < timeout:                              # 2nd Loop {while-loop} creates a wait for receiver to response to message sent
-                        print "Time = " + str(startTime - time.time())
-                        inString = rfObject.read()
-                        if inString == chr(0x05):
-                                print "ENQ"
-                                break
-                        elif inString == chr(0x06):
-                                print "ACK"
-                                h = iterCheck
-                                break
-                                """
-                                
+                        break                                                                                   # Break out of the "while loop"          
 
 # Begin Recording
 #       This function will trigger the recording and storing of an audio signal by the Teensy board
 #       Input   ::      None
 #       Output  ::      None
-def beginRecord(rfObject):
-        outString = "REC"
+def startRecording(rfObject):
+        print fullStamp() + " startRecording()"                                                                 # Printing program name
+        iterCount = 0
+        startTime = time.time()                                                                                 # Initial time
+        #while 
         

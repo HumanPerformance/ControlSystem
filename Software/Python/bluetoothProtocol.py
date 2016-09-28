@@ -25,6 +25,7 @@ import os
 import serial
 import time
 from timeStamp import *
+import protocolDefinitions as definitions
 
 # Create RFComm Ports
 #   This function creates radio-frquency (bluetooth) communication ports for specific devices, using their corresponding address
@@ -64,28 +65,24 @@ def portRelease(portType, portNumber):
 # Send until Read
 #   Function sends message through serial port until a response is sent
 #   The function uses a timer and an iteration check to handle failed communication attempts
-def sendUntilRead(rfObject,outString):
-    inString = []
-    iterCheck = 5                                             # Maximum number of iterations or connection trials
-    timeout = 5                                               # Maximum amount of time before message is re-sent 
-    for h in range(0,iterCheck):                                # 1st Loop {for-loop} controls the number of communication attempts
-        print "Communication attempt " + str(h) + "/" + str(iterCheck)
-        rfObject.write(chr(outString))                          # Write message to serial port
-        #rfObject.write("\n")                                     # Write newline character to separate messages
-        #inChar = rfObject.read(rfObject.inWaiting())
-        #print inChar
-        startTime = time.time()
-        while (time.time() - startTime) < timeout:       # 2nd Loop {while-loop} creates a wait for receiver to response to message sent
-            print "Time = " + str(startTime - time.time())
-            # inString = rfObject.read(rfObject.inWaiting())
-            inString = rfObject.read()
-            # print inString
-            if inString == chr(0x05):
-                print "ENQ"
-                break
-            elif inString == chr(0x06):
-                print "ACK"
-                break
+def sendUntilRead(rfObject, outByte, timeout, iterCheck):
+    print fullStamp() + " sendUntilRead()"                                                                 # Printing program name
+    iterCount = 0
+    startTime = time.time()                                                                                 # Initial time, instance before entering "while loop"
+    while (time.time() - startTime) < timeout and iterCount <= iterCheck:                                   # While loop - will continue until either timeout or iteration check is reached
+        print fullStamp() + " Communication attempt " + str(iterCount) + "/" + str(iterCheck)
+        print fullStamp() + " Time = " + str(time.time()-startTime)
+        rfObject.write(outByte)                                                                             # Send CHK / System Check request
+        inByte = rfObject.read()                                                                            # Read response from remote device
+        if inByte == definitions.ACK:                                                                       # If response equals ACK / Positive Acknowledgement
+            # print fullStamp() + " ACK"                                                                    # Print terminal message, device READY / System Check Successful                                                                             
+            return inByte                                                                                   # Return the byte read from the port
+            break                                                                                           # Break out of the "while loop"
+        elif inByte == definitions.NAK:                                                                     # If response equals NAK / Negative Acknowledgement
+            # print fullStamp() + " NAK"                                                                    # Print terminal message, device NOT READY / System Check Failed
+            return inByte                                                                                   # Return the byte read from the port
+            break                                                                                           # Break out of the "while loop"
+
 # Timed Read
 #   This function reads information from the serial port for a given amount of time
 #   Input   ::  {object} serial object, {int} time in seconds
