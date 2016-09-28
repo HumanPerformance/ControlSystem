@@ -38,13 +38,13 @@ import protocolDefinitions as definitions
 #                       iterCheck               {int}           maximum number of iterations for serial communication
 #       Output  ::      terminal messages       {string}        terminal messages for logging
 def statusEnquiry(rfObject, timeout, iterCheck):
-        print fullStamp() + "statusEnquiry()"
-        outByte = definitions.ENQ
-        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)
-        if inByte == definitions.ACK:
-                print fullStamp() + "ACK Device READY"
-        elif inByte == definitions.NAK:
-                print fullStamp() + "NAK Device NOT READY"
+        print fullStamp() + " statusEnquiry()"                                                                  # Print function name
+        outByte = definitions.ENQ                                                                               # Send ENQ / Status Enquiry command - see protocolDefinitions.py
+        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK Device READY"                                                         # ACK, in this case, translates to DEVICE READY
+        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " NAK Device NOT READY"                                                     # NAK, in this case, translates to DEVICE NOT READY
 
 """
         print fullStamp() + " statusEnquiry() "                                                                 # Printing program name
@@ -70,6 +70,17 @@ def statusEnquiry(rfObject, timeout, iterCheck):
 #                       iterCheck               {int}           maximum number of iterations for serial communication
 #       Output  ::      terminal messages       {string}        terminal messages for logging
 def systemCheck(rfObject, timeout, iterCheck):
+        print fullStamp() + " systemCheck()"                                                                    # Print function name
+        outByte = definitions.CHK                                                                               # Send CHK / System Check command - see protocolDefinitions.py
+        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK SD Card Check Passed"                                                 # If the SD card check is successful, the remote device sends a ACK
+                print fullStamp() + " ACK Device Ready"                                                         # ACK, in this case, translates to DEVICE READY
+        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " NAK SD Card Check Failed"                                                 # If the SD card check fails, the remote device sends a NAK
+                print fullStamp() + " NAK Device NOT Ready"                                                     # NAK, in this case, translates to DEVICE NOT READY
+                
+"""
         print fullStamp() + " systemCheck() "                                                                   # Printing program name
         iterCount = 0
         startTime = time.time()                                                                                 # Initial time, instance before entering "while loop"
@@ -86,6 +97,7 @@ def systemCheck(rfObject, timeout, iterCheck):
                         print fullStamp() + "  NAK :: SD Card Check Failed"                                     # If the SD card check fails, the remote device sends a NAK
                         print fullStamp() + "  NAK :: Device NOT Ready"                                         # Print terminal message, device NOT READY / System Check Failed
                         break                                                                                   # Break out of the "while loop"          
+"""
 
 # Begin Recording
 #       This function will trigger the recording and storing of an audio signal by the Teensy board
