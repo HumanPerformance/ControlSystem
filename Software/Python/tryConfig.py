@@ -41,8 +41,10 @@ rfObject = createPort(deviceName, deviceBTAddress)          # create rfObjects/p
 
 #sendUntilRead(rfObject[0],0x05)
 
-statusEnquiry(rfObject[0],5,5)
+#statusEnquiry(rfObject[0],5,5)
 #systemCheck(rfObject[0],5,5)
+#startRecording(rfObject[0],5,5)
+stopRecording(rfObject[0],5,5)
 
 #timedRead(rfObject[0],5)
 
