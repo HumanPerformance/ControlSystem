@@ -41,13 +41,9 @@ rfObject = createPort(deviceName, deviceBTAddress)          # create rfObjects/p
 
 #sendUntilRead(rfObject[0],0x05)
 
-#statusEnquiry(rfObject[0])
-systemCheck(rfObject[0])
-
-#timedRead(rfObject[0],5)
-
-#for i in range(0,50):
-#    rfObject[0].write(chr(0x05))
-#    print str(i)
+statusEnquiry(rfObject[0],5,5)
+#systemCheck(rfObject[0],5,5)
+#startRecording(rfObject[0],5,5)
+#stopRecording(rfObject[0],5,5)
 
 portRelease('rfcomm', 0)                                    # Release port to avoid permanent connection
