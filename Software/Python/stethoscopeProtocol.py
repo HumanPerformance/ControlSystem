@@ -113,9 +113,9 @@ def stopRecording(rfObject, timeout, iterCheck):
         outByte = definitions.DC2_STPREC                                                                        # Send DC2_STPREC / Stop Recording command - see protocolDefinitions.py
         inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
         if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " ACK Stethoscope will STOP recording"                                      # If ACK, the stethoscope will STOP recording
+                print fullStamp() + " ACK Stethoscope will STOP RECORDING"                                      # If ACK, the stethoscope will STOP recording
         elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " NAK Stethoscope CANNOT STOP recording"                                    # NAK, in this case, translates to CANNOT STOP RECORDING
+                print fullStamp() + " NAK Stethoscope CANNOT STOP RECORDING"                                    # NAK, in this case, translates to CANNOT STOP RECORDING
 
 # Start Playback
 #       This function commands the connected stethoscope to play an audio filed stored within the SD card
@@ -128,6 +128,22 @@ def startPlayback(rfObject, timeout, iterCheck):
         outByte = definitions.DC3_STRTPLY                                                                       # Send DC3_STRTPLY / Start Playback command - see protocolDefinitions.py
         inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
         if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " ACK Stethoscope will STOP recording"                                      # If ACK, the stethoscope will START PLAYBACK
+                print fullStamp() + " ACK Stethoscope will START PLAYBACK"                                      # If ACK, the stethoscope will START PLAYBACK
         elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " NAK Stethoscope CANNOT STOP recording"                                    # NAK, in this case, translates to CANNOT STOP RECORDING
+                print fullStamp() + " NAK Stethoscope CANNOT START PLAYBACK"                                    # NAK, in this case, translates to CANNOT START PLAYBACK
+
+# Stop Playback
+#       This function commands the connected stethoscope to stop playing an audio filed stored within the SD card
+#       Input   ::      rfObject                {object}        serial object
+#                       timeout                 {int}           maximum wait time for serial communication
+#                       iterCheck               {int}           maximum number of iterations for serial communication
+#       Output  ::      terminal messages       {string}        terminal messages for logging
+def stopPlayback(rfObject, timeout, iterCheck):
+        print fullStamp() + " stopPlayback()"                                                                   # Print function name
+        outByte = definitions.DC4_STPPLY                                                                        # Send DC4_STPPLY / Start Playback command - see protocolDefinitions.py
+        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK Stethoscope will STOP PLAYBACK"                                       # If ACK, the stethoscope will STOP PLAYBACK
+        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " NAK Stethoscope CANNOT STOP PLAYBACK"                                     # NAK, in this case, translates to CANNOT STOP PLAYBACK
+
