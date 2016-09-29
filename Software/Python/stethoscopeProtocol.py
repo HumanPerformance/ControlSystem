@@ -33,23 +33,6 @@ def statusEnquiry(rfObject, timeout, iterCheck):
         elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
                 print fullStamp() + " NAK Device NOT READY"                                                     # NAK, in this case, translates to DEVICE NOT READY
 
-"""
-        print fullStamp() + " statusEnquiry() "                                                                 # Printing program name
-        iterCount = 0
-        startTime = time.time()                                                                                 # Initial time, instance before entering "while loop"
-        while (time.time() - startTime) < timeout and iterCount <= iterCheck:                                   # While loop - will continue until either timeout or iteration check is reached 
-                print fullStamp() + "  Communication attempt " + str(iterCount) + "/" + str(iterCheck)
-                print fullStamp() + "  Time = " + str(time.time()-startTime)
-                rfObject.write(definitions.ENQ)                                                                 # Send CHK / System Check request
-                inByte = rfObject.read()                                                                        # Read response from remote device
-                if inByte == definitions.ACK:                                                                   # If response equals ACK / Positive Acknowledgement
-                        print fullStamp() + "  ACK :: Device Ready"                                             # Print terminal message, device READY / System Check Successful                                                                             
-                        break                                                                                   # Break out of the "while loop"
-                elif inByte == definitions.NAK:                                                                 # If response equals NAK / Negative Acknowledgement
-                        print fullStamp() + "  NAK :: Device NOT Ready"                                         # Print terminal message, device NOT READY / System Check Failed
-                        break                                                                                   # Break out of the "while loop"
-"""
-
 # System Check
 #       This function commands the connected stethoscope to perform a "systems check", which may consist on a routine verification of remote features
 #       Input   ::      rfObject                {object}        serial object
@@ -67,25 +50,6 @@ def systemCheck(rfObject, timeout, iterCheck):
                 print fullStamp() + " NAK SD Card Check Failed"                                                 # If the SD card check fails, the remote device sends a NAK
                 print fullStamp() + " NAK Device NOT Ready"                                                     # NAK, in this case, translates to DEVICE NOT READY
                 
-"""
-        print fullStamp() + " systemCheck() "                                                                   # Printing program name
-        iterCount = 0
-        startTime = time.time()                                                                                 # Initial time, instance before entering "while loop"
-        while (time.time() - startTime) < timeout and iterCount <= iterCheck:                                   # While loop - will continue until either timeout or iteration check is reached 
-                print fullStamp() + "  Communication attempt " + str(iterCount) + "/" + str(iterCheck)
-                print fullStamp() + "  Time = " + str(time.time()-startTime)
-                rfObject.write(definitions.CHK)                                                                 # Send CHK / System Check request
-                inByte = rfObject.read()                                                                        # Read response from remote device
-                if inByte == definitions.ACK:                                                                   # If response equals ACK / Positive Acknowledgement
-                        print fullStamp() + "  ACK :: SD Card Check Passed"                                     # CHK triggers an SD card check on the remote device
-                        print fullStamp() + "  ACK :: Device Ready"                                             # Print terminal message, device READY / System Check Successful                                                                             
-                        break                                                                                   # Break out of the "while loop"
-                elif inByte == definitions.NAK:                                                                 # If response equals NAK / Negative Acknowledgement
-                        print fullStamp() + "  NAK :: SD Card Check Failed"                                     # If the SD card check fails, the remote device sends a NAK
-                        print fullStamp() + "  NAK :: Device NOT Ready"                                         # Print terminal message, device NOT READY / System Check Failed
-                        break                                                                                   # Break out of the "while loop"          
-"""
-
 # Start Recording
 #       This function commands the connected stethoscope to begin recording audio
 #       The recorded audio is then stored in the local SD
