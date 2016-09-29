@@ -93,16 +93,14 @@ def systemCheck(rfObject, timeout, iterCheck):
 #                       timeout                 {int}           maximum wait time for serial communication
 #                       iterCheck               {int}           maximum number of iterations for serial communication
 #       Output  ::      terminal messages       {string}        terminal messages for logging
-def startRecording(rfObject):
-        print fullStamp() + " systemCheck()"                                                                    # Print function name
-        outByte = definitions.CHK                                                                               # Send CHK / System Check command - see protocolDefinitions.py
+def startRecording(rfObject, timeout, iterCheck):
+        print fullStamp() + " startRecording()"                                                                 # Print function name
+        outByte = definitions.DC1_STRTREC                                                                       # Send DC1_STRTREC / Start Recording command - see protocolDefinitions.py
         inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
         if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " ACK SD Card Check Passed"                                                 # If the SD card check is successful, the remote device sends a ACK
-                print fullStamp() + " ACK Device Ready"                                                         # ACK, in this case, translates to DEVICE READY
+                print fullStamp() + " ACK Stethoscope will START RECORDING"                                     # ACK, in this case, translates to device START RECORDING
         elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " NAK SD Card Check Failed"                                                 # If the SD card check fails, the remote device sends a NAK
-                print fullStamp() + " NAK Device NOT Ready"                                                     # NAK, in this case, translates to DEVICE NOT READY
+                print fullStamp() + " NAK Stethoscope CANNOT START RECORDING"                                   # NAK, in this case, translates to device CANNOT START RECORDING
            
 # Stop Recording
 #       This function commands the connected stethoscope to stop recording audio
@@ -110,7 +108,7 @@ def startRecording(rfObject):
 #                       timeout                 {int}           maximum wait time for serial communication
 #                       iterCheck               {int}           maximum number of iterations for serial communication
 #       Output  ::      terminal messages       {string}        terminal messages for logging
-def stopRecording(rfObject):
+def stopRecording(rfObject, timeout, iterCheck):
         print fullStamp() + " stopRecording()"                                                                  # Print function name
         outByte = definitions.DC2_STPREC                                                                        # Send DC2_STPREC / Stop Recording command - see protocolDefinitions.py
         inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
@@ -118,6 +116,18 @@ def stopRecording(rfObject):
                 print fullStamp() + " ACK Stethoscope will STOP recording"                                      # If ACK, the stethoscope will STOP recording
         elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
                 print fullStamp() + " NAK Stethoscope CANNOT STOP recording"                                    # NAK, in this case, translates to CANNOT STOP RECORDING
-                # need to add error handles
-                #       - Why will this error appear?
- 
+
+# Start Playback
+#       This function commands the connected stethoscope to play an audio filed stored within the SD card
+#       Input   ::      rfObject                {object}        serial object
+#                       timeout                 {int}           maximum wait time for serial communication
+#                       iterCheck               {int}           maximum number of iterations for serial communication
+#       Output  ::      terminal messages       {string}        terminal messages for logging
+def startPlayback(rfObject, timeout, iterCheck):
+        print fullStamp() + " startPlayback()"                                                                  # Print function name
+        outByte = definitions.DC3_STRTPLY                                                                       # Send DC3_STRTPLY / Start Playback command - see protocolDefinitions.py
+        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK Stethoscope will STOP recording"                                      # If ACK, the stethoscope will START PLAYBACK
+        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " NAK Stethoscope CANNOT STOP recording"                                    # NAK, in this case, translates to CANNOT STOP RECORDING
