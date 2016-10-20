@@ -34,9 +34,9 @@ tree, root = readConfigFile(configFile)
 # OPERATION
 # =========
 
-deviceName, deviceBTAddress = pullInstruments(tree, root)   # pull instrument information from configuration file
-#deviceName = ["hola"]
-#deviceBTAddress = ["00:06:66:7D:80:CD"]
+#deviceName, deviceBTAddress = pullInstruments(tree, root)   # pull instrument information from configuration file
+deviceName = ["hola"]
+deviceBTAddress = ["00:06:66:7D:96:C4"]
 rfObject = createPort(deviceName, deviceBTAddress)          # create rfObjects/ports
 
 #sendUntilRead(rfObject[0],0x05)
@@ -44,7 +44,8 @@ rfObject = createPort(deviceName, deviceBTAddress)          # create rfObjects/p
 #statusEnquiry(rfObject[0],5,5)
 #systemCheck(rfObject[0],5,5)
 #startRecording(rfObject[0],5,5)
-stopRecording(rfObject[0],5,5)
+#stopRecording(rfObject[0],5,5)
+escapeOp(rfObject[0],5,5)
 
 #timedRead(rfObject[0],5)
 
