@@ -31,7 +31,7 @@ import protocolDefinitions as definitions
 #   This function creates radio-frquency (bluetooth) communication ports for specific devices, using their corresponding address
 #   Input   ::  {array/list} "deviceName", "deviceBTAddress"
 #   Output  ::  {array/list} "btObjects"
-def createPort(deviceName, deviceBTAddress):
+def createPorts(deviceName, deviceBTAddress):
     Ndevices = len(deviceName)                                                              # Determines the number of devices listed
     rfObject = []                                                                           # Create RF object variable/list (in case of multiple devices)
     for i in range(0,Ndevices):     
@@ -41,6 +41,17 @@ def createPort(deviceName, deviceBTAddress):
         #triggerRFInstrument(arduRFObj[i], instrumentNames[i])                              # Trigger data collection on instruments
     return rfObject                                                                         # Return RFObject or list of objects
 
+# Create RFComm Port
+def createPort(deviceName,deviceBTAddress):
+    portRelease("rfcomm",0)                                                             # The program performs a port-release to ensure that the desired rf port is available
+    portBind("rfcomm",0,deviceBTAddress[0])
+    rfObject = serial.Serial(
+        port = "/dev/rfcomm" + str(0),
+        baudrate = 115200,
+        bytesize = serial.EIGHTBITS,
+        parity = serial.PARITY_NONE,
+        timeout = 5)
+    return rfObject   
 
 # Port Bind
 #   This function binds the specified bluetooth device to a rfcomm port
