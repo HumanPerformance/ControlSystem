@@ -50,7 +50,14 @@ def systemCheck(rfObject, timeout, iterCheck):
                 print fullStamp() + " NAK SD Card Check Failed"                                                 # If the SD card check fails, the remote device sends a NAK
                 print fullStamp() + " NAK Device NOT Ready"                                                     # NAK, in this case, translates to DEVICE NOT READY
 
-# SD Check
+
+# Diagnostic Functions
+#       These functions deal with the status of the hardware
+
+# SD Card Check
+#       This function commands the connected stethoscope to perform a check on the connected sd card
+#       Input   ::      rfObject                {object}        serial object
+#       Output  ::      terminal messages       {string}        terminal messages for logging
 def sdCardCheck(rfObject):
         print fullStamp() + " sdCardCheck()"
         outBytes = [definitions.DC1, definitions.DC1_SDCHECK]
@@ -60,9 +67,18 @@ def sdCardCheck(rfObject):
                 if i == (Nbytes - 1):
                         inByte = rfObject.read(size=1)
         if inByte == definitions.ACK:
-                print " awesome "
+                print fullStamp() + " ACK SD Card Check Passed"                                                 # If the SD card check is successful, the remote device sends a ACK
+                print fullStamp() + " ACK Device Ready"                                                         # ACK, in this case, translates to DEVICE READY
         elif inByte == definitions.NAK:
-                print " bye bye "
+                print fullStamp() + " NAK SD Card Check Failed"                                                 # If the SD card check fails, the remote device sends a NAK
+                print fullStamp() + " NAK Device NOT Ready"                                                     # NAK, in this case, translates to DEVICE NOT READY
+
+# Operational Functions
+#       These functions deal with the normal operation of the device
+
+
+# Device-Specific Functions
+#       These functions deal with the device-specific operation or features
 
 # Start Recording
 #       This function commands the connected stethoscope to begin recording audio
