@@ -49,7 +49,21 @@ def systemCheck(rfObject, timeout, iterCheck):
         elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
                 print fullStamp() + " NAK SD Card Check Failed"                                                 # If the SD card check fails, the remote device sends a NAK
                 print fullStamp() + " NAK Device NOT Ready"                                                     # NAK, in this case, translates to DEVICE NOT READY
-                
+
+# SD Check
+def sdCardCheck(rfObject):
+        print fullStamp() + " sdCardCheck()"
+        outBytes = [definitions.DC1, definitions.DC1_SDCHECK]
+        Nbytes = len(outBytes)
+        for i in range(0,Nbytes):
+                rfObject.write(outBytes[i])
+                if i == (Nbytes - 1):
+                        inByte = rfObject.read(size=1)
+        if inByte == definitions.ACK:
+                print " awesome "
+        elif inByte == definitions.NAK:
+                print " bye bye "
+
 # Start Recording
 #       This function commands the connected stethoscope to begin recording audio
 #       The recorded audio is then stored in the local SD
