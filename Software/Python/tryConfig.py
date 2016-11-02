@@ -36,16 +36,16 @@ tree, root = readConfigFile(configFile)
 
 #deviceName, deviceBTAddress = pullInstruments(tree, root)   # pull instrument information from configuration file
 deviceName = ["hola"]
-deviceBTAddress = ["00:06:66:7D:96:C4"]
+deviceBTAddress = ["00:06:66:86:76:E6"]
 rfObject = createPort(deviceName, deviceBTAddress)          # create rfObjects/ports
 
 #sendUntilRead(rfObject[0],0x05)
 
 #statusEnquiry(rfObject[0],5,5)
-#systemCheck(rfObject[0],5,5)
+systemCheck(rfObject[0],5,5)
 #startRecording(rfObject[0],5,5)
 #stopRecording(rfObject[0],5,5)
-escapeOp(rfObject[0],5,5)
+#escapeOp(rfObject[0],5,5)
 
 #timedRead(rfObject[0],5)
 
