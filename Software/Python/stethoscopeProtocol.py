@@ -59,13 +59,12 @@ def systemCheck(rfObject, timeout, iterCheck):
 #       Input   ::      rfObject                {object}        serial object
 #       Output  ::      terminal messages       {string}        terminal messages for logging
 def sdCardCheck(rfObject):
-        print fullStamp() + " sdCardCheck()"
-        outBytes = [definitions.DC1, definitions.DC1_SDCHECK]
-        Nbytes = len(outBytes)
-        for i in range(0,Nbytes):
+        print fullStamp() + " sdCardCheck()"                                                                    # Print function name
+        outBytes = [definitions.DC1, definitions.DC1_SDCHECK]                                                   # Store the sequence of bytes associated with the operation, function, feature
+        for i in range(0,len(outBytes)):                                                                        # For loop for the sequential delivery of bytes using the length of the sequence for the range
                 rfObject.write(outBytes[i])
-                if i == (Nbytes - 1):
-                        inByte = rfObject.read(size=1)
+                if i == (len(outBytes) - 1):                                                                    # On the last byte, the program reads the response
+                        inByte = rfObject.read(size=1)                                                          # The read is limited to a single byte (timeout predefined in the createPort() function)
         if inByte == definitions.ACK:
                 print fullStamp() + " ACK SD Card Check Passed"                                                 # If the SD card check is successful, the remote device sends a ACK
                 print fullStamp() + " ACK Device Ready"                                                         # ACK, in this case, translates to DEVICE READY
@@ -84,31 +83,33 @@ def sdCardCheck(rfObject):
 #       This function commands the connected stethoscope to begin recording audio
 #       The recorded audio is then stored in the local SD
 #       Input   ::      rfObject                {object}        serial object
-#                       timeout                 {int}           maximum wait time for serial communication
-#                       iterCheck               {int}           maximum number of iterations for serial communication
 #       Output  ::      terminal messages       {string}        terminal messages for logging
-def startRecording(rfObject, timeout, iterCheck):
-        print fullStamp() + " startRecording()"                                                                 # Print function name
-        outByte = definitions.DC1_STRTREC                                                                       # Send DC1_STRTREC / Start Recording command - see protocolDefinitions.py
-        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
-        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+def startRecording(rfObject):
+        print fullStamp() + " startRecording()"                                                                 # ...
+        outBytes = [definitions.DC3, definitions.DC3_STARTREC]                                                  # ...
+        for i in range(0,len(outBytes)):                                                                        # ...
+                rfObject.write(outBytes[i])                                                                     # ...
+                if i == (len(outBytes) - 1):                                                                    # ...
+                        inByte = rfObject.read(size=1)                                                          # ...
+        if inByte == definitions.ACK:                                                                           # ...
                 print fullStamp() + " ACK Stethoscope will START RECORDING"                                     # ACK, in this case, translates to device START RECORDING
-        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
+        elif inByte == definitions.NAK:                                                                         # ...
                 print fullStamp() + " NAK Stethoscope CANNOT START RECORDING"                                   # NAK, in this case, translates to device CANNOT START RECORDING
            
 # Stop Recording
 #       This function commands the connected stethoscope to stop recording audio
 #       Input   ::      rfObject                {object}        serial object
-#                       timeout                 {int}           maximum wait time for serial communication
-#                       iterCheck               {int}           maximum number of iterations for serial communication
 #       Output  ::      terminal messages       {string}        terminal messages for logging
-def stopRecording(rfObject, timeout, iterCheck):
-        print fullStamp() + " stopRecording()"                                                                  # Print function name
-        outByte = definitions.DC2_STPREC                                                                        # Send DC2_STPREC / Stop Recording command - see protocolDefinitions.py
-        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
-        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+def stopRecording(rfObject):
+        print fullStamp() + " stopRecording()"                                                                  # ...
+        outBytes = [definitions.DC3, definitions.DC3_STOPREC]                                                   # ...
+        for i in range(0,len(outBytes)):                                                                        # ...
+                rfObject.write(outBytes[i])                                                                     # ...
+                if i == (len(outBytes) - 1):                                                                    # ...
+                        inByte = rfObject.read(size=1)                                                          # ...
+        if inByte == definitions.ACK:                                                                           # ...
                 print fullStamp() + " ACK Stethoscope will STOP RECORDING"                                      # If ACK, the stethoscope will STOP recording
-        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
+        elif inByte == definitions.NAK:                                                                         # ...
                 print fullStamp() + " NAK Stethoscope CANNOT STOP RECORDING"                                    # NAK, in this case, translates to CANNOT STOP RECORDING
 
 # Start Playback
