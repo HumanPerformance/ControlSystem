@@ -21,11 +21,34 @@ X.X - Connect to paired device
 """
 
 # Import Libraries and/or Modules
+import bluetooth
+"""
+        Implementation of the "bluetooth" module may require the installation of the python-bluez package
+        >> sudp apt-get install python-bluez
+"""
 import os
 import serial
 import time
 from timeStamp import *
 import protocolDefinitions as definitions
+
+
+# Find RF Device
+def findDevice():
+    print "performing inquiry..."
+    devices = bluetooth.discover_devices(
+        duration=20,
+        lookup_names=True)
+
+    Ndevices = len(devices)
+    availableDeviceNames = []
+    availableDeviceBTAddresses = []
+    for i in range(0,Ndevices):
+        availableDeviceNames.append(devices[i][1])
+        availableDeviceBTAddresses.append(devices[i][0])
+
+    print availableDeviceNames
+    print availableDeviceBTAddresses
 
 # Create RFComm Ports
 #   This function creates radio-frquency (bluetooth) communication ports for specific devices, using their corresponding address
