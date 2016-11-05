@@ -2,6 +2,6 @@
 testing algorithm for bluetooth commands and/or functions
 """
 
-from bluetoothProtocol import findDevice
+from bluetoothProtocol import findDevices
 
-findDevice()
+findDevices()
