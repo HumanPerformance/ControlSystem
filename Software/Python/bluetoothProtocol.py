@@ -53,6 +53,25 @@ def findDevices():
     print fullStamp() + " Devices found (addresses): " + str(availableDeviceBTAddresses)    # Print the list of addresses for the devices found
     return availableDeviceNames, availableDeviceBTAddresses                                 # Return arrays/lists of devices and bluetooth addresses
 
+# Identify Smart Devices
+#   This function searches through the list of detected devices and...
+#   Input   ::  {string}     "smartDeviceIdentifier"
+#           ::  {array/list} "availableDeviceNames", "availableDeviceBTAddresses"
+#   Output  ::  {array/list} "smartDeviceNames", "smartDeviceBTAddresses"
+def findSmartDevices(smartDeviceIdentifier, availableDeviceNames, availableDeviceBTAddresses):
+    print fullStamp() + " findSmartDevices()"
+    Ndevices = len(availableDeviceNames)
+    smartDeviceNames = []
+    smartDeviceBTAddresses = []
+    for i in range(0,Ndevices):
+        deviceIdentifier = availableDeviceNames[i][0:4]
+        if deviceIdentifier == smartDeviceIdentifier:
+            smartDeviceNames.append(availableDeviceNames[i])
+            smartDeviceBTAddresses.append(availableDeviceBTAddresses[i])
+    print fullStamp() + " Smart Devices found (names): " + str(smartDeviceNames)
+    print fullStamp() + " Smart Devices found (addresses): " + str(smartDeviceBTAddresses)
+    return smartDeviceNames, smartDeviceBTAddresses
+
 # Create RFComm Ports
 #   This function creates radio-frquency (bluetooth) communication ports for specific devices, using their corresponding address
 #   Input   ::  {array/list} "deviceName", "deviceBTAddress"
