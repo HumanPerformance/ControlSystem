@@ -19,7 +19,8 @@ CAN = chr(0x18)                 #       Cancel Current Command                  
 #   We have extended the four (4) standard "device control" commands by means of a two-byte communication protocol
 
 DC1 = chr(0x11)                 #       Device Control 1: Diagnostic Functions              0x11            STD
-DC1_SDCHECK = chr(0x00)         #           SD Card Check                                   0x00            ORG
+DC1_DEVICEID = chr(0x00)        #           Device Identification
+DC1_SDCHECK = chr(0x01)         #           SD Card Check                                   0x00            ORG
 #                                                                                           0xFF            ORG
 
 DC2 = chr(0x12)                 #       Device Control 2: Operational Functions             0x12            STD

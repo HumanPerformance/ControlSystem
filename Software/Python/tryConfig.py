@@ -41,11 +41,12 @@ rfObject = createPort(deviceName, deviceBTAddress)          # create rfObjects/p
 
 #sendUntilRead(rfObject[0],0x05)
 
+deviceID(rfObject)
 #statusEnquiry(rfObject,5,5)
 #sdCardCheck(rfObject)
 #systemCheck(rfObject[0],5,5)
 #startRecording(rfObject)
-stopRecording(rfObject)
+#stopRecording(rfObject)
 #escapeOp(rfObject[0],5,5)
 
 #timedRead(rfObject[0],5)
