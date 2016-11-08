@@ -29,7 +29,7 @@ def findStethoscope():
     print fullStamp() + " findStethoscope()"
     availableDeviceNames, availableDeviceBTAddresses = findDevices()
     smartDeviceNames, smartDeviceBTAddresses = findSmartDevices("RNBT",availableDeviceNames, availableDeviceBTAddresses)
-    rfObject = createPorts(smartDeviceNames, smartDeviceBTAddresses)
+    #rfObject = createPort(smartDeviceNames, smartDeviceBTAddresses)
     #deviceID(rfObject[0])
-    sdCardCheck(rfObject)
-    portRelease('rfcomm',0)
+    #sdCardCheck(rfObject)
+    #portRelease('rfcomm',0)
