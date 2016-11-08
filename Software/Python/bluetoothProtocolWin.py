@@ -16,6 +16,7 @@ import bluetooth
 """
 import os
 import serial
+import serial.tools.list_ports
 import time
 from timeStamp import *
 import protocolDefinitions as definitions
@@ -110,6 +111,18 @@ def createPort(deviceName,deviceBTAddress):
         write_timeout = 0,
         inter_byte_timeout = None)
     return rfObject
+
+# Search Available Serial Ports
+#   This function was designed to find available virtual serial communication ports on a windows computer
+#   The program simply looks for the available ports and adds a port to the list
+#   Input   ::  None
+#   Output  ::  {String}    "portName"
+def nextAvailablePort():
+    usedPorts = serial.tools.list_ports.comports()
+    lastPort, description, hwid = usedPorts[len(usedPorts)-1]
+    lastPortNumber = int(lastPort[3:len(lastPort)])
+    nextAvailablePort = "COM" + str(lastPortNumber + 1)
+    return nextAvailablePort
 
 # Port Bind
 #   This function binds the specified bluetooth device to a rfcomm port
