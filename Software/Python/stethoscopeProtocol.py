@@ -76,8 +76,9 @@ def sdCardCheck(rfObject):
         print fullStamp() + " sdCardCheck()"                                                                    # Print function name
         outBytes = [definitions.DC1, definitions.DC1_SDCHECK]                                                   # Store the sequence of bytes associated with the operation, function, feature
         for i in range(0,len(outBytes)):                                                                        # For loop for the sequential delivery of bytes using the length of the sequence for the range
+                rfObject.reset_output_buffer()
                 rfObject.write(outBytes[i])
-                if i == (len(outBytes) - 1):                                                                    # On the last byte, the program reads the response
+                if i == (len(outBytes) - 1):                                                                  # On the last byte, the program reads the response
                         inByte = rfObject.read(size=1)                                                          # The read is limited to a single byte (timeout predefined in the createPort() function)
         if inByte == definitions.ACK:
                 print fullStamp() + " ACK SD Card Check Passed"                                                 # If the SD card check is successful, the remote device sends a ACK

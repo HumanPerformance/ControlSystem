@@ -95,7 +95,13 @@ def createPort(deviceName,deviceBTAddress):
         baudrate = 115200,
         bytesize = serial.EIGHTBITS,
         parity = serial.PARITY_NONE,
-        timeout = 5)
+        stopbits = serial.STOPBITS_ONE,
+        timeout = 5,
+        xonxoff = True,
+        rtscts = True,
+        dsrdtr = True,
+        write_timeout = 0,
+        inter_byte_timeout = None)
     return rfObject   
 
 # Port Bind

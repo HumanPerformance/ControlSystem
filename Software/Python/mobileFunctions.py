@@ -8,6 +8,14 @@ Fluvio L Lobo Fenoglietto
 """
 
 # Import Modules
+from timeStamp import fullStamp
+import protocolDefinitions
+from bluetoothProtocol import findDevices
+from bluetoothProtocol import findSmartDevices
+from bluetoothProtocol import createPorts
+from bluetoothProtocol import portRelease
+from stethoscopeProtocol import deviceID
+from stethoscopeProtocol import sdCardCheck
 
 
 # Functions
@@ -18,4 +26,10 @@ Fluvio L Lobo Fenoglietto
 #   Input   ::  None
 #   Output  ::  {array/list}
 def findStethoscope():
-    print "Stethoscope Found"
+    print fullStamp() + " findStethoscope()"
+    availableDeviceNames, availableDeviceBTAddresses = findDevices()
+    smartDeviceNames, smartDeviceBTAddresses = findSmartDevices("RNBT",availableDeviceNames, availableDeviceBTAddresses)
+    rfObject = createPorts(smartDeviceNames, smartDeviceBTAddresses)
+    #deviceID(rfObject[0])
+    sdCardCheck(rfObject)
+    portRelease('rfcomm',0)
