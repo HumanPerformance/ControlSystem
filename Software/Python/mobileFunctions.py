@@ -11,7 +11,7 @@ Fluvio L Lobo Fenoglietto
 from timeStamp import fullStamp
 import protocolDefinitions
 from bluetoothProtocol import findDevices
-from bluetoothProtocol import findSmartDevices
+from bluetoothProtocol import findSmartDevice
 from bluetoothProtocol import createPorts
 from bluetoothProtocol import portRelease
 from stethoscopeProtocol import deviceID
@@ -28,8 +28,4 @@ from stethoscopeProtocol import sdCardCheck
 def findStethoscope():
     print fullStamp() + " findStethoscope()"
     availableDeviceNames, availableDeviceBTAddresses = findDevices()
-    smartDeviceNames, smartDeviceBTAddresses = findSmartDevices("RNBT",availableDeviceNames, availableDeviceBTAddresses)
-    #rfObject = createPort(smartDeviceNames, smartDeviceBTAddresses)
-    #deviceID(rfObject[0])
-    #sdCardCheck(rfObject)
-    #portRelease('rfcomm',0)
+    smartDeviceNames, smartDeviceBTAddresses = findSmartDevice("RNBT-76E6",availableDeviceNames, availableDeviceBTAddresses)
