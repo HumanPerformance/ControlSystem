@@ -80,6 +80,18 @@ def findSmartDevice(smartDeviceName, availableDeviceNames, availableDeviceBTAddr
     print fullStamp() + " Smart Devices found (addresses): " + str(smartDeviceBTAddresses)
     return smartDeviceNames, smartDeviceBTAddresses
 
+# Search Available Serial Ports
+#   This function was designed to find available virtual serial communication ports on a windows computer
+#   The program simply looks for the available ports and adds a port to the list
+#   Input   ::  None
+#   Output  ::  {String}    "portName"
+def nextAvailablePort():
+    usedPorts = serial.tools.list_ports.comports()                                                          # Import information about COM ports from the system
+    lastPort, description, hwid = usedPorts[len(usedPorts)-1]                                               # Extract the port name, among other parameters, from the last found port
+    lastPortNumber = int(lastPort[3:len(lastPort)])                                                         # Based on the port name of the last detected port (assumed to be in use), the program creates a new port
+    nextAvailablePort = "COM" + str(lastPortNumber + 1)                                                     # ...
+    return nextAvailablePort                                                                                # Returns the full string defining the new port
+
 # Create RFComm Ports
 #   This function creates radio-frquency (bluetooth) communication ports for specific devices, using their corresponding address
 #   Input   ::  {array/list} "deviceName", "deviceBTAddress"
@@ -95,11 +107,10 @@ def createPorts(deviceName, deviceBTAddress):
     return rfObject                                                                         # Return RFObject or list of objects
 
 # Create RFComm Port
-def createPort(deviceName,deviceBTAddress):
-    portRelease("rfcomm",0)                                                             # The program performs a port-release to ensure that the desired rf port is available
-    portBind("rfcomm",0,deviceBTAddress[0])
+def createPort(portName,deviceName,deviceBTAddress):
+    print fullStamp() + " createPort()"
     rfObject = serial.Serial(
-        port = "/dev/rfcomm" + str(0),
+        port = portName,
         baudrate = 115200,
         bytesize = serial.EIGHTBITS,
         parity = serial.PARITY_NONE,
@@ -111,34 +122,6 @@ def createPort(deviceName,deviceBTAddress):
         write_timeout = 0,
         inter_byte_timeout = None)
     return rfObject
-
-# Search Available Serial Ports
-#   This function was designed to find available virtual serial communication ports on a windows computer
-#   The program simply looks for the available ports and adds a port to the list
-#   Input   ::  None
-#   Output  ::  {String}    "portName"
-def nextAvailablePort():
-    usedPorts = serial.tools.list_ports.comports()
-    lastPort, description, hwid = usedPorts[len(usedPorts)-1]
-    lastPortNumber = int(lastPort[3:len(lastPort)])
-    nextAvailablePort = "COM" + str(lastPortNumber + 1)
-    return nextAvailablePort
-
-# Port Bind
-#   This function binds the specified bluetooth device to a rfcomm port
-#   Input   ::  {string} port type, {int} port number, {string} bluetooth address of device
-#   Output  ::  None -- Terminal messages
-def portBind(portType, portNumber, deviceBTAddress):
-    print fullStamp() + " Connecting device to " + portType + str(portNumber)                    # Terminal message, program status
-    os.system("sudo " + portType + " bind /dev/" + portType + str(portNumber) + " " + deviceBTAddress)     # Bind bluetooth device to control system
-
-# Port Release
-#   This function releases the specified communication port (serial) given the type and the number
-#   Input   ::  {string} "portType", {int} "portNumber"
-#   Output  ::  None -- Terminal messages
-def portRelease(portType, portNumber):
-    print fullStamp() + " Releasing " + portType + str(portNumber)                               # Terminal message, program status
-    os.system("sudo " + portType + " release " + str(portNumber))                           # Releasing port through terminal commands
 
 # Port Message Check
 #   Reads serial port and checks for a specific input message

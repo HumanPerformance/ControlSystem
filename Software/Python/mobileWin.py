@@ -6,7 +6,7 @@ mobile.py
 from Tkinter import *                                   # GUI design libraries
 import ttk                                              # ...
 
-from mobileFunctions import findStethoscope
+from mobileFunctionsWin import findStethoscope
 
 gui = Tk()                                              # Initialization of the window under object name "root"
 gui.title("mobile.py")                                  # Title of the window

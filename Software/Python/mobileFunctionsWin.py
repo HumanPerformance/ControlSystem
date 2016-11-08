@@ -10,12 +10,10 @@ Fluvio L Lobo Fenoglietto
 # Import Modules
 from timeStamp import fullStamp
 import protocolDefinitions
-from bluetoothProtocol import findDevices
-from bluetoothProtocol import findSmartDevice
-from bluetoothProtocol import createPorts
-from bluetoothProtocol import portRelease
-from stethoscopeProtocol import deviceID
-from stethoscopeProtocol import sdCardCheck
+from bluetoothProtocolWin import findDevices
+from bluetoothProtocolWin import findSmartDevice
+from bluetoothProtocolWin import nextAvailablePort
+from bluetoothProtocolWin import createPort
 
 
 # Functions
@@ -28,4 +26,7 @@ from stethoscopeProtocol import sdCardCheck
 def findStethoscope():
     print fullStamp() + " findStethoscope()"
     availableDeviceNames, availableDeviceBTAddresses = findDevices()
-    smartDeviceNames, smartDeviceBTAddresses = findSmartDevice("RNBT-76E6",availableDeviceNames, availableDeviceBTAddresses)
+    smartDeviceName, smartDeviceBTAddress = findSmartDevice("RNBT-76E6",availableDeviceNames, availableDeviceBTAddresses)
+    portName = nextAvailablePort()
+    rfObject = createPort(portName,smartDeviceName,smartDeviceBTAddress)
+    return smartDeviceName, portName, rfObject
