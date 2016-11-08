@@ -2,11 +2,11 @@
 mobile.py
 """
 
-
+# Import Libraries and/or Modules
 from Tkinter import *                                   # GUI design libraries
 import ttk                                              # ...
-
 from mobileFunctionsWin import findStethoscope
+
 
 gui = Tk()                                              # Initialization of the window under object name "root"
 gui.title("mobile.py")                                  # Title of the window
@@ -19,6 +19,7 @@ infoLabel.place(x=10,y=10)
 # Action Buttons
 searchDevicesButton = Button(text="Find Stethoscope", command=findStethoscope)
 searchDevicesButton.place(x=10,y=50)
+
 
 gui.mainloop()
 

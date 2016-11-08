@@ -25,8 +25,9 @@ from bluetoothProtocolWin import createPort
 #   Output  ::  {array/list}
 def findStethoscope():
     print fullStamp() + " findStethoscope()"
+    global smartDeviceName
     availableDeviceNames, availableDeviceBTAddresses = findDevices()
     smartDeviceName, smartDeviceBTAddress = findSmartDevice("RNBT-76E6",availableDeviceNames, availableDeviceBTAddresses)
     portName = nextAvailablePort()
     rfObject = createPort(portName,smartDeviceName,smartDeviceBTAddress)
-    return smartDeviceName, portName, rfObject
+    return smartDeviceName
