@@ -2,12 +2,11 @@ import sys
 import platform
 import os
 import serial.tools.list_ports
-from bluetoothProtocolWin import nextAvailablePort
+from bluetoothProtocolWin import nextAvailableBTPort
 
 #platform = sys.platform
 osname = os.name
 os = platform.system()
 
 
-portName = nextAvailablePort()
-print portName
+availableBTPort = nextAvailableBTPort()

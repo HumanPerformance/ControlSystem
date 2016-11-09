@@ -5,6 +5,8 @@ import os
 from os.path import expanduser
 import serial
 from bluetoothProtocolWin import createPort
+from bluetoothProtocolWin import nextAvailableBTPort
+from stethoscopeProtocol import sdCardCheck
 
 # =========
 # OPERATION
@@ -13,9 +15,8 @@ from bluetoothProtocolWin import createPort
 #deviceName, deviceBTAddress = pullInstruments(tree, root)   # pull instrument information from configuration file
 deviceName = ["hola"]
 deviceBTAddress = ["00:06:66:86:76:E6"]
-portName = "COM70"
-rfObject = createPort(portName,deviceName,deviceBTAddress)
+rfObject = createPort("COM71",deviceName,deviceBTAddress)
+
+print rfObject
 
 sdCardCheck(rfObject)
-
-portRelease('rfcomm', 0)                                    # Release port to avoid permanent connection

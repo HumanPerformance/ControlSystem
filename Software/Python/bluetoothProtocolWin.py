@@ -92,6 +92,19 @@ def nextAvailablePort():
     nextAvailablePort = "COM" + str(lastPortNumber + 1)                                                     # ...
     return nextAvailablePort                                                                                # Returns the full string defining the new port                                                                      # Return RFObject or list of objects
 
+def nextAvailableBTPort():
+    print fullStamp() + " nextAvailableBTPort()"                                                            # Terminal message signaling execution of the function
+    usedPorts = serial.tools.list_ports.comports()                                                          # ...
+    for i in range(0,len(usedPorts)):                                                                       # Loop through found ports...
+        port, description, hwid = usedPorts[i]                                                              # Read port-name, description, and hwid from each found port...
+        comType = "Bluetooth"                                                                               # String that will be used to find Bluetooth ports by string comparison
+        if description[21:30] == comType:                                                                   # If match found...
+            portNumber = int(port[3:len(port)])
+            availableBTPort = "COM" + str(portNumber)                                                       # An available bluetooth port is said to be found
+            break
+    print fullStamp() + " Available Bluetooth Port: " + availableBTPort                                     # Terminal message signaling the finding of the available port
+    return availableBTPort                                                                                  # Return available port
+
 # Create RFComm Port
 def createPort(portName,deviceName,deviceBTAddress):
     print fullStamp() + " createPort()"
