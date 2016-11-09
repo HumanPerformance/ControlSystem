@@ -1,5 +1,10 @@
 """
-mobile.py
+mobileWin.py
+
+The following function has been designed to create a small graphical user interface for PD3D's smart devices
+
+Fluvio L Lobo Fenoglietto
+11/09/2016
 """
 
 # Import Libraries and/or Modules
@@ -11,7 +16,7 @@ from bluetoothProtocolWin import findDevices
 from bluetoothProtocolWin import findSmartDevice
 from bluetoothProtocolWin import nextAvailablePort
 from bluetoothProtocolWin import createPort
-
+from stethoscopeProtocol import sdCardCheck
 
 # Functions
 
@@ -23,6 +28,8 @@ from bluetoothProtocolWin import createPort
 def findStethoscope():
     print fullStamp() + " findStethoscope()"
     global smartDeviceName
+    global smartDeviceBTAddress
+    global rfObject
     availableDeviceNames, availableDeviceBTAddresses = findDevices()
     smartDeviceName, smartDeviceBTAddress = findSmartDevice("RNBT-76E6",availableDeviceNames, availableDeviceBTAddresses)
     portName = nextAvailablePort()
@@ -42,11 +49,12 @@ infoLabel = Label(text="SMART STETHOSCOPE")
 infoLabel.place(x=10,y=10)
 
 # Action Buttons
+# Find Smart Device Button
 searchDevicesButton = Button(text="Find Stethoscope", command=findStethoscope)
 searchDevicesButton.place(x=10,y=50)
 
-# Action Buttons
-searchDevicesButton = Button(text="Print Device Name", command= lambda: printDeviceInfo(smartDeviceName))
+# SD Card Check
+searchDevicesButton = Button(text="SD Card Check", command= lambda: sdCardCheck(rfObject))
 searchDevicesButton.place(x=10,y=200)
 
 
