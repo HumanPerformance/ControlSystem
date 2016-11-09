@@ -17,6 +17,8 @@ from bluetoothProtocolWin import findSmartDevice
 from bluetoothProtocolWin import nextAvailablePort
 from bluetoothProtocolWin import createPort
 from stethoscopeProtocol import sdCardCheck
+from stethoscopeProtocol import startPlayback
+from stethoscopeProtocol import normalHBPlayback
 
 # Functions
 
@@ -30,6 +32,18 @@ def sdCardCheckCallback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
     sdCardCheck(rfObject)
+    rfObject.close()
+
+def startPlaybackCallback(rfObject):
+    if rfObject.isOpen() == False:
+        rfObject.open()
+    startPlayback(rfObject)
+    rfObject.close()
+
+def normalHBPlaybackCallback(rfObject):
+    if rfObject.isOpen() == False:
+        rfObject.open()
+    normalHBPlayback(rfObject)
     rfObject.close()
 
 # Graphical User Interface (GUI)
@@ -49,7 +63,11 @@ searchDevicesButton.place(x=10,y=50)
 
 # SD Card Check
 searchDevicesButton = Button(text="SD Card Check", command=lambda: sdCardCheckCallback(rfObject))
-searchDevicesButton.place(x=10,y=200)
+searchDevicesButton.place(x=10,y=100)
+
+# Playback - Normal Sound
+startPlaybackNormalButton = Button(text="Normal HB", command=lambda: normalHBPlaybackCallback(rfObject))
+startPlaybackNormalButton.place(x=10,y=200)
 
 
 gui.mainloop()
