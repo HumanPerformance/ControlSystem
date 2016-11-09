@@ -21,22 +21,16 @@ from stethoscopeProtocol import sdCardCheck
 # Functions
 
 # Find Stethoscope
-#   Function designed to find a smart stethoscope in range
-#   This function coordinates several functions from various imported protocols
-#   Input   ::  None
-#   Output  ::  {array/list}
-def findStethoscope():
+def connect2Stethoscope(portName,deviceName,deviceBTAddress):
     print fullStamp() + " findStethoscope()"
-    global smartDeviceName
-    global smartDeviceBTAddress
     global rfObject
-    availableDeviceNames, availableDeviceBTAddresses = findDevices()
-    smartDeviceName, smartDeviceBTAddress = findSmartDevice("RNBT-76E6",availableDeviceNames, availableDeviceBTAddresses)
-    portName = nextAvailablePort()
-    rfObject = createPort(portName,smartDeviceName,smartDeviceBTAddress)
+    rfObject = createPort(portName,deviceName,deviceBTAddress)
 
-def printDeviceInfo(smartDeviceName):
-    print smartDeviceName
+def sdCardCheckCallback(rfObject):
+    if rfObject.isOpen() == False:
+        rfObject.open()
+    sdCardCheck(rfObject)
+    rfObject.close()
 
 # Graphical User Interface (GUI)
 
@@ -50,11 +44,11 @@ infoLabel.place(x=10,y=10)
 
 # Action Buttons
 # Find Smart Device Button
-searchDevicesButton = Button(text="Find Stethoscope", command=findStethoscope)
+searchDevicesButton = Button(text="Find Stethoscope", command=lambda: connect2Stethoscope("COM71","RNBT-76E6","00:06:66:86:76:E6"))
 searchDevicesButton.place(x=10,y=50)
 
 # SD Card Check
-searchDevicesButton = Button(text="SD Card Check", command= lambda: sdCardCheck(rfObject))
+searchDevicesButton = Button(text="SD Card Check", command=lambda: sdCardCheckCallback(rfObject))
 searchDevicesButton.place(x=10,y=200)
 
 
