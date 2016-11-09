@@ -90,21 +90,7 @@ def nextAvailablePort():
     lastPort, description, hwid = usedPorts[len(usedPorts)-1]                                               # Extract the port name, among other parameters, from the last found port
     lastPortNumber = int(lastPort[3:len(lastPort)])                                                         # Based on the port name of the last detected port (assumed to be in use), the program creates a new port
     nextAvailablePort = "COM" + str(lastPortNumber + 1)                                                     # ...
-    return nextAvailablePort                                                                                # Returns the full string defining the new port
-
-# Create RFComm Ports
-#   This function creates radio-frquency (bluetooth) communication ports for specific devices, using their corresponding address
-#   Input   ::  {array/list} "deviceName", "deviceBTAddress"
-#   Output  ::  {array/list} "btObjects"
-def createPorts(deviceName, deviceBTAddress):
-    Ndevices = len(deviceName)                                                              # Determines the number of devices listed
-    rfObject = []                                                                           # Create RF object variable/list (in case of multiple devices)
-    for i in range(0,Ndevices):     
-        portRelease("rfcomm",i)                                                             # The program performs a port-release to ensure that the desired rf port is available
-        portBind("rfcomm",i,deviceBTAddress[i])
-        rfObject.append(serial.Serial("/dev/rfcomm" + str(i),115200))                       # Create and append RFComm port to the RFObject structure
-        #triggerRFInstrument(arduRFObj[i], instrumentNames[i])                              # Trigger data collection on instruments
-    return rfObject                                                                         # Return RFObject or list of objects
+    return nextAvailablePort                                                                                # Returns the full string defining the new port                                                                      # Return RFObject or list of objects
 
 # Create RFComm Port
 def createPort(portName,deviceName,deviceBTAddress):
