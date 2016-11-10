@@ -20,6 +20,7 @@ from stethoscopeProtocol import sdCardCheck
 from stethoscopeProtocol import startPlayback
 from stethoscopeProtocol import normalHBPlayback
 from stethoscopeProtocol import earlyHMPlayback
+from stethoscopeProtocol import stopPlayback
 
 # Functions
 
@@ -57,7 +58,7 @@ def earlyHMPlaybackCallback(rfObject):
 def stopPlaybackCallback():
     if rfObject.isOpen() == False:
         rfObject.open()
-    stopPlaying(rfObject)
+    stopPlayback(rfObject)
     rfObject.close()
 
 # Graphical User Interface (GUI)
@@ -66,41 +67,57 @@ gui = Tk()                                              # Initialization of the 
 gui.title("mobile.py")                                  # Title of the window
 gui.geometry('450x450+200+200')                         # Window dimensions in pixels + the distance from the top-left corner of your screen
 
-# Labels
+# Labels ------------------------------------------------------------------------------------------------------ # Labels Comments
 # Information Label
-infoLabel = Label(text="SMART STETHOSCOPE")
-infoLabel.place(x=10,y=10)
-infoLabel.config(height=1,width=20)
+infoLabel = Label(text="SMART STETHOSCOPE")                                                                     # Label title
+infoLabel.place(x=10,y=10)                                                                                      # Label location
+infoLabel.config(height=1,width=20)                                                                             # Label dimensions
 
 # Normal Hear Beat 
-startPlayNormalLabel = Label(text="NORMAL HEART BEAT")
-startPlayNormalLabel.place(x=5,y=175)
-startPlayNormalLabel.config(height=1,width=20)
+startPlayNormalLabel = Label(text="NORMAL HEART BEAT")                                                          # ...
+startPlayNormalLabel.place(x=5,y=175)                                                                           # ...
+startPlayNormalLabel.config(height=1,width=20)                                                                  # ...
 
-# Action Buttons
+# Early Systolic Murmur
+startPlayNormalLabel = Label(text="EARLY SYSTOLIC MURMUR")                                                      # ...
+startPlayNormalLabel.place(x=5,y=275)                                                                           # ...
+startPlayNormalLabel.config(height=1,width=20)                                                                  # ...
+
+# Action Buttons ---------------------------------------------------------------------------------------------- # Buttons Commnets
 # Find Smart Device Button
-searchDevicesButton = Button(text="Find Stethoscope", command=lambda: connect2Stethoscope("COM71","RNBT-76E6","00:06:66:86:76:E6"))
-searchDevicesButton.place(x=10,y=50)
-searchDevicesButton.config(height=1,width=20)
+searchDevicesButton = Button(text="Find Stethoscope",                                                           # Button text
+                             command=lambda: connect2Stethoscope("COM71","RNBT-76E6","00:06:66:86:76:E6"))      # Button action command
+searchDevicesButton.place(x=10,y=50)                                                                            # Button location
+searchDevicesButton.config(height=1,width=20)                                                                   # Button dimensions
 
 # SD Card Check
-sdCardCheckButton = Button(text="SD Card Check", command=lambda: sdCardCheckCallback(rfObject))
-sdCardCheckButton.place(x=10,y=100)
-sdCardCheckButton.config(height=1,width=20)
+sdCardCheckButton = Button(text="SD Card Check",                                                                # ...
+                           command=lambda: sdCardCheckCallback(rfObject))                                       # ...
+sdCardCheckButton.place(x=10,y=100)                                                                             # ...
+sdCardCheckButton.config(height=1,width=20)                                                                     # ...
 
 # Playback - Normal Sound (Play)
-startPlayNormalButton = Button(text="Play NHB", command=lambda: normalHBPlaybackCallback(rfObject))
-startPlayNormalButton.place(x=10,y=200)
-startPlayNormalButton.config(height=1,width=20)
+startPlayNormalButton = Button(text="Play NHB",                                                                 # ...                           
+                               command=lambda: normalHBPlaybackCallback(rfObject))                              # ...
+startPlayNormalButton.place(x=10,y=200)                                                                         # ...
+startPlayNormalButton.config(height=1,width=20)                                                                 # ...
 
 # Playback - Normal Sound (Stop)
-startStopNormalButton = Button(text="Stop NHB", command=lambda: stopPlaybackCallback())
+startStopNormalButton = Button(text="Stop NHB",
+                               command=lambda: stopPlaybackCallback())
 startStopNormalButton.place(x=200,y=200)
 startStopNormalButton.config(height=1,width=20)
 
-# Playback - Early Systolic Mumur
-startPlaybackMurmurButton = Button(text="ES Mumur", command=lambda: earlyHMPlaybackCallback(rfObject))
-startPlaybackMurmurButton.place(x=10,y=250)
+# Playback - Early Systolic Mumur (Play)
+startPlaybackMurmurButton = Button(text="ES Mumur",
+                                   command=lambda: earlyHMPlaybackCallback(rfObject))
+startPlaybackMurmurButton.place(x=10,y=300)
+startPlaybackMurmurButton.config(height=1,width=20)
+
+# Playback - Early Systolic Mumur (Stop)
+startPlaybackMurmurButton = Button(text="ES Mumur",
+                                   command=lambda: earlyHMPlaybackCallback(rfObject))
+startPlaybackMurmurButton.place(x=10,y=300)
 startPlaybackMurmurButton.config(height=1,width=20)
 
 gui.mainloop()

@@ -37,7 +37,7 @@ DC3_STOPPLAY = chr(0x03)        #           Stop Playback                       
 
 DC4 = chr(0x14)                 #       Device Control 4: Simulation Functions              0x14            STD
 DC4_NORMALHB = chr(0x00)        #           Playback of Normal Heart Beat                   0x00            ORG
-DC4_DC4_ESHMURMUR = chr(0x01)   #           Playback of Early Systolic Heart Beat           0x01            ORG
+DC4_ESHMURMUR = chr(0x01)   #           Playback of Early Systolic Heart Beat           0x01            ORG
 #                                                                                           0xFF            ORG
 
 # Legend
