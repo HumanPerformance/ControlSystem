@@ -69,19 +69,25 @@ gui.geometry('450x450+200+200')                         # Window dimensions in p
 
 # Labels ------------------------------------------------------------------------------------------------------ # Labels Comments
 # Information Label
-infoLabel = Label(text="SMART STETHOSCOPE")                                                                     # Label title
+infoLabel = Label(text="SMART STETHOSCOPE",                                                                     # Label title
+                  anchor=W,                                                                                     # Label anchor
+                  justify=LEFT)                                                                                 # Text justification
 infoLabel.place(x=10,y=10)                                                                                      # Label location
 infoLabel.config(height=1,width=20)                                                                             # Label dimensions
 
 # Normal Hear Beat 
-startPlayNormalLabel = Label(text="NORMAL HEART BEAT")                                                          # ...
+startPlayNormalLabel = Label(text="NORMAL HEART BEAT",                                                          # ...
+                             anchor=W,                                                                          # ...
+                             justify=LEFT)                                                                      # ...
 startPlayNormalLabel.place(x=5,y=175)                                                                           # ...
 startPlayNormalLabel.config(height=1,width=20)                                                                  # ...
 
 # Early Systolic Murmur
-startPlayNormalLabel = Label(text="EARLY SYSTOLIC MURMUR")                                                      # ...
+startPlayNormalLabel = Label(text="EARLY SYSTOLIC MURMUR",                                                      # ...
+                             anchor=W,                                                                          # ...
+                             justify=LEFT)                                                                      # ...
 startPlayNormalLabel.place(x=5,y=275)                                                                           # ...
-startPlayNormalLabel.config(height=1,width=20)                                                                  # ...
+startPlayNormalLabel.config(height=1,width=50)                                                                  # ...
 
 # Action Buttons ---------------------------------------------------------------------------------------------- # Buttons Commnets
 # Find Smart Device Button
@@ -103,22 +109,22 @@ startPlayNormalButton.place(x=10,y=200)                                         
 startPlayNormalButton.config(height=1,width=20)                                                                 # ...
 
 # Playback - Normal Sound (Stop)
-startStopNormalButton = Button(text="Stop NHB",
+stopPlayNormalButton = Button(text="Stop NHB",
                                command=lambda: stopPlaybackCallback())
-startStopNormalButton.place(x=200,y=200)
-startStopNormalButton.config(height=1,width=20)
+stopPlayNormalButton.place(x=200,y=200)
+stopPlayNormalButton.config(height=1,width=20)
 
 # Playback - Early Systolic Mumur (Play)
-startPlaybackMurmurButton = Button(text="ES Mumur",
+startPlaybackMurmurButton = Button(text="Play ES Mumur",
                                    command=lambda: earlyHMPlaybackCallback(rfObject))
 startPlaybackMurmurButton.place(x=10,y=300)
 startPlaybackMurmurButton.config(height=1,width=20)
 
 # Playback - Early Systolic Mumur (Stop)
-startPlaybackMurmurButton = Button(text="ES Mumur",
-                                   command=lambda: earlyHMPlaybackCallback(rfObject))
-startPlaybackMurmurButton.place(x=10,y=300)
-startPlaybackMurmurButton.config(height=1,width=20)
+stopPlaybackMurmurButton = Button(text="Stop ES Mumur",
+                                   command=lambda: stopPlaybackCallback())
+stopPlaybackMurmurButton.place(x=200,y=300)
+stopPlaybackMurmurButton.config(height=1,width=20)
 
 gui.mainloop()
 
