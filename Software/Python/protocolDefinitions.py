@@ -33,11 +33,13 @@ DC3_STARTREC = chr(0x00)        #           Start Recording                     
 DC3_STOPREC = chr(0x01)         #           Stop Recording                                  0x01            ORG
 DC3_STARTPLAY = chr(0x02)       #           Start Playback                                  0x02            ORG
 DC3_STOPPLAY = chr(0x03)        #           Stop Playback                                   0x03            ORG
+DC3_STARTSTREAM = chr(0x04)     #           Start Microphone Stream                         0x04            ORG
+DC3_TRACKSTREAM = chr(0x05)     #           Start Tracking Microphone Stream for Peaks      0x05            ORG
 #                                                                                           0xFF            ORG
 
 DC4 = chr(0x14)                 #       Device Control 4: Simulation Functions              0x14            STD
 DC4_NORMALHB = chr(0x00)        #           Playback of Normal Heart Beat                   0x00            ORG
-DC4_ESHMURMUR = chr(0x01)   #           Playback of Early Systolic Heart Beat           0x01            ORG
+DC4_ESHMURMUR = chr(0x01)       #           Playback of Early Systolic Heart Beat           0x01            ORG
 #                                                                                           0xFF            ORG
 
 # Legend
