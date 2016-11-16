@@ -23,9 +23,10 @@ from stethoscopeProtocol import earlyHMPlayback
 from stethoscopeProtocol import stopPlayback
 from stethoscopeProtocol import startRecording
 from stethoscopeProtocol import stopRecording
-from stethoscopeProtocol import trackingMicStream
+from stethoscopeProtocol import startTrackingMicStream
+from stethoscopeProtocol import stopTrackingMicStream
 
-# Functions
+# Functions ----------------------------------------------------------------------------------------------- # Function Comments
 
 # Find Stethoscope
 def connect2Stethoscope(portName,deviceName,deviceBTAddress):
@@ -40,10 +41,16 @@ def sdCardCheckCallback(rfObject):
     sdCardCheck(rfObject)
     rfObject.close()
 
-def trackingMicStreamCallback(rfObject):
+def startTrackingMicStreamCallback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
-    trackingMicStream(rfObject)
+    startTrackingMicStream(rfObject)
+    rfObject.close()
+
+def stopTrackingMicStreamCallback(rfObject):
+    if rfObject.isOpen() == False:
+        rfObject.open()
+    stopTrackingMicStream(rfObject)
     rfObject.close()
 
 def startRecordingCallback(rfObject):
@@ -82,11 +89,11 @@ def stopPlaybackCallback():
     stopPlayback(rfObject)
     rfObject.close()
 
-# Graphical User Interface (GUI)
+# Graphical User Interface (GUI) ------------------------------------------------------------------------------ # GUI Callback Comments
 
-gui = Tk()                                              # Initialization of the window under object name "root"
-gui.title("mobile.py")                                  # Title of the window
-gui.geometry('450x550+200+200')                         # Window dimensions in pixels + the distance from the top-left corner of your screen
+gui = Tk()                                                                                                      # Initialization of the window under object name "root"
+gui.title("mobile.py")                                                                                          # Title of the window
+gui.geometry('450x550+200+200')                                                                                 # Window dimensions in pixels + the distance from the top-left corner of your screen
 
 # Labels ------------------------------------------------------------------------------------------------------ # Labels Comments
 # Information Label
@@ -128,7 +135,7 @@ startPlaybackMurmurLabel.config(height=1,width=50)                              
 # Find Smart Device Button
 searchDevicesButton = Button(text="Find Stethoscope",                                                           # Button text
                              command=lambda: connect2Stethoscope("COM15","RNBT-76E6","00:06:66:86:76:E6"))      # Button action command (Fluvio's PC)
-                             #command=lambda: connect2Stethoscope("COM71","RNBT-76E6","00:06:66:86:76:E6"))      # Button action command (Lab's PC)
+                             #command=lambda: connect2Stethoscope("COM71","RNBT-76E6","00:06:66:86:76:E6"))     # Button action command (Lab's PC)
 searchDevicesButton.place(x=10,y=50)                                                                            # Button location
 searchDevicesButton.config(height=1,width=20)                                                                   # Button dimensions
 
@@ -139,10 +146,16 @@ sdCardCheckButton.place(x=10,y=100)                                             
 sdCardCheckButton.config(height=1,width=20)                                                                     # ...
 
 # Start Streaming
-trackingMicStreamButton = Button(text="Start Stream",                                                           # ...                           
-                               command=lambda: trackingMicStreamCallback(rfObject))                             # ...
-trackingMicStreamButton.place(x=10,y=200)                                                                       # ...
-trackingMicStreamButton.config(height=1,width=20)                                                               # ...
+startTrackingMicStreamButton = Button(text="Start Stream",                                                      # ...                           
+                               command=lambda: startTrackingMicStreamCallback(rfObject))                        # ...
+startTrackingMicStreamButton.place(x=10,y=200)                                                                  # ...
+startTrackingMicStreamButton.config(height=1,width=20)                                                          # ...
+
+# Stop Streaming
+stopTrackingMicStreamButton = Button(text="Stop Stream",                                                        # ...                           
+                               command=lambda: stopTrackingMicStreamCallback(rfObject))                         # ...
+stopTrackingMicStreamButton.place(x=200,y=200)                                                                  # ...
+stopTrackingMicStreamButton.config(height=1,width=20)                                                           # ...
 
 # Start Recording
 startRecordingButton = Button(text="Start REC",                                                                 # ...                           

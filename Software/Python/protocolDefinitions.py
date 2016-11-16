@@ -34,7 +34,8 @@ DC3_STOPREC = chr(0x01)         #           Stop Recording                      
 DC3_STARTPLAY = chr(0x02)       #           Start Playback                                  0x02            ORG
 DC3_STOPPLAY = chr(0x03)        #           Stop Playback                                   0x03            ORG
 DC3_STARTSTREAM = chr(0x04)     #           Start Microphone Stream                         0x04            ORG
-DC3_TRACKSTREAM = chr(0x05)     #           Start Tracking Microphone Stream for Peaks      0x05            ORG
+DC3_STARTTRACKING = chr(0x05)   #           Start Tracking Microphone Stream for Peaks      0x05            ORG
+DC3_STOPTRACKING = chr(0x06)    #           Stop Tracking Microphone Stream for Peaks       0x06            ORG
 #                                                                                           0xFF            ORG
 
 DC4 = chr(0x14)                 #       Device Control 4: Simulation Functions              0x14            STD
