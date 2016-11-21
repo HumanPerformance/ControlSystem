@@ -34,23 +34,6 @@ def statusEnquiry(rfObject):
         elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
                 print fullStamp() + " NAK Device NOT READY"                                                     # NAK, in this case, translates to DEVICE NOT READY
 
-# System Check
-#       This function commands the connected stethoscope to perform a "systems check", which may consist on a routine verification of remote features
-#       Input   ::      rfObject                {object}        serial object
-#                       timeout                 {int}           maximum wait time for serial communication
-#                       iterCheck               {int}           maximum number of iterations for serial communication
-#       Output  ::      terminal messages       {string}        terminal messages for logging
-def systemCheck(rfObject, timeout, iterCheck):
-        print fullStamp() + " systemCheck()"                                                                    # Print function name
-        outByte = definitions.CHK                                                                               # Send CHK / System Check command - see protocolDefinitions.py
-        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
-        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " ACK SD Card Check Passed"                                                 # If the SD card check is successful, the remote device sends a ACK
-                print fullStamp() + " ACK Device Ready"                                                         # ACK, in this case, translates to DEVICE READY
-        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " NAK SD Card Check Failed"                                                 # If the SD card check fails, the remote device sends a NAK
-                print fullStamp() + " NAK Device NOT Ready"  
-
 # Diagnostic Functions
 #       These functions deal with the status of the hardware
 
