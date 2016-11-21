@@ -42,11 +42,15 @@ tree, root = readConfigFile(configFile)
 # OPERATION
 # =========
 
-deviceName = ["smart-handle"]
-deviceBTAddress = ["00:06:66:80:8C:AB"]
-rfObject = createPort(deviceName, deviceBTAddress)          # create rfObjects/ports
+deviceName = "smart-handle"
+deviceBTAddress = "00:06:66:80:8C:AB"
+rfObject = createPort(deviceName, deviceBTAddress, 115200, 20)          # create rfObjects/ports
 
-deviceID(rfObject)
+#deviceID(rfObject)
+statusEnquiry(rfObject)
+#for i in range(0,20):
+#    inByte = rfObject.read()
+#    print inByte
 
 portRelease('rfcomm', 0)                                    # Release port to avoid permanent connection
 

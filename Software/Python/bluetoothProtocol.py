@@ -106,12 +106,12 @@ def createPorts(deviceName, deviceBTAddress):
     return rfObject                                                                         # Return RFObject or list of objects
 
 # Create RFComm Port
-def createPort(deviceName,deviceBTAddress):
+def createPort(deviceName,deviceBTAddress,baudrate,timeout):
     portRelease("rfcomm",0)                                                             # The program performs a port-release to ensure that the desired rf port is available
-    portBind("rfcomm",0,deviceBTAddress[0])
+    portBind("rfcomm",0,deviceBTAddress)
     rfObject = serial.Serial(port = "/dev/rfcomm" + str(0),
-                             baudrate = 115200,
-                             timeout = 5)
+                             baudrate = baudrate,
+                             timeout = timeout)
     return rfObject   
 
 # Port Bind

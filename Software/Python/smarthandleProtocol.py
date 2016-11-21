@@ -22,14 +22,13 @@ import protocolDefinitions as definitions
 
 # State Enquiry
 #       This function requests the status of then stethoscope
-#       Input   ::      rfObject                {object}        serial object
-#                       timeout                 {int}           maximum wait time for serial communication
-#                       iterCheck               {int}           maximum number of iterations for serial communication
+#       Input   ::      rfObject                {object}        serial object                      iterCheck               {int}           maximum number of iterations for serial communication
 #       Output  ::      terminal messages       {string}        terminal messages for logging
-def statusEnquiry(rfObject, timeout, iterCheck):
+def statusEnquiry(rfObject):
         print fullStamp() + " statusEnquiry()"                                                                  # Print function name
-        outByte = definitions.ENQ                                                                               # Send ENQ / Status Enquiry command - see protocolDefinitions.py
-        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
+        outByte = definitions.ENQ
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)
         if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
                 print fullStamp() + " ACK Device READY"                                                         # ACK, in this case, translates to DEVICE READY
         elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
