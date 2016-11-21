@@ -109,18 +109,9 @@ def createPorts(deviceName, deviceBTAddress):
 def createPort(deviceName,deviceBTAddress):
     portRelease("rfcomm",0)                                                             # The program performs a port-release to ensure that the desired rf port is available
     portBind("rfcomm",0,deviceBTAddress[0])
-    rfObject = serial.Serial(
-        port = "/dev/rfcomm" + str(0),
-        baudrate = 115200,
-        bytesize = serial.EIGHTBITS,
-        parity = serial.PARITY_NONE,
-        stopbits = serial.STOPBITS_ONE,
-        timeout = 5,
-        xonxoff = True,
-        rtscts = True,
-        dsrdtr = True,
-        write_timeout = 0,
-        inter_byte_timeout = None)
+    rfObject = serial.Serial(port = "/dev/rfcomm" + str(0),
+                             baudrate = 115200,
+                             timeout = 5)
     return rfObject   
 
 # Port Bind
