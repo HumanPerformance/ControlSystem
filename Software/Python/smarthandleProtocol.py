@@ -10,6 +10,8 @@ Fluvio L Lobo Fenoglietto
 
 # Import Libraries and/or Modules
 import os
+import os.path
+from os.path import expanduser
 import sys
 import serial
 from timeStamp import *
@@ -17,72 +19,94 @@ from configurationProtocol import *
 from bluetoothProtocol import *
 import smarthandleProtocolDefinitions as definitions
 
-# Standard Functions
-#       These functions are standard from the ASCii communication table
+# Path/Directoy Variables
+homeDir = expanduser("~")
+rootDir = "/root"
+if homeDir == rootDir:
+          homeDir = "/home/pi"
+          # This check and correction is needed for raspbian
+# .../Python
+consysPyDir = homeDir + "/csec/repos/ControlSystem/Software/Python"
+# .../Python/data
+consysPyDataDir = consysPyDir + "/data"
+# .../Python/data/scenarios
+scenarioConfigFilePath = consysPyDataDir + "/scenarios"
+# The exact scenario name is determined using the terminal input (Operation :: 1.0-2.0)
+# .../Python/data/instruments
+instrumentsConfigFilePath = consysPyDataDir + "/instruments"
+instrumentsConfigFileName = "/instrumentconfig.txt"
+instrumentsConfigFile = instrumentsConfigFilePath + instrumentsConfigFileName
+# .../Python/data/output
+outputFilePath = consysPyDataDir + "/output"
 
-# State Enquiry
-#       This function requests the status of then stethoscope
-#       Input   ::      rfObject                {object}        serial object                      iterCheck               {int}           maximum number of iterations for serial communication
-#       Output  ::      terminal messages       {string}        terminal messages for logging
-def statusEnquiry(rfObject):
-        print fullStamp() + " statusEnquiry()"                                                                  # Print function name
-        outByte = definitions.ENQ
-        rfObject.write(outByte)
-        inByte = rfObject.read(size=1)
-        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " ACK Device READY"                                                         # ACK, in this case, translates to DEVICE READY
-        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " NAK Device NOT READY"                                                     # NAK, in this case, translates to DEVICE NOT READY
+# Functions - String-based
 
-# Diagnostic Functions
-#       These functions deal with the status of the hardware
+# Trigger Device
+#   This function triggers the data recording of the smart handle
+def triggerDevice(rfObject,deviceName,iterCheck):
+    for i in range(0,iterCheck):
+        inString = rfObject.readline()
+        if inString[:-1] == deviceName:
+            print "Triggering device..."
+            rfObject.write('g')
+            break
 
-# Device Identification
-#       This function requests the identification of the connected device
-#       Input   ::      {object}                rfObject                serial object
-#       Output  ::      {string}                terminal message        terminal message
-def deviceID(rfObject):
-        outBytes = [definitions.DC1, definitions.DC1_DEVICEID]                                                  # Store the sequence of bytes associated with the operation, function, feature
-        inBytes = []
-        for i in range(0,len(outBytes)):                                                                        # For loop for the sequential delivery of bytes using the length of the sequence for the range
-                rfObject.write(outBytes[i])
-                if i == (len(outBytes) - 1):                                                                    # On the last byte, the program reads the response
-                        for i in range(0,3):
-                                inBytes.append(rfObject.read(size=1))
-        print inBytes
+# Stop Device
+# This function stops the data collection process of the smart handle
+def stopDevice(rfObject, deviceName, iterCheck):
+    for i in range(0,iterCheck):
+        inString = rfObject.readline()
+        if inString[:-1] != deviceName:
+            print "Stopping device..."
+            rfObject.write('s')
+            break
 
-# Device-Specific Functions
-#       These functions deal with the device-specific operation or features
+# Data Read
+#   This function captures the data written to the serial port
+def dataRead(rfObject):
+    inString = rfObject.readline()
+    print inString
+    return inString
 
-# Start Recording
-#       This function commands the connected smart handle to begin recording/passing sensor data through the serial port
-#       The recorded audio is then stored in the local SD
-#       Input   ::      rfObject                {object}        serial object
-#       Output  ::      terminal messages       {string}        terminal messages for logging
-def startRecording(rfObject):
-        print fullStamp() + " startRecording()"                                                                 # ...
-        outBytes = [definitions.DC3, definitions.DC3_STARTREC]                                                  # ...
-        for i in range(0,len(outBytes)):                                                                        # ...
-                rfObject.write(outBytes[i])                                                                     # ...
-                if i == (len(outBytes) - 1):                                                                    # ...
-                        inByte = rfObject.read(size=1)                                                         # ...
-        if inByte == definitions.ACK:                                                                           # ...
-                print fullStamp() + " ACK SmartHandle will START RECORDING"                                     # ACK, in this case, translates to device START RECORDING
-        elif inByte == definitions.NAK:                                                                         # ...
-                print fullStamp() + " NAK SmartHandle CANNOT START RECORDING"                                   # NAK, in this case, translates to device CANNOT START RECORDING
-           
-# Stop Recording
-#       This function commands the connected stethoscope to stop recording audio
-#       Input   ::      rfObject                {object}        serial object
-#       Output  ::      terminal messages       {string}        terminal messages for logging
-def stopRecording(rfObject):
-        print fullStamp() + " stopRecording()"                                                                  # ...
-        outBytes = [definitions.DC3, definitions.DC3_STOPREC]                                                   # ...
-        for i in range(0,len(outBytes)):                                                                        # ...
-                rfObject.write(outBytes[i])                                                                     # ...
-                if i == (len(outBytes) - 1):                                                                    # ...
-                        inByte = rfObject.read(size=1)                                                          # ...
-        if inByte == definitions.ACK:                                                                           # ...
-                print fullStamp() + " ACK Stethoscope will STOP RECORDING"                                      # If ACK, the stethoscope will STOP recording
-        elif inByte == definitions.NAK:                                                                         # ...
-                print fullStamp() + " NAK Stethoscope CANNOT STOP RECORDING"                                    # NAK, in this case, translates to CANNOT STOP RECORDING
+# Data Write
+#   This function writes the data read from serial to an output file
+def dataWrite(executionTimeStamp, currentTime, outputFilePath, instrumentName, inString):
+    dataFileDir = outputFilePath + "/" + executionTimeStamp
+
+    if os.path.exists(dataFileDir) == False:
+        createDataFolder(dataFileDir)
+    
+    dataFileName = "/" + instrumentName + ".txt"
+    dataFilePath = dataFileDir + dataFileName
+
+    if os.path.isfile(dataFilePath) == False:
+        createDataFile(dataFilePath, instrumentName)
+    
+    with open(dataFilePath, "a") as dataFile:
+        timePrefix = "TIM," + str(currentTime) + ","
+        dataFile.write(timePrefix + inString)
+        
+
+# Create Data File
+#   Creates the output/text file
+def createDataFile(dataFilePath, instrumentName):
+    with open(dataFilePath, "a") as dataFile:
+        dataFile.write("===================== \n")
+        dataFile.write("Scenario =  \n")
+        dataFile.write("Instrument = " + instrumentName + "\n")
+        dataFile.write("This is a header line \n")
+        dataFile.write("===================== \n")
+
+# Create Data Folder
+#   Creates the output/text file's directory/folder
+def createDataFolder(dataFileDir):
+    os.makedirs(dataFileDir)
+    
+"""
+References
+1 - Print String to File - http://stackoverflow.com/questions/5214578/python-print-string-to-text-file
+2 - File Modes - https://docs.python.org/2/tutorial/inputoutput.html
+3 - Check for file existence - http://stackoverflow.com/questions/82831/how-to-check-whether-a-file-exists-using-python
+4 - Print on a new line - http://stackoverflow.com/questions/2918362/writing-string-to-a-file-on-a-new-line-everytime
+5 - Check for Existance and Create Directory - http://stackoverflow.com/questions/273192/how-to-check-if-a-directory-exists-and-create-it-if-necessary
+"""

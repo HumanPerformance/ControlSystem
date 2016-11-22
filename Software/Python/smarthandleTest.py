@@ -8,50 +8,34 @@ Fluvio L Lobo Fenoglietto
 """
 
 # Import
-import sys
-import os
-from os.path import expanduser
-import serial
-from configurationProtocol import *
+from timeStamp import *
 from bluetoothProtocol import *
 from smarthandleProtocol import *
 
-# Variables
-# ----------------------------------------------
-# B) Path/Directory Variables
-# ----------------------------------------------
-homeDir = expanduser("~")
-rootDir = "/root"
-if homeDir == rootDir:
-          homeDir = "/home/pi"
-          # This check and correction is needed for raspbian
-# .../Python
-consysPyDir = homeDir + "/csec/repos/ControlSystem/Software/Python"
-# .../Python/data
-consysPyDataDir = consysPyDir + "/data"
-# .../Python/data/scenarios
-scenarioConfigFilePath = consysPyDataDir + "/scenarios"
+# Operation
+executionTimeStamp = fullStamp()                                                                        # Program execution timestamp
+deviceName = "oto"                                                                             # Hard-coded device name
+deviceBTAddress = "00:06:66:80:8C:AB"                                                                  # Hard-code device bluetooth address
+rfObject = createPort(deviceName, deviceBTAddress, 115200, 25)                                          # Connect to bluetooth device
+triggerDevice(rfObject, deviceName, 20)
+startTime = time.time()                                                                                 # Start loop timer
+currentTime = 0                                                                                         # 0 sec.
+stopTime = 20                                                                                           # Stop time
 
-# Scenario File Name
-scenarioFileName = "sc001.xml"
+while currentTime < stopTime:
 
-configFile = scenarioConfigFilePath + "/" + scenarioFileName
-tree, root = readConfigFile(configFile)
+        # Read data from device
+        inString = dataRead(rfObject)
 
-# =========
-# OPERATION
-# =========
+        # Write data from device
+        dataWrite(executionTimeStamp, currentTime, outputFilePath, deviceName, inString)
 
-deviceName = "smart-handle"
-deviceBTAddress = "00:06:66:80:8C:AB"
-rfObject = createPort(deviceName, deviceBTAddress, 115200, 25)          # create rfObjects/ports
+        # Update time
+        currentTime = time.time() - startTime
+        # print currentTime
 
-#deviceID(rfObject)
-#statusEnquiry(rfObject)
-#startRecording(rfObject)
-for i in range(0,50):
-    inString = rfObject.readline()
-    print inString
+print "Program Concluded"
+stopDevice(rfObject, deviceName, 20)
 
 portRelease('rfcomm', 0)                                    # Release port to avoid permanent connection
 
