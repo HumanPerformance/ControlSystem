@@ -1,0 +1,41 @@
+"""
+smarthandleTest.py
+
+The following script has been created to test/debug functions specific to the smart handle prototype
+
+Fluvio L Lobo Fenoglietto
+11/21/2016
+"""
+
+# Import
+from timeStamp import *
+from bluetoothProtocol import *
+from smarthandleProtocol import *
+
+# Operation
+executionTimeStamp = fullStamp()                                                                        # Program execution timestamp
+deviceName = "oto"                                                                             # Hard-coded device name
+deviceBTAddress = "00:06:66:80:8C:AB"                                                                  # Hard-code device bluetooth address
+rfObject = createPort(deviceName, deviceBTAddress, 115200, 25)                                          # Connect to bluetooth device
+triggerDevice(rfObject, deviceName, 20)
+startTime = time.time()                                                                                 # Start loop timer
+currentTime = 0                                                                                         # 0 sec.
+stopTime = 20                                                                                           # Stop time
+
+while currentTime < stopTime:
+
+        # Read data from device
+        inString = dataRead(rfObject)
+
+        # Write data from device
+        dataWrite(executionTimeStamp, currentTime, outputFilePath, deviceName, inString)
+
+        # Update time
+        currentTime = time.time() - startTime
+        # print currentTime
+
+print "Program Concluded"
+stopDevice(rfObject, deviceName, 20)
+
+portRelease('rfcomm', 0)                                    # Release port to avoid permanent connection
+
