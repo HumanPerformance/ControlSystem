@@ -34,25 +34,12 @@ tree, root = readConfigFile(configFile)
 # OPERATION
 # =========
 
-#deviceName, deviceBTAddress = pullInstruments(tree, root)   # pull instrument information from configuration file
-deviceName = ["hola"]
-deviceBTAddress = ["00:06:66:86:76:E6"]
-rfObject = createPort(deviceName, deviceBTAddress)          # create rfObjects/ports
+deviceName = "stet"
+#deviceBTAddress = "00:06:66:86:76:E6"                              # stethoscope prototype 
+deviceBTAddress = "00:06:66:7D:80:D0"                               # POV stethoscope
+rfObject = createPort(deviceName, deviceBTAddress, 115200, 5)       # create rfObjects/ports
 
-#sendUntilRead(rfObject[0],0x05)
+statusEnquiry(rfObject)
 
-deviceID(rfObject)
-#statusEnquiry(rfObject,5,5)
-#sdCardCheck(rfObject)
-#systemCheck(rfObject[0],5,5)
-#startRecording(rfObject)
-#stopRecording(rfObject)
-#escapeOp(rfObject[0],5,5)
-
-#timedRead(rfObject[0],5)
-
-#for i in range(0,50):
-#    rfObject[0].write(chr(0x05))
-#    print str(i)
 
 portRelease('rfcomm', 0)                                    # Release port to avoid permanent connection

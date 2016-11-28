@@ -18,21 +18,6 @@ from configurationProtocol import *
 from bluetoothProtocol import *
 import protocolDefinitions as definitions
 
-# State Enquiry
-#       This function requests the status of then stethoscope
-#       Input   ::      rfObject                {object}        serial object
-#                       timeout                 {int}           maximum wait time for serial communication
-#                       iterCheck               {int}           maximum number of iterations for serial communication
-#       Output  ::      terminal messages       {string}        terminal messages for logging
-def statusEnquiry(rfObject, timeout, iterCheck):
-        print fullStamp() + " statusEnquiry()"                                                                  # Print function name
-        outByte = definitions.ENQ                                                                               # Send ENQ / Status Enquiry command - see protocolDefinitions.py
-        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
-        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " ACK Device READY"                                                         # ACK, in this case, translates to DEVICE READY
-        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " NAK Device NOT READY"                                                     # NAK, in this case, translates to DEVICE NOT READY
-
 # System Check
 #       This function commands the connected stethoscope to perform a "systems check", which may consist on a routine verification of remote features
 #       Input   ::      rfObject                {object}        serial object
@@ -84,7 +69,23 @@ def sdCardCheck(rfObject):
                 print fullStamp() + " ACK Device Ready"                                                         # ACK, in this case, translates to DEVICE READY
         elif inByte == definitions.NAK:
                 print fullStamp() + " NAK SD Card Check Failed"                                                 # If the SD card check fails, the remote device sends a NAK
-                print fullStamp() + " NAK Device NOT Ready"                                                     # NAK, in this case, translates to DEVICE NOT READY
+                print fullStamp() + " NAK Device NOT Ready"                                                    # NAK, in this case, translates to DEVICE NOT READY
+
+# State Enquiry
+#       This function requests the status of then stethoscope
+#       Input   ::      rfObject                {object}        serial object
+#                       timeout                 {int}           maximum wait time for serial communication
+#                       iterCheck               {int}           maximum number of iterations for serial communication
+#       Output  ::      terminal messages       {string}        terminal messages for logging
+def statusEnquiry(rfObject):
+        print fullStamp() + " statusEnquiry()"                                                                  # Print function name
+        outByte = definitions.ENQ                                                                               # Send ENQ / Status Enquiry command - see protocolDefinitions.py
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)                                                                          # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK Device READY"                                                         # ACK, in this case, translates to DEVICE READY
+        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " NAK Device NOT READY"   
 
 # Operational Functions
 #       These functions deal with the normal operation of the device
