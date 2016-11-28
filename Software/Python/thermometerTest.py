@@ -6,7 +6,7 @@ from os.path import expanduser
 import serial
 from configurationProtocol import *
 from bluetoothProtocol import *
-from stethoscopeProtocol import *
+from thermometerProtocol import *
 
 # Variables
 # ----------------------------------------------
@@ -36,23 +36,12 @@ tree, root = readConfigFile(configFile)
 
 #deviceName, deviceBTAddress = pullInstruments(tree, root)   # pull instrument information from configuration file
 deviceName = ["hola"]
-deviceBTAddress = ["00:06:66:86:76:E6"]
+deviceBTAddress = ["00:06:66:86:76:C5"]
 rfObject = createPort(deviceName, deviceBTAddress)          # create rfObjects/ports
 
-#sendUntilRead(rfObject[0],0x05)
+#statusEnquiry(rfObject, 5, 5)
+startSIMold(rfObject, 5, 5)
+#deviceID(rfObject)
 
-deviceID(rfObject)
-#statusEnquiry(rfObject,5,5)
-#sdCardCheck(rfObject)
-#systemCheck(rfObject[0],5,5)
-#startRecording(rfObject)
-#stopRecording(rfObject)
-#escapeOp(rfObject[0],5,5)
-
-#timedRead(rfObject[0],5)
-
-#for i in range(0,50):
-#    rfObject[0].write(chr(0x05))
-#    print str(i)
 
 portRelease('rfcomm', 0)                                    # Release port to avoid permanent connection

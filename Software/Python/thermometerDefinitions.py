@@ -43,6 +43,10 @@ DC4_NORMALHB = chr(0x00)        #           Playback of Normal Heart Beat       
 DC4_ESHMURMUR = chr(0x01)       #           Playback of Early Systolic Heart Beat           0x01            ORG
 #                                                                                           0xFF            ORG
 
+SIM = chr(0x21)         #       Simulation Mode             0x21            ORG
+SIM_000 = chr(0x30)     #       Simulate Scenario 0         0x30            ORG
+SIM_001 = chr(0x31)     #       Simulate Scenario 1         0x31            ORG
+
 # Legend
 # STD - Standard terminology / Standard reference for command
 # ORG - Original or custom-made command and reference
