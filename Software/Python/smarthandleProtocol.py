@@ -17,7 +17,7 @@ import serial
 from timeStamp import *
 from configurationProtocol import *
 from bluetoothProtocol import *
-import smarthandleProtocolDefinitions as definitions
+import smarthandleDefinitions as definitions
 
 # Path/Directoy Variables
 homeDir = expanduser("~")
@@ -38,6 +38,49 @@ instrumentsConfigFileName = "/instrumentconfig.txt"
 instrumentsConfigFile = instrumentsConfigFilePath + instrumentsConfigFileName
 # .../Python/data/output
 outputFilePath = consysPyDataDir + "/output"
+
+# Functions - Byte-based
+
+# Status Enquiry
+#   This function requests the status of the bluetooth device
+def statusEnquiry(rfObject, timeout, iterCheck):
+        print fullStamp() + " statusEnquiry()"                                                                  # Print function name
+        outByte = definitions.ENQ                                                                               # Send ENQ / Status Enquiry command - see protocolDefinitions.py
+        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK Device READY"                                                         # ACK, in this case, translates to DEVICE READY
+        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " NAK Device NOT READY"
+
+def startRecording(rfObject, timeout, iterCheck):
+        print fullStamp() + " startRecording()"                                                                  # Print function name
+        outByte = definitions.DC3                                                                               # Send ENQ / Status Enquiry command - see protocolDefinitions.py
+        #print outByte
+        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK Device READY"                                                         # ACK, in this case, translates to DEVICE READY
+                outByte = definitions.DC3_STARTREC                                                                              # Send ENQ / Status Enquiry command - see protocolDefinitions.py
+                inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)
+                if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                    print fullStamp() + " ACK Device READY"
+                elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
+                    print fullStamp() + " NAK Device NOT READY"
+        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " NAK Device NOT READY"
+
+def startRec(rfObject):
+    print fullStamp() + " startRec()"                                                                    # Print function name
+    outBytes = [definitions.DC3, definitions.DC3_STARTREC]
+    inBytes = []
+    for i in range(0,len(outBytes)):                                                                        # For loop for the sequential delivery of bytes using the length of the sequence for the range
+        rfObject.write(outBytes[i])
+        inBytes.append(rfObject.read(size=1))                                                          # The read is limited to a single byte (timeout predefined in the createPort() function)
+    if inBytes[len(outBytes)-1] == definitions.ACK:
+        print fullStamp() + " ACK SD Card Check Passed"                                                 # If the SD card check is successful, the remote device sends a ACK
+        print fullStamp() + " ACK Device Ready"                                                         # ACK, in this case, translates to DEVICE READY
+    elif inBytes[len(outBytes)-1] == definitions.NAK:
+        print fullStamp() + " NAK SD Card Check Failed"                                                 # If the SD card check fails, the remote device sends a NAK
+        print fullStamp() + " NAK Device NOT Ready"
 
 # Functions - String-based
 

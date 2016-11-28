@@ -17,10 +17,17 @@ executionTimeStamp = fullStamp()                                                
 deviceName = "oto"                                                                             # Hard-coded device name
 deviceBTAddress = "00:06:66:80:8C:AB"                                                                  # Hard-code device bluetooth address
 rfObject = createPort(deviceName, deviceBTAddress, 115200, 25)                                          # Connect to bluetooth device
+#statusEnquiry(rfObject, 5, 5)
+#startRecording(rfObject, 5, 5)
+startRec(rfObject)
+
+""" CSEC Demo Nov. 2016
 triggerDevice(rfObject, deviceName, 20)
 startTime = time.time()                                                                                 # Start loop timer
 currentTime = 0                                                                                         # 0 sec.
 stopTime = 20                                                                                           # Stop time
+
+
 
 while currentTime < stopTime:
 
@@ -39,3 +46,6 @@ stopDevice(rfObject, deviceName, 20)
 
 portRelease('rfcomm', 0)                                    # Release port to avoid permanent connection
 
+"""
+
+portRelease('rfcomm', 0)
