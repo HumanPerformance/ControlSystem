@@ -53,12 +53,14 @@ def startTrackingMicStreamCallback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
     startTrackingMicStream(rfObject)
+    updateTrackingData(rfObject, 1)
     rfObject.close()
 
 def stopTrackingMicStreamCallback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
     stopTrackingMicStream(rfObject)
+    updateTrackingData(rfObject, 2)
     rfObject.close()
 
 def startRecordingCallback(rfObject):
@@ -102,6 +104,13 @@ def updateConnectionStatus(flag):
         connectionStatus.configure(text="Device found, Port created")
     elif flag == 2:
         connectionStatus.configure(text="Cannot Connect - Reboot!")
+
+def updateTrackingData(rfObject, flag):
+    while flag == 1:
+        inString = rfObject.readline()
+        audioTrackingData.configure(text=inString)
+    else:
+        audioTrackingData.configure(text="NA")
 
 # Graphical User Interface (GUI) ------------------------------------------------------------------------------ # GUI Callback Comments
 
