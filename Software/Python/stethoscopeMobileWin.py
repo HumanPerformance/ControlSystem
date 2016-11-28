@@ -41,16 +41,6 @@ def connect2Stethoscope(portName,deviceName,deviceBTAddress,baudrate,timeout):
     except serial.SerialException:
         updateConnectionStatus(2)
 
-def sdCardCheckCallback(rfObject):
-    if rfObject.isOpen() == False:
-        try:
-            rfObject.open()
-        except serial.SerialException:
-            rfObject.open()
-            print "Could not connect to Bluetooth antenna, try again!!!"
-    sdCardCheck(rfObject)
-    rfObject.close()
-
 def setFilterCallback(rfObject):
     try:
         frequencyValue = int(cornerFrequency.get())
@@ -176,12 +166,6 @@ searchDevicesButton = Button(text="Find Stethoscope",                           
                              command=lambda: connect2Stethoscope("COM71","RNBT-76E6","00:06:66:86:76:E6",115200,25))        # Button action command (Lab's PC)
 searchDevicesButton.place(x=10,y=50)                                                                                        # Button location
 searchDevicesButton.config(height=1,width=20)                                                                               # Button dimensions
-
-# SD Card Check
-sdCardCheckButton = Button(text="SD Card Check",                                                                # ...
-                           command=lambda: sdCardCheckCallback(rfObject))                                       # ...
-sdCardCheckButton.place(x=10,y=100)                                                                             # ...
-sdCardCheckButton.config(height=1,width=20)                                                                     # ...
 
 # Set Filter
 filterSetButton = Button(text="Apply",                                                                          # ...
