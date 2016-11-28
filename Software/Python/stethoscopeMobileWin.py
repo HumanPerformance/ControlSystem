@@ -30,6 +30,16 @@ from stethoscopeProtocol import stopTrackingMicStream
 
 # Functions ----------------------------------------------------------------------------------------------- # Function Comments
 
+def variableDefinitions():
+    global rfObject
+    rfObject = 0
+    global trackingflag
+    trackingflag = 0
+    global refreshTimer
+    refreshTimer = 500
+
+variableDefinitions()
+
 # Find Stethoscope
 def connect2Stethoscope(portName,deviceName,deviceBTAddress,baudrate,timeout):
     print fullStamp() + " findStethoscope()"
@@ -52,15 +62,19 @@ def setFilterCallback(rfObject):
 def startTrackingMicStreamCallback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
+    global trackingflag
+    trackingflag = 1
     startTrackingMicStream(rfObject)
-    updateTrackingData(rfObject, 1)
+    updateTrackingData()
     rfObject.close()
 
 def stopTrackingMicStreamCallback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
+    global trackingflag
+    trackingflag = 2
     stopTrackingMicStream(rfObject)
-    updateTrackingData(rfObject, 2)
+    updateTrackingData()
     rfObject.close()
 
 def startRecordingCallback(rfObject):
@@ -105,17 +119,18 @@ def updateConnectionStatus(flag):
     elif flag == 2:
         connectionStatus.configure(text="Cannot Connect - Reboot!")
 
-def updateTrackingData(rfObject, flag):
-    while flag == 1:
+def updateTrackingData():
+    if trackingflag == 0:
+        pass
+    elif trackingflag == 1:
+        if rfObject.isOpen() == False:
+            rfObject.open()
         inString = rfObject.readline()
         print inString
         audioTrackingData.configure(text=inString)
-    else:
+    elif trackingflag == 2:
         audioTrackingData.configure(text="NA")
-
-def printStuff():
-    print "Stuff"
-    gui.after(500, printStuff)
+    gui.after(refreshTimer, updateTrackingData)
 
 # Graphical User Interface (GUI) ------------------------------------------------------------------------------ # GUI Callback Comments
 
@@ -250,8 +265,6 @@ filterSetEntry.place(x=10,y=175)
 filterSetEntry.config(width=24)
 
 # Continuos Calls
-
-
-gui.after(500, printStuff)
+gui.after(refreshTimer, updateTrackingData)
 gui.mainloop()
 
