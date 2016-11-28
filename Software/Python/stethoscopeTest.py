@@ -39,8 +39,13 @@ deviceBTAddress = "00:06:66:86:76:E6"                              # stethoscope
 #deviceBTAddress = "00:06:66:7D:80:D0"                               # POV stethoscope
 rfObject = createPort(deviceName, deviceBTAddress, 115200, 5)       # create rfObjects/ports
 
-statusEnquiry(rfObject)
+#statusEnquiry(rfObject)
 #startTrackingMicStream(rfObject)
-#stopTrackingMicStream(rfObject)
+
+#while(1):
+#    outString = rfObject.read(size=1)
+#    print outString
+
+stopTrackingMicStream(rfObject)
 
 portRelease('rfcomm', 0)                                    # Release port to avoid permanent connection
