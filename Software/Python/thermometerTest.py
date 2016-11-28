@@ -35,9 +35,9 @@ tree, root = readConfigFile(configFile)
 # =========
 
 #deviceName, deviceBTAddress = pullInstruments(tree, root)   # pull instrument information from configuration file
-deviceName = ["hola"]
-deviceBTAddress = ["00:06:66:86:76:C5"]
-rfObject = createPort(deviceName, deviceBTAddress)          # create rfObjects/ports
+deviceName = "hola"
+deviceBTAddress = "00:06:66:86:76:C5"
+rfObject = createPort(deviceName, deviceBTAddress, 115200, 20)          # create rfObjects/ports
 
 #statusEnquiry(rfObject, 5, 5)
 startSIMold(rfObject, 5, 5)
