@@ -106,20 +106,15 @@ def nextAvailableBTPort():
     return availableBTPort                                                                                  # Return available port
 
 # Create RFComm Port
-def createPort(portName,deviceName,deviceBTAddress):
+def createPort(portName,deviceName,deviceBTAddress,baudrate,timeout):
     print fullStamp() + " createPort()"
     rfObject = serial.Serial(
         port = portName,
-        baudrate = 115200,
+        baudrate = baudrate,
         bytesize = serial.EIGHTBITS,
         parity = serial.PARITY_NONE,
         stopbits = serial.STOPBITS_ONE,
-        timeout = 5,
-        xonxoff = True,
-        rtscts = True,
-        dsrdtr = True,
-        write_timeout = 0,
-        inter_byte_timeout = None)
+        timeout = timeout)
     return rfObject
 
 # Port Message Check
