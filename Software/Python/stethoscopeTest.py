@@ -35,11 +35,12 @@ tree, root = readConfigFile(configFile)
 # =========
 
 deviceName = "stet"
-#deviceBTAddress = "00:06:66:86:76:E6"                              # stethoscope prototype 
-deviceBTAddress = "00:06:66:7D:80:D0"                               # POV stethoscope
+deviceBTAddress = "00:06:66:86:76:E6"                              # stethoscope prototype 
+#deviceBTAddress = "00:06:66:7D:80:D0"                               # POV stethoscope
 rfObject = createPort(deviceName, deviceBTAddress, 115200, 5)       # create rfObjects/ports
 
 statusEnquiry(rfObject)
-
+#startTrackingMicStream(rfObject)
+#stopTrackingMicStream(rfObject)
 
 portRelease('rfcomm', 0)                                    # Release port to avoid permanent connection

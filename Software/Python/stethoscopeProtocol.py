@@ -74,8 +74,6 @@ def sdCardCheck(rfObject):
 # State Enquiry
 #       This function requests the status of then stethoscope
 #       Input   ::      rfObject                {object}        serial object
-#                       timeout                 {int}           maximum wait time for serial communication
-#                       iterCheck               {int}           maximum number of iterations for serial communication
 #       Output  ::      terminal messages       {string}        terminal messages for logging
 def statusEnquiry(rfObject):
         print fullStamp() + " statusEnquiry()"                                                                  # Print function name
@@ -184,8 +182,6 @@ def startMicStream(rfObject):
 # Start Tracking Microphone Stream for Peaks
 #       This function commands the connected stethoscope to begin streaming audio from the microphone and find/detect peaks
 #       Input   ::      rfObject                {object}        serial object
-#                       timeout                 {int}           maximum wait time for serial communication
-#                       iterCheck               {int}           maximum number of iterations for serial communication
 #       Output  ::      terminal messages       {string}        terminal messages for logging
 def startTrackingMicStream(rfObject):
         print fullStamp() + " startTrackingMicStream()"                                                         # ...
@@ -202,8 +198,6 @@ def startTrackingMicStream(rfObject):
 # Start Tracking Microphone Stream for Peaks
 #       This function commands the connected stethoscope to stop streaming audio from the microphone and find/detect peaks
 #       Input   ::      rfObject                {object}        serial object
-#                       timeout                 {int}           maximum wait time for serial communication
-#                       iterCheck               {int}           maximum number of iterations for serial communication
 #       Output  ::      terminal messages       {string}        terminal messages for logging
 def stopTrackingMicStream(rfObject):
         print fullStamp() + " stopTrackingMicStream()"                                                          # ...
