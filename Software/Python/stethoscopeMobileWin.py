@@ -108,9 +108,14 @@ def updateConnectionStatus(flag):
 def updateTrackingData(rfObject, flag):
     while flag == 1:
         inString = rfObject.readline()
+        print inString
         audioTrackingData.configure(text=inString)
     else:
         audioTrackingData.configure(text="NA")
+
+def printStuff():
+    print "Stuff"
+    gui.after(500, printStuff)
 
 # Graphical User Interface (GUI) ------------------------------------------------------------------------------ # GUI Callback Comments
 
@@ -244,5 +249,9 @@ filterSetEntry = Entry(textvariable=cornerFrequency)
 filterSetEntry.place(x=10,y=175)
 filterSetEntry.config(width=24)
 
+# Continuos Calls
+
+
+gui.after(500, printStuff)
 gui.mainloop()
 
