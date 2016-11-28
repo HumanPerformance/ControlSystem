@@ -57,21 +57,8 @@ def systemCheck(rfObject, timeout, iterCheck):
 #                       timeout                 {int}           maximum wait time for serial communication
 #                       iterCheck               {int}           maximum number of iterations for serial communication
 #       Output  ::      terminal messages       {string}        terminal messages for logging
-def startSIM(rfObject):
-        print fullStamp() + " startSIM()"                                                                       # Print function name
-        outBytes = [definitions.SIM, definitions.SIM_000]                                                                               # Send SIM / Start Simulation - see protocolDefinitions.py
-        for i in range(0,len(outBytes)):                                                                        # For loop for the sequential delivery of bytes using the length of the sequence for the range
-                rfObject.write(outBytes[i])
-                if i == (len(outBytes) - 1):                                                                  # On the last byte, the program reads the response
-                        inByte = rfObject.read(size=1)
-        if inByte == definitions.ACK:
-                #do something
-                print fullStamp()
-        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " NAK Device NOT READY"
-
-def startSIMold(rfObject, timeout, iterCheck):
-        print fullStamp() + " startSIM()"                                                                       # Print function name
+def startSIM_000(rfObject, timeout, iterCheck):
+        print fullStamp() + " startSIM_000()"                                                                       # Print function name
         outByte = definitions.SIM                                                                               # Send SIM / Start Simulation - see protocolDefinitions.py
         inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
         if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
@@ -81,10 +68,41 @@ def startSIMold(rfObject, timeout, iterCheck):
                 inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)
                 if inByte == definitions.ACK:
                         #do something
-                        print fullStamp() + "hola"
+                        print fullStamp() + " Simulation 1 Running"
                 elif inByte == definitions.NAK:
                         #do something else
-                        print fullStamp() + "chao"
+                        print fullStamp() + " Device NOT responding"
+
+        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " NAK Device NOT READY"
+
+
+def startSIM_001(rfObject, timeout, iterCheck):
+        print fullStamp() + " startSIM_001()"                                                                       # Print function name
+        outByte = definitions.SIM                                                                               # Send SIM / Start Simulation - see protocolDefinitions.py
+        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK Device READY"                                                         # ACK, in this case, translates to DEVICE READY
+                print fullStamp() + " Starting Simulation"
+                outByte = definitions.SIM_001                                                                   # Send SIM_001 / Simulate Scenario 2 - see protocolDefinitions.py
+                inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)
+                if inByte == definitions.ACK:
+                        #do something
+                        print fullStamp() + " Simulation 2 Running"
+                elif inByte == definitions.NAK:
+                        #do something else
+                        print fullStamp() + " Device NOT responding"
+
+        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " NAK Device NOT READY"
+
+def normalOP(rfObject, timeout, iterCheck):
+        print fullStamp() + " normalOP()"                                                                       # Print function name
+        outByte = definitions.NRMOP                                                                               # Send SIM / Start Simulation - see protocolDefinitions.py
+        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK Device READY"                                                         # ACK, in this case, translates to DEVICE READY
+                print fullStamp() + " Normal Operation ON"
 
         elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
                 print fullStamp() + " NAK Device NOT READY"
