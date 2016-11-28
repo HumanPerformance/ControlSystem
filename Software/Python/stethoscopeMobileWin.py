@@ -12,6 +12,8 @@ from Tkinter import *                                   # GUI design libraries
 import ttk                                              # ...
 from timeStamp import fullStamp
 import protocolDefinitions
+import serial
+from serial import SerialException
 from bluetoothProtocolWin import findDevices
 from bluetoothProtocolWin import findSmartDevice
 from bluetoothProtocolWin import nextAvailablePort
@@ -29,15 +31,18 @@ from stethoscopeProtocol import stopTrackingMicStream
 # Functions ----------------------------------------------------------------------------------------------- # Function Comments
 
 # Find Stethoscope
-def connect2Stethoscope(portName,deviceName,deviceBTAddress):
+def connect2Stethoscope(portName,deviceName,deviceBTAddress,baudrate,timeout):
     print fullStamp() + " findStethoscope()"
     global rfObject
-    rfObject = createPort(portName,deviceName,deviceBTAddress)
+    rfObject = createPort(portName,deviceName,deviceBTAddress,baudrate,timeout)
     rfObject.close()
 
 def sdCardCheckCallback(rfObject):
     if rfObject.isOpen() == False:
-        rfObject.open()
+        try:
+            rfObject.open()
+        except serial.SerialException:
+            print "Could not connect to Bluetooth antenna, try again!!!"
     sdCardCheck(rfObject)
     rfObject.close()
 
@@ -148,11 +153,11 @@ startPlaybackMurmurLabel.config(height=1,width=50)                              
 
 # Action Buttons ---------------------------------------------------------------------------------------------- # Buttons Commnets
 # Find Smart Device Button
-searchDevicesButton = Button(text="Find Stethoscope",                                                           # Button text
-                             command=lambda: connect2Stethoscope("COM15","RNBT-76E6","00:06:66:86:76:E6"))      # Button action command (Fluvio's PC)
-                             #command=lambda: connect2Stethoscope("COM71","RNBT-76E6","00:06:66:86:76:E6"))     # Button action command (Lab's PC)
-searchDevicesButton.place(x=10,y=50)                                                                            # Button location
-searchDevicesButton.config(height=1,width=20)                                                                   # Button dimensions
+searchDevicesButton = Button(text="Find Stethoscope",                                                                       # Button text
+                             #command=lambda: connect2Stethoscope("COM15","RNBT-76E6","00:06:66:86:76:E6"))                 # Button action command (Fluvio's PC)
+                             command=lambda: connect2Stethoscope("COM71","RNBT-76E6","00:06:66:86:76:E6",115200,25))        # Button action command (Lab's PC)
+searchDevicesButton.place(x=10,y=50)                                                                                        # Button location
+searchDevicesButton.config(height=1,width=20)                                                                               # Button dimensions
 
 # SD Card Check
 sdCardCheckButton = Button(text="SD Card Check",                                                                # ...
