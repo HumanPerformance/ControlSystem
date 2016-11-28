@@ -128,7 +128,7 @@ connectionStatus.config(height=1,width=100)
 filterSetLabel = Label(text="SET FILTER (Hz)",
                        anchor = W,
                        justify=LEFT)
-filterSetLabel.place(x=5,y=250)                                                                                 # ...
+filterSetLabel.place(x=5,y=150)                                                                                 # ...
 filterSetLabel.config(height=1,width=20)                                                                        # ...
 
 # Stethoscope tracking
@@ -170,7 +170,7 @@ searchDevicesButton.config(height=1,width=20)                                   
 # Set Filter
 filterSetButton = Button(text="Apply",                                                                          # ...
                            command=lambda: setFilterCallback(rfObject))                                         # ...
-filterSetButton.place(x=10,y=300)                                                                               # ...
+filterSetButton.place(x=10,y=200)                                                                               # ...
 filterSetButton.config(height=1,width=20)                                                                       # ...
 
 # Start Streaming
@@ -225,7 +225,7 @@ stopPlaybackMurmurButton.config(height=1,width=20)
 # Set filter
 cornerFrequency = StringVar()
 filterSetEntry = Entry(textvariable=cornerFrequency)
-filterSetEntry.place(x=10,y=275)
+filterSetEntry.place(x=10,y=175)
 filterSetEntry.config(width=24)
 
 gui.mainloop()
