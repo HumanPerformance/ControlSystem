@@ -34,14 +34,19 @@ from stethoscopeProtocol import stopTrackingMicStream
 def connect2Stethoscope(portName,deviceName,deviceBTAddress,baudrate,timeout):
     print fullStamp() + " findStethoscope()"
     global rfObject
-    rfObject = createPort(portName,deviceName,deviceBTAddress,baudrate,timeout)
-    rfObject.close()
+    try:
+        rfObject = createPort(portName,deviceName,deviceBTAddress,baudrate,timeout)
+        rfObject.close()
+        updateConnectionStatus(1)
+    except serial.SerialException:
+        updateConnectionStatus(2)
 
 def sdCardCheckCallback(rfObject):
     if rfObject.isOpen() == False:
         try:
             rfObject.open()
         except serial.SerialException:
+            rfObject.open()
             print "Could not connect to Bluetooth antenna, try again!!!"
     sdCardCheck(rfObject)
     rfObject.close()
@@ -102,6 +107,12 @@ def stopPlaybackCallback():
     stopPlayback(rfObject)
     rfObject.close()
 
+def updateConnectionStatus(flag):
+    if flag == 1:
+        connectionStatus.configure(text="Device found, Port created")
+    elif flag == 2:
+        connectionStatus.configure(text="Cannot Connect - Reboot!")
+
 # Graphical User Interface (GUI) ------------------------------------------------------------------------------ # GUI Callback Comments
 
 gui = Tk()                                                                                                      # Initialization of the window under object name "root"
@@ -116,6 +127,13 @@ infoLabel = Label(text="SMART STETHOSCOPE",                                     
 infoLabel.place(x=10,y=10)                                                                                      # Label location
 infoLabel.config(height=1,width=20)                                                                             # Label dimensions
 
+# Connection Status
+connectionStatus = Label(text="NA",
+                         anchor=W,
+                         justify=LEFT)
+connectionStatus.place(x=200,y=55)
+connectionStatus.config(height=1,width=100) 
+
 # Stethoscope Signal Filtering
 filterSetLabel = Label(text="SET FILTER (Hz)",
                        anchor = W,
@@ -123,12 +141,12 @@ filterSetLabel = Label(text="SET FILTER (Hz)",
 filterSetLabel.place(x=5,y=250)                                                                                 # ...
 filterSetLabel.config(height=1,width=20)                                                                        # ...
 
-# Stethoscope streaming
-startStreamingLabel = Label(text="AUDIO STREAMING",
+# Stethoscope tracking
+audioTrackingLabel = Label(text="HEART BEAT TRACKING",
                             anchor=W,                                                                           # ...
                             justify=LEFT)                                                                       # ...
-startStreamingLabel.place(x=5,y=375)                                                                            # ...
-startStreamingLabel.config(height=1,width=20)                                                                   # ...
+audioTrackingLabel.place(x=5,y=375)                                                                            # ...
+audioTrackingLabel.config(height=1,width=20)                                                                   # ...
 
 # Stethoscope recording
 startRecordingLabel = Label(text="AUDIO RECORDING",
@@ -172,13 +190,13 @@ filterSetButton.place(x=10,y=300)                                               
 filterSetButton.config(height=1,width=20)                                                                       # ...
 
 # Start Streaming
-startTrackingMicStreamButton = Button(text="Start Stream",                                                      # ...                           
+startTrackingMicStreamButton = Button(text="Start Tracking",                                                      # ...                           
                                command=lambda: startTrackingMicStreamCallback(rfObject))                        # ...
 startTrackingMicStreamButton.place(x=10,y=400)                                                                  # ...
 startTrackingMicStreamButton.config(height=1,width=20)                                                          # ...
 
 # Stop Streaming
-stopTrackingMicStreamButton = Button(text="Stop Stream",                                                        # ...                           
+stopTrackingMicStreamButton = Button(text="Stop Tracking",                                                        # ...                           
                                command=lambda: stopTrackingMicStreamCallback(rfObject))                         # ...
 stopTrackingMicStreamButton.place(x=200,y=400)                                                                  # ...
 stopTrackingMicStreamButton.config(height=1,width=20)                                                           # ...
