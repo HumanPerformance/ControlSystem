@@ -30,15 +30,12 @@ from stethoscopeProtocol import stopTrackingMicStream
 
 # Functions ----------------------------------------------------------------------------------------------- # Function Comments
 
-def variableDefinitions():
-    global rfObject
-    rfObject = 0
-    global trackingflag
+def variableDefinitions():                                                                                  # Function to define global variables needed throughout the code
+    global trackingflag                                                                                     # "trackingflag" will be used to trigger the continued reading of data from the serial port
     trackingflag = 0
-    global refreshTimer
+    global refreshTimer                                                                                     # "refreshTimer" will be used to set the refresh rate for data reading and displaying
     refreshTimer = 500
-
-variableDefinitions()
+variableDefinitions()                                                                                       # The variableDefinitions() function is called immediately to define the variables
 
 # Find Stethoscope
 def connect2Stethoscope(portName,deviceName,deviceBTAddress,baudrate,timeout):
@@ -157,15 +154,15 @@ connectionStatus.config(height=1,width=100)
 filterSetLabel = Label(text="SET FILTER (Hz)",
                        anchor = W,
                        justify=LEFT)
-filterSetLabel.place(x=5,y=150)                                                                                 # ...
-filterSetLabel.config(height=1,width=20)                                                                        # ...
+filterSetLabel.place(x=5,y=150)                                                                                 
+filterSetLabel.config(height=1,width=20)                                                                        
 
 # Stethoscope tracking
 audioTrackingLabel = Label(text="HEART BEAT TRACKING",
-                            anchor=W,                                                                           # ...
-                            justify=LEFT)                                                                       # ...
-audioTrackingLabel.place(x=5,y=275)                                                                            # ...
-audioTrackingLabel.config(height=1,width=20)                                                                 # ...
+                            anchor=W,                                                                           
+                            justify=LEFT)                                                                       
+audioTrackingLabel.place(x=5,y=275)                                                                            
+audioTrackingLabel.config(height=1,width=20)                                                               
 
 # Tracking Data
 audioTrackingData = Label(text="NA",
@@ -176,26 +173,26 @@ audioTrackingData.config(height=1,width=20)
 
 # Stethoscope recording
 startRecordingLabel = Label(text="AUDIO RECORDING",
-                            anchor=W,                                                                           # ...
-                            justify=LEFT)                                                                       # ...
-startRecordingLabel.place(x=5,y=475)                                                                            # ...
-startRecordingLabel.config(height=1,width=20)                                                                   # ...
+                            anchor=W,                                                                           
+                            justify=LEFT)                                                                       
+startRecordingLabel.place(x=5,y=475)                                                                            
+startRecordingLabel.config(height=1,width=20)                                                                 
 
 # Normal Hear Beat 
 startPlaybackNormalLabel = Label(text="NORMAL HEART BEAT",
                                  anchor=W,
-                                 justify=LEFT)                                                                  # ...
-startPlaybackNormalLabel.place(x=5,y=575)                                                                       # ...
-startPlaybackNormalLabel.config(height=1,width=20)                                                              # ...
+                                 justify=LEFT)                                                                  
+startPlaybackNormalLabel.place(x=5,y=575)                                                                       
+startPlaybackNormalLabel.config(height=1,width=20)                                                             
 
 # Early Systolic Murmur
 startPlaybackMurmurLabel = Label(text="EARLY SYSTOLIC MURMUR",
                                  anchor=W,
-                                 justify=LEFT)                                                                  # ...
-startPlaybackMurmurLabel.place(x=5,y=675)                                                                       # ...
-startPlaybackMurmurLabel.config(height=1,width=50)                                                              # ...
+                                 justify=LEFT)                                                                  
+startPlaybackMurmurLabel.place(x=5,y=675)                                                                       
+startPlaybackMurmurLabel.config(height=1,width=50)                                                             
 
-# Action Buttons ---------------------------------------------------------------------------------------------- # Buttons Commnets
+# Action Buttons ---------------------------------------------------------------------------------------------------------- # Buttons Commnets
 # Find Smart Device Button
 searchDevicesButton = Button(text="Find Stethoscope",                                                                       # Button text
                              #command=lambda: connect2Stethoscope("COM15","RNBT-76E6","00:06:66:86:76:E6"))                 # Button action command (Fluvio's PC)
@@ -204,40 +201,40 @@ searchDevicesButton.place(x=10,y=50)                                            
 searchDevicesButton.config(height=1,width=20)                                                                               # Button dimensions
 
 # Set Filter
-filterSetButton = Button(text="Apply",                                                                          # ...
-                           command=lambda: setFilterCallback(rfObject))                                         # ...
-filterSetButton.place(x=10,y=200)                                                                               # ...
-filterSetButton.config(height=1,width=20)                                                                       # ...
+filterSetButton = Button(text="Apply",                                                                        
+                           command=lambda: setFilterCallback(rfObject))                                         
+filterSetButton.place(x=10,y=200)                                                                               
+filterSetButton.config(height=1,width=20)                                                                      
 
 # Start Tracking
-startTrackingMicStreamButton = Button(text="Start Tracking",                                                      # ...                           
-                               command=lambda: startTrackingMicStreamCallback(rfObject))                        # ...
-startTrackingMicStreamButton.place(x=10,y=300)                                                                  # ...
-startTrackingMicStreamButton.config(height=1,width=20)                                                          # ...
+startTrackingMicStreamButton = Button(text="Start Tracking",                                                                                 
+                               command=lambda: startTrackingMicStreamCallback(rfObject))                        
+startTrackingMicStreamButton.place(x=10,y=300)                                                                  
+startTrackingMicStreamButton.config(height=1,width=20)                                                        
 
 # Stop Tracking
-stopTrackingMicStreamButton = Button(text="Stop Tracking",                                                        # ...                           
-                               command=lambda: stopTrackingMicStreamCallback(rfObject))                         # ...
-stopTrackingMicStreamButton.place(x=10,y=350)                                                                  # ...
-stopTrackingMicStreamButton.config(height=1,width=20)                                                           # ...
+stopTrackingMicStreamButton = Button(text="Stop Tracking",                                                                                
+                               command=lambda: stopTrackingMicStreamCallback(rfObject))                       
+stopTrackingMicStreamButton.place(x=10,y=350)                                                                 
+stopTrackingMicStreamButton.config(height=1,width=20)                                                           
 
 # Start Recording
-startRecordingButton = Button(text="Start REC",                                                                 # ...                           
-                               command=lambda: startRecordingCallback(rfObject))                                # ...
-startRecordingButton.place(x=10,y=500)                                                                          # ...
-startRecordingButton.config(height=1,width=20)                                                                  # ...
+startRecordingButton = Button(text="Start REC",                                                                                           
+                               command=lambda: startRecordingCallback(rfObject))                                
+startRecordingButton.place(x=10,y=500)                                                                          
+startRecordingButton.config(height=1,width=20)                                                                  
 
 # Stop Recording
-stopRecordingButton = Button(text="Stop REC",                                                                   # ...                           
-                               command=lambda: stopRecordingCallback(rfObject))                                 # ...
-stopRecordingButton.place(x=200,y=500)                                                                          # ...
-stopRecordingButton.config(height=1,width=20)                                                                   # ...
+stopRecordingButton = Button(text="Stop REC",                                                                                            
+                               command=lambda: stopRecordingCallback(rfObject))                                
+stopRecordingButton.place(x=200,y=500)                                                                          
+stopRecordingButton.config(height=1,width=20)                                                                 
 
 # Playback - Normal Sound (Play)
-startPlaybackNormalButton = Button(text="Play NHB",                                                             # ...                           
-                               command=lambda: normalHBPlaybackCallback(rfObject))                              # ...
-startPlaybackNormalButton.place(x=10,y=600)                                                                     # ...
-startPlaybackNormalButton.config(height=1,width=20)                                                             # ...
+startPlaybackNormalButton = Button(text="Play NHB",                                                                                       
+                               command=lambda: normalHBPlaybackCallback(rfObject))                             
+startPlaybackNormalButton.place(x=10,y=600)                                                                    
+startPlaybackNormalButton.config(height=1,width=20)                                                            
 
 # Playback - Normal Sound (Stop)
 stopPlaybackNormalButton = Button(text="Stop NHB",
