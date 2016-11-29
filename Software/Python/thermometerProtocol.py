@@ -26,6 +26,7 @@ import thermometerDefinitions as definitions
 #                       iterCheck               {int}           maximum number of iterations for serial communication
 #       Output  ::      terminal messages       {string}        terminal messages for logging
 def statusEnquiry(rfObject, timeout, iterCheck):
+        print " "
         print fullStamp() + " statusEnquiry()"                                                                  # Print function name
         outByte = definitions.ENQ                                                                               # Send ENQ / Status Enquiry command - see protocolDefinitions.py
         inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
@@ -41,14 +42,13 @@ def statusEnquiry(rfObject, timeout, iterCheck):
 #                       iterCheck               {int}           maximum number of iterations for serial communication
 #       Output  ::      terminal messages       {string}        terminal messages for logging
 def systemCheck(rfObject, timeout, iterCheck):
+        print " "
         print fullStamp() + " systemCheck()"                                                                    # Print function name
         outByte = definitions.CHK                                                                               # Send CHK / System Check command - see protocolDefinitions.py
         inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
         if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " ACK SD Card Check Passed"                                                 # If the SD card check is successful, the remote device sends a ACK
                 print fullStamp() + " ACK Device Ready"                                                         # ACK, in this case, translates to DEVICE READY
         elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " NAK SD Card Check Failed"                                                 # If the SD card check fails, the remote device sends a NAK
                 print fullStamp() + " NAK Device NOT Ready"                                                     # NAK, in this case, translates to DEVICE NOT READY
 
 # Start Simulation
@@ -58,19 +58,17 @@ def systemCheck(rfObject, timeout, iterCheck):
 #                       iterCheck               {int}           maximum number of iterations for serial communication
 #       Output  ::      terminal messages       {string}        terminal messages for logging
 def startSIM_000(rfObject, timeout, iterCheck):
-        print fullStamp() + " startSIM_000()"                                                                       # Print function name
+        print " "
+        print fullStamp() + " Command Sent..."                                                                  # Print function name
         outByte = definitions.SIM                                                                               # Send SIM / Start Simulation - see protocolDefinitions.py
         inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
         if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " ACK Device READY"                                                         # ACK, in this case, translates to DEVICE READY
-                print fullStamp() + " Starting Simulation"
+                print fullStamp() + " Acknowledged! Starting Simulation"
                 outByte = definitions.SIM_000                                                                   # Send SIM_000 / Simulate Scenario 1 - see protocolDefinitions.py
                 inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)
                 if inByte == definitions.ACK:
-                        #do something
                         print fullStamp() + " Simulation 1 Running"
                 elif inByte == definitions.NAK:
-                        #do something else
                         print fullStamp() + " Device NOT responding"
 
         elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
@@ -78,12 +76,12 @@ def startSIM_000(rfObject, timeout, iterCheck):
 
 
 def startSIM_001(rfObject, timeout, iterCheck):
-        print fullStamp() + " startSIM_001()"                                                                       # Print function name
+        print " "
+        print fullStamp() + " Command Sent..."                                                                  # Print function name
         outByte = definitions.SIM                                                                               # Send SIM / Start Simulation - see protocolDefinitions.py
         inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
         if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " ACK Device READY"                                                         # ACK, in this case, translates to DEVICE READY
-                print fullStamp() + " Starting Simulation"
+                print fullStamp() + " Acknowledged! Starting Simulation"
                 outByte = definitions.SIM_001                                                                   # Send SIM_001 / Simulate Scenario 2 - see protocolDefinitions.py
                 inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)
                 if inByte == definitions.ACK:
@@ -97,12 +95,13 @@ def startSIM_001(rfObject, timeout, iterCheck):
                 print fullStamp() + " NAK Device NOT READY"
 
 def normalOP(rfObject, timeout, iterCheck):
-        print fullStamp() + " normalOP()"                                                                       # Print function name
-        outByte = definitions.NRMOP                                                                               # Send SIM / Start Simulation - see protocolDefinitions.py
+        print " "
+        print fullStamp() + " Command Sent..."                                                                  # Print function name
+        outByte = definitions.NRMOP                                                                             # Send SIM / Start Simulation - see protocolDefinitions.py
         inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
         if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
                 print fullStamp() + " ACK Device READY"                                                         # ACK, in this case, translates to DEVICE READY
-                print fullStamp() + " Normal Operation ON"
+                print fullStamp() + " Acknowledged! Normal Operation ON"
 
         elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
                 print fullStamp() + " NAK Device NOT READY"

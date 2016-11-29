@@ -14,9 +14,7 @@ Nov. 28th, 2016
 
 # Import Libraries and/or Modules
 from Tkinter import *                                   # GUI design libraries
-import ttk                                              # ...
 from timeStamp import fullStamp
-import protocolDefinitions
 from bluetoothProtocolWin import findDevices
 from bluetoothProtocolWin import findSmartDevice
 from bluetoothProtocolWin import nextAvailablePort
@@ -28,13 +26,17 @@ from thermometerProtocol import normalOP
 from thermometerProtocol import startSIM_000
 from thermometerProtocol import startSIM_001
 
+import ttk                                              # ...
+import protocolDefinitions
+import sys
+
 # Functions ----------------------------------------------------------------------------------------------- # Function Comments
 
 # Find Thermometer
-def connect2Thermometer(portName,deviceName,deviceBTAddress):
+def connect2Thermometer(portName,deviceName,deviceBTAddress,baudrate,timeout):
     print fullStamp() + " findThermometer()"
     global rfObject
-    rfObject = createPort(portName,deviceName,deviceBTAddress)
+    rfObject = createPort(portName,deviceName,deviceBTAddress,baudrate,timeout)
     rfObject.close()
 
 def statusEnquiryCallback(rfObject):
@@ -66,12 +68,28 @@ def startSIM_001Callback(rfObject):
         rfObject.open()
     startSIM_001(rfObject, 5, 5)
     rfObject.close()
+
+class Std_redirector(object):
+    def __init__(self,widget):
+        self.widget = widget
+
+    def write(self,string):
+        if not exit_thread:
+            self.widget.insert(END,string)
+            self.widget.see(END)
+
     
 # Graphical User Interface (GUI) ------------------------------------------------------------------ # GUI Callback Comments
 
 gui = Tk()                                                                                          # Initialization of the window under object name "root"
-gui.title("mobile.py")                                                                              # Title of the window
+gui.title("SMART Thermometer")                                                                              # Title of the window
 gui.geometry('450x450+200+200')                                                                     # Window dimensions in pixels + the distance from the top-left corner of your screen
+
+exit_thread= False
+root = Tk()
+text = Text(root)
+text.pack()
+sys.stdout = Std_redirector(text)
 
 # Labels ------------------------------------------------------------------------------------------ # Labels Comments
 # Information Label
@@ -129,7 +147,8 @@ systemCheckButton.config(height=1,width=15)                                     
 
 # Find Smart Device Button
 searchDevicesButton = Button(text="Find Thermometer",
-                             command=lambda: connect2Thermometer("COM7","RNBT-76C5","00:06:66:86:76:C5"))
+                             command=lambda: connect2Thermometer("COM7","RNBT-76C5","00:06:66:86:76:C5", 115200, 5))   #Lab Computer
+                             #command=lambda: connect2Thermometer("COM5","RNBT-76C5","00:06:66:86:76:C5", 115200, 5))   #Jack's Laptop
 searchDevicesButton.place(x=310,y=400)
 searchDevicesButton.config(height=1,width=15)
 
