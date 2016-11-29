@@ -1,6 +1,0 @@
-===================== 
-Scenario =  
-Instrument = oto
-This is a header line 
-===================== 
-TIM,0,ototooootoottotoototooototo

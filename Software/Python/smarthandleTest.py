@@ -15,13 +15,13 @@ from smarthandleProtocol import *
 # Operation
 executionTimeStamp = fullStamp()                                                                        # Program execution timestamp
 deviceName = "oto"                                                                             # Hard-coded device name
-deviceBTAddress = "00:06:66:80:8C:AB"                                                                  # Hard-code device bluetooth address
+deviceBTAddress = "00:06:66:80:8C:BE"                                                                  # Hard-code device bluetooth address
 rfObject = createPort(deviceName, deviceBTAddress, 115200, 25)                                          # Connect to bluetooth device
 #statusEnquiry(rfObject, 5, 5)
 #startRecording(rfObject, 5, 5)
-startRec(rfObject)
+#startRec(rfObject)
 
-""" CSEC Demo Nov. 2016
+#CSEC Demo Nov. 2016
 triggerDevice(rfObject, deviceName, 20)
 startTime = time.time()                                                                                 # Start loop timer
 currentTime = 0                                                                                         # 0 sec.
@@ -46,6 +46,5 @@ stopDevice(rfObject, deviceName, 20)
 
 portRelease('rfcomm', 0)                                    # Release port to avoid permanent connection
 
-"""
 
-portRelease('rfcomm', 0)
+#portRelease('rfcomm', 0)
