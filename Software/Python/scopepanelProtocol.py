@@ -1,7 +1,7 @@
 """
 scopepanelProtocol.py
 
-The following module has been created to manage the interface between the smart handle module and the control system
+The following module has been created to manage the interface between the scope panel module and the control system
 
 Fluvio L Lobo Fenoglietto
 11/21/2016
@@ -16,8 +16,8 @@ import sys
 import serial
 from timeStamp import *
 from configurationProtocol import *
-from bluetoothProtocol import *
-import smarthandleDefinitions as definitions
+from usbProtocol import *
+import scopepanelDefinitions as definitions
 
 # Path/Directoy Variables
 homeDir = expanduser("~")

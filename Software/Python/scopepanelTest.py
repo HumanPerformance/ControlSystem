@@ -1,38 +1,31 @@
 """
 scopepanelTest.py
 
-The following script has been created to test/debug functions specific to the smart handle prototype
+The following script has been created to test/debug functions specific to the scope panel prototype
 
 Fluvio L Lobo Fenoglietto
 11/21/2016
 """
 
 # Import
+import time
 from timeStamp import *
-from bluetoothProtocol import *
-from smarthandleProtocol import *
+from usbProtocol import *
+from scopepanelProtocol import *
 
 # Operation
-executionTimeStamp = fullStamp()                                                                        # Program execution timestamp
-deviceName = "oto"                                                                             # Hard-coded device name
-deviceBTAddress = "00:06:66:80:8C:AB"                                                                  # Hard-code device bluetooth address
-rfObject = createPort(deviceName, deviceBTAddress, 115200, 25)                                          # Connect to bluetooth device
-#statusEnquiry(rfObject, 5, 5)
-#startRecording(rfObject, 5, 5)
-startRec(rfObject)
-
-""" CSEC Demo Nov. 2016
-triggerDevice(rfObject, deviceName, 20)
+executionTimeStamp = fullStamp()
+deviceName = "ScopePanel"
+usbObject = createPort(0,115200, 5)              # Make more robust function
 startTime = time.time()                                                                                 # Start loop timer
 currentTime = 0                                                                                         # 0 sec.
-stopTime = 20                                                                                           # Stop time
-
-
+stopTime = 10                                                                                           # Stop time
 
 while currentTime < stopTime:
 
         # Read data from device
-        inString = dataRead(rfObject)
+        inString = usbObject.readline()
+        #print inString
 
         # Write data from device
         dataWrite(executionTimeStamp, currentTime, outputFilePath, deviceName, inString)
@@ -42,10 +35,3 @@ while currentTime < stopTime:
         # print currentTime
 
 print "Program Concluded"
-stopDevice(rfObject, deviceName, 20)
-
-portRelease('rfcomm', 0)                                    # Release port to avoid permanent connection
-
-"""
-
-portRelease('rfcomm', 0)
