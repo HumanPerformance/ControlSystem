@@ -42,31 +42,31 @@ def connect2Thermometer(portName,deviceName,deviceBTAddress,baudrate,timeout):
 def statusEnquiryCallback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
-    statusEnquiry(rfObject, 5, 5)
+    statusEnquiry(rfObject)
     rfObject.close()
 
 def systemCheckCallback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
-    systemCheck(rfObject, 5, 5)
+    systemCheck(rfObject)
     rfObject.close()
 
 def normalOPCallback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
-    normalOP(rfObject, 5, 5)
+    normalOP(rfObject)
     rfObject.close()
 
 def startSIM_000Callback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
-    startSIM_000(rfObject, 5, 5)
+    startSIM_000(rfObject)
     rfObject.close()
 
 def startSIM_001Callback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
-    startSIM_001(rfObject, 5, 5)
+    startSIM_001(rfObject)
     rfObject.close()
 
 class Std_redirector(object):
