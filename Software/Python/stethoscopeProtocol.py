@@ -16,7 +16,7 @@ import serial
 from timeStamp import *
 from configurationProtocol import *
 from bluetoothProtocol import *
-import protocolDefinitions as definitions
+import stethoscopeDefinitions as definitions
 
 # System Check
 #       This function commands the connected stethoscope to perform a "systems check", which may consist on a routine verification of remote features

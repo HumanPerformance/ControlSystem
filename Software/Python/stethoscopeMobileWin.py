@@ -10,8 +10,10 @@ Fluvio L Lobo Fenoglietto
 # Import Libraries and/or Modules
 from Tkinter import *                                   # GUI design libraries
 import ttk                                              # ...
+import sys
+import time
 from timeStamp import fullStamp
-import protocolDefinitions
+import stethoscopeDefinitions as definitions
 import serial
 from serial import SerialException
 from bluetoothProtocolWin import findDevices
@@ -28,19 +30,11 @@ from stethoscopeProtocol import stopRecording
 from stethoscopeProtocol import startTrackingMicStream
 from stethoscopeProtocol import stopTrackingMicStream
 
-# Functions ----------------------------------------------------------------------------------------------- # Function Comments
+# Functions ----------------------------------------------------------------------------------------------- # Function Comments                                                                                   # The variableDefinitions() function is called immediately to define the variables
 
-def variableDefinitions():                                                                                  # Function to define global variables needed throughout the code
-    global trackingflag                                                                                     # "trackingflag" will be used to trigger the continued reading of data from the serial port
-    trackingflag = 0
-    global refreshTimer                                                                                     # "refreshTimer" will be used to set the refresh rate for data reading and displaying
-    refreshTimer = 500
-variableDefinitions()                                                                                       # The variableDefinitions() function is called immediately to define the variables
-
-# Find Stethoscope
 def connect2Stethoscope(portName,deviceName,deviceBTAddress,baudrate,timeout):
-    print fullStamp() + " findStethoscope()"
-    global rfObject
+    #print fullStamp() + " findStethoscope()"
+    #global rfObject
     try:
         rfObject = createPort(portName,deviceName,deviceBTAddress,baudrate,timeout)
         rfObject.close()
@@ -59,8 +53,6 @@ def setFilterCallback(rfObject):
 def startTrackingMicStreamCallback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
-    global trackingflag
-    trackingflag = 1
     startTrackingMicStream(rfObject)
     updateTrackingData()
     rfObject.close()
@@ -68,10 +60,8 @@ def startTrackingMicStreamCallback(rfObject):
 def stopTrackingMicStreamCallback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
-    global trackingflag
-    trackingflag = 2
     stopTrackingMicStream(rfObject)
-    updateTrackingData()
+    audioTrackingData.configure(text="NA")
     rfObject.close()
 
 def startRecordingCallback(rfObject):
@@ -116,24 +106,25 @@ def updateConnectionStatus(flag):
     elif flag == 2:
         connectionStatus.configure(text="Cannot Connect - Reboot!")
 
-def updateTrackingData():
-    if trackingflag == 0:
-        pass
-    elif trackingflag == 1:
-        if rfObject.isOpen() == False:
-            rfObject.open()
-        inString = rfObject.readline()
-        print inString
-        audioTrackingData.configure(text=inString)
-    elif trackingflag == 2:
-        audioTrackingData.configure(text="NA")
-    gui.after(refreshTimer, updateTrackingData)
+def Std_redirector(object):
+    def __init__(self,widget):
+        self.widget = widget
+    def write(self,string):
+        if not exit_thread:
+            self.widget.insert(END,string)
+            self.widget.see(END)
 
 # Graphical User Interface (GUI) ------------------------------------------------------------------------------ # GUI Callback Comments
 
 gui = Tk()                                                                                                      # Initialization of the window under object name "root"
 gui.title("mobile.py")                                                                                          # Title of the window
-gui.geometry('450x800+200+200')                                                                                 # Window dimensions in pixels + the distance from the top-left corner of your screen
+gui.geometry('450x800+200+200')                                                                                # Window dimensions in pixels + the distance from the top-left corner of your screen
+
+exit_thread = False
+root = Tk()
+text = Text(root)
+text.pack()
+sys.stdout = Std_redirector(text)
 
 # Labels ------------------------------------------------------------------------------------------------------ # Labels Comments
 # Information Label
@@ -169,7 +160,8 @@ audioTrackingData = Label(text="NA",
                           anchor=W,
                           justify=LEFT)
 audioTrackingData.place(x=200,y=325)
-audioTrackingData.config(height=1,width=20)
+audioTrackingData.config(height=2,width=20)
+audioTrackingData.config(font=("Arial",24))
 
 # Stethoscope recording
 startRecordingLabel = Label(text="AUDIO RECORDING",
@@ -178,7 +170,7 @@ startRecordingLabel = Label(text="AUDIO RECORDING",
 startRecordingLabel.place(x=5,y=475)                                                                            
 startRecordingLabel.config(height=1,width=20)                                                                 
 
-# Normal Hear Beat 
+# Normal Heart Beat 
 startPlaybackNormalLabel = Label(text="NORMAL HEART BEAT",
                                  anchor=W,
                                  justify=LEFT)                                                                  
@@ -194,9 +186,8 @@ startPlaybackMurmurLabel.config(height=1,width=50)
 
 # Action Buttons ---------------------------------------------------------------------------------------------------------- # Buttons Commnets
 # Find Smart Device Button
-searchDevicesButton = Button(text="Find Stethoscope",                                                                       # Button text
-                             #command=lambda: connect2Stethoscope("COM15","RNBT-76E6","00:06:66:86:76:E6"))                 # Button action command (Fluvio's PC)
-                             command=lambda: connect2Stethoscope("COM71","RNBT-76E6","00:06:66:86:76:E6",115200,25))        # Button action command (Lab's PC)
+searchDevicesButton = Button(text="Find Stethoscope",
+                             command=lambda: connect2Stethoscope("COM86","RNBT-76E6","00:06:66:86:60:8C",115200,25))        # Button action command (Lab's PC)
 searchDevicesButton.place(x=10,y=50)                                                                                        # Button location
 searchDevicesButton.config(height=1,width=20)                                                                               # Button dimensions
 
@@ -262,6 +253,6 @@ filterSetEntry.place(x=10,y=175)
 filterSetEntry.config(width=24)
 
 # Continuos Calls
-gui.after(refreshTimer, updateTrackingData)
+#gui.after(refreshTimer, updateTrackingData)
 gui.mainloop()
 
