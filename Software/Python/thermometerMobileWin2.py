@@ -33,43 +33,82 @@ import sys
 # Functions ----------------------------------------------------------------------------------------------- # Function Comments
 
 # Find Thermometer
-def connect2Thermometer(portName,deviceName,deviceBTAddress,baudrate,timeout):
-    print fullStamp() + " findThermometer()"
+def connect2Stethoscope(portName,deviceName,deviceBTAddress,baudrate,timeout):
+    print fullStamp() + " findStethoscope()"
     global rfObject
-    rfObject = createPort(portName,deviceName,deviceBTAddress,baudrate,timeout)
-    rfObject.close()
+    try:
+        rfObject = createPort(portName,deviceName,deviceBTAddress,baudrate,timeout)
+        rfObject.close()
+        updateConnectionStatus(1)
+    except serial.SerialException:
+        updateConnectionStatus(2)
+"""
+def setFilterCallback(rfObject):
+    try:
+        frequencyValue = int(cornerFrequency.get())
+        print frequencyValue
+        print chr(frequencyValue)
+    except ValueError:
+        pass
+"""
 
-def statusEnquiryCallback(rfObject):
+def startTrackingMicStreamCallback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
-    statusEnquiry(rfObject, 5, 5)
+    startTrackingMicStream(rfObject)
+    updateTrackingData()
     rfObject.close()
 
-def systemCheckCallback(rfObject):
+def stopTrackingMicStreamCallback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
-    systemCheck(rfObject, 5, 5)
+    stopTrackingMicStream(rfObject)
+    audioTrackingData.configure(text="NA")
     rfObject.close()
 
-def normalOPCallback(rfObject):
+def startRecordingCallback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
-    normalOP(rfObject, 5, 5)
+    startRecording(rfObject)
     rfObject.close()
 
-def startSIM_000Callback(rfObject):
+def stopRecordingCallback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
-    startSIM_000(rfObject, 5, 5)
+    stopRecording(rfObject)
     rfObject.close()
 
-def startSIM_001Callback(rfObject):
+def startPlaybackCallback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
-    startSIM_001(rfObject, 5, 5)
+    startPlayback(rfObject)
     rfObject.close()
 
-class Std_redirector(object):
+def normalHBPlaybackCallback(rfObject):
+    if rfObject.isOpen() == False:
+        rfObject.open()
+    normalHBPlayback(rfObject)
+    rfObject.close()
+
+def earlyHMPlaybackCallback(rfObject):
+    if rfObject.isOpen() == False:
+        rfObject.open()
+    earlyHMPlayback(rfObject)
+    rfObject.close()
+
+def stopPlaybackCallback():
+    if rfObject.isOpen() == False:
+        rfObject.open()
+    stopPlayback(rfObject)
+    rfObject.close()
+
+def updateConnectionStatus(flag):
+    if flag == 1:
+        connectionStatus.configure(text="Device found, Port created")
+    elif flag == 2:
+        connectionStatus.configure(text="Cannot Connect - Reboot!")
+
+def Std_redirector(object):
     def __init__(self,widget):
         self.widget = widget
 
@@ -145,11 +184,9 @@ systemCheckButton.place(x=170,y=400)                                            
 systemCheckButton.config(height=1,width=15)                                                         # ...
 
 # Find Smart Device Button
-searchDevicesButton = Button(text="Find Thermometer",
-                             command=lambda: connect2Thermometer("COM7","RNBT-76C5","00:06:66:86:76:C5", 115200, 5))   #Lab Computer
-                             #command=lambda: connect2Thermometer("COM5","RNBT-76C5","00:06:66:86:76:C5", 115200, 5))   #Jack's Laptop
-searchDevicesButton.place(x=310,y=400)
-searchDevicesButton.config(height=1,width=15)
+searchDevicesButton = Button(text="Find Stethoscope",command=lambda: connect2Stethoscope("COM86","RNBT-76E6","00:06:66:86:60:8C",115200,25))
+searchDevicesButton.place(x=10,y=50)
+searchDevicesButton.config(height=1,width=20)
 
 gui.mainloop()
 

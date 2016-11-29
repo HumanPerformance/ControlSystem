@@ -107,7 +107,7 @@ def nextAvailableBTPort():
 
 # Create RFComm Port
 def createPort(portName,deviceName,deviceBTAddress,baudrate,timeout):
-    print fullStamp() + " createPort()"
+    #print fullStamp() + " createPort()"
     rfObject = serial.Serial(
         port = portName,
         baudrate = baudrate,
