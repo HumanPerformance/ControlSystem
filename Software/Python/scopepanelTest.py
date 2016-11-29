@@ -15,17 +15,18 @@ from scopepanelProtocol import *
 
 # Operation
 executionTimeStamp = fullStamp()
-deviceName = "ScopePanel"
-usbObject = createPort(0,115200, 5)              # Make more robust function
+deviceName = "scp"
+usbObject = createPort(1,115200, 5)              # Make more robust function
 startTime = time.time()                                                                                 # Start loop timer
 currentTime = 0                                                                                         # 0 sec.
-stopTime = 10                                                                                           # Stop time
+stopTime = 10                                                                                          # Stop time
+
+triggerDevice(usbObject,deviceName,20)
 
 while currentTime < stopTime:
 
         # Read data from device
-        inString = usbObject.readline()
-        #print inString
+        inString = dataRead(usbObject)
 
         # Write data from device
         dataWrite(executionTimeStamp, currentTime, outputFilePath, deviceName, inString)
@@ -35,3 +36,5 @@ while currentTime < stopTime:
         # print currentTime
 
 print "Program Concluded"
+
+stopDevice(usbObject, deviceName, 20)
