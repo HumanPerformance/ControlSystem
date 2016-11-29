@@ -9,6 +9,7 @@ Fluvio L Lobo Fenoglietto
 """
 # Definition                            Name                                                Value           Class
 # ----------                            ----                                                -----           -----
+CHK = chr(0x01)					#		System Check										0x01			STD
 ENQ = chr(0x05)                 #       Enquiry                                             0x05            STD
 EOT = chr(0x04)                 #       End of Transmission                                 0x04            STD
 ACK = chr(0x06)                 #       Positive Acknowledgement                            0x06            STD
@@ -42,6 +43,11 @@ DC4 = chr(0x14)                 #       Device Control 4: Simulation Functions  
 DC4_NORMALHB = chr(0x00)        #           Playback of Normal Heart Beat                   0x00            ORG
 DC4_ESHMURMUR = chr(0x01)       #           Playback of Early Systolic Heart Beat           0x01            ORG
 #                                                                                           0xFF            ORG
+
+NRMOP = chr(0x20)		#		Normal Operation Mode  		0x20 			ORG
+SIM = chr(0x21)         #       Simulation Mode             0x21            ORG
+SIM_000 = chr(0x30)     #       Simulate Scenario 0         0x30            ORG
+SIM_001 = chr(0x31)     #       Simulate Scenario 1         0x31            ORG
 
 # Legend
 # STD - Standard terminology / Standard reference for command
