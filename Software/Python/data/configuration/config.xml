@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+System Configuration File
+
+This XML file contains the information of the Control Systems built to date
+
+Fluvio L Lobo Fenoglietto 12/05/2016
+-->
+<data>
+	<system> <!-- Identification number for scenario -->
+		<name>consys</name> <!-- System Name -->
+		<number>001</number> <!-- System Number -->
+		<ip>10.171.190.58</ip> <!-- Last Registered ip address -->
+		<instrument>
+			<scopepanel>
+				<id>scp</id>
+			</scopepanel>
+			<smarthandle>
+				<id>sh01</id>
+				<btaddress>00:06:66:80:8C:BE</btaddress>
+			</smarthandle>
+			<smarthandle>
+				<id>sh02</id>
+				<btaddress>00:06:66:80:8C:A9</btaddress>
+			<stethoscope>
+				<id>ste</id>
+				<btaddress></btaddress>
+			</stethoscope>
+		</instrument>
+	</system><!-- Description of the scenario -->
+</data>
