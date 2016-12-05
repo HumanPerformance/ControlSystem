@@ -24,7 +24,7 @@ Fluvio L Lobo Fenoglietto 12/05/2016
 				<btaddress>00:06:66:80:8C:A9</btaddress>
 			<stethoscope>
 				<id>ste</id>
-				<btaddress></btaddress>
+				<btaddress>00:06:66:86:60:3D</btaddress>
 			</stethoscope>
 		</instrument>
 	</system><!-- Description of the scenario -->
