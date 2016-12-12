@@ -14,3 +14,5 @@ tree, root = readConfigFile(configFile)
 
 
 address = getMAC("eth0")
+
+panelIndex, panelNumber = selfID(address, tree, root)

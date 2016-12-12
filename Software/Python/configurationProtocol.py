@@ -66,6 +66,39 @@ def readConfigFile(configFile):
     root = tree.getroot()
     return tree, root
 
+# Self Identification
+#   This function uses the MAC address of the control system to identify itself within the configuration XML file
+#   Input   ::  {string}        MAC address
+#           ::  {structure}     tree
+#           ::  {structure}     root
+#   Output  ::  {string}        terminal message
+def selfID(address, tree, root):
+    print fullStamp() + " selfID()"
+    Npanels = len(root[0])
+    print fullStamp() + " Found " + str(Npanels) + " instrument panels"
+    for i in range(0,Npanels):
+        mac_bt = root[0][i][0].get("mac_bt")
+        mac_eth = root[0][i][0].get("mac_eth")
+        mac_wlan = root[0][i][0].get("mac_wlan")
+        if address == mac_bt:
+            print fullStamp() + " Match on BT MAC address"
+            panelIndex = i
+            panelNumber = i + 1
+            return panelIndex, panelNumber
+            break
+        elif address == mac_eth:
+            print fullStamp() + " Match on eth MAC address"
+            panelIndex = i
+            panelNumber = i + 1
+            return panelIndex, panelNumber
+            break
+        elif address == mac_wlan:
+            print fullStamp() + " Match on wlan MAC address"
+            panelIndex = i
+            panelNumber = i + 1
+            return panelIndex, panelNumber
+            break
+
 # Search Given Child (Group within tree)
 #   Searches for a specific "child" or section within the configuration file
 #   Input  :: {string} name of "child" or section
