@@ -31,15 +31,17 @@ def definePaths():
         homeDir = "/home/pi"                                                                    # if the two strings are equivalent, then the program must have been executed from a raspbian system. A correction to the home directory has to be made.
         pythonDir = homeDir + "/pd3d/csec/repos/ControlSystem/Software/Python"                  # Python directory
         configDir = pythonDir + "/configuration"                                                # Configuration directory
+        configFile = configDir + "/configuration.xml"                                           # Configuration file
         dataDir = pythonDir + "/data"                                                           # Data directory
         outputDir = dataDir + "/output"                                                         # Output directory
     else:
         print fullStamp() + " User executed function on an OS that is not supported..."
         pythonDir = 0
         configDir = 0
+        configFile = 0
         dataDir = 0
         outputDir = 0
-    return pythonDir, configDir, dataDir, outputDir
+    return pythonDir, configDir, configFile, dataDir, outputDir
 
 # Read Configuration (.XML) File
 #   Reads or imports information from configuration file into an object or structure
