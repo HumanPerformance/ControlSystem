@@ -1,20 +1,81 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-	Configuration File for Control Systems
--->
-
+<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<panel id = "consys001" status = "READY">
-		<devices>
-			<device id = "STET" btaddress = "00:06:66:86:60:3D"></device>
-		</devices>
-	</panel>
+	<panels>
+		<panel id="pan001" status="online">
+			<device id="000" type="controlcenter" mac="0006667d817e" status="available">
+				<description>
+					A Raspberry Pi-bassed controller which serves as a control point to all panel-attached devices
+				</description>
+			</device>
+			<device id="001" type="stethoscope"   mac="0006667d817d" status="available">
+				<description>
+					An electronic stethoscope providing either augmented listening or unmodified heart sounds 
+				</description>
+			</device>
+			<device id="002" type="opthalmascope" mac="0006667d817e" status="available">
+				<description>
+					No description
+				</description>
+			</device>
+			<device id="003" type="otoscope"      mac="0006667d817f" status="unavailable">
+				<description>
+					No description
+				</description>
+			</device>
+			<device id="004" type="pulseoximeter" mac="0006667d8180" status="available">
+				<description>
+					No description
+				</description>
+			</device>
+			<device id="005" type="bloodpressure" mac="0006667d8181" status="unavailable">
+				<description>
+					No description
+				</description>
+			</device>
+			<device id="006" type="thermometer"   mac="0006667d8182" status="available">
+				<description>
+					No description
+				</description>
+			</device>
+		</panel>
+	</panels>
 	<scenarios>
-		<scenario title = "SC001" narrative = "hola, mi nombre es scenario 001"></scenario>
+		<scenario id="scn000" title="baseline">
+			<narrative>
+				In this scenario, the patient presents with...
+			</narrative>
+			<parameters>
+				<date></date>
+				<tod></tod>
+				<locale></locale>
+			</parameters>
 			<devices>
-				<device id ="STET"></device>
+				<stethoscope>
+					<events>
+						<event id="001" seq="001" minutes="6:00">
+							<title>Normal heartbeat</title>
+							<heartrate>80</heartrate>
+						</event>
+						<event id="001" seq="002" minutes="6:00">
+							<title>Heart murmur</title>
+							<heartrate>100</heartrate>
+						</event>
+						<event id="001" seq="003" minutes="6:00">
+							<title>3rd heart sound</title>
+							<heartrate>100</heartrate>
+						</event>
+					</events>
+				</stethoscope>
+				<pulseoximeter>
+					<events>
+						<event id="001" seq="001" minutes="12:00">
+							<title>Moderate compromise</title>
+							<heartrate>100</heartrate>
+							<oxygen>75</oxygen>
+						</event>
+					</events>
+				</pulseoximeter>
 			</devices>
+		</scenario>
 	</scenarios>
 </configuration>
-			
-				
