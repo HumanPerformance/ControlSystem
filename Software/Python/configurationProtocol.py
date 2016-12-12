@@ -99,9 +99,25 @@ def selfID(address, tree, root):
             return panelIndex, panelNumber
             break
 
-# Search Given Child (Group within tree)
-#   Searches for a specific "child" or section within the configuration file
-#   Input  :: {string} name of "child" or section
+# Find Scenario Index
+#   The following function finds the configuration file index for the scenario number passed as an input
+def findScenario(number, tree, root):
+    print fullStamp() + " findScenario()"
+    Nscenarios = len(root[1])
+    print fullStamp() + " Found " + str(Nscenarios) + " scenarios"
+    for i in range(0,Nscenarios):
+        scenario_number = int(root[1][i].get("number"))
+        if scenario_number == number:
+            print fullStamp() + " Scenario " + str(number) + " found on index " + str(i)
+            scenarioIndex = i
+            scenarioNumber = number
+            return scenarioIndex, scenarioNumber
+            break
+        elif i == Nscenarios - 1:
+            print fullStamp() + " Scenario " + str(number) + " NOT found"
+            scenarioIndex = -1
+            scenarioNumber = number
+            return scenarioIndex, scenarioNumber
 
 # Pull Instrument Information (CSEC-Specific)
 #   Automatically searches for the instrument information and stores data in several arrays
