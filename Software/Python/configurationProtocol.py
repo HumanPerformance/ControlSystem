@@ -19,6 +19,20 @@ from os.path import expanduser
 from timeStamp import fullStamp
 import xml.etree.ElementTree as etree
 
+# Get MAC address
+#   The following function returns the MAC address of the input interface
+#   Input   ::  {string}    interface   eth0, wlan0
+#   Output  ::  {string}    MAC address
+def getMAC(interface):
+    print fullStamp() + " getMAC()"
+    print fullStamp() + " Searching MAC address for " + interface + " module"
+    try:
+        address = open("/sys/class/net/" + interface + "/address").read()[:-1]
+        print fullStamp() + " MAC (" + interface + "): " + address
+        return address
+    except:
+        print fullStamp() + " Failed to find address, check input interface"
+
 # Define Path Variables
 #   The following function defines the path variables for the relevant directories used throughout the control system functions
 #   The program does not handle other operating systems
@@ -31,7 +45,7 @@ def definePaths():
         homeDir = "/home/pi"                                                                    # if the two strings are equivalent, then the program must have been executed from a raspbian system. A correction to the home directory has to be made.
         pythonDir = homeDir + "/pd3d/csec/repos/ControlSystem/Software/Python"                  # Python directory
         configDir = pythonDir + "/configuration"                                                # Configuration directory
-        configFile = configDir + "/configuration.xml"                                           # Configuration file
+        configFile = configDir + "/config.xml"                                           # Configuration file
         dataDir = pythonDir + "/data"                                                           # Data directory
         outputDir = dataDir + "/output"                                                         # Output directory
     else:

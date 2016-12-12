@@ -10,4 +10,7 @@ print homeDir
 
 pythonDir, configDir, configFile, dataDir, outputDir = definePaths()
 
-#tree, root = readConfigFile(configurationPath + configurationFile)
+tree, root = readConfigFile(configFile)
+
+
+address = getMAC("eth0")
