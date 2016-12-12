@@ -2,37 +2,37 @@
 <configuration>
 	<panels>
 		<panel id="pan001" status="online">
-			<device id="000" type="controlcenter" mac="0006667d817e" status="available">
+			<device id="000" type="controlcenter" mac_bt="B8:27:EB:DD:1F:86" mac_eth="b8:27:eb:77:b5:2c" mac_wlan="b8:27:eb:22:e0:79" status="available">
 				<description>
 					A Raspberry Pi-bassed controller which serves as a control point to all panel-attached devices
 				</description>
 			</device>
-			<device id="001" type="stethoscope"   mac="0006667d817d" status="available">
+			<device id="001" type="stethoscope"   mac="0006667d817d" 								  status="available">
 				<description>
 					An electronic stethoscope providing either augmented listening or unmodified heart sounds 
 				</description>
 			</device>
-			<device id="002" type="opthalmascope" mac="0006667d817e" status="available">
+			<device id="002" type="opthalmascope" mac="0006667d817e" 								  status="available">
 				<description>
 					No description
 				</description>
 			</device>
-			<device id="003" type="otoscope"      mac="0006667d817f" status="unavailable">
+			<device id="003" type="otoscope"      mac="0006667d817f" 								  status="unavailable">
 				<description>
 					No description
 				</description>
 			</device>
-			<device id="004" type="pulseoximeter" mac="0006667d8180" status="available">
+			<device id="004" type="pulseoximeter" mac="0006667d8180" 								  status="available">
 				<description>
 					No description
 				</description>
 			</device>
-			<device id="005" type="bloodpressure" mac="0006667d8181" status="unavailable">
+			<device id="005" type="bloodpressure" mac="0006667d8181" 								  status="unavailable">
 				<description>
 					No description
 				</description>
 			</device>
-			<device id="006" type="thermometer"   mac="0006667d8182" status="available">
+			<device id="006" type="thermometer"   mac="0006667d8182" 								  status="available">
 				<description>
 					No description
 				</description>
