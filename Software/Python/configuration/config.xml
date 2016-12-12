@@ -1,1 +1,20 @@
-# no xml here...
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Configuration File for Control Systems
+-->
+
+<configuration>
+	<panel id = "consys001" status = "READY">
+		<devices>
+			<device id = "STET" btaddress = "00:06:66:86:60:3D"></device>
+		</devices>
+	</panel>
+	<scenarios>
+		<scenario title = "SC001" narrative = "hola, mi nombre es scenario 001"></scenario>
+			<devices>
+				<device id ="STET"></device>
+			</devices>
+	</scenarios>
+</configuration>
+			
+				
