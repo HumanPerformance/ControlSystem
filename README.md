@@ -10,5 +10,8 @@ The CS;
 
 ### Command Relay
 The CS mediates the commands sent from the CR. Mediation encompasses: <b>receipt</b>, <b>translation</b> and <b>transmission</b>.
-> 1. The CS receives a command 
+> <b>1.</b> The CS receives a command from the CR. For instance, "Run Scenario #5" (Figure 1) <br />
+> <b>2.</b> Using the XML configuration file, the CS;
+>> <b>2.1</b> hola
+
 ![OPERATION](https://github.com/pd3d/ControlSystem/blob/master/Documentation/Operation/operation001.png)
