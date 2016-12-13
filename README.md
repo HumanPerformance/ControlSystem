@@ -10,7 +10,7 @@ The CS;
 
 ### Command Relay
 The CS mediates the commands sent from the CR. Mediation encompasses: <b>receipt</b>, <b>translation</b> and <b>transmission</b>.<br />
-><b>1.0</b> The CS receives a command from the CR. For instance, "Run Scenario #5" (Figure 1) <br />
+><b>1.0</b> The CS receives a command from the CR. For instance, "Run Scenario #5"<br />
 ><b>2.0</b> Using the XML configuration file, the CS; <br />
 
 >><b>2.1</b> Identifies itself within a list of SIPs and CSs <br />
@@ -19,6 +19,9 @@ The CS mediates the commands sent from the CR. Mediation encompasses: <b>receipt
 >><b>2.4</b> Pulls scenario instructions and parameters to be sent to the SDs <br />
 
 ><b>3.0</b> Triggers SDs as specified by scenario instructions and parameters <br />
+
+In other words, the process of <b>receipt</b> (as the name indicates) consists of receiving commands or messages from the CR.
+The proces of <b>translation</b> consists on using the information from the CR command to access the configuration XML and extract the instrument list, scenario instructions and parameters, which are then passed to the SDs as part of the <b>transmission</b>. The entire process has been depicted in <b>Figure 1</b>.
 
 ![OPERATION](https://github.com/pd3d/ControlSystem/blob/master/Documentation/Operation/operation001.png)
 <b> Figure 1. Command Relay Diagram </b>
