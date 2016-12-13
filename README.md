@@ -3,10 +3,10 @@ The Control System (CS) module of our Smart Instrument Panel (SIP) consists of a
 
 ## Functionality
 The CS;
-> Receives direct commands from the CR <br />
-> Translates CR commands into scenario instructions via the configuration XML <br />
-> Relays scenario instructions to integrated SDs <br />
-> Retrieves SDs data after termination of scenario <br />
+> + Receives direct commands from the CR <br />
+> + Translates CR commands into scenario instructions via the configuration XML <br />
+> + Relays scenario instructions to integrated SDs <br />
+> + Retrieves SDs data after termination of scenario <br />
 
 ### Command Relay
 The CS mediates the commands sent from the CR. Mediation encompasses: <b>receipt</b>, <b>translation</b> and <b>transmission</b>.<br />
