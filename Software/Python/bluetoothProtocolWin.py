@@ -103,7 +103,7 @@ def nextAvailableBTPort():
             portNumber = int(port[3:len(port)])
             availableBTPort = "COM" + str(portNumber)                                                       # An available bluetooth port is said to be found
             break
-    print fullStamp() + " Available Bluetooth Port: " + availableBTPort "\n"                                # Terminal message signaling the finding of the available port
+    print fullStamp() + " Available Bluetooth Port: " + availableBTPort + "\n"                                # Terminal message signaling the finding of the available port
     return availableBTPort                                                                                  # Return available port
 
 # Create RFComm Port
