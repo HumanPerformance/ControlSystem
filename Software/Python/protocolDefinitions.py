@@ -9,6 +9,7 @@ Fluvio L Lobo Fenoglietto
 """
 # Definition                            Name                                                Value           Class
 # ----------                            ----                                                -----           -----
+SOH = chr(0x01)					#		Start of Heading									0x01			STD
 ENQ = chr(0x05)                 #       Enquiry                                             0x05            STD
 EOT = chr(0x04)                 #       End of Transmission                                 0x04            STD
 ACK = chr(0x06)                 #       Positive Acknowledgement                            0x06            STD

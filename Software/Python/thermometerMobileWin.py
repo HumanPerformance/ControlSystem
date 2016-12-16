@@ -17,11 +17,11 @@ from Tkinter import *                                   # GUI design libraries
 from timeStamp import fullStamp
 from bluetoothProtocolWin import findDevices
 from bluetoothProtocolWin import findSmartDevice
-from bluetoothProtocolWin import nextAvailablePort
+from bluetoothProtocolWin import nextAvailableBTPort
 from bluetoothProtocolWin import createPort
 
 from thermometerProtocol import statusEnquiry
-from thermometerProtocol import systemCheck
+#from thermometerProtocol import systemCheck
 from thermometerProtocol import debugModeON
 from thermometerProtocol import debugModeOFF
 from thermometerProtocol import normalOP
@@ -33,6 +33,12 @@ import protocolDefinitions
 import sys
 
 # Functions ----------------------------------------------------------------------------------------------- # Function Comments
+
+def findDevicesCallback():
+    findDevices()
+
+def nextAvailableBTPortCallback():
+    nextAvailableBTPort()
 
 # Find Thermometer
 def connect2Thermometer(portName,deviceName,deviceBTAddress,baudrate,timeout):
@@ -47,11 +53,13 @@ def statusEnquiryCallback(rfObject):
     statusEnquiry(rfObject)
     rfObject.close()
 
+'''
 def systemCheckCallback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
     systemCheck(rfObject)
     rfObject.close()
+'''
 
 def debugModeONCallback(rfObject):
     if rfObject.isOpen() == False:
@@ -153,11 +161,11 @@ statsEnquiryButton = Button(text="Status Enquiry",                              
 statsEnquiryButton.place(x=30,y=365)                                                                # ...
 statsEnquiryButton.config(height=1,width=15)                                                        # ...
 
-#System Check
-systemCheckButton = Button(text="System Check",                                                     # ...
-                           command=lambda: systemCheckCallback(rfObject))                           # ...
-systemCheckButton.place(x=170,y=365)                                                                # ...
-systemCheckButton.config(height=1,width=15)                                                         # ...
+# Find Devices
+findDevicesButton = Button(text="Find Devices",                                                     # ...
+                           command=lambda: findDevicesCallback())                                   # ...
+findDevicesButton.place(x=170,y=365)                                                                # ...
+findDevicesButton.config(height=1,width=15)
 
 #Debug Mode ON
 debugModeONButton = Button(text="Debug Mode ON",                                                    # ...
@@ -178,6 +186,22 @@ searchDevicesButton = Button(text="Find Thermometer",
                              #command=lambda: connect2Thermometer("COM5","RNBT-76C5","00:06:66:86:76:C5", 115200, 5))   #Jack's Laptop
 searchDevicesButton.place(x=310,y=365)
 searchDevicesButton.config(height=1,width=15)
+
+# Next Available BT Port
+nextAvailableBTPortButton = Button(text="Next Available BT Port",                                   # ...
+                           command=lambda: nextAvailableBTPortCallback())                           # ...
+nextAvailableBTPortButton.place(x=160,y=120)                                                        # ...
+nextAvailableBTPortButton.config(height=1,width=20)                                                 # ...
+
+
+'''
+#System Check
+systemCheckButton = Button(text="System Check",                                                     # ...
+                           command=lambda: systemCheckCallback(rfObject))                           # ...
+systemCheckButton.place(x=160,y=120)                                                                # ...
+systemCheckButton.config(height=1,width=15)                                                         # ...
+'''
+
 
 gui.mainloop()
 

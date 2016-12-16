@@ -38,8 +38,9 @@ def findDevices():
     for i in range(0,Ndevices):                                                             # Populate device name and bluetooth address arrays/lists with a for-loop
         availableDeviceNames.append(devices[i][1])
         availableDeviceBTAddresses.append(devices[i][0])
-    print fullStamp() + " Devices found (names): " + str(availableDeviceNames)              # Print the list of devices found
-    print fullStamp() + " Devices found (addresses): " + str(availableDeviceBTAddresses)    # Print the list of addresses for the devices found
+        # Print a list of devices' names and addresses
+        print fullStamp() + " Device (name, address): (" + str(availableDeviceNames[i]) + ", " + str(availableDeviceBTAddresses[i]) + ")"
+    print "\n"
     return availableDeviceNames, availableDeviceBTAddresses                                 # Return arrays/lists of devices and bluetooth addresses
 
 # Identify Smart Devices - General
@@ -102,7 +103,7 @@ def nextAvailableBTPort():
             portNumber = int(port[3:len(port)])
             availableBTPort = "COM" + str(portNumber)                                                       # An available bluetooth port is said to be found
             break
-    print fullStamp() + " Available Bluetooth Port: " + availableBTPort                                     # Terminal message signaling the finding of the available port
+    print fullStamp() + " Available Bluetooth Port: " + availableBTPort "\n"                                # Terminal message signaling the finding of the available port
     return availableBTPort                                                                                  # Return available port
 
 # Create RFComm Port
@@ -115,7 +116,15 @@ def createPort(portName,deviceName,deviceBTAddress,baudrate,timeout):
         parity = serial.PARITY_NONE,
         stopbits = serial.STOPBITS_ONE,
         timeout = timeout)
-    return rfObject
+    time.sleep(1)
+    outByte = definitions.SOH                                                                               # Send SOH (Start of Heading) byte - see protocolDefinitions.py
+    rfObject.write(outByte)
+    inByte = rfObject.read(size=1)
+    if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response
+        print fullStamp() + " Connection Established\n"
+        return rfObject
+    elif inByte == definitions.NAK:
+        print fullStamp() + " NAK device NOT READY\n"
 
 # Port Message Check
 #   Reads serial port and checks for a specific input message
