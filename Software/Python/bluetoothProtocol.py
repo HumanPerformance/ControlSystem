@@ -116,7 +116,15 @@ def createPort(deviceName,deviceBTAddress,baudrate,timeout):
         parity = serial.PARITY_NONE,
         stopbits = serial.STOPBITS_ONE,
         timeout = timeout)
-    return rfObject
+    time.sleep(1)
+    outByte = definitions.SOH                                                                               # Send SOH (Start of Heading) byte - see protocolDefinitions.py
+    rfObject.write(outByte)
+    inByte = rfObject.read(size=1)
+    if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response
+        print fullStamp() + " Connection Established\n"
+        return rfObject
+    elif inByte == definitions.NAK:
+        print fullStamp() + " NAK device NOT READY\n"
 
 # Port Bind
 #   This function binds the specified bluetooth device to a rfcomm port
