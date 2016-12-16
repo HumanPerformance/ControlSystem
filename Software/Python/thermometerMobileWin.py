@@ -22,7 +22,8 @@ from bluetoothProtocolWin import createPort
 
 from thermometerProtocol import statusEnquiry
 from thermometerProtocol import systemCheck
-from thermometerProtocol import debugMode
+from thermometerProtocol import debugModeON
+from thermometerProtocol import debugModeOFF
 from thermometerProtocol import normalOP
 from thermometerProtocol import startSIM_000
 from thermometerProtocol import startSIM_001
@@ -52,10 +53,16 @@ def systemCheckCallback(rfObject):
     systemCheck(rfObject)
     rfObject.close()
 
-def debugModeCallback(rfObject):
+def debugModeONCallback(rfObject):
     if rfObject.isOpen() == False:
         rfObject.open()
-    debugMode(rfObject)
+    debugModeON(rfObject)
+    rfObject.close()
+
+def debugModeOFFCallback(rfObject):
+    if rfObject.isOpen() == False:
+        rfObject.open()
+    debugModeOFF(rfObject)
     rfObject.close()
 
 def normalOPCallback(rfObject):
@@ -117,7 +124,7 @@ operationModesLabel.config(height=1,width=20)                                   
 systemCheckLabel = Label(text="System Check",
                             anchor=W,                                                               # ...
                             justify=LEFT)                                                           # ...
-systemCheckLabel.place(x=5,y=325)                                                                   # ...
+systemCheckLabel.place(x=5,y=340)                                                                   # ...
 systemCheckLabel.config(height=1,width=20)                                                          # ...
 
 # Action Buttons ---------------------------------------------------------------------------------- # Buttons Commnets
@@ -152,11 +159,17 @@ systemCheckButton = Button(text="System Check",                                 
 systemCheckButton.place(x=170,y=365)                                                                # ...
 systemCheckButton.config(height=1,width=15)                                                         # ...
 
-#Debug Mode
-debugModeButton = Button(text="Debug Mode",                                                         # ...
-                           command=lambda: debugModeCallback(rfObject))                             # ...
-debugModeButton.place(x=170,y=400)                                                                        # ...
-debugModeButton.config(height=1,width=15) 
+#Debug Mode ON
+debugModeONButton = Button(text="Debug Mode ON",                                                    # ...
+                           command=lambda: debugModeONCallback(rfObject))                           # ...
+debugModeONButton.place(x=100,y=400)                                                                # ...
+debugModeONButton.config(height=1,width=15) 
+
+#Debug Mode OFF
+debugModeOFFButton = Button(text="Debug Mode OFF",                                                  # ...
+                           command=lambda: debugModeOFFCallback(rfObject))                          # ...
+debugModeOFFButton.place(x=240,y=400)                                                               # ...
+debugModeOFFButton.config(height=1,width=15) 
 
 # Find Smart Device Button
 searchDevicesButton = Button(text="Find Thermometer",

@@ -15,7 +15,7 @@ Adapted Definitions to be compatible with the Smart Thermometer Project
 
 # Definition                            Name                                                Value           Class
 # ----------                            ----                                                -----           -----
-CHK = chr(0x01)					#		System Check										0x01			STD
+SOH = chr(0x01)					#		Start of Heading									0x01			STD
 ENQ = chr(0x05)                 #       Enquiry                                             0x05            STD
 EOT = chr(0x04)                 #       End of Transmission                                 0x04            STD
 ACK = chr(0x06)                 #       Positive Acknowledgement                            0x06            STD
@@ -25,8 +25,9 @@ CAN = chr(0x18)                 #       Cancel Current Command                  
 # Device Control Commands
 #   We have extended the four (4) standard "device control" commands by means of a two-byte communication protocol
 
-DC1 	  = chr(0x11)           #       Device Control 1: Diagnostic Functions              0x11            STD
-DC1_DEBUG = chr(0x00)        	#           Debug Mode 										0x00			ORG
+DC1 	  	  = chr(0x11)       #       Device Control 1: Diagnostic Functions              0x11            STD
+DC1_DEBUGON   = chr(0x00)       #           Debug Mode ON									0x00			ORG
+DC1_DEBUGOFF  = chr(0x01)		#			Debug Mode OFF
 #                                                                                           0xFF            ORG
 
 DC2 	= chr(0x12)         	#       Device Control 2: Operational Functions             0x12            STD
