@@ -2,7 +2,29 @@
 <configuration>
 	<configversion id="1.2.1" date="15 DEC 2016"/>
 	<panels>
-		<panel id="pan001" status="online">
+		<panel id="PAN000"   type="ISP" 																						status="online">
+			<device id="000" type="CS"	mac_bt="B8:27:EB:DD:1F:86"	mac_eth="b8:27:eb:77:b5:2c"	mac_wlan="b8:27:eb:22:e0:79"	status="available">
+				<description>
+					A Raspberry Pi-bassed controller which serves as a control point to all panel-attached devices
+				</description>
+			</device>
+			<device id="001" type="stethoscope"   mac_bt="00:06:66:7D:81:7D" 	status="available">
+				<description>
+					An electronic stethoscope providing either augmented listening or unmodified heart sounds 
+				</description>
+			</device>
+			<device id="002" type="opthalmascope" mac_bt="00:06:66:80:8C:BE"	status="available">
+				<description>
+					No description
+				</description>
+			</device>
+			<device id="003" type="otoscope"      mac_bt="00:06:66:80:8C:A9"	status="unavailable">
+				<description>
+					No description
+				</description>
+			</device>
+		</panel>
+		<panel id="PAN001" status="online">
 			<device id="000" type="controlcenter" mac_bt="B8:27:EB:DD:1F:86" mac_eth="b8:27:eb:77:b5:2c" mac_wlan="b8:27:eb:22:e0:79" status="available">
 				<description>
 					A Raspberry Pi-bassed controller which serves as a control point to all panel-attached devices
