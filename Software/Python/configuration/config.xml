@@ -46,9 +46,9 @@
 				In this scenario, the patient presents with...
 			</narrative>
 			<parameters>
-				<date></date>
-				<tod></tod>
-				<locale></locale>
+				<t0>30</t0>
+				<t>300</t>
+				<tp>30</tp>
 			</parameters>
 			<devices>
 				<stethoscope>
