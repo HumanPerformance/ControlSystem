@@ -25,22 +25,29 @@ import serial
 import time
 from timeStamp import fullStamp
 # PD3D Modules
+from configurationProtocol import getMAC
 from configurationProtocol import definePaths
 from configurationProtocol import readConfigFile
-from configurationProtocol import getMAC
+from configurationProtocol import selfID
 
 # ==============================================
 # Variables
 # ==============================================
 
 # ----------------------------------------------
-# Input Variables - From Terminal
+# Input Terminal Variables
 #   The script reads the inputs from the terminal execution triggered by the Control Room
 #   Consys currently handles one (1) input variable, the "scenario #"
 # ----------------------------------------------
 inputArg = sys.argv
 selectedScenario = int(sys.argv[1])
 print fullStamp() + " User Executed " + inputArg[0] + ", scenario #" + inputArg[1]
+
+# ----------------------------------------------
+# Panel self-dentification
+#   The panel obtains the mac address of the local system
+# ----------------------------------------------
+mac_bt = getMAC('eth0')
 
 # ----------------------------------------------
 # Timers
@@ -57,15 +64,17 @@ pythonDir, configDir, configFile, dataDir, outputDir = definePaths()
 # ----------------------------------------------
 tree, root = readConfigFile(configFile)
 
+# ----------------------------------------------
+# Define Panel
+#   Using the MAC address from the local system and the configuration XML, the program identifies the SIP id and index
+# ----------------------------------------------
+panelIndex, panelNumber = selfID(mac_bt, tree, root)
+
 # ==============================================
 # Operation
 # ==============================================
 
-# ----------------------------------------------
-# Panel self-dentification
-#   The panel obtains the mac address of the local system
-# ----------------------------------------------
-mac_bt = getMAC('eth0')
+
 
 """
 # ----------------------------------------------
