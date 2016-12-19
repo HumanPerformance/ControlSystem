@@ -62,6 +62,7 @@ def definePaths():
 #   Input  :: path to configuration file (string)
 #   Output :: configuration file structure
 def readConfigFile(configFile):
+    print fullStamp() + " readConfigFile()"
     tree = etree.parse(configFile)
     root = tree.getroot()
     return tree, root
