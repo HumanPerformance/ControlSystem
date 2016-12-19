@@ -68,7 +68,7 @@ tree, root = readConfigFile(configFile)
 # Define Panel
 #   Using the MAC address from the local system and the configuration XML, the program identifies the SIP id and index
 # ----------------------------------------------
-panelIndex, panelNumber = selfID(mac_bt, tree, root)
+panelIndex, panelID = selfID(mac_bt, tree, root)
 
 # ==============================================
 # Operation
