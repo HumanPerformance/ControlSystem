@@ -29,6 +29,7 @@ from configurationProtocol import getMAC
 from configurationProtocol import definePaths
 from configurationProtocol import readConfigFile
 from configurationProtocol import selfID
+from configurationProtocol import findScenario
 
 # ==============================================
 # Variables
@@ -69,6 +70,12 @@ tree, root = readConfigFile(configFile)
 #   Using the MAC address from the local system and the configuration XML, the program identifies the SIP id and index
 # ----------------------------------------------
 panelIndex, panelID = selfID(mac_bt, tree, root)
+
+# ----------------------------------------------
+# Define Scenario
+#   Using the scenario number from the terminal input and the configuration XML, the program identifies the scenarion index
+# ----------------------------------------------
+scenarioIndex, scenarioNumber, scenarioID = findScenario(selectedScenario, tree, root)
 
 # ==============================================
 # Operation
