@@ -31,6 +31,8 @@ from configurationProtocol import readConfigFile
 from configurationProtocol import selfID
 from configurationProtocol import findScenario
 from configurationProtocol import pullParameters
+from configurationProtocol import pullInstruments
+from configurationProtocol import instrumentCrossReference
 
 # ==============================================
 # Variables
@@ -83,6 +85,19 @@ scenarioIndex, scenarioNumber, scenarioID = findScenario(selectedScenario, tree,
 #   This functions pulls relevant information about the scenarios from the configuration XML
 # ----------------------------------------------
 timers = pullParameters(scenarioIndex, tree, root)
+
+# ----------------------------------------------
+# Pull and Cross-Reference Devices
+#   This function pulls the devices to be used in the selected scenario from the configuration XML
+#   Then uses that list to croo-reference the addresses of the devices associated with the selected instrument panel
+#   Returns the list of device names and addresses for execution
+# ----------------------------------------------
+scenarioDeviceNames = pullInstruments(panelIndex, scenarioIndex, tree, root)
+print scenarioDeviceNames
+deviceIndex, deviceNames, deviceAddresses = instrumentCrossReference(panelIndex, scenarioDeviceNames, tree, root)
+print deviceIndex
+print deviceNames
+print deviceAddresses
 
 # ==============================================
 # Operation
