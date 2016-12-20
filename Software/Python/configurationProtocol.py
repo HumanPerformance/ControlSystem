@@ -192,7 +192,7 @@ def instrumentCrossReference(panelIndex, scenarioDeviceNames, tree, root):
                 deviceIndex.append(j)
                 deviceNames.append(panelDeviceName)
                 deviceAddresses.append(panelDeviceAddress)
-                print fullStamp() + " Match device, " + panelDeviceName + " with address, " + panelDeviceAddress
+                print fullStamp() + " Matched " + panelDeviceName + ", with address " + panelDeviceAddress + ", on index " + str(j)
     return deviceIndex, deviceNames, deviceAddresses
     
 """

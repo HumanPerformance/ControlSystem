@@ -93,11 +93,7 @@ timers = pullParameters(scenarioIndex, tree, root)
 #   Returns the list of device names and addresses for execution
 # ----------------------------------------------
 scenarioDeviceNames = pullInstruments(panelIndex, scenarioIndex, tree, root)
-print scenarioDeviceNames
 deviceIndex, deviceNames, deviceAddresses = instrumentCrossReference(panelIndex, scenarioDeviceNames, tree, root)
-print deviceIndex
-print deviceNames
-print deviceAddresses
 
 # ==============================================
 # Operation
