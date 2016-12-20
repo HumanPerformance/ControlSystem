@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<configversion id="1.2.4" date="15 DEC 2016"/>
+	<configversion id="1.2.5" date="15 DEC 2016"/>
 	<panels>
 		<panel id="PAN000"   type="ISP" 																						status="online">
 			<device id="000" type="CS"	mac_bt="B8:27:EB:DD:1F:86"	mac_eth="b8:27:eb:77:b5:2c"	mac_wlan="b8:27:eb:22:e0:79"	status="available">
@@ -73,9 +73,9 @@
 				<parameter id="PARAM002" type="timer" name="tp">30</parameter>
 			</parameters>
 			<devices>
-				<device	id="000" type="ophthalmoscope">
+				<device	id="DEV000" type="SD" name="ophthalmoscope">
 				</device>
-				<device id="001" type="otoscope">
+				<device id="DEV001" type="SD" name="otoscope">
 				</device>
 			</devices>
 		</scenario>
