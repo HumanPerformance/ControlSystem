@@ -26,8 +26,8 @@ DC2 = chr(0x12)                 #       Device Control 2: Operational Functions 
 #                                                                                           0xFF            ORG
 
 DC3 = chr(0x13)                 #       Device Control 3: Device-Specific Functions         0x13            STD
-DC3_STARTREC = chr(0x00)        #           Start Recording                                 0x00            ORG
-DC3_STOPREC = chr(0x01)         #           Stop Recording                                  0x01            ORG
+DC3_STARTSTREAM = chr(0x00)     #           Start Data Stream                                0x00            ORG
+DC3_STOPSTREAM = chr(0x01)      #           Stop Data Stream                                  0x01            ORG
 #                                                                                           0xFF            ORG
 
 DC4 = chr(0x14)                 #       Device Control 4: Simulation Functions              0x14            STD

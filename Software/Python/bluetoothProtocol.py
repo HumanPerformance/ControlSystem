@@ -95,15 +95,21 @@ def findSmartDevice(smartDeviceName, availableDeviceNames, availableDeviceBTAddr
 #   This function creates radio-frquency (bluetooth) communication ports for specific devices, using their corresponding address
 #   Input   ::  {array/list} "deviceName", "deviceBTAddress"
 #   Output  ::  {array/list} "btObjects"
-def createPorts(deviceName, deviceBTAddress):
-    Ndevices = len(deviceName)                                                              # Determines the number of devices listed
-    rfObject = []                                                                           # Create RF object variable/list (in case of multiple devices)
-    for i in range(0,Ndevices):     
+def createPorts(deviceNames, deviceBTAddresses, baudrate, timeout):
+    Ndevices = len(deviceNames)                                                              # Determines the number of devices listed
+    rfObjects = []                                                                           # Create RF object variable/list (in case of multiple devices)
+    for i in range(0,Ndevices):
         portRelease("rfcomm",i)                                                             # The program performs a port-release to ensure that the desired rf port is available
-        portBind("rfcomm",i,deviceBTAddress[i])
-        rfObject.append(serial.Serial("/dev/rfcomm" + str(i),115200))                       # Create and append RFComm port to the RFObject structure
-        #triggerRFInstrument(arduRFObj[i], instrumentNames[i])                              # Trigger data collection on instruments
-    return rfObject                                                                         # Return RFObject or list of objects
+        portBind("rfcomm",i,deviceBTAddresses[i])
+        rfObjects.append(serial.Serial(
+            port = "/dev/rfcomm" + str(i),
+            baudrate = baudrate,
+            bytesize = serial.EIGHTBITS,
+            parity = serial.PARITY_NONE,
+            stopbits = serial.STOPBITS_ONE,
+            timeout = timeout))
+        time.sleep(1)
+    return rfObjects                                                                         # Return RFObject or list of objects
 
 # Create RFComm Port
 def createPort(deviceName,deviceBTAddress,baudrate,timeout):
@@ -117,7 +123,7 @@ def createPort(deviceName,deviceBTAddress,baudrate,timeout):
         stopbits = serial.STOPBITS_ONE,
         timeout = timeout)
     time.sleep(1)
-    outByte = definitions.SOH                                                                               # Send SOH (Start of Heading) byte - see protocolDefinitions.py
+    outByte = definitions.ENQ                                                                               # Send SOH (Start of Heading) byte - see protocolDefinitions.py
     rfObject.write(outByte)
     inByte = rfObject.read(size=1)
     if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response

@@ -34,6 +34,7 @@ from    configurationProtocol  import findScenario
 from    configurationProtocol  import pullParameters
 from    configurationProtocol  import pullInstruments
 from    configurationProtocol  import instrumentCrossReference
+from    bluetoothProtocol      import createPorts
 
 # ==============================================
 # Variables
@@ -109,12 +110,17 @@ deviceIndex, deviceNames, deviceAddresses = instrumentCrossReference(panelIndex,
 startTime = time.time()
 currentTime = 0
 stopTime = timers[0]
-
+loopCounter = 0
 print fullStamp() + " Starting Configuration Loop, time = " + str(stopTime) + " seconds"
 while currentTime < stopTime:
 
+    # Connect to listed devices...
+    if loopCounter == 0:
+        print fullStamp() + " Connecting to panel devices"
+        rfObjects = createPorts(deviceNames, deviceAddresses, 115200, 5)
     
     currentTime = time.time() - startTime
+    loopCounter = loopCounter + 1
     #print currentTime
 
 
