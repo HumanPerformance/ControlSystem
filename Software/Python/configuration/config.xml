@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<configversion id="1.2.2" date="15 DEC 2016"/>
+	<configversion id="1.2.3" date="15 DEC 2016"/>
 	<panels>
 		<panel id="PAN000"   type="ISP" 																						status="online">
 			<device id="000" type="CS"	mac_bt="B8:27:EB:DD:1F:86"	mac_eth="b8:27:eb:77:b5:2c"	mac_wlan="b8:27:eb:22:e0:79"	status="available">
@@ -68,9 +68,9 @@
 				In this scenario, the patient presents with...
 			</narrative>
 			<parameters>
-				<t0>30</t0>
-				<t>300</t>
-				<tp>30</tp>
+				<parameter id="PARAM000" name="t0">30</parameter>
+				<parameter id="PARAM001" name="t" >300</parameter>
+				<parameter id="PARAM002" name="tp">30</parameter>
 			</parameters>
 			<devices>
 				<device	id="000" type="ophthalmoscope">
