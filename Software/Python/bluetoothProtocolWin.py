@@ -107,7 +107,7 @@ def nextAvailableBTPort():
     return availableBTPort                                                                                  # Return available port
 
 # Create RFComm Port
-def createPort(portName,deviceName,deviceBTAddress,baudrate,timeout):
+def createPort(portName,deviceName,deviceBTAddress,baudrate,timeout,attempts):
     #print fullStamp() + " createPort()"
     rfObject = serial.Serial(
         port = portName,
@@ -125,6 +125,14 @@ def createPort(portName,deviceName,deviceBTAddress,baudrate,timeout):
         return rfObject
     elif inByte == definitions.NAK:
         print fullStamp() + " NAK device NOT READY\n"
+        return
+    else:
+        rfObject.close()
+        if attempts is not 0:
+            return createPort(portName,deviceName,deviceBTAddress,baudrate,timeout,attempts-1)
+        elif attempts is 0:
+            print fullStamp() + " Attempts limit reached"
+            print fullStamp() + " Please troubleshoot device"
 
 # Port Message Check
 #   Reads serial port and checks for a specific input message
