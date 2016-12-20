@@ -157,13 +157,10 @@ def pullParameters(scenarioIndex, tree, root):
 
 # Pull Scenario Instruments
 #   The following function finds the devices listed under the scenario section of the configuration XML.
-#   Then, the program cross-references that list with the devices listed under the connected instrument panel and control system.
-#   Finally, the program generates lists with the specific devices to be triggered and their respective hardware addresses
 #   Input   ::  {int}           scenario index
 #           ::  {structure}     tree
 #           ::  {structure}     root
-#   Output  ::  {array/list}    device names
-#           ::  {array/list}    device bluetooth addresses
+#   Output  ::  {array/list}    scenario devices
 
 def pullInstruments(panelIndex, scenarioIndex, tree, root):
     print fullStamp() + " pullInstruments()"
@@ -175,6 +172,16 @@ def pullInstruments(panelIndex, scenarioIndex, tree, root):
         scenarioDeviceNames.append(deviceName)
         print fullStamp() + " Device found, " + deviceName
     return scenarioDeviceNames
+
+# Instrument Cross Reference
+#   The following function cross-references the scenario devices list with the devices listed under the connected instrument panel and control system.
+#   Finally, the program generates lists with the specific devices to be triggered and their respective hardware addresses
+#   Input   ::  {int}           panel index
+#           ::  {array/list}    scenario devices
+#           ::  {structure}     tree
+#           ::  {structure}     root
+#   Output  ::  {array/list}    device names
+#           ::  {array/list}    device bluetooth addresses#
 
 def instrumentCrossReference(panelIndex, scenarioDeviceNames, tree, root):
     print fullStamp() + " instrumentCrossReference()"
@@ -194,22 +201,7 @@ def instrumentCrossReference(panelIndex, scenarioDeviceNames, tree, root):
                 deviceAddresses.append(panelDeviceAddress)
                 print fullStamp() + " Matched " + panelDeviceName + ", with address " + panelDeviceAddress + ", on index " + str(j)
     return deviceIndex, deviceNames, deviceAddresses
-    
-"""
-# Pull Instrument Information (CSEC-Specific)
-#   Automatically searches for the instrument information and stores data in several arrays
-#   Input  :: tree, root --> from config. file
-#   Output :: {arrays/lists} of each parameter associated with the device
-def pullInstruments(tree, root):
-    instrumentsTag = 4 # This program assumes the format of the configuration file will remain unchanged
-    deviceName = []
-    deviceBTAddress = []
-    Ndevices = len(root[instrumentsTag]) 
-    for i in range(0, Ndevices):
-        deviceName.append(root[instrumentsTag][i][0].text)
-        deviceBTAddress.append(root[instrumentsTag][i][1].text)
-    return deviceName, deviceBTAddress
-"""    
+     
 """
 References
 
