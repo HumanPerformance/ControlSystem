@@ -30,6 +30,7 @@ from configurationProtocol import definePaths
 from configurationProtocol import readConfigFile
 from configurationProtocol import selfID
 from configurationProtocol import findScenario
+from configurationProtocol import pullParameters
 
 # ==============================================
 # Variables
@@ -76,6 +77,12 @@ panelIndex, panelID = selfID(mac_bt, tree, root)
 #   Using the scenario number from the terminal input and the configuration XML, the program identifies the scenarion index
 # ----------------------------------------------
 scenarioIndex, scenarioNumber, scenarioID = findScenario(selectedScenario, tree, root)
+
+# ----------------------------------------------
+# Pull Scenario Info
+#   This functions pulls relevant information about the scenarios from the configuration XML
+# ----------------------------------------------
+timers = pullParameters(scenarioIndex, tree, root)
 
 # ==============================================
 # Operation
