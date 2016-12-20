@@ -132,6 +132,31 @@ def findScenario(number, tree, root):
             scenarioID = "NA"
             return scenarioIndex, scenarioNumber, scenarioID
 
+# Pull Scenario Parameters
+#   The following function pulls scenario parameters from the configuration XML
+#   Input   ::  {int}           scenario index
+#           ::  {structure}     tree
+#           ::  {structure}     root
+#   Output  ::  {int}           t0, time buffer before test begins
+#           ::  {int}           t, time of test
+#           ::  {int}           tp, time buffer after the test ends
+def pullParameters(scenarioIndex, tree, root):
+    print fullStamp() + " pullParameters()"
+    parametersIndex = 1
+    timers = []
+    Nparameters = len(root[2][scenarioIndex][parametersIndex])
+    for i in range(0,Nparameters):
+        parameterType = root[2][scenarioIndex][parametersIndex][i].get("type")
+        if parameterType == "timer":
+            timerName = root[2][scenarioIndex][parametersIndex][i].get("name")
+            timerValue = int(root[2][scenarioIndex][parametersIndex][i].text)
+            timers.append(timerValue)
+            print fullStamp() + " Timer found, " + timerName + " = " + str(timerValue)
+        else:
+            print fullStamp() + " Unknown parameter '" + parameterType + "' found"
+    return timers
+
+
 # Pull Instrument Information (CSEC-Specific)
 #   Automatically searches for the instrument information and stores data in several arrays
 #   Input  :: tree, root --> from config. file
