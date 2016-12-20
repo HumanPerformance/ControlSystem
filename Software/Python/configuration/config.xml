@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<configversion id="1.2.1" date="15 DEC 2016"/>
+	<configversion id="1.2.2" date="15 DEC 2016"/>
 	<panels>
 		<panel id="PAN000"   type="ISP" 																						status="online">
 			<device id="000" type="CS"	mac_bt="B8:27:EB:DD:1F:86"	mac_eth="b8:27:eb:77:b5:2c"	mac_wlan="b8:27:eb:22:e0:79"	status="available">
@@ -13,7 +13,7 @@
 					An electronic stethoscope providing either augmented listening or unmodified heart sounds 
 				</description>
 			</device>
-			<device id="002" type="opthalmascope" mac_bt="00:06:66:80:8C:BE"	status="available">
+			<device id="002" type="ophthalmoscope" mac_bt="00:06:66:80:8C:BE"	status="available">
 				<description>
 					No description
 				</description>
@@ -73,34 +73,11 @@
 				<tp>30</tp>
 			</parameters>
 			<devices>
-				<stethoscope>
-					<events>
-						<event id="001" seq="001" minutes="6:00">
-							<title>Normal heartbeat</title>
-							<heartrate>80</heartrate>
-						</event>
-						<event id="001" seq="002" minutes="6:00">
-							<title>Heart murmur</title>
-							<heartrate>100</heartrate>
-						</event>
-						<event id="001" seq="003" minutes="6:00">
-							<title>3rd heart sound</title>
-							<heartrate>100</heartrate>
-						</event>
-					</events>
-				</stethoscope>
-				<pulseoximeter>
-					<events>
-						<event id="001" seq="001" minutes="12:00">
-							<title>Moderate compromise</title>
-							<heartrate>100</heartrate>
-							<oxygen>75</oxygen>
-						</event>
-					</events>
-				</pulseoximeter>
+				<device	id="000" type="ophthalmoscope">
+				</device>
+				<device id="001" type="otoscope">
+				</device>
 			</devices>
-		</scenario>
-		<scenario id="SCN001" number="1" title="murmur">
 		</scenario>
 	</scenarios>
 </configuration>
