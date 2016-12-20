@@ -22,7 +22,6 @@ class StopWatch(Frame):
 
     def makeWidgets(self):                         
         """ Make the time label. """
-        global l
         l = Label(self, textvariable=self.timestr, bg="black", 
                   fg="white", width=200, font=("Courier", 72), anchor='center')
         self._setTime(self._elapsedtime)

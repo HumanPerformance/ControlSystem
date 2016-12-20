@@ -28,6 +28,7 @@ def phaseThree():
     print "Phase 3 Passed"
     sw.Reset()
     sw.Stop()
+    root.after(2000, lambda:root.destroy())
     pass
 
 def phaseOneALT(t1):
@@ -46,10 +47,11 @@ def phaseThreeALT():
     print "Phase 3 Passed"
     sw.ResetDown(0)
     sw.Stop()
+    root.after(2000, lambda:root.destroy())
     pass
 
 def toggle_fullscreen(self, event=None):
-    root.state = not root.state  # Just toggling the boolean
+    root.state = not root.state  #Boolean toggle
     root.attributes("-fullscreen", root.state)
     return "break"
 
@@ -59,7 +61,7 @@ def end_fullscreen(self, event=None):
     return "break"
 
 def timerApp(t0,t1,t2,direction):
-    #timerApp(2,5,2,"down")
+    #timerApp(1,1,1,"down")
 
     if direction == "up":
         sw.Start()
@@ -84,16 +86,17 @@ def timerApp(t0,t1,t2,direction):
 
         z = threading.Timer(t0+t1+t2, phaseThreeALT)
         z.start()
-        
 
     root.mainloop()
+        
+
 
 root = Tk()
 root.configure(bg='black')
 root.attributes('-fullscreen', True)
-root.frame = Frame(root)
-root.frame.pack()
-root.state = False
+'''root.frame = Frame(root)
+root.frame.pack()'''
+root.state = True
 root.bind("<F11>", toggle_fullscreen)
 root.bind("<Escape>", end_fullscreen)
 sw = StopWatchModule.StopWatch(root)
