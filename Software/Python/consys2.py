@@ -18,21 +18,22 @@ Fluvio L. Lobo Fenoglietto 12/19/2016
 # Import Libraries and/or Modules
 # ==============================================
 # Python modules
-import sys
-import os
-from os.path import expanduser
-import serial
-import time
-from timeStamp import fullStamp
+import  sys
+import  os
+import  serial
+import  time
+from    os.path                import expanduser
+
 # PD3D Modules
-from configurationProtocol import getMAC
-from configurationProtocol import definePaths
-from configurationProtocol import readConfigFile
-from configurationProtocol import selfID
-from configurationProtocol import findScenario
-from configurationProtocol import pullParameters
-from configurationProtocol import pullInstruments
-from configurationProtocol import instrumentCrossReference
+from    timeStamp              import fullStamp
+from    configurationProtocol  import getMAC
+from    configurationProtocol  import definePaths
+from    configurationProtocol  import readConfigFile
+from    configurationProtocol  import selfID
+from    configurationProtocol  import findScenario
+from    configurationProtocol  import pullParameters
+from    configurationProtocol  import pullInstruments
+from    configurationProtocol  import instrumentCrossReference
 
 # ==============================================
 # Variables
@@ -98,6 +99,23 @@ deviceIndex, deviceNames, deviceAddresses = instrumentCrossReference(panelIndex,
 # ==============================================
 # Operation
 # ==============================================
+
+# ----------------------------------------------
+# Pre-Simulation / Configuration Loop
+#   The following while-loop will preceed the simulatio loop
+#   This loop works as a configuration step
+# ----------------------------------------------
+
+startTime = time.time()
+currentTime = 0
+stopTime = timers[0]
+
+print fullStamp() + " Starting Configuration Loop, time = " + str(stopTime) + " seconds"
+while currentTime < stopTime:
+
+    
+    currentTime = time.time() - startTime
+    #print currentTime
 
 
 
