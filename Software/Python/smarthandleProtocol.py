@@ -19,26 +19,6 @@ from configurationProtocol import *
 from bluetoothProtocol import *
 import smarthandleDefinitions as definitions
 
-# Path/Directoy Variables
-homeDir = expanduser("~")
-rootDir = "/root"
-if homeDir == rootDir:
-          homeDir = "/home/pi"
-          # This check and correction is needed for raspbian
-# .../Python
-consysPyDir = homeDir + "/csec/repos/ControlSystem/Software/Python"
-# .../Python/data
-consysPyDataDir = consysPyDir + "/data"
-# .../Python/data/scenarios
-scenarioConfigFilePath = consysPyDataDir + "/scenarios"
-# The exact scenario name is determined using the terminal input (Operation :: 1.0-2.0)
-# .../Python/data/instruments
-instrumentsConfigFilePath = consysPyDataDir + "/instruments"
-instrumentsConfigFileName = "/instrumentconfig.txt"
-instrumentsConfigFile = instrumentsConfigFilePath + instrumentsConfigFileName
-# .../Python/data/output
-outputFilePath = consysPyDataDir + "/output"
-
 # Functions - Byte-based
 
 # Status Enquiry
