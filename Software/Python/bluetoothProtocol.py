@@ -127,14 +127,15 @@ def createPort(deviceName,deviceBTAddress,baudrate,timeout,attempts):
     rfObject.write(outByte)
     inByte = rfObject.read(size=1)
     if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response
-        print fullStamp() + " Connection Established\n"
+        print fullStamp() + " ACK Connection Established"
+        #rfObject.close()
         return rfObject
     elif inByte == definitions.NAK:
-        print fullStamp() + " NAK device NOT READY\n"
+        print fullStamp() + " NAK device NOT READY"
     else:
         rfObject.close()
         if attempts is not 0:
-            return (deviceName,deviceBTAddress,baudrate,timeout,attempts-1)
+            return createPort(deviceName,deviceBTAddress,baudrate,timeout,attempts-1)
         elif attempts is 0:
             print fullStamp() + " Attempts limit reached"
             print fullStamp() + " Please troubleshoot devices"

@@ -18,7 +18,9 @@ from smarthandleProtocol import *
 executionTimeStamp = fullStamp()                                                                        # Program execution timestamp
 deviceName = "oto"                                                                             # Hard-coded device name
 deviceBTAddress = "00:06:66:80:8C:BE"                                                                  # Hard-code device bluetooth address
-rfObject = createPort(deviceName, deviceBTAddress, 115200, 5,5)
+rfObject = createPort(deviceName, deviceBTAddress, 115200, 5, 5)
+
+"""
 startStreaming(rfObject)
 time.sleep(2)
 for i in range(0,20):
@@ -26,7 +28,7 @@ for i in range(0,20):
 time.sleep(5)
 stopStreaming(rfObject)
 portRelease('rfcomm',0)
-
+"""
 
 
 """

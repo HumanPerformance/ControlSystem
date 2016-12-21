@@ -23,23 +23,38 @@ from    bluetoothProtocol           import *
 # Functions - Byte-based
 
 # Status Enquiry
-#   This function requests the status of the bluetooth device
-def statusEnquiry(rfObject, timeout, iterCheck):
-        print fullStamp() + " statusEnquiry()"                                                                  # Print function name
-        outByte = definitions.ENQ                                                                               # Send ENQ / Status Enquiry command - see protocolDefinitions.py
-        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
-        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " ACK Device READY"                                                         # ACK, in this case, translates to DEVICE READY
-        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " NAK Device NOT READY"
+#   The following function requests the status of the smart-handle module
+#   Input   ::  {object}    serial object
+#   Output  ::  {string}    terminal messages
+def statusEnquiry(rfObject,attempts):
+    print fullStamp() + " statusEnquiry()"
+    if rfObject.isOpen() == False:
+        rfObject.open()
+    outByte = definitions.ENQ
+    rfObject.write(outByte)
+    time.sleep(1)
+    inByte = rfObject.read(size=1)
+    if inByte == definitions.ACK:
+        print fullStamp() + " ACK Device READY"
+    elif inByte == definitions.NAK:
+        print fullStamp() + " NAK Device NOT READY"
+    else:
+        rfObject.close()
+        if attempts is not 0:
+            return (rfObject,attempts-1)
+        elif attempts is 0:
+            print fullStamp() + " Attempts limit reached"
+    rfObject.close()
 
 # Start Streaming
 #   The following function allows the smart handle module to stream the data from the on-board sensors through the serial port
 #   Input   ::  {object}    serial object
 #   Output  ::  {string}    terminal messages
 
-def startStreaming(rfObject):
+def startStreaming(rfObject,attempts):
     print fullStamp() + " startStreaming()"
+    if rfObject.isOpen() == False:
+        rfObject.open()
     outBytes = [definitions.DC3, definitions.DC3_STARTSTREAM]
     inBytes = []
     for i in range(0,len(outBytes)):
@@ -47,9 +62,17 @@ def startStreaming(rfObject):
         time.sleep(1)
         inBytes.append(rfObject.read(size=1))
     if inBytes[len(outBytes)-1] == definitions.ACK:
-        print fullStamp() + " ACK Device has began STREAMING data
+        print fullStamp() + " ACK Device has began STREAMING data"
     elif inBytes[len(outBytes)-1] == definitions.NAK:
         print fullStamp() + " NAK Device CANNOT STREAM data"
+    else:
+        rfObject.close()
+        if attempts is not 0:
+            return startStreaming(rfObject,attempts-1)
+        elif attempts is 0:
+            print fullStamp() + " Attempts limit reached"
+            print fullStamp() + " Please troubleshoot devices"
+    rfObject.close()
 
 # Read Stream
 #   The following function reads the string-based data stream coming from the serial port
@@ -67,6 +90,8 @@ def readStream(rfObject):
 
 def stopStreaming(rfObject):
     print fullStamp() + " stopStreaming()"
+    #if rfObject.isOpen() == False:
+    #    rfObject.open()
     outBytes = [definitions.DC3, definitions.DC3_STOPSTREAM]
     inBytes = []
     for i in range(0,len(outBytes)):
@@ -77,6 +102,7 @@ def stopStreaming(rfObject):
         print fullStamp() + " ACK Device has STOPPED STREAMING data"
     elif inBytes[len(outBytes)-1] == definitions.NAK:
         print fullStamp() + " NAK Device CANNOT STOP STREAMING data"
+    #rfObject.close()
 
 # Functions - String-based
 
