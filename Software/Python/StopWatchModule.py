@@ -30,6 +30,12 @@ class StopWatch(Frame):
     def _update(self): 
         """ Update the label with elapsed time. """
         self._elapsedtime = time.time() - self._start
+        
+        if self._countDownToggle is True:
+            self._start1 = time.time()
+            self._start2 = self._start1 - self._start0
+            self._elapsedtime = self._startTime - self._start2   
+            
         self._setTime(self._elapsedtime)
         self._timer = self.after(50, self._update)
         
@@ -40,24 +46,11 @@ class StopWatch(Frame):
         hseconds = int((elap - minutes*60.0 - seconds)*100)                
         self.timestr.set('%02d:%02d:%02d' % (minutes, seconds, hseconds))
 
-    def _updateDown(self): 
-        """ Update the label with elapsed time during a countdown. """
-        self._start1 = time.time()
-        self._start2 = self._start1 - self._start0
-        self._elapsedtimeDown = self._startTime - self._start2
-        self._setTimeDown(self._elapsedtimeDown)
-        self._timer = self.after(50, self._updateDown)
-        
-    def _setTimeDown(self, elap):
-        """ Set the time string to Minutes:Seconds:Hundreths during a countdown """
-        minutes = int(elap/60)
-        seconds = int(elap - minutes*60.0)
-        hseconds = int((elap - minutes*60.0 - seconds)*100)                
-        self.timestr.set('%02d:%02d:%02d' % (minutes, seconds, hseconds))
         
     def Start(self):                                                     
         """ Start the stopwatch, ignore if running. """
-        if not self._running:            
+        if not self._running:
+            self._countDownToggle = False
             self._start = time.time() - self._elapsedtime
             self._update()
             self._running = 1        
@@ -70,27 +63,23 @@ class StopWatch(Frame):
             self._setTime(self._elapsedtime)
             self._running = 0
     
-    def Reset(self):                                  
+    def Reset(self, startTime):                                  
         """ Reset the stopwatch. """
         self._start = time.time()         
         self._elapsedtime = 0.0    
         self._setTime(self._elapsedtime)
-
-    def ResetDown(self, startTime):                                  
-        """ Reset the stopwatch during a countdown. """
-        self._start = time.time()
-        self._elapsedtime = 0.0    
-        self._setTime(self._elapsedtime)
-        self._start0 = time.time()
-        self._start1 = time.time()
-        self._startTime = startTime
-        self._setTimeDown(self._elapsedtimeDown)
+        if self._countDownToggle is True:
+            self._start0 = time.time()
+            self._start1 = time.time()
+            self._startTime = startTime
+            self._setTime(self._elapsedtime)
 
     def countDown(self, startTime):        
         if not self._running:
+            self._countDownToggle = True
             self._startTime = startTime
             self._start0 = time.time()
-            self._updateDown()
+            self._update()
             self._running = 1
 
 '''     

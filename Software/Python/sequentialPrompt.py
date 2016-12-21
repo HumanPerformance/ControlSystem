@@ -14,41 +14,37 @@ import time
 import threading
 import StopWatchModule
 
-def phaseOne():
+def phaseOne(t1):
     print "Phase 1 Passed"
-    sw.Reset()
-    pass
+    if mode is 'countDown':
+        sw.Reset(t1)
+        sw.countDown(t1)
+    elif mode is 'stopWatch':
+        sw.Reset(0)
 
-def phaseTwo():
+    return
+
+def phaseTwo(t2):
     print "Phase 2 Passed"
-    sw.Reset()
-    pass
+    if mode is 'countDown':
+        sw.Reset(t2)
+        sw.countDown(t2)
+    elif mode is 'stopWatch':
+        sw.Reset(0)
+
+    return
 
 def phaseThree():
     print "Phase 3 Passed"
-    sw.Reset()
+    if mode is 'countDown':
+        pass
+    elif mode is 'stopWatch':
+        pass
+    
+    sw.Reset(0)
     sw.Stop()
     root.after(2000, lambda:root.destroy())
-    pass
-
-def phaseOneALT(t1):
-    print "Phase 1 Passed"
-    sw.ResetDown(t1)
-    sw.countDown(t1)
-    pass
-
-def phaseTwoALT(t2):
-    print "Phase 2 Passed"
-    sw.ResetDown(t2)
-    sw.countDown(t2)
-    pass
-
-def phaseThreeALT():
-    print "Phase 3 Passed"
-    sw.ResetDown(0)
-    sw.Stop()
-    root.after(2000, lambda:root.destroy())
-    pass
+    return
 
 def toggle_fullscreen(self, event=None):
     root.state = not root.state  #Boolean toggle
@@ -63,41 +59,40 @@ def end_fullscreen(self, event=None):
 def timerApp(t0,t1,t2,direction):
     #timerApp(1,1,1,"down")
 
-    if direction == "up":
+    global mode, root, sw
+    root = Tk()
+    root.configure(bg='black')
+    root.attributes('-fullscreen', True)
+    root.state = True
+    root.bind("<F11>", toggle_fullscreen)
+    root.bind("<Escape>", end_fullscreen)
+    sw = StopWatchModule.StopWatch(root)
+    sw.pack(side=TOP)
+    
+    if direction is 'up':
+        mode = 'stopWatch'
         sw.Start()
 
-        x = threading.Timer(t0, phaseOne)
+        x = threading.Timer(t0, phaseOne, args=(0,))
         x.start()
 
-        y = threading.Timer(t0+t1, phaseTwo)
+        y = threading.Timer(t0+t1, phaseTwo, args=(0,))
         y.start()   
 
         z = threading.Timer(t0+t1+t2, phaseThree)
         z.start()
     
-    elif direction == "down":
+    elif direction is 'down':
+        mode = 'countDown'
         sw.countDown(t0)
         
-        x = threading.Timer(t0, phaseOneALT, args=(t1,))
+        x = threading.Timer(t0, phaseOne, args=(t1,))
         x.start()
         
-        y = threading.Timer(t0+t1, phaseTwoALT, args=(t2,))
+        y = threading.Timer(t0+t1, phaseTwo, args=(t2,))
         y.start()   
 
-        z = threading.Timer(t0+t1+t2, phaseThreeALT)
+        z = threading.Timer(t0+t1+t2, phaseThree)
         z.start()
 
     root.mainloop()
-        
-
-
-root = Tk()
-root.configure(bg='black')
-root.attributes('-fullscreen', True)
-'''root.frame = Frame(root)
-root.frame.pack()'''
-root.state = True
-root.bind("<F11>", toggle_fullscreen)
-root.bind("<Escape>", end_fullscreen)
-sw = StopWatchModule.StopWatch(root)
-sw.pack(side=TOP)
