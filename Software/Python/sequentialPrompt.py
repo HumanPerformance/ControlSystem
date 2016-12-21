@@ -67,7 +67,7 @@ def timerApp(t0,t1,t2,direction):
     root.bind("<F11>", toggle_fullscreen)
     root.bind("<Escape>", end_fullscreen)
     sw = StopWatchModule.StopWatch(root)
-    sw.pack(side=TOP)
+    sw.pack(side=TOP, expand=YES, fill=BOTH)
     
     if direction is 'up':
         mode = 'stopWatch'

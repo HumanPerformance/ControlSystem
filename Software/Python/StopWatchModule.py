@@ -25,7 +25,7 @@ class StopWatch(Frame):
         l = Label(self, textvariable=self.timestr, bg="black", 
                   fg="white", width=200, font=("Courier", 72), anchor='center')
         self._setTime(self._elapsedtime)
-        l.pack(fill=X, expand=NO, pady=2, padx=2)                      
+        l.pack(fill=BOTH, expand=YES, pady=2, padx=2)
     
     def _update(self): 
         """ Update the label with elapsed time. """
