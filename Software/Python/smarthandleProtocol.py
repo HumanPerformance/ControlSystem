@@ -67,8 +67,13 @@ def startStreaming(rfObject):
         print fullStamp() + " NAK SD Card Check Failed"                                                 # If the SD card check fails, the remote device sends a NAK
         print fullStamp() + " NAK Device NOT Ready"
 
+def readStream(rfObject):
+    #print fullStamp() + " readStream()"
+    inString = rfObject.readline()
+    print inString
+
 def stopStreaming(rfObject):
-    print fullStamp() + " startStreaming()"                                                                    # Print function name
+    print fullStamp() + " stopStreaming()"                                                                    # Print function name
     outBytes = [definitions.DC3, definitions.DC3_STOPSTREAM]
     inBytes = []
     for i in range(0,len(outBytes)):                                                                        # For loop for the sequential delivery of bytes using the length of the sequence for the range

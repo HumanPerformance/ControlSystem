@@ -112,7 +112,7 @@ def createPorts(deviceNames, deviceBTAddresses, baudrate, timeout):
     return rfObjects                                                                         # Return RFObject or list of objects
 
 # Create RFComm Port
-def createPort(deviceName,deviceBTAddress,baudrate,timeout):
+def createPort(deviceName,deviceBTAddress,baudrate,timeout,attempts):
     portRelease("rfcomm",0)                                                             # The program performs a port-release to ensure that the desired rf port is available
     portBind("rfcomm",0,deviceBTAddress)
     rfObject = serial.Serial(
@@ -131,6 +131,13 @@ def createPort(deviceName,deviceBTAddress,baudrate,timeout):
         return rfObject
     elif inByte == definitions.NAK:
         print fullStamp() + " NAK device NOT READY\n"
+    else:
+        rfObject.close()
+        if attempts is not 0:
+            return (deviceName,deviceBTAddress,baudrate,timeout,attempts-1)
+        elif attempts is 0:
+            print fullStamp() + " Attempts limit reached"
+            print fullStamp() + " Please troubleshoot devices"
 
 # Port Bind
 #   This function binds the specified bluetooth device to a rfcomm port
