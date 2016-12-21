@@ -140,6 +140,20 @@ def createPort(deviceName,deviceBTAddress,baudrate,timeout,attempts):
             print fullStamp() + " Attempts limit reached"
             print fullStamp() + " Please troubleshoot devices"
 
+def createPort2(deviceName,deviceBTAddress,baudrate,timeout):
+    portRelease("rfcomm",0)                                                             # The program performs a port-release to ensure that the desired rf port is available
+    portBind("rfcomm",0,deviceBTAddress)
+    rfObject = serial.Serial(
+        port = "/dev/rfcomm" + str(0),
+        baudrate = baudrate,
+        bytesize = serial.EIGHTBITS,
+        parity = serial.PARITY_NONE,
+        stopbits = serial.STOPBITS_ONE,
+        timeout = timeout)
+    time.sleep(1)
+    rfObject.close()
+    return rfObject
+
 # Port Bind
 #   This function binds the specified bluetooth device to a rfcomm port
 #   Input   ::  {string} port type, {int} port number, {string} bluetooth address of device

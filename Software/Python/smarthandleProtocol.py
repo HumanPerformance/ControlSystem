@@ -13,6 +13,7 @@ import  os
 import  os.path
 import  sys
 import  serial
+import  time
 import  smarthandleDefinitions      as definitions
 from    os.path                     import expanduser
 from    timeStamp                   import *
@@ -119,6 +120,18 @@ def triggerDevice(rfObject,deviceName,iterCheck):
             rfObject.write('g')
             break
 
+def triggerDevice2(rfObject,deviceName):
+    if rfObject.isOpen() == False:
+        rfObject.open()
+    inString = deviceName
+    while inString == deviceName:
+        print fullStamp() + " Triggering Device"
+        rfObject.write('g')
+        time.sleep(1)
+        inString = rfObject.readline()[:-1]
+        print inString
+    rfObject.close()
+
 # Stop Device
 # This function stops the data collection process of the smart handle
 def stopDevice(rfObject, deviceName, iterCheck):
@@ -128,6 +141,18 @@ def stopDevice(rfObject, deviceName, iterCheck):
             print "Stopping device..."
             rfObject.write('s')
             break
+
+def stopDevice2(rfObject,deviceName):
+    if rfObject.isOpen() == False:
+        rfObject.open()
+    inString = rfObject.readline()
+    while inString != deviceName:
+        print fullStamp() + " Stopping Device"
+        rfObject.write('s')
+        time.sleep(1)
+        inString = rfObject.readline()[:-1]
+        print inString
+    rfObject.close()
 
 # Data Read
 #   This function captures the data written to the serial port
