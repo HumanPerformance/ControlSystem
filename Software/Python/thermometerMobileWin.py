@@ -41,11 +41,15 @@ def nextAvailableBTPortCallback():
     nextAvailableBTPort()
 
 # Find Thermometer
-def connect2Thermometer(portName,deviceName,deviceBTAddress,baudrate,timeout):
+def connect2Thermometer(portName,deviceName,deviceBTAddress,baudrate,timeout,attempts):
     print fullStamp() + " findThermometer()"
-    global rfObject
-    rfObject = createPort(portName,deviceName,deviceBTAddress,baudrate,timeout)
-    rfObject.close()
+    try:
+        global rfObject
+        rfObject = createPort(portName,deviceName,deviceBTAddress,baudrate,timeout,attempts)
+        rfObject.close()
+    except AttributeError:
+        print fullStamp() + " Connection not successful"
+
 
 def statusEnquiryCallback(rfObject):
     if rfObject.isOpen() == False:
@@ -181,7 +185,7 @@ debugModeOFFButton.config(height=1,width=15)
 
 # Find Smart Device Button
 searchDevicesButton = Button(text="Find Thermometer",
-                             command=lambda: connect2Thermometer("COM22","SmartThermometer-7701","00:06:66:86:77:01", 115200, 5))   #Lab Computer
+                             command=lambda: connect2Thermometer("COM22","SmartThermometer-7701","00:06:66:86:77:01", 115200, 5, 3))   #Lab Computer
                              #command=lambda: connect2Thermometer("COM24","RNBT-7712","00:06:66:86:77:12", 115200, 5))   #Lab Computer
                              #command=lambda: connect2Thermometer("COM5","RNBT-76C5","00:06:66:86:76:C5", 115200, 5))   #Jack's Laptop
 searchDevicesButton.place(x=310,y=365)
