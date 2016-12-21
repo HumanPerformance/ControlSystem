@@ -21,6 +21,7 @@ from    bluetoothProtocol           import *
 
 
 # Functions - Byte-based
+#   As we developed more sofisticated hardware and software, our devices will communicate by sending/receiving bytes
 
 # Status Enquiry
 #   The following function requests the status of the smart-handle module
@@ -41,7 +42,7 @@ def statusEnquiry(rfObject,attempts):
     else:
         rfObject.close()
         if attempts is not 0:
-            return (rfObject,attempts-1)
+            return statusEnquiry(rfObject,attempts-1)
         elif attempts is 0:
             print fullStamp() + " Attempts limit reached"
     rfObject.close()
@@ -55,23 +56,20 @@ def startStreaming(rfObject,attempts):
     print fullStamp() + " startStreaming()"
     if rfObject.isOpen() == False:
         rfObject.open()
-    outBytes = [definitions.DC3, definitions.DC3_STARTSTREAM]
-    inBytes = []
-    for i in range(0,len(outBytes)):
-        rfObject.write(outBytes[i])
-        time.sleep(1)
-        inBytes.append(rfObject.read(size=1))
-    if inBytes[len(outBytes)-1] == definitions.ACK:
-        print fullStamp() + " ACK Device has began STREAMING data"
-    elif inBytes[len(outBytes)-1] == definitions.NAK:
-        print fullStamp() + " NAK Device CANNOT STREAM data"
+    outByte = definitions.DC2
+    rfObject.write(outByte)
+    time.sleep(1)
+    inByte = rfObject.read(size=1)
+    if inByte == definitions.ACK:
+        print fullStamp() + " ACK Device STARTED STREAMING data"
+    elif inByte == definitions.NAK:
+        print fullStamp() + " NAK Device CANNOT START STREAMING data"
     else:
         rfObject.close()
         if attempts is not 0:
             return startStreaming(rfObject,attempts-1)
         elif attempts is 0:
             print fullStamp() + " Attempts limit reached"
-            print fullStamp() + " Please troubleshoot devices"
     rfObject.close()
 
 # Read Stream
@@ -88,23 +86,28 @@ def readStream(rfObject):
 #   Input   ::  {object}    serial object
 #   Output  ::  {string}    terminal messages
 
-def stopStreaming(rfObject):
+def stopStreaming(rfObject,attempts):
     print fullStamp() + " stopStreaming()"
-    #if rfObject.isOpen() == False:
-    #    rfObject.open()
-    outBytes = [definitions.DC3, definitions.DC3_STOPSTREAM]
-    inBytes = []
-    for i in range(0,len(outBytes)):
-        rfObject.write(outBytes[i])
-        time.sleep(1)
-        inBytes.append(rfObject.read(size=1))
-    if inBytes[len(outBytes)-1] == definitions.ACK:
-        print fullStamp() + " ACK Device has STOPPED STREAMING data"
-    elif inBytes[len(outBytes)-1] == definitions.NAK:
+    if rfObject.isOpen() == False:
+        rfObject.open()
+    outByte = definitions.DC3
+    rfObject.write(outByte)
+    time.sleep(1)
+    inByte = rfObject.read(size=1)
+    if inByte == definitions.ACK:
+        print fullStamp() + " ACK Device STOPPED STREAMING data"
+    elif inByte == definitions.NAK:
         print fullStamp() + " NAK Device CANNOT STOP STREAMING data"
-    #rfObject.close()
+    else:
+        rfObject.close()
+        if attempts is not 0:
+            return stopStreaming(rfObject,attempts-1)
+        elif attempts is 0:
+            print fullStamp() + " Attempts limit reached"
+    rfObject.close()
 
 # Functions - String-based
+#   The original and robust method of communication consisted of character-based communication
 
 # Trigger Device
 #   This function triggers the data recording of the smart handle
