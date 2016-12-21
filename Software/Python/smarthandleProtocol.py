@@ -9,15 +9,16 @@ Fluvio L Lobo Fenoglietto
 """
 
 # Import Libraries and/or Modules
-import os
-import os.path
-from os.path import expanduser
-import sys
-import serial
-from timeStamp import *
-from configurationProtocol import *
-from bluetoothProtocol import *
-import smarthandleDefinitions as definitions
+import  os
+import  os.path
+import  sys
+import  serial
+import  smarthandleDefinitions      as definitions
+from    os.path                     import expanduser
+from    timeStamp                   import *
+from    configurationProtocol       import *
+from    bluetoothProtocol           import *
+
 
 # Functions - Byte-based
 
@@ -32,40 +33,50 @@ def statusEnquiry(rfObject, timeout, iterCheck):
         elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
                 print fullStamp() + " NAK Device NOT READY"
 
+# Start Streaming
+#   The following function allows the smart handle module to stream the data from the on-board sensors through the serial port
+#   Input   ::  {object}    serial object
+#   Output  ::  {string}    terminal messages
+
 def startStreaming(rfObject):
-    print fullStamp() + " startStreaming()"                                                                    # Print function name
+    print fullStamp() + " startStreaming()"
     outBytes = [definitions.DC3, definitions.DC3_STARTSTREAM]
     inBytes = []
-    for i in range(0,len(outBytes)):                                                                        # For loop for the sequential delivery of bytes using the length of the sequence for the range
+    for i in range(0,len(outBytes)):
         rfObject.write(outBytes[i])
         time.sleep(1)
-        inBytes.append(rfObject.read(size=1))                                                          # The read is limited to a single byte (timeout predefined in the createPort() function)
+        inBytes.append(rfObject.read(size=1))
     if inBytes[len(outBytes)-1] == definitions.ACK:
-        print fullStamp() + " ACK SD Card Check Passed"                                                 # If the SD card check is successful, the remote device sends a ACK
-        print fullStamp() + " ACK Device Ready"                                                         # ACK, in this case, translates to DEVICE READY
+        print fullStamp() + " ACK Device has began STREAMING data
     elif inBytes[len(outBytes)-1] == definitions.NAK:
-        print fullStamp() + " NAK SD Card Check Failed"                                                 # If the SD card check fails, the remote device sends a NAK
-        print fullStamp() + " NAK Device NOT Ready"
+        print fullStamp() + " NAK Device CANNOT STREAM data"
+
+# Read Stream
+#   The following function reads the string-based data stream coming from the serial port
+#   Input   ::  {object}    serial object
+#   Output  ::  {string}    data string
 
 def readStream(rfObject):
-    #print fullStamp() + " readStream()"
     inString = rfObject.readline()
-    print inString
+    return inString
+
+# Stop Streaming
+#   The following function interrupts the streaming of data from the smart-handle module
+#   Input   ::  {object}    serial object
+#   Output  ::  {string}    terminal messages
 
 def stopStreaming(rfObject):
-    print fullStamp() + " stopStreaming()"                                                                    # Print function name
+    print fullStamp() + " stopStreaming()"
     outBytes = [definitions.DC3, definitions.DC3_STOPSTREAM]
     inBytes = []
-    for i in range(0,len(outBytes)):                                                                        # For loop for the sequential delivery of bytes using the length of the sequence for the range
+    for i in range(0,len(outBytes)):
         rfObject.write(outBytes[i])
         time.sleep(1)
-        inBytes.append(rfObject.read(size=1))                                                          # The read is limited to a single byte (timeout predefined in the createPort() function)
+        inBytes.append(rfObject.read(size=1))
     if inBytes[len(outBytes)-1] == definitions.ACK:
-        print fullStamp() + " ACK SD Card Check Passed"                                                 # If the SD card check is successful, the remote device sends a ACK
-        print fullStamp() + " ACK Device Ready"                                                         # ACK, in this case, translates to DEVICE READY
+        print fullStamp() + " ACK Device has STOPPED STREAMING data"
     elif inBytes[len(outBytes)-1] == definitions.NAK:
-        print fullStamp() + " NAK SD Card Check Failed"                                                 # If the SD card check fails, the remote device sends a NAK
-        print fullStamp() + " NAK Device NOT Ready"
+        print fullStamp() + " NAK Device CANNOT STOP STREAMING data"
 
 # Functions - String-based
 
