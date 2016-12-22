@@ -35,6 +35,7 @@ from    configurationProtocol  import pullParameters
 from    configurationProtocol  import pullInstruments
 from    configurationProtocol  import instrumentCrossReference
 from    bluetoothProtocol      import createPorts2
+from    smarthandleProtocol    import triggerDevice2
 
 # ==============================================
 # Variables
@@ -127,6 +128,34 @@ while currentTime < stopTime:
     loopCounter = loopCounter + 1
     #print currentTime
 
+# ----------------------------------------------
+# Simulation / Configuration Loop
+#   In this loop, connected devices will be accessed for data collection
+# ----------------------------------------------
+
+startTime = time.time()
+currentTime = 0
+stopTime = 10
+loopCounter = 0
+print fullStamp() + " Satrting Simulation Loop, time = " + str(stopTime) + " seconds"
+while currentTime < stopTime:
+
+    # Handles
+    # Triggering Handles...
+    if loopCounter == 0:
+        pass
+        #triggerDevice2(rfObjects[0],deviceTypes[0])
+    elif loopCounter == 1:
+        time.sleep(1)
+        if rfObjects[0].isOpen() == False:
+            rfObjects[0].open()
+    elif loopCounter > 1:
+        print rfObjects[0].readline()
+
+    currentTime = time.time() - startTime
+    loopCounter = loopCounter + 1;
+
+rfObjects[0].close()
 
 
 """

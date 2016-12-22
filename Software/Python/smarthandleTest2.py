@@ -20,6 +20,13 @@ deviceNames = ["SH","SH"]                                                       
 deviceBTAddresses = ["00:06:66:80:8C:BE","00:06:66:80:8C:A9"]                                                                  # Hard-code device bluetooth address
 rfObject = createPorts2(deviceNames, deviceBTAddresses, 115200, 5, 5)
 
+time.sleep(5)
+
+rfObject[0].open()
+for i in range(0,20):
+    print rfObject[0].readline()
+time.sleep(1)
+rfObject[0].close()
 
 """
 startStreaming(rfObject)

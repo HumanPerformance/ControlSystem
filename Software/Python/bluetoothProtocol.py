@@ -174,8 +174,8 @@ def addPort(rfObjects, index, deviceName, deviceBTAddress, baudrate, timeout, at
 #   Working alternative to connection checks and add port functions
 def connectionCheck2(rfObjects,index,rfObject,deviceName,deviceBTAddress,baudrate,timeout,attempts):
     print fullStamp() + " connectionCheck2()"
-    #if rfObject.isOpen == False:
-    #    rfObject.open()
+    if rfObject.isOpen == False:
+        rfObject.open()
     inString = rfObject.readline()[:-1]
     if inString == deviceName:
         print fullStamp() + " Connection successfully established with " + deviceName
