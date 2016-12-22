@@ -1,24 +1,46 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<!--
+config.xml
+
+Configuration XML
+
+The following XML contains all of the information relevant to the identification, diagnostic and operation of the CSEC Smart Instrument Panels
+
+Terminology:
+------------
+SIP		::		Smart Instrument Panel
+CS		::		Control System
+SD		::		Smart Device
+SS		::		Smart Stethoscope
+ST		::		Smart Thermometer
+SO		::		Smart Oximeter
+SSP		::		Smart Scope Panel
+SH		::		Smart Handle
+
+Michael Xinidis
+Fluvio L Lobo Fenoglietto
+12/22/2016
+-->
 <configuration>
-	<configversion id="1.2.6" date="15 DEC 2016"/>
+	<configversion id="1.2.7" date="15 DEC 2016"/>
 	<panels>
-		<panel 		id="PAN000" type="ISP"	name="instrument_panel" 																							status="online">
+		<panel 		id="PAN000" type="SIP"	name="instrument_panel" 																							status="online">
 			<device id="DEV000" type="CS"	name="control_system"		mac_bt="B8:27:EB:DD:1F:86"	mac_eth="b8:27:eb:77:b5:2c"	mac_wlan="b8:27:eb:22:e0:79"	status="available">
 				<description>
 					A Raspberry Pi-bassed controller which serves as a control point to all panel-attached devices
 				</description>
 			</device>
-			<device id="DEV001" type="SD"	name="stethoscope"			mac_bt="00:06:66:7D:81:7D" 																status="available">
+			<device id="DEV001" type="SS"	name="stethoscope"			mac_bt="00:06:66:7D:81:7D" 																status="available">
 				<description>
 					An electronic stethoscope providing either augmented listening or unmodified heart sounds 
 				</description>
 			</device>
-			<device id="DEV002" type="SD"	name="ophthalmoscope"		mac_bt="00:06:66:80:8C:BE"																status="available">
+			<device id="DEV002" type="SH"	name="ophthalmoscope"		mac_bt="00:06:66:80:8C:BE"																status="available">
 				<description>
 					No description
 				</description>
 			</device>
-			<device id="DEV003" type="SD"	name="otoscope"				mac_bt="00:06:66:80:8C:A9"																status="unavailable">
+			<device id="DEV003" type="SH"	name="otoscope"				mac_bt="00:06:66:80:8C:A9"																status="unavailable">
 				<description>
 					No description
 				</description>
