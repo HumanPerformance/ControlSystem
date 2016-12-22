@@ -145,7 +145,10 @@ def triggerDevices(rfObjects,deviceNames):
             rfObjects[i].write('g')
             time.sleep(1)
             inString = rfObjects[i].readline()[:-1]
-            print inString
+            if inString != deviceNames[i]:
+                print fullStamp() + " Successfully triggered " + deviceNames[i] + " device"
+            elif inString == deviceNames[i]:
+                print fullStamp() + " Failed to trigger " + deviceNames[i] + " device"
         rfObjects[i].close()
 
 # Stop Device
@@ -169,6 +172,25 @@ def stopDevice2(rfObject,deviceName):
         inString = rfObject.readline()[:-1]
         print inString
     rfObject.close()
+
+def stopDevices(rfObjects,deviceNames):
+    print fullStamp() + " stopDevices()"
+    Ndevices = len(rfObjects)
+    print fullStamp() + " Stopping " + str(Ndevices) + " devices"
+    for i in range(0,Ndevices):
+        if rfObjects[i].isOpen() == False:
+            rfObjects[i].open()
+        inString = rfObjects[i].readline()
+        while inString != deviceNames[i]:
+            print fullStamp() + " Stopping " + deviceNames[i] + " device"
+            rfObjects[i].write('s')
+            time.sleep(1)
+            inString = rfObjects[i].readline()[:-1]
+            if inString == deviceNames[i]:
+                print fullStamp() + " Successfully stopped " + deviceNames[i] + " device"
+            elif inString != deviceNames[i]:
+                print fullStamp() + " Failed to stop " + deviceNames[i] + " device"
+        rfObjects[i].close()
 
 # Data Read
 #   This function captures the data written to the serial port

@@ -42,6 +42,7 @@ from    smarthandleProtocol    import dataWrite
 from    smarthandleProtocol    import createDataFolder
 from    smarthandleProtocol    import createDataFile
 from    smarthandleProtocol    import stopDevice2
+from    smarthandleProtocol    import stopDevices
 
 # ==============================================
 # Variables
@@ -133,12 +134,16 @@ while configCurrentTime < configStopTime:
         time.sleep(1)
         print fullStamp() + " Triggering smart devices"
         #triggerDevice2(rfObjects[0],deviceTypes[0])
-        triggerDevices(rfObjects,deviceNames)
+        triggerDevices(rfObjects,deviceTypes)
         
         time.sleep(1)
         print fullStamp() + " Opening smart device communication"
         if rfObjects[0].isOpen() == False:
             rfObjects[0].open()
+
+        time.sleep(1)
+        if rfObjects[1].isOpen() == False:
+            rfObjects[1].open()
     
     configCurrentTime = time.time() - configStartTime
     configLoopCounter = configLoopCounter + 1
@@ -166,8 +171,10 @@ while simCurrentTime < simStopTime:
 
 rfObjects[0].close()
 time.sleep(1)
-stopDevice2(rfObjects[0],deviceTypes[0])
-
+rfObjects[1].close()
+time.sleep(1)
+#stopDevice2(rfObjects[0],deviceTypes[0])
+stopDevices(rfObjects,deviceTypes)
 
 """
 # ----------------------------------------------
