@@ -112,6 +112,13 @@ def createPorts(deviceNames, deviceBTAddresses, baudrate, timeout):
     return rfObjects                                                                         # Return RFObject or list of objects
 
 # Create RFComm Port
+#   This function establishes a RF serial communication port
+#   Input   ::  {string}    device name
+#           ::  {string}    device bluetooth address
+#           ::  {int}       baudrate
+#           ::  {int}       timeout
+#   Output  ::  {object}    serial object
+
 def createPort(deviceName,deviceBTAddress,baudrate,timeout,attempts):
     portRelease("rfcomm",0)                                                             # The program performs a port-release to ensure that the desired rf port is available
     portBind("rfcomm",0,deviceBTAddress)
@@ -139,6 +146,15 @@ def createPort(deviceName,deviceBTAddress,baudrate,timeout,attempts):
         elif attempts is 0:
             print fullStamp() + " Attempts limit reached"
             print fullStamp() + " Please troubleshoot devices"
+
+# Create Port 2
+#   This function is a variation of the standard create port function, which establishes a RF serial communication port
+#   This variation performs a character or string-based verification with the control system
+#   Input   ::  {string}    device name
+#           ::  {string}    device bluetooth address
+#           ::  {int}       baudrate
+#           ::  {int}       timeout
+#   Output  ::  {object}    serial object
 
 def createPort2(deviceName,deviceBTAddress,baudrate,timeout):
     portRelease("rfcomm",0)                                                             # The program performs a port-release to ensure that the desired rf port is available
