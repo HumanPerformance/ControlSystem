@@ -186,6 +186,7 @@ def pullInstruments(panelIndex, scenarioIndex, tree, root):
 def instrumentCrossReference(panelIndex, scenarioDeviceNames, tree, root):
     print fullStamp() + " instrumentCrossReference()"
     deviceIndex = []
+    deviceTypes = []
     deviceNames = []
     deviceAddresses = []
     Nscenariodevices = len(scenarioDeviceNames)
@@ -193,14 +194,16 @@ def instrumentCrossReference(panelIndex, scenarioDeviceNames, tree, root):
     for i in range(0,Nscenariodevices):
         scenarioDeviceName = scenarioDeviceNames[i]
         for j in range(0,Npaneldevices):
+            panelDeviceType = root[1][panelIndex][j].get("type")
             panelDeviceName = root[1][panelIndex][j].get("name")
             panelDeviceAddress = root[1][panelIndex][j].get("mac_bt")
             if scenarioDeviceName == panelDeviceName:
                 deviceIndex.append(j)
+                deviceTypes.append(panelDeviceType)
                 deviceNames.append(panelDeviceName)
                 deviceAddresses.append(panelDeviceAddress)
-                print fullStamp() + " Matched " + panelDeviceName + ", with address " + panelDeviceAddress + ", on index " + str(j)
-    return deviceIndex, deviceNames, deviceAddresses
+                print fullStamp() + " Matched " + panelDeviceName + ", of type " + panelDeviceType + ", with address " + panelDeviceAddress + ", on index " + str(j)
+    return deviceIndex, deviceTypes, deviceNames, deviceAddresses
   
 """
 References
