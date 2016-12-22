@@ -36,6 +36,7 @@ from    configurationProtocol  import pullInstruments
 from    configurationProtocol  import instrumentCrossReference
 from    bluetoothProtocol      import createPorts2
 from    smarthandleProtocol    import triggerDevice2
+from    smarthandleProtocol    import dataRead
 from    smarthandleProtocol    import stopDevice2
 
 # ==============================================
@@ -150,7 +151,8 @@ while currentTime < stopTime:
         if rfObjects[0].isOpen() == False:
             rfObjects[0].open()
     elif loopCounter > 1:
-        print rfObjects[0].readline()
+        dataString = dataRead(rfObjects[0])
+        print dataString
 
     currentTime = time.time() - startTime
     loopCounter = loopCounter + 1;

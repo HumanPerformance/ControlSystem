@@ -157,14 +157,7 @@ def stopDevice2(rfObject,deviceName):
 # Data Read
 #   This function captures the data written to the serial port
 def dataRead(rfObject):
-    if rfObject.isOpen() == False:
-        rfObject.open()
-    time.sleep(1)
     inString = rfObject.readline()
-    print inString
-    time.sleep(1)
-    rfObject.close()
-    time.sleep(1)
     return inString
 
 # Data Write
