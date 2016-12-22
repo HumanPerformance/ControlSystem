@@ -36,6 +36,7 @@ from    configurationProtocol  import pullInstruments
 from    configurationProtocol  import instrumentCrossReference
 from    bluetoothProtocol      import createPorts2
 from    smarthandleProtocol    import triggerDevice2
+from    smarthandleProtocol    import stopDevice2
 
 # ==============================================
 # Variables
@@ -143,8 +144,7 @@ while currentTime < stopTime:
     # Handles
     # Triggering Handles...
     if loopCounter == 0:
-        pass
-        #triggerDevice2(rfObjects[0],deviceTypes[0])
+        triggerDevice2(rfObjects[0],deviceTypes[0])
     elif loopCounter == 1:
         time.sleep(1)
         if rfObjects[0].isOpen() == False:
@@ -156,6 +156,8 @@ while currentTime < stopTime:
     loopCounter = loopCounter + 1;
 
 rfObjects[0].close()
+time.sleep(1)
+stopDevice2(rfObjects[0],deviceTypes[0])
 
 
 """
