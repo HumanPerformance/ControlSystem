@@ -37,6 +37,9 @@ from    configurationProtocol  import instrumentCrossReference
 from    bluetoothProtocol      import createPorts2
 from    smarthandleProtocol    import triggerDevice2
 from    smarthandleProtocol    import dataRead
+from    smarthandleProtocol    import dataWrite
+from    smarthandleProtocol    import createDataFolder
+from    smarthandleProtocol    import createDataFile
 from    smarthandleProtocol    import stopDevice2
 
 # ==============================================
@@ -137,7 +140,7 @@ while currentTime < stopTime:
 
 startTime = time.time()
 currentTime = 0
-stopTime = 10
+stopTime = 30
 loopCounter = 0
 print fullStamp() + " Satrting Simulation Loop, time = " + str(stopTime) + " seconds"
 while currentTime < stopTime:
@@ -152,6 +155,7 @@ while currentTime < stopTime:
             rfObjects[0].open()
     elif loopCounter > 1:
         dataString = dataRead(rfObjects[0])
+        dataWrite(executionTimeStamp, currentTime, outputDir, deviceNames[0], dataString)
         print dataString
 
     currentTime = time.time() - startTime

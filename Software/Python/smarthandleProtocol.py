@@ -162,8 +162,8 @@ def dataRead(rfObject):
 
 # Data Write
 #   This function writes the data read from serial to an output file
-def dataWrite(executionTimeStamp, currentTime, outputFilePath, instrumentName, inString):
-    dataFileDir = outputFilePath + "/" + executionTimeStamp
+def dataWrite(executionTimeStamp, currentTime, outputDir, instrumentName, inString):
+    dataFileDir = outputDir + "/" + executionTimeStamp
 
     if os.path.exists(dataFileDir) == False:
         createDataFolder(dataFileDir)
