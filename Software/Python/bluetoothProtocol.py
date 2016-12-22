@@ -172,6 +172,14 @@ def createPort2(deviceName,deviceBTAddress,baudrate,timeout,attempts):
     rfObject.close()
     return rfObject
 
+# Connection Check
+#   The following function verifies the connection to the desired device.
+#   The current iteration of this function uses character/string communication between the control system and the connected device.
+#   Input   ::  {object}    serial object
+#           ::  {string}    device name
+#           ::  {int}       attempts
+#   Output  ::  {string}    terminal messages
+
 def connectionCheck(rfObject,deviceName,attempts):
     print fullStamp() + " connectionCheck()"
     inString = rfObject.readline()[:-1]
