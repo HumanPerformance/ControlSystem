@@ -117,20 +117,24 @@ deviceIndex, deviceTypes, deviceNames, deviceAddresses = instrumentCrossReferenc
 # ----------------------------------------------
 
 
-startTime = time.time()
-currentTime = 0
-stopTime = 10 #timers[0]
-loopCounter = 0
-print fullStamp() + " Starting Configuration Loop, time = " + str(stopTime) + " seconds"
-while currentTime < stopTime:
+configStartTime = time.time()
+configCurrentTime = 0
+configStopTime = 20 #timers[0]
+configLoopCounter = 0
+print fullStamp() + " Starting Configuration Loop, time = " + str(configStopTime) + " seconds"
+while configCurrentTime < configStopTime:
 
     # Connect to listed devices...
-    if loopCounter == 0:
-        print fullStamp() + " Connecting to panel devices"
+    if configLoopCounter == 0:
+        print fullStamp() + " Connecting smart devices"
         rfObjects = createPorts2(deviceTypes, deviceAddresses, 115200, 5, 5)
+
+        time.sleep(1)
+        print fullStamp() + " Triggering smart devices"
+        triggerDevice2(rfObjects[0],deviceTypes[0])
     
-    currentTime = time.time() - startTime
-    loopCounter = loopCounter + 1
+    configCurrentTime = time.time() - configStartTime
+    configLoopCounter = configLoopCounter + 1
     #print currentTime
 
 # ----------------------------------------------
@@ -138,28 +142,28 @@ while currentTime < stopTime:
 #   In this loop, connected devices will be accessed for data collection
 # ----------------------------------------------
 
-startTime = time.time()
-currentTime = 0
-stopTime = 30
-loopCounter = 0
-print fullStamp() + " Satrting Simulation Loop, time = " + str(stopTime) + " seconds"
-while currentTime < stopTime:
+simStartTime = time.time()
+simCurrentTime = 0
+simStopTime = 30
+simLoopCounter = 0
+print fullStamp() + " Satrting Simulation Loop, time = " + str(simStopTime) + " seconds"
+while simCurrentTime < simStopTime:
 
     # Handles
     # Triggering Handles...
-    if loopCounter == 0:
-        triggerDevice2(rfObjects[0],deviceTypes[0])
-    elif loopCounter == 1:
+    if simLoopCounter == 0:
+        print simCurrentTime
         time.sleep(1)
         if rfObjects[0].isOpen() == False:
             rfObjects[0].open()
-    elif loopCounter > 1:
+    elif simLoopCounter > 0:
+        print simCurrentTime
         dataString = dataRead(rfObjects[0])
-        dataWrite(executionTimeStamp, currentTime, outputDir, deviceNames[0], dataString)
+        dataWrite(executionTimeStamp, simCurrentTime, outputDir, deviceNames[0], dataString)
         print dataString
 
-    currentTime = time.time() - startTime
-    loopCounter = loopCounter + 1;
+    simCurrentTime = time.time() - simStartTime
+    simLoopCounter = simLoopCounter + 1;
 
 rfObjects[0].close()
 time.sleep(1)
