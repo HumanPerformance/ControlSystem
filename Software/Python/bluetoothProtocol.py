@@ -111,6 +111,8 @@ def createPorts(deviceNames, deviceBTAddresses, baudrate, timeout):
         time.sleep(1)
     return rfObjects
 
+# Create Ports v2
+#   This variation of the original create ports function creates multiple ports and verifies connectivity
 def createPorts2(deviceNames, deviceBTAddresses, baudrate, timeout, attempts):
     print fullStamp() + " createPorts2()"
     Ndevices = len(deviceNames)
@@ -133,6 +135,9 @@ def createPorts2(deviceNames, deviceBTAddresses, baudrate, timeout, attempts):
         rfObjects[i].close()
     return rfObjects
 
+# Connection Checks
+#   This variation of the connection check function handle multiple cases assuming that its embedded in a loop
+#   This function has a recursive statement that triggers the reconnection of all ports listed, which is not desirable.
 def connectionChecks(rfObjects,deviceNames,deviceBTAddresses,baudrate,timeout,index,attempts):
     print fullStamp() + " connectionCheck()"
     inString = rfObjects[index].readline()[:-1]
@@ -146,6 +151,8 @@ def connectionChecks(rfObjects,deviceNames,deviceBTAddresses,baudrate,timeout,in
             print fullStamp() + " Connection Attempts Limit Reached"
             print fullStamp() + " Please troubleshoot " + deviceName
 
+# Add Port
+#   Solution to the dileman of connection checks. In its recursive call, this function only adds the port being checked
 def addPort(rfObjects, index, deviceName, deviceBTAddress, baudrate, timeout, attempts):
     print fullStamp() + " addPort()"
     portNumber = index
@@ -163,6 +170,8 @@ def addPort(rfObjects, index, deviceName, deviceBTAddress, baudrate, timeout, at
     rfObjects[i].close()
     return rfObjects
 
+# Connection Check v2
+#   Working alternative to connection checks and add port functions
 def connectionCheck2(rfObjects,index,rfObject,deviceName,deviceBTAddress,baudrate,timeout,attempts):
     print fullStamp() + " connectionCheck2()"
     #if rfObject.isOpen == False:
