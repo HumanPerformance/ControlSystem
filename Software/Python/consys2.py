@@ -132,6 +132,11 @@ while configCurrentTime < configStopTime:
         time.sleep(1)
         print fullStamp() + " Triggering smart devices"
         triggerDevice2(rfObjects[0],deviceTypes[0])
+
+        time.sleep(1)
+        print fullStamp() + " Opening smart device communication"
+        if rfObjects[0].isOpen() == False:
+            rfObjects[0].open()
     
     configCurrentTime = time.time() - configStartTime
     configLoopCounter = configLoopCounter + 1
@@ -150,17 +155,9 @@ print fullStamp() + " Satrting Simulation Loop, time = " + str(simStopTime) + " 
 while simCurrentTime < simStopTime:
 
     # Handles
-    # Triggering Handles...
-    if simLoopCounter == 0:
-        print simCurrentTime
-        time.sleep(1)
-        if rfObjects[0].isOpen() == False:
-            rfObjects[0].open()
-    elif simLoopCounter > 0:
-        print simCurrentTime
-        dataString = dataRead(rfObjects[0])
-        dataWrite(executionTimeStamp, simCurrentTime, outputDir, deviceNames[0], dataString)
-        print dataString
+    dataString = dataRead(rfObjects[0])
+    dataWrite(executionTimeStamp, simCurrentTime, outputDir, deviceNames[0], dataString)
+    print "TIM," + str(simCurrentTime) + ", " + dataString
 
     simCurrentTime = time.time() - simStartTime
     simLoopCounter = simLoopCounter + 1;
