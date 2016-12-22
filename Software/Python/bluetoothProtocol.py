@@ -152,12 +152,13 @@ def createPort(deviceName,deviceBTAddress,baudrate,timeout,attempts):
 #   This variation performs a character or string-based verification with the control system
 #   Input   ::  {string}    device name
 #           ::  {string}    device bluetooth address
-#           ::  {int}       baudrate
-#           ::  {int}       timeout
+#           ::  {int}       baudrate                        --Communication speed, bits per minute (bpm)
+#           ::  {int}       timeout                         --Connection timeout
+#           ::  {int}       attempts                        --Number of recursive connection attempts the program will execute
 #   Output  ::  {object}    serial object
 
-def createPort2(deviceName,deviceBTAddress,baudrate,timeout):
-    portRelease("rfcomm",0)                                                             # The program performs a port-release to ensure that the desired rf port is available
+def createPort2(deviceName,deviceBTAddress,baudrate,timeout,attempts):
+    portRelease("rfcomm",0)
     portBind("rfcomm",0,deviceBTAddress)
     rfObject = serial.Serial(
         port = "/dev/rfcomm" + str(0),
@@ -167,8 +168,22 @@ def createPort2(deviceName,deviceBTAddress,baudrate,timeout):
         stopbits = serial.STOPBITS_ONE,
         timeout = timeout)
     time.sleep(1)
+    connectionCheck(rfObject,deviceName,attempts)
     rfObject.close()
     return rfObject
+
+def connectionCheck(rfObject,deviceName,attempts):
+    print fullStamp() + " connectionCheck()"
+    inString = rfObject.readline()[:-1]
+    if inString == deviceName:
+        print fullStamp() + " Connection successfully established with " + deviceName
+    else:
+        rfObject.close()
+        if attempts is not 0:
+            return createPort2(deviceName,deviceBTAddress,baudrate,timeout,attempts-1)
+        elif attempts is 0:
+            print fullStamp() + " Connection Attempts Limit Reached"
+            print fullStamp() + " Please troubleshoot " + deviceName
 
 # Port Bind
 #   This function binds the specified bluetooth device to a rfcomm port

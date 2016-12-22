@@ -18,7 +18,7 @@ from smarthandleProtocol import *
 executionTimeStamp = fullStamp()                                                                        # Program execution timestamp
 deviceName = "oto"                                                                             # Hard-coded device name
 deviceBTAddress = "00:06:66:80:8C:BE"                                                                  # Hard-code device bluetooth address
-rfObject = createPort2(deviceName, deviceBTAddress, 115200, 5)
+rfObject = createPort2(deviceName, deviceBTAddress, 115200, 5, 5)
 
 
 """
