@@ -16,9 +16,9 @@ from smarthandleProtocol import *
 # Operation
 
 executionTimeStamp = fullStamp()                                                                        # Program execution timestamp
-deviceName = "oto"                                                                             # Hard-coded device name
-deviceBTAddress = "00:06:66:80:8C:BE"                                                                  # Hard-code device bluetooth address
-rfObject = createPort2(deviceName, deviceBTAddress, 115200, 5, 5)
+deviceNames = ["SH","SH"]                                                                            # Hard-coded device name
+deviceBTAddresses = ["00:06:66:80:8C:BE","00:06:66:80:8C:A9"]                                                                  # Hard-code device bluetooth address
+rfObject = createPorts2(deviceNames, deviceBTAddresses, 115200, 5, 5)
 
 
 """

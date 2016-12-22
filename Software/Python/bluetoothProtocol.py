@@ -109,7 +109,74 @@ def createPorts(deviceNames, deviceBTAddresses, baudrate, timeout):
             stopbits = serial.STOPBITS_ONE,
             timeout = timeout))
         time.sleep(1)
-    return rfObjects                                                                         # Return RFObject or list of objects
+    return rfObjects
+
+def createPorts2(deviceNames, deviceBTAddresses, baudrate, timeout, attempts):
+    print fullStamp() + " createPorts2()"
+    Ndevices = len(deviceNames)
+    print fullStamp() + " Connecting to " + str(Ndevices) + " device"
+    rfObjects = []
+    for i in range(0,Ndevices):
+        portNumber = i
+        portRelease('rfcomm',portNumber)
+        portBind("rfcomm",portNumber,deviceBTAddresses[i])
+        rfObjects.append(serial.Serial(
+            port = "/dev/rfcomm" + str(portNumber),
+            baudrate = baudrate,
+            bytesize = serial.EIGHTBITS,
+            parity = serial.PARITY_NONE,
+            stopbits = serial.STOPBITS_ONE,
+            timeout = timeout))
+        time.sleep(1)
+        #connectionChecks(rfObjects,deviceNames,deviceBTAddresses,baudrate,timeout,i,attempts)
+        connectionCheck2(rfObjects,i,rfObjects[i],deviceNames[i],deviceBTAddresses[i],baudrate,timeout,attempts)
+        rfObjects[i].close()
+    return rfObjects
+
+def connectionChecks(rfObjects,deviceNames,deviceBTAddresses,baudrate,timeout,index,attempts):
+    print fullStamp() + " connectionCheck()"
+    inString = rfObjects[index].readline()[:-1]
+    if inString == deviceNames[index]:
+        print fullStamp() + " Connection successfully established with " + deviceNames[index]
+    else:
+        rfObjects[index].close()
+        if attempts is not 0:
+            return createPorts2(deviceNames,deviceBTAddresses,baudrate,timeout,attempts-1)
+        elif attempts is 0:
+            print fullStamp() + " Connection Attempts Limit Reached"
+            print fullStamp() + " Please troubleshoot " + deviceName
+
+def addPort(rfObjects, index, deviceName, deviceBTAddress, baudrate, timeout, attempts):
+    print fullStamp() + " addPort()"
+    portNumber = index
+    portRelease('rfcomm',portNumber)
+    portBind("rfcomm",portNumber,deviceBTAddress)
+    rfObjects.append(serial.Serial(
+        port = "/dev/rfcomm" + str(portNumber),
+        baudrate = baudrate,
+        bytesize = serial.EIGHTBITS,
+        parity = serial.PARITY_NONE,
+        stopbits = serial.STOPBITS_ONE,
+        timeout = timeout))
+    time.sleep(1)
+    connectionCheck2(rfObjects,index,rfObjects[index],deviceName,deviceBTAddress,baudrate,timeout,attempts)
+    rfObjects[i].close()
+    return rfObjects
+
+def connectionCheck2(rfObjects,index,rfObject,deviceName,deviceBTAddress,baudrate,timeout,attempts):
+    print fullStamp() + " connectionCheck2()"
+    #if rfObject.isOpen == False:
+    #    rfObject.open()
+    inString = rfObject.readline()[:-1]
+    if inString == deviceName:
+        print fullStamp() + " Connection successfully established with " + deviceName
+    else:
+        rfObject.close()
+        if attempts is not 0:
+            return addPort(rfObjects,index,deviceName,deviceBTAddress,baudrate,timeout,attempts-1)
+        elif attempts is 0:
+            print fullStamp() + " Connection Attempts Limit Reached"
+            print fullStamp() + " Please troubleshoot " + deviceName
 
 # Create RFComm Port
 #   This function establishes a RF serial communication port

@@ -45,9 +45,12 @@ from    bluetoothProtocol      import createPorts
 #   The script reads the inputs from the terminal execution triggered by the Control Room
 #   Consys currently handles one (1) input variable, the "scenario #"
 # ----------------------------------------------
-inputArg = sys.argv
-selectedScenario = int(sys.argv[1])
-print fullStamp() + " User Executed " + inputArg[0] + ", scenario #" + inputArg[1]
+try:
+    inputArg = sys.argv
+    selectedScenario = int(sys.argv[1])
+    print fullStamp() + " User Executed " + inputArg[0] + ", scenario #" + inputArg[1]
+except:
+    selectedScenario = 0
 
 # ----------------------------------------------
 # Panel self-dentification
@@ -107,6 +110,7 @@ deviceIndex, deviceNames, deviceAddresses = instrumentCrossReference(panelIndex,
 #   This loop works as a configuration step
 # ----------------------------------------------
 
+
 startTime = time.time()
 currentTime = 0
 stopTime = timers[0]
@@ -117,7 +121,7 @@ while currentTime < stopTime:
     # Connect to listed devices...
     if loopCounter == 0:
         print fullStamp() + " Connecting to panel devices"
-        rfObjects = createPorts(deviceNames, deviceAddresses, 115200, 5)
+        #rfObjects = createPorts(deviceNames, deviceAddresses, 115200, 5)
     
     currentTime = time.time() - startTime
     loopCounter = loopCounter + 1
