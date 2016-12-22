@@ -132,6 +132,22 @@ def triggerDevice2(rfObject,deviceName):
         print inString
     rfObject.close()
 
+def triggerDevices(rfObjects,deviceNames):
+    print fullStamp() + " triggerDevices()"
+    Ndevices = len(rfObjects)
+    print fullStamp() + " Triggering " + str(Ndevices) + " devices"
+    for i in range(0,Ndevices):
+        if rfObjects[i].isOpen() == False:
+            rfObjects[i].open()
+        inString = deviceNames[i]
+        while inString == deviceNames[i]:
+            print fullStamp() + " Triggering " + deviceNames[i] + " device..."
+            rfObjects[i].write('g')
+            time.sleep(1)
+            inString = rfObjects[i].readline()[:-1]
+            print inString
+        rfObjects[i].close()
+
 # Stop Device
 # This function stops the data collection process of the smart handle
 def stopDevice(rfObject, deviceName, iterCheck):

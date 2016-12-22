@@ -36,6 +36,7 @@ from    configurationProtocol  import pullInstruments
 from    configurationProtocol  import instrumentCrossReference
 from    bluetoothProtocol      import createPorts2
 from    smarthandleProtocol    import triggerDevice2
+from    smarthandleProtocol    import triggerDevices
 from    smarthandleProtocol    import dataRead
 from    smarthandleProtocol    import dataWrite
 from    smarthandleProtocol    import createDataFolder
@@ -131,8 +132,9 @@ while configCurrentTime < configStopTime:
 
         time.sleep(1)
         print fullStamp() + " Triggering smart devices"
-        triggerDevice2(rfObjects[0],deviceTypes[0])
-
+        #triggerDevice2(rfObjects[0],deviceTypes[0])
+        triggerDevices(rfObjects,deviceNames)
+        
         time.sleep(1)
         print fullStamp() + " Opening smart device communication"
         if rfObjects[0].isOpen() == False:
