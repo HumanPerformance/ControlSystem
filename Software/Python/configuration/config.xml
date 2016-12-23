@@ -8,7 +8,7 @@
 					A Raspberry Pi-bassed controller which serves as a control point to all panel-attached devices
 				</description>
 			</device>
-			<device id="DEV001" type="SS"	name="stethoscope"			mac_bt="00:06:66:7D:81:7D" 																status="available">
+			<device id="DEV001" type="SS"	name="stethoscope"			mac_bt="00:06:66:86:60:3D" 																status="available">
 				<description>
 					An electronic stethoscope providing either augmented listening or unmodified heart sounds 
 				</description>
