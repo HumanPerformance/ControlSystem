@@ -9,7 +9,7 @@ Fluvio L Lobo Fenoglietto
 
 Modified by: Mohammad Odeh
 Date: Nov. 29th, 2016
-Adapted protocol to be compatible with the Smart Thermometer Project
+Protocol is NOT fully adapted for the SmartHolder project
 
 """
 
@@ -81,8 +81,49 @@ def debugModeON(rfObject):
 # Data Read
 #   This function captures the data written to the serial port
 def dataRead(rfObject):
-    inString = rfObject.readline()
-    print inString
+    if rfObject.isOpen() is False:
+        rfObject.open()
+    rfObject.flush()
+    dataAvailable = rfObject.in_waiting
+    while dataAvailable is not 0:
+        time.sleep(.15)
+        inString = rfObject.readline()
+        dataAvailable = rfObject.in_waiting
+        print inString
+    rfObject.close()
+    return inString
+
+
+#   This function captures the data written to the serial port
+def dataRead_interrupt(rfObject):
+    if rfObject.isOpen() is False:
+        rfObject.open()
+    rfObject.flush()
+    dataAvailable = rfObject.in_waiting
+    i=0
+    while dataAvailable is not 0:
+        i = i+1
+        #print "(1)bytesAvailable: " + str(dataAvailable)
+        #print "loop # " + str(i)
+        time.sleep(.15)
+        inString = rfObject.readline()
+        dataAvailable = rfObject.in_waiting
+        print inString
+        if i is 50:
+            rfObject.reset_input_buffer()
+            rfObject.reset_output_buffer()
+            time.sleep(1.5)
+            #print "(2)bytesAvailable: " + str(dataAvailable)
+            rfObject.write("i")
+            time.sleep(.15)
+            dataAvailable = rfObject.in_waiting
+            while dataAvailable is not 0:
+                #print "(3)bytesAvailable: " + str(dataAvailable)
+                time.sleep(.15)
+                inString = rfObject.readline()
+                dataAvailable = rfObject.in_waiting
+                print inString
+    rfObject.close()
     return inString
 
 # Data Write

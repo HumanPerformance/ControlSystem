@@ -12,8 +12,9 @@ from smartHolderProtocol import *
 # OPERATION
 # =========
 
-portNumber = 1
-rfObject = createPort(portNumber, 115200, 20) 
+portNumber = 0
+rfObject = createPort(portNumber, 115200, None)
+print "Enter command: "
+rfObject.write(raw_input())
+time.sleep(1)
 dataRead(rfObject)
-
-portRelease('rfcomm', 0)                                    
