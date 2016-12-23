@@ -161,29 +161,20 @@ simStartTime = time.time()
 simCurrentTime = 0
 simStopTime = 30
 simLoopCounter = 0
-dataStream1 = []
-dataStream2 = []
+dataStream = []
 print fullStamp() + " Satrting Simulation Loop, time = " + str(simStopTime) + " seconds"
 while simCurrentTime < simStopTime:
 
     # Handles
-    #dataString = dataRead(rfObjects[0])
-    #dataStream = dataReadStreams(rfObjects,2)
-    dataStream1.append(rfObjects[0].readline())
-    #time.sleep(0.25)
-    dataStream2.append(rfObjects[1].readline())
-    #time.sleep(0.25)
-    #dataWrite(executionTimeStamp, simCurrentTime, outputDir, deviceNames[0], dataStream[0])
-    #dataWrite(executionTimeStamp, simCurrentTime, outputDir, deviceNames[1], dataStream[1])
-    #print "TIM," + str(simCurrentTime) + ", " + dataStream[0]
-    #print "TIM," + str(simCurrentTime) + ", " + dataStream[1]
+    dataStream.append( [rfObjects[0].readline(),
+                        rfObjects[1].readline()] )
 
     simCurrentTime = time.time() - simStartTime
     simLoopCounter = simLoopCounter + 1;
 
 # End of Simulatio Loop
 
-print dataStream1, dataStream2
+print dataStream
 
 rfObjects[0].close()
 rfObjects[1].close()
