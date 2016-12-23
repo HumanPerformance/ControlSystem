@@ -170,9 +170,9 @@ while simCurrentTime < simStopTime:
     #dataString = dataRead(rfObjects[0])
     #dataStream = dataReadStreams(rfObjects,2)
     dataStream1.append(rfObjects[0].readline())
-    time.sleep(0.25)
+    #time.sleep(0.25)
     dataStream2.append(rfObjects[1].readline())
-    time.sleep(0.25)
+    #time.sleep(0.25)
     #dataWrite(executionTimeStamp, simCurrentTime, outputDir, deviceNames[0], dataStream[0])
     #dataWrite(executionTimeStamp, simCurrentTime, outputDir, deviceNames[1], dataStream[1])
     #print "TIM," + str(simCurrentTime) + ", " + dataStream[0]
@@ -186,9 +186,8 @@ while simCurrentTime < simStopTime:
 print dataStream1, dataStream2
 
 rfObjects[0].close()
-time.sleep(1)
 rfObjects[1].close()
-time.sleep(1)
+time.sleep(0.25)
 #stopDevice2(rfObjects[0],deviceTypes[0])
 stopDevices(rfObjects,deviceTypes)
 
