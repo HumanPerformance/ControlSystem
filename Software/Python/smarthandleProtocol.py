@@ -150,6 +150,7 @@ def triggerDevices(rfObjects,deviceNames):
             elif inString == deviceNames[i]:
                 print fullStamp() + " Failed to trigger " + deviceNames[i] + " device"
         rfObjects[i].close()
+        time.sleep(1)
 
 # Stop Device
 # This function stops the data collection process of the smart handle
@@ -191,12 +192,20 @@ def stopDevices(rfObjects,deviceNames):
             elif inString != deviceNames[i]:
                 print fullStamp() + " Failed to stop " + deviceNames[i] + " device"
         rfObjects[i].close()
+        time.sleep(1)
 
 # Data Read
 #   This function captures the data written to the serial port
 def dataRead(rfObject):
     inString = rfObject.readline()
     return inString
+
+def dataReadStreams(rfObjects, Nstreams):
+    dataStream = []
+    for i in range(0,Nstreams):
+        dataStream.append(rfObjects[i].readline())
+        time.sleep(0.5)
+    return dataStream
 
 # Data Write
 #   This function writes the data read from serial to an output file

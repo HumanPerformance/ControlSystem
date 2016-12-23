@@ -244,7 +244,7 @@ def createPort2(deviceName,deviceBTAddress,baudrate,timeout,attempts):
         stopbits = serial.STOPBITS_ONE,
         timeout = timeout)
     time.sleep(1)
-    connectionCheck(rfObject,deviceName,attempts)
+    connectionCheck(rfObject,deviceName,deviceBTAddress,baudrate,timeout,attempts)
     rfObject.close()
     return rfObject
 
@@ -256,7 +256,7 @@ def createPort2(deviceName,deviceBTAddress,baudrate,timeout,attempts):
 #           ::  {int}       attempts
 #   Output  ::  {string}    terminal messages
 
-def connectionCheck(rfObject,deviceName,attempts):
+def connectionCheck(rfObject,deviceName,deviceBTAddress,baudrate,timeout,attempts):
     print fullStamp() + " connectionCheck()"
     inString = rfObject.readline()[:-1]
     if inString == deviceName:

@@ -18,23 +18,24 @@ from smarthandleProtocol import *
 executionTimeStamp = fullStamp()                                                                        # Program execution timestamp
 deviceNames = ["SH","SH"]                                                                            # Hard-coded device name
 deviceBTAddresses = ["00:06:66:80:8C:BE","00:06:66:80:8C:A9"]                                                                  # Hard-code device bluetooth address
-rfObject = createPorts2(deviceNames, deviceBTAddresses, 115200, 5, 5)
+rfObject = createPort2(deviceNames[1], deviceBTAddresses[1], 115200, 5, 5)
 
-time.sleep(5)
+time.sleep(1)
+triggerDevice2(rfObject,deviceNames[1])
 
-rfObject[1].open()
 time.sleep(1)
-rfObject[0].open()
+rfObject.open()
 time.sleep(1)
+
 for i in range(0,20):
-    print rfObject[1].readline()
-    time.sleep(0.25)
-    print rfObject[0].readline()
-    time.sleep(0.25)
+    print rfObject.readline()
+    #time.sleep(0.10)
+
 time.sleep(1)
-rfObject[1].close()
+rfObject.close()
 time.sleep(1)
-rfObject[0].close()
+stopDevice2(rfObject,deviceNames[1])
+
 
 """
 startStreaming(rfObject)
