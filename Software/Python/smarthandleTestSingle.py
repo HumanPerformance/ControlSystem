@@ -27,9 +27,16 @@ time.sleep(1)
 rfObject.open()
 time.sleep(1)
 
-for i in range(0,20):
-    print rfObject.readline()
-    #time.sleep(0.10)
+startTime = time.time()
+currentTime = 0
+stopTime = 30
+dataStream = []
+while currentTime < stopTime:
+
+    dataStream.append(["TIM," + str(currentTime),
+                       rfObject.readline()])
+
+    currentTime = time.time() - startTime
 
 time.sleep(1)
 rfObject.close()

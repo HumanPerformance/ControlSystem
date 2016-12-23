@@ -34,6 +34,7 @@ from    configurationProtocol  import findScenario
 from    configurationProtocol  import pullParameters
 from    configurationProtocol  import pullInstruments
 from    configurationProtocol  import instrumentCrossReference
+from    bluetoothProtocol      import createPort2
 from    bluetoothProtocol      import createPorts2
 from    smarthandleProtocol    import triggerDevice2
 from    smarthandleProtocol    import triggerDevices
@@ -130,20 +131,16 @@ while configCurrentTime < configStopTime:
     # Connect to listed devices...
     if configLoopCounter == 0:
         print fullStamp() + " Connecting smart devices"
-        rfObjects = createPorts2(deviceTypes, deviceAddresses, 115200, 5, 5)
+        rfObject = createPort2(deviceTypes[0], deviceAddresses[0], 115200, 5, 5)
 
         time.sleep(1)
         print fullStamp() + " Triggering smart devices"
-        triggerDevices(rfObjects,deviceTypes)
+        triggerDevice2(rfObject,deviceTypes[0])
         
         print fullStamp() + " Opening smart device communication"
         time.sleep(1)
-        if rfObjects[0].isOpen() == False:
-            rfObjects[0].open()
-
-        time.sleep(1)
-        if rfObjects[1].isOpen() == False:
-            rfObjects[1].open()
+        if rfObject.isOpen() == False:
+            rfObject.open()
     
     configCurrentTime = time.time() - configStartTime
     configLoopCounter = configLoopCounter + 1
@@ -165,8 +162,7 @@ while simCurrentTime < simStopTime:
 
     # Handles
     dataStream.append( ["TIM,"+str(simCurrentTime),
-                        rfObjects[0].readline()[:-1],
-                        rfObjects[1].readline()[:-1]] )
+                        rfObject.readline()[:-1]] )
 
     simCurrentTime = time.time() - simStartTime
     # simLoopCounter = simLoopCounter + 1;
@@ -175,10 +171,10 @@ while simCurrentTime < simStopTime:
 
 print dataStream
 
-rfObjects[0].close()
-rfObjects[1].close()
 time.sleep(0.25)
-stopDevices(rfObjects,deviceTypes)
+rfObject.close()
+time.sleep(0.25)
+stopDevice2(rfObject,deviceTypes[0])
 
 """
 # ----------------------------------------------
