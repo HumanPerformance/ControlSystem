@@ -18,7 +18,7 @@ from smarthandleProtocol import *
 executionTimeStamp = fullStamp()                                                                        # Program execution timestamp
 deviceNames = ["SH","SH"]                                                                            # Hard-coded device name
 deviceBTAddresses = ["00:06:66:80:8C:BE","00:06:66:80:8C:A9"]                                                                  # Hard-code device bluetooth address
-rfObject = createPort2(deviceNames[1], deviceBTAddresses[1], 115200, 5, 5)
+rfObject = createPort2(deviceNames[0], deviceBTAddresses[0], 115200, 5, 5)
 
 time.sleep(1)
 triggerDevice2(rfObject,deviceNames[1])
