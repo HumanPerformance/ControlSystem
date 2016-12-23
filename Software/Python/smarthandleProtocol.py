@@ -222,9 +222,9 @@ def dataWrite(executionTimeStamp, currentTime, outputDir, instrumentName, inStri
         createDataFile(dataFilePath, instrumentName)
     
     with open(dataFilePath, "a") as dataFile:
-        timePrefix = "TIM," + str(currentTime) + ","
-        dataFile.write(timePrefix + inString)
-        
+        #timePrefix = "TIM," + str(currentTime) + ","
+        #dataFile.write(timePrefix + inString)
+        dataFile.write(inString + "\n")
 
 # Create Data File
 #   Creates the output/text file

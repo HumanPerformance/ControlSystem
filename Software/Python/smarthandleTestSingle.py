@@ -14,73 +14,45 @@ from bluetoothProtocol import *
 from smarthandleProtocol import *
 
 # Operation
-
-executionTimeStamp = fullStamp()                                                                        # Program execution timestamp
-deviceNames = ["SH","SH"]                                                                            # Hard-coded device name
-deviceBTAddresses = ["00:06:66:80:8C:BE","00:06:66:80:8C:A9"]                                                                  # Hard-code device bluetooth address
+executionTimeStamp = fullStamp()
+testDir = "/home/pi/Desktop/test"
+deviceNames = ["SH","SH"]
+deviceBTAddresses = ["00:06:66:80:8C:BE","00:06:66:80:8C:A9"]
 rfObject = createPort2(deviceNames[0], deviceBTAddresses[0], 115200, 5, 5)
 
+print fullStamp() + " Triggering Smart Handle"
 time.sleep(1)
 triggerDevice2(rfObject,deviceNames[1])
 
+print fullStamp() + " Openning Smart Handle Serial Port"
 time.sleep(1)
-rfObject.open()
+if rfObject.isOpen() == False:
+    rfObject.open()
 time.sleep(1)
 
+print fullStamp() + " Starting Data Collection Loop"
 startTime = time.time()
 currentTime = 0
-stopTime = 30
+stopTime = 90
 dataStream = []
 while currentTime < stopTime:
 
-    dataStream.append(["TIM," + str(currentTime),
-                       rfObject.readline()])
+    dataStream.append("TIM," + str(currentTime) + "," + rfObject.readline()[:-1])
 
     currentTime = time.time() - startTime
 
+print fullStamp() + " Closing Smart Handle Serial Port"
 time.sleep(1)
-rfObject.close()
+if rfObject.isOpen() == True:
+    rfObject.close()
 time.sleep(1)
-stopDevice2(rfObject,deviceNames[1])
+print fullStamp() + " Stopping Smart Handle"
+stopDevice2(rfObject,deviceNames[0])
 
+print fullStamp() + " Saving Output Text File"
+Nlines = len(dataStream)
+for i in range(0,Nlines):
+    dataWrite(executionTimeStamp, currentTime, testDir, deviceNames[0], dataStream[i])
 
-"""
-startStreaming(rfObject)
-time.sleep(2)
-for i in range(0,20):
-    readStream(rfObject)
-time.sleep(5)
-stopStreaming(rfObject)
-portRelease('rfcomm',0)
-"""
+print fullStamp() + " Program completed"
 
-
-"""
-#CSEC Demo Nov. 2016
-triggerDevice(rfObject, deviceName, 20)
-startTime = time.time()                                                                                 # Start loop timer
-currentTime = 0                                                                                         # 0 sec.
-stopTime = 20                                                                                           # Stop time
-
-
-
-while currentTime < stopTime:
-
-        # Read data from device
-        inString = dataRead(rfObject)
-
-        # Write data from device
-        dataWrite(executionTimeStamp, currentTime, outputFilePath, deviceName, inString)
-
-        # Update time
-        currentTime = time.time() - startTime
-        # print currentTime
-
-print "Program Concluded"
-stopDevice(rfObject, deviceName, 20)
-
-portRelease('rfcomm', 0)                                    # Release port to avoid permanent connection
-
-
-#portRelease('rfcomm', 0)
-"""
