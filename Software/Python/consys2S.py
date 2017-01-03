@@ -131,7 +131,7 @@ while configCurrentTime < configStopTime:
     # Connect to listed devices...
     if configLoopCounter == 0:
         print fullStamp() + " Connecting smart devices"
-        rfObject = createPort2(deviceTypes[0], deviceAddresses[0], 115200, None, 5)
+        rfObject = createPort2(deviceTypes[0], deviceAddresses[0], 115200, 0.10, 5)
 
         time.sleep(1)
         print fullStamp() + " Triggering smart devices"
@@ -161,10 +161,10 @@ print fullStamp() + " Starting Simulation Loop, time = " + str(simStopTime) + " 
 while simCurrentTime < simStopTime:
 
     # Handles
-    dataStream.append( ["TIM,"+str(simCurrentTime),
-                        rfObject.readline()[:-1]] )
-
+    dataStream.append( ["TIM,"+str(simCurrentTime), rfObject.readline()] )
+    
     simCurrentTime = time.time() - simStartTime
+    print simCurrentTime
     # simLoopCounter = simLoopCounter + 1;
 
 # End of Simulatio Loop

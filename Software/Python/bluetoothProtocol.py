@@ -248,6 +248,20 @@ def createPort2(deviceName,deviceBTAddress,baudrate,timeout,attempts):
     rfObject.close()
     return rfObject
 
+# Create Port -Simple
+#   Simplest varient of the create port function
+def createPortS(deviceName,deviceBTAddress,baudrate,attempts):
+    print fullStamp() + " createPortS()"
+    portRelease("rfcomm",0)
+    portBind("rfcomm",0,deviceBTAddress)
+    rfObject = serial.Serial(
+        port = "/dev/rfcomm" + str(0),
+        baudrate = baudrate)
+    time.sleep(1)
+    connectionCheckS(rfObject,deviceName,deviceBTAddress,baudrate,attempts)
+    rfObject.close()
+    return rfObject
+
 # Connection Check
 #   The following function verifies the connection to the desired device.
 #   The current iteration of this function uses character/string communication between the control system and the connected device.
@@ -265,6 +279,21 @@ def connectionCheck(rfObject,deviceName,deviceBTAddress,baudrate,timeout,attempt
         rfObject.close()
         if attempts is not 0:
             return createPort2(deviceName,deviceBTAddress,baudrate,timeout,attempts-1)
+        elif attempts is 0:
+            print fullStamp() + " Connection Attempts Limit Reached"
+            print fullStamp() + " Please troubleshoot " + deviceName
+
+# Connection Check -Simple
+#   Simplest variant of the connection check functions
+def connectionCheckS(rfObject,deviceName,deviceBTAddress,baudrate,attempts):
+    print fullStamp() + " connectionCheck()"
+    inString = rfObject.readline()[:-1]
+    if inString == deviceName:
+        print fullStamp() + " Connection successfully established with " + deviceName
+    else:
+        rfObject.close()
+        if attempts is not 0:
+            return createPortS(deviceName,deviceBTAddress,baudrate,attempts-1)
         elif attempts is 0:
             print fullStamp() + " Connection Attempts Limit Reached"
             print fullStamp() + " Please troubleshoot " + deviceName
