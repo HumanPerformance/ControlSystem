@@ -18,19 +18,16 @@ CAN = chr(0x18)                 #       Cancel Current Command                  
 # Device Control Commands
 #   We have extended the four (4) standard "device control" commands by means of a two-byte communication protocol
 
-DC1 = chr(0x11)                 #       Device Control 1: Diagnostic Functions              0x11            STD
-DC1_DEVICEID = chr(0x00)        #           Device Identification
+DC1 = chr(0x11)                 #       Device Identification
 #                                                                                           0xFF            ORG
 
-DC2 = chr(0x12)                 #       Device Control 2: Operational Functions             0x12            STD
+DC2 = chr(0x12)                 #       Start Data Stream                                   0x12            STD
 #                                                                                           0xFF            ORG
 
-DC3 = chr(0x13)                 #       Device Control 3: Device-Specific Functions         0x13            STD
-DC3_STARTSTREAM = chr(0x00)     #           Start Data Stream                                0x00            ORG
-DC3_STOPSTREAM = chr(0x01)      #           Stop Data Stream                                  0x01            ORG
+DC3 = chr(0x13)                 #       Stop Data Stream                                    0x01            ORG
 #                                                                                           0xFF            ORG
 
-DC4 = chr(0x14)                 #       Device Control 4: Simulation Functions              0x14            STD
+DC4 = chr(0x14)                 #       Simulation Functions                                0x14            STD
 #                                                                                           0xFF            ORG
 
 # Legend

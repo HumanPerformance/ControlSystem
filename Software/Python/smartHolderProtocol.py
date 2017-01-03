@@ -23,27 +23,6 @@ from configurationProtocol import *
 from usbProtocol import *
 import thermometerDefinitions as definitions
 
-# Path/Directoy Variables
-homeDir = expanduser("~")
-rootDir = "/root"
-if homeDir == rootDir:
-          homeDir = "/home/pi"
-          # This check and correction is needed for raspbian
-          
-# .../Python
-consysPyDir = homeDir + "/csec/repos/ControlSystem/Software/Python"
-# .../Python/data
-consysPyDataDir = consysPyDir + "/data"
-# .../Python/data/scenarios
-scenarioConfigFilePath = consysPyDataDir + "/scenarios"
-# The exact scenario name is determined using the terminal input (Operation :: 1.0-2.0)
-# .../Python/data/instruments
-instrumentsConfigFilePath = consysPyDataDir + "/instruments"
-instrumentsConfigFileName = "/instrumentconfig.txt"
-instrumentsConfigFile = instrumentsConfigFilePath + instrumentsConfigFileName
-# .../Python/data/output
-outputFilePath = consysPyDataDir + "/output"
-
 
 # State Enquiry
 #       This function requests the status of the thermometer
@@ -83,52 +62,88 @@ def debugModeON(rfObject):
 def dataRead(rfObject):
     if rfObject.isOpen() is False:
         rfObject.open()
-    rfObject.flush()
     dataAvailable = rfObject.in_waiting
     while dataAvailable is not 0:
         time.sleep(.15)
         inString = rfObject.readline()
+        #dataAvailable = rfObject.in_waiting
+        print inString
+    rfObject.flush()
+    rfObject.close()
+    try:
+        return inString
+    except:
+        print "No data to print"
+
+def triggerDevice(rfObject,deviceName):
+    if rfObject.isOpen() == False:
+        rfObject.open()
+    inString = deviceName
+    while inString == deviceName:
+        print fullStamp() + " Triggering Device"
+        rfObject.write('s')
+        time.sleep(1)
+        inString = rfObject.readline()[:-1]
         print inString
     rfObject.close()
-    return inString
 
+def stopDevice(rfObject,deviceName):
+    if rfObject.isOpen() == False:
+        rfObject.open()
+    inString = rfObject.readline()
+    while inString != deviceName:
+        print fullStamp() + " Stopping Device"
+        rfObject.write('i')
+        time.sleep(1)
+        inString = rfObject.readline()[:-1]
+        inString = deviceName
+        print inString
+    rfObject.close()
+
+def dataReadStreams(rfObjects, Nstreams):
+    dataStream = []
+    for i in range(0,Nstreams):
+        dataStream.append(rfObjects[i].readline())
+        time.sleep(0.5)
+    return dataStream
 
 #   This function captures the data written to the serial port
 def dataRead_interrupt(rfObject):
     if rfObject.isOpen() is False:
         rfObject.open()
-    rfObject.flush()
     dataAvailable = rfObject.in_waiting
     i=0
     while dataAvailable is not 0:
         i = i+1
-        #print "(1)bytesAvailable: " + str(dataAvailable)
-        #print "loop # " + str(i)
+        print "(1)bytesAvailable: " + str(dataAvailable)
+        print "loop # " + str(i)
         time.sleep(.15)
         inString = rfObject.readline()
         dataAvailable = rfObject.in_waiting
         print inString
-        if i is 50:
+        if i is 55:
+            rfObject.flush()
             rfObject.reset_input_buffer()
             rfObject.reset_output_buffer()
             time.sleep(1.5)
-            #print "(2)bytesAvailable: " + str(dataAvailable)
+            print "(2)bytesAvailable: " + str(dataAvailable)
             rfObject.write("i")
             time.sleep(.15)
             dataAvailable = rfObject.in_waiting
             while dataAvailable is not 0:
-                #print "(3)bytesAvailable: " + str(dataAvailable)
+                print "(3)bytesAvailable: " + str(dataAvailable)
                 time.sleep(.15)
                 inString = rfObject.readline()
                 dataAvailable = rfObject.in_waiting
                 print inString
+    rfObject.flush()
     rfObject.close()
     return inString
 
 # Data Write
 #   This function writes the data read from serial to an output file
-def dataWrite(executionTimeStamp, currentTime, outputFilePath, instrumentName, inString):
-    dataFileDir = outputFilePath + "/" + executionTimeStamp
+def dataWrite(executionTimeStamp, currentTime, outputDir, instrumentName, inString):
+    dataFileDir = outputDir + "/" + executionTimeStamp
 
     if os.path.exists(dataFileDir) == False:
         createDataFolder(dataFileDir)
@@ -140,8 +155,9 @@ def dataWrite(executionTimeStamp, currentTime, outputFilePath, instrumentName, i
         createDataFile(dataFilePath, instrumentName)
     
     with open(dataFilePath, "a") as dataFile:
-        timePrefix = "TIM," + str(currentTime) + ","
-        dataFile.write(timePrefix + inString)
+        #timePrefix = "TIM," + str(currentTime) + ","
+        #dataFile.write(timePrefix + inString)
+        dataFile.write(inString + "\n")
         
 
 # Create Data File

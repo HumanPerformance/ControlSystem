@@ -17,4 +17,5 @@ rfObject = createPort(portNumber, 115200, None)
 print "Enter command: "
 rfObject.write(raw_input())
 time.sleep(1)
-dataRead(rfObject)
+dataRead_interrupt(rfObject)
+#dataRead(rfObject)

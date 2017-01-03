@@ -9,65 +9,106 @@ Fluvio L Lobo Fenoglietto
 """
 
 # Import Libraries and/or Modules
-import os
-import os.path
-from os.path import expanduser
-import sys
-import serial
-from timeStamp import *
-from configurationProtocol import *
-from bluetoothProtocol import *
-import smarthandleDefinitions as definitions
+import  os
+import  os.path
+import  sys
+import  serial
+import  time
+import  smarthandleDefinitions      as definitions
+from    os.path                     import expanduser
+from    timeStamp                   import *
+from    configurationProtocol       import *
+from    bluetoothProtocol           import *
+
 
 # Functions - Byte-based
+#   As we developed more sofisticated hardware and software, our devices will communicate by sending/receiving bytes
 
 # Status Enquiry
-#   This function requests the status of the bluetooth device
-def statusEnquiry(rfObject, timeout, iterCheck):
-        print fullStamp() + " statusEnquiry()"                                                                  # Print function name
-        outByte = definitions.ENQ                                                                               # Send ENQ / Status Enquiry command - see protocolDefinitions.py
-        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
-        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " ACK Device READY"                                                         # ACK, in this case, translates to DEVICE READY
-        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " NAK Device NOT READY"
+#   The following function requests the status of the smart-handle module
+#   Input   ::  {object}    serial object
+#   Output  ::  {string}    terminal messages
+def statusEnquiry(rfObject,attempts):
+    print fullStamp() + " statusEnquiry()"
+    if rfObject.isOpen() == False:
+        rfObject.open()
+    outByte = definitions.ENQ
+    rfObject.write(outByte)
+    time.sleep(1)
+    inByte = rfObject.read(size=1)
+    if inByte == definitions.ACK:
+        print fullStamp() + " ACK Device READY"
+    elif inByte == definitions.NAK:
+        print fullStamp() + " NAK Device NOT READY"
+    else:
+        rfObject.close()
+        if attempts is not 0:
+            return statusEnquiry(rfObject,attempts-1)
+        elif attempts is 0:
+            print fullStamp() + " Attempts limit reached"
+    rfObject.close()
 
-def startStreaming(rfObject):
-    print fullStamp() + " startStreaming()"                                                                    # Print function name
-    outBytes = [definitions.DC3, definitions.DC3_STARTSTREAM]
-    inBytes = []
-    for i in range(0,len(outBytes)):                                                                        # For loop for the sequential delivery of bytes using the length of the sequence for the range
-        rfObject.write(outBytes[i])
-        time.sleep(1)
-        inBytes.append(rfObject.read(size=1))                                                          # The read is limited to a single byte (timeout predefined in the createPort() function)
-    if inBytes[len(outBytes)-1] == definitions.ACK:
-        print fullStamp() + " ACK SD Card Check Passed"                                                 # If the SD card check is successful, the remote device sends a ACK
-        print fullStamp() + " ACK Device Ready"                                                         # ACK, in this case, translates to DEVICE READY
-    elif inBytes[len(outBytes)-1] == definitions.NAK:
-        print fullStamp() + " NAK SD Card Check Failed"                                                 # If the SD card check fails, the remote device sends a NAK
-        print fullStamp() + " NAK Device NOT Ready"
+# Start Streaming
+#   The following function allows the smart handle module to stream the data from the on-board sensors through the serial port
+#   Input   ::  {object}    serial object
+#   Output  ::  {string}    terminal messages
+
+def startStreaming(rfObject,attempts):
+    print fullStamp() + " startStreaming()"
+    if rfObject.isOpen() == False:
+        rfObject.open()
+    outByte = definitions.DC2
+    rfObject.write(outByte)
+    time.sleep(1)
+    inByte = rfObject.read(size=1)
+    if inByte == definitions.ACK:
+        print fullStamp() + " ACK Device STARTED STREAMING data"
+    elif inByte == definitions.NAK:
+        print fullStamp() + " NAK Device CANNOT START STREAMING data"
+    else:
+        rfObject.close()
+        if attempts is not 0:
+            return startStreaming(rfObject,attempts-1)
+        elif attempts is 0:
+            print fullStamp() + " Attempts limit reached"
+    rfObject.close()
+
+# Read Stream
+#   The following function reads the string-based data stream coming from the serial port
+#   Input   ::  {object}    serial object
+#   Output  ::  {string}    data string
 
 def readStream(rfObject):
-    #print fullStamp() + " readStream()"
     inString = rfObject.readline()
-    print inString
+    return inString
 
-def stopStreaming(rfObject):
-    print fullStamp() + " stopStreaming()"                                                                    # Print function name
-    outBytes = [definitions.DC3, definitions.DC3_STOPSTREAM]
-    inBytes = []
-    for i in range(0,len(outBytes)):                                                                        # For loop for the sequential delivery of bytes using the length of the sequence for the range
-        rfObject.write(outBytes[i])
-        time.sleep(1)
-        inBytes.append(rfObject.read(size=1))                                                          # The read is limited to a single byte (timeout predefined in the createPort() function)
-    if inBytes[len(outBytes)-1] == definitions.ACK:
-        print fullStamp() + " ACK SD Card Check Passed"                                                 # If the SD card check is successful, the remote device sends a ACK
-        print fullStamp() + " ACK Device Ready"                                                         # ACK, in this case, translates to DEVICE READY
-    elif inBytes[len(outBytes)-1] == definitions.NAK:
-        print fullStamp() + " NAK SD Card Check Failed"                                                 # If the SD card check fails, the remote device sends a NAK
-        print fullStamp() + " NAK Device NOT Ready"
+# Stop Streaming
+#   The following function interrupts the streaming of data from the smart-handle module
+#   Input   ::  {object}    serial object
+#   Output  ::  {string}    terminal messages
+
+def stopStreaming(rfObject,attempts):
+    print fullStamp() + " stopStreaming()"
+    if rfObject.isOpen() == False:
+        rfObject.open()
+    outByte = definitions.DC3
+    rfObject.write(outByte)
+    time.sleep(1)
+    inByte = rfObject.read(size=1)
+    if inByte == definitions.ACK:
+        print fullStamp() + " ACK Device STOPPED STREAMING data"
+    elif inByte == definitions.NAK:
+        print fullStamp() + " NAK Device CANNOT STOP STREAMING data"
+    else:
+        rfObject.close()
+        if attempts is not 0:
+            return stopStreaming(rfObject,attempts-1)
+        elif attempts is 0:
+            print fullStamp() + " Attempts limit reached"
+    rfObject.close()
 
 # Functions - String-based
+#   The original and robust method of communication consisted of character-based communication
 
 # Trigger Device
 #   This function triggers the data recording of the smart handle
@@ -79,6 +120,38 @@ def triggerDevice(rfObject,deviceName,iterCheck):
             rfObject.write('g')
             break
 
+def triggerDevice2(rfObject,deviceName):
+    if rfObject.isOpen() == False:
+        rfObject.open()
+    inString = deviceName
+    while inString == deviceName:
+        print fullStamp() + " Triggering Device"
+        rfObject.write('g')
+        time.sleep(1)
+        inString = rfObject.readline()[:-1]
+        print inString
+    rfObject.close()
+
+def triggerDevices(rfObjects,deviceNames):
+    print fullStamp() + " triggerDevices()"
+    Ndevices = len(rfObjects)
+    print fullStamp() + " Triggering " + str(Ndevices) + " devices"
+    for i in range(0,Ndevices):
+        if rfObjects[i].isOpen() == False:
+            rfObjects[i].open()
+        inString = deviceNames[i]
+        while inString == deviceNames[i]:
+            print fullStamp() + " Triggering " + deviceNames[i] + " device..."
+            rfObjects[i].write('g')
+            time.sleep(1)
+            inString = rfObjects[i].readline()[:-1]
+            if inString != deviceNames[i]:
+                print fullStamp() + " Successfully triggered " + deviceNames[i] + " device"
+            elif inString == deviceNames[i]:
+                print fullStamp() + " Failed to trigger " + deviceNames[i] + " device"
+        rfObjects[i].close()
+        time.sleep(1)
+
 # Stop Device
 # This function stops the data collection process of the smart handle
 def stopDevice(rfObject, deviceName, iterCheck):
@@ -89,17 +162,55 @@ def stopDevice(rfObject, deviceName, iterCheck):
             rfObject.write('s')
             break
 
+def stopDevice2(rfObject,deviceName):
+    if rfObject.isOpen() == False:
+        rfObject.open()
+    inString = rfObject.readline()
+    while inString != deviceName:
+        print fullStamp() + " Stopping Device"
+        rfObject.write('s')
+        time.sleep(1)
+        inString = rfObject.readline()[:-1]
+        print inString
+    rfObject.close()
+
+def stopDevices(rfObjects,deviceNames):
+    print fullStamp() + " stopDevices()"
+    Ndevices = len(rfObjects)
+    print fullStamp() + " Stopping " + str(Ndevices) + " devices"
+    for i in range(0,Ndevices):
+        if rfObjects[i].isOpen() == False:
+            rfObjects[i].open()
+        inString = rfObjects[i].readline()
+        while inString != deviceNames[i]:
+            print fullStamp() + " Stopping " + deviceNames[i] + " device"
+            rfObjects[i].write('s')
+            time.sleep(1)
+            inString = rfObjects[i].readline()[:-1]
+            if inString == deviceNames[i]:
+                print fullStamp() + " Successfully stopped " + deviceNames[i] + " device"
+            elif inString != deviceNames[i]:
+                print fullStamp() + " Failed to stop " + deviceNames[i] + " device"
+        rfObjects[i].close()
+        time.sleep(1)
+
 # Data Read
 #   This function captures the data written to the serial port
 def dataRead(rfObject):
     inString = rfObject.readline()
-    print inString
     return inString
+
+def dataReadStreams(rfObjects, Nstreams):
+    dataStream = []
+    for i in range(0,Nstreams):
+        dataStream.append(rfObjects[i].readline())
+        time.sleep(0.5)
+    return dataStream
 
 # Data Write
 #   This function writes the data read from serial to an output file
-def dataWrite(executionTimeStamp, currentTime, outputFilePath, instrumentName, inString):
-    dataFileDir = outputFilePath + "/" + executionTimeStamp
+def dataWrite(executionTimeStamp, currentTime, outputDir, instrumentName, inString):
+    dataFileDir = outputDir + "/" + executionTimeStamp
 
     if os.path.exists(dataFileDir) == False:
         createDataFolder(dataFileDir)
@@ -111,9 +222,9 @@ def dataWrite(executionTimeStamp, currentTime, outputFilePath, instrumentName, i
         createDataFile(dataFilePath, instrumentName)
     
     with open(dataFilePath, "a") as dataFile:
-        timePrefix = "TIM," + str(currentTime) + ","
-        dataFile.write(timePrefix + inString)
-        
+        #timePrefix = "TIM," + str(currentTime) + ","
+        #dataFile.write(timePrefix + inString)
+        dataFile.write(inString + "\n")
 
 # Create Data File
 #   Creates the output/text file
