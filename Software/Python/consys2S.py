@@ -36,6 +36,7 @@ from    configurationProtocol  import pullInstruments
 from    configurationProtocol  import instrumentCrossReference
 from    bluetoothProtocol      import createPort2
 from    bluetoothProtocol      import createPorts2
+from    bluetoothProtocol      import createPortS
 from    smarthandleProtocol    import triggerDevice2
 from    smarthandleProtocol    import triggerDevices
 from    smarthandleProtocol    import dataRead
@@ -121,6 +122,20 @@ deviceIndex, deviceTypes, deviceNames, deviceAddresses = instrumentCrossReferenc
 # ----------------------------------------------
 
 
+print fullStamp() + " Start Configuration"
+
+rfObject = createPortS(deviceTypes[0],deviceAddresses[0],115200,5)
+
+# triggering device
+time.sleep(1)
+triggerDevice2(rfObject,"SH")
+
+# openning device
+time.sleep(1)
+if rfObject.isOpen() == False:
+    rfObject.open()
+
+"""
 configStartTime = time.time()
 configCurrentTime = 0
 configStopTime = 20 #timers[0]
@@ -131,7 +146,7 @@ while configCurrentTime < configStopTime:
     # Connect to listed devices...
     if configLoopCounter == 0:
         print fullStamp() + " Connecting smart devices"
-        rfObject = createPort2(deviceTypes[0], deviceAddresses[0], 115200, 0.10, 5)
+        rfObject = createPortS(deviceTypes[0], deviceAddresses[0], 115200, 5)
 
         time.sleep(1)
         print fullStamp() + " Triggering smart devices"
@@ -146,7 +161,7 @@ while configCurrentTime < configStopTime:
     configLoopCounter = configLoopCounter + 1
 
 # End of Configuration Loop
-
+"""
 # ----------------------------------------------
 # Simulation / Configuration Loop
 #   In this loop, connected devices will be accessed for data collection
@@ -161,7 +176,7 @@ print fullStamp() + " Starting Simulation Loop, time = " + str(simStopTime) + " 
 while simCurrentTime < simStopTime:
 
     # Handles
-    dataStream.append( ["TIM,"+str(simCurrentTime), rfObject.readline()] )
+    dataStream.append( ["TIM,"+str(simCurrentTime), rfObject.readline()[:-1]] )
     
     simCurrentTime = time.time() - simStartTime
     print simCurrentTime
@@ -176,89 +191,4 @@ rfObject.close()
 time.sleep(0.25)
 stopDevice2(rfObject,deviceTypes[0])
 
-"""
-# ----------------------------------------------
-# Load Configuration File
-#   The program loads the configuration XML file to pull the relevant information
-# ----------------------------------------------
-# Loading configuration file using terminal input
-scenarioNumberString = doubleDigitCorrection(inputArg[1])
-scenarioConfigFileName = "/sc" + scenarioNumberString + ".txt"
-scenarioConfigFile = scenarioConfigFilePath + scenarioConfigFileName
-with open(scenarioConfigFile,'r+') as scenarioConfigFileObj:
-    lines = scenarioConfigFileObj.readlines()
 
-# Save loaded data into program variables
-Nlines = len(lines)
-scenarioConfigVariables = []
-scenarioConfigValues = []
-for i in range(0, Nlines-1):
-    scenarioConfigVariables.append(lines[i].split(":")[0])
-    scenarioConfigValues.append(lines[i].split(":")[1])
-# print scenarioConfigVariables
-# print int(scenarioConfigValues[1])
-
-# ----------------------------------------------
-# X.0 - Write Configuration File
-# ----------------------------------------------
-# Write configuration file for downstream parallel applications
-with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
-    # Note: For the countdown application, only two inputs are currently needed: StartTime and WarningTime
-    countdownConfigFileObj.write(scenarioConfigVariables[1] + ":" + str(scenarioConfigValues[1]))
-    countdownConfigFileObj.write(scenarioConfigVariables[2] + ":" + str(scenarioConfigValues[2]))
-
-# ----------------------------------------------
-# X.0 - Connect Instrument(s)
-# ----------------------------------------------
-# Pull instrument information from the instrument configuration file
-Ndevices, instrumentNames, instrumentBTAddress = pullInstruments(instrumentsConfigFile)
-# Connect to instruments by creating bluetooth-serial (RFCOMM) ports
-arduRFObj = createRFPort(instrumentNames, instrumentBTAddress)
-
-# ----------------------------------------------
-# X.0 - Execute Parallel Application(s)
-# ----------------------------------------------
-print "User may execute countdown application now"
-#countdownExeFilePath = countdownDir
-#countdownExeFileName = "/countdown"
-#terminalCommand = "DISPLAY=:0.0; " + countdownExeFilePath + countdownExeFileName + " &"
-#os.system(terminalCommand)
-time.sleep(5)
-
-# ----------------------------------------------
-# X.0 - Data Acquisition Timed-Loop
-# ----------------------------------------------
-startTime = time.time()
-currentTime = 0
-stopTime = 10 # seconds
-
-while currentTime < stopTime:
-        #
-        # Operation
-
-        # Loop through all devices
-        for i in range(0,Ndevices):
-
-            # Read data from device
-            inString = dataRead(arduRFObj[i])
-
-            # Write data from device
-            dataWrite(executionTimeStamp, currentTime, outputFilePath, instrumentNames[i], inString)
-
-        # Update time
-        currentTime = time.time() - startTime
-        # print currentTime
-
-print "Program Concluded"
-
-stopRFInstruments(arduRFObj, instrumentNames)
-"""
-
-"""
-References
-1- Defining Functions in Python - http://www.tutorialspoint.com/python/python_functions.htm
-2- Calling Functions from other Python scripts - http://stackoverflow.com/questions/20309456/how-to-call-a-function-from-another-file-in-python
-3- "       "         "    "     "      "       - http://stackoverflow.com/questions/7701646/how-to-call-a-function-from-another-file
-4- Returning multiple variables from python function/script - http://stackoverflow.com/questions/354883/how-do-you-return-multiple-values-in-python
-5- Writing to Serial on Python - http://playground.arduino.cc/Interfacing/Python
-"""

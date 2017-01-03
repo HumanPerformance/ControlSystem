@@ -10,10 +10,10 @@ from smarthandleProtocol import *
 
 
 bt_address = "00:06:66:80:8C:BE"
-#rfObject = createPortS("SH",bt_address,115200,5)
-portRelease("rfcomm",0)
-portBind("rfcomm",0,bt_address)
-rfObject = serial.Serial("/dev/rfcomm0",115200,timeout=None)
+rfObject = createPortS("SH",bt_address,115200,5)
+#portRelease("rfcomm",0)
+#portBind("rfcomm",0,bt_address)
+#rfObject = serial.Serial("/dev/rfcomm0",115200,timeout=None)
 
 # triggering device
 time.sleep(1)
