@@ -18,7 +18,7 @@ executionTimeStamp = fullStamp()
 testDir = "/home/pi/Desktop/test"
 deviceNames = ["SH","SH"]
 deviceBTAddresses = ["00:06:66:80:8C:BE","00:06:66:80:8C:A9"]
-rfObject = createPort2(deviceNames[0], deviceBTAddresses[0], 115200, 5, 5)
+rfObject = createPort2(deviceNames[1], deviceBTAddresses[1], 115200, 5, 5)
 
 print fullStamp() + " Triggering Smart Handle"
 time.sleep(1)
@@ -47,7 +47,7 @@ if rfObject.isOpen() == True:
     rfObject.close()
 time.sleep(1)
 print fullStamp() + " Stopping Smart Handle"
-stopDevice2(rfObject,deviceNames[0])
+stopDevice2(rfObject,deviceNames[1])
 
 print fullStamp() + " Saving Output Text File"
 Nlines = len(dataStream)

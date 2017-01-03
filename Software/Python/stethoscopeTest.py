@@ -22,10 +22,12 @@ if rfObject.isOpen() == False:
 sdCardCheck(rfObject)
 rfObject.close()
 
+
 time.sleep(2)
 if rfObject.isOpen() == False:
     rfObject.open()
 startRecording(rfObject)
+#startTrackingMicStream(rfObject)
 rfObject.close()
 
 
@@ -35,6 +37,7 @@ time.sleep(2)
 if rfObject.isOpen() == False:
     rfObject.open()
 stopRecording(rfObject)
+#stopTrackingMicStream(rfObject)
 rfObject.close()
 
 """
