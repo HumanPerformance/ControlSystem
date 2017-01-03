@@ -88,7 +88,6 @@ def dataRead(rfObject):
     while dataAvailable is not 0:
         time.sleep(.15)
         inString = rfObject.readline()
-        dataAvailable = rfObject.in_waiting
         print inString
     rfObject.close()
     return inString
