@@ -173,21 +173,33 @@ simStopTime = 30
 # simLoopCounter = 0
 dataStream = []
 print fullStamp() + " Starting Simulation Loop, time = " + str(simStopTime) + " seconds"
-while simCurrentTime < simStopTime:
 
-    # Handles
-    dataStream.append( ["TIM,"+str(simCurrentTime), rfObject.readline()[:-1]] )
-    
-    simCurrentTime = time.time() - simStartTime
-    print simCurrentTime
-    # simLoopCounter = simLoopCounter + 1;
+try:
+    while simCurrentTime < simStopTime:
 
-# End of Simulatio Loop
+        # Handles
+        dataStream.append( ["TIM,"+str(simCurrentTime), rfObjects.readline()[:-1]] )
 
-print dataStream
+        simCurrentTime = time.time() - simStartTime
+        print fullStamp() + " Current Simulation Time = " + str(simCurrentTime)
+        # simLoopCounter = simLoopCounter + 1;
+
+        # End of Simulatio Loop
+        
+except Exception as instance:
+    print fullStamp() + " Exception or Error Caught"
+    print fullStamp() + " Error Type " + str(type(instance))
+    print fullStamp() + " Error Arguments " + str(instance.args)
+    print fullStamp() + " Closing Open Ports"
+    time.sleep(1)
+    if rfObject.isOpen() == True:
+        rfObject.close()
+
+# print dataStream
 
 time.sleep(0.25)
-rfObject.close()
+if rfObject.isOpen() == True:
+    rfObject.close()
 time.sleep(0.25)
 stopDevice2(rfObject,deviceTypes[0])
 
