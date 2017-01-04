@@ -105,27 +105,33 @@ deviceIndex, deviceTypes, deviceNames, deviceAddresses = instrumentCrossReferenc
 # ----------------------------------------------
 
 print fullStamp() + " Start Configuration"
+
 # Creating Serial Port for Devices
+time.sleep(1)
 print fullStamp() + " Creating port for SH0"
-sh0 = createPortS(deviceTypes[0],deviceAddresses[0],115200,5)
+sh0 = createPortS(deviceTypes[0],0,deviceAddresses[0],115200,5)
+
+time.sleep(1)
 print fullStamp() + " Creating port for SH1"
-sh1 = createPortS(deviceTypes[1],deviceAddresses[1],115200,5)
+sh1 = createPortS(deviceTypes[1],1,deviceAddresses[1],115200,5)
 
 # Triggering Smart Handle Devices
+time.sleep(1)
 print fullStamp() + " Triggering SH0"
-time.sleep(1)
 triggerDevice2(sh0,"SH")
-print fullStamp() + " Triggering SH1"
+
 time.sleep(1)
+print fullStamp() + " Triggering SH1"
 triggerDevice2(sh1,"SH")
 
 # Openning Ports
-print fullStamp() + " Openning Serial Port to SH0"
 time.sleep(1)
+print fullStamp() + " Openning Serial Port to SH0"
 if sh0.isOpen() == False:
     sh0.open()
-print fullStamp() + " Openning Serial Port to SH1"
+
 time.sleep(1)
+print fullStamp() + " Openning Serial Port to SH1"
 if sh1.isOpen() == False:
     sh1.open()
 
@@ -192,21 +198,24 @@ print dataStream
 """
 
 # Closing Open Serial Ports
+time.sleep(0.25)
 print fullStamp() + " Closing Serial Port to SH0"
-if sh0.isOpen is True:
+if sh0.isOpen() == True:
     sh0.close()
+
 time.sleep(0.25)
 print fullStamp() + " Closing Serial Port to SH1"
-if sh1.isOpen() is True:
+if sh1.isOpen() == True:
     sh1.close()
-time.sleep(0.25)
 
 # Stopping Devices
+time.sleep(1)
 print fullStamp() + " Stopping SH0"
 stopDevice2(sh0,deviceTypes[0])
+
+time.sleep(1)
 print fullStamp() + " Stopping SH1"
 stopDevice2(sh1,deviceTypes[1])
-
 
 
 """

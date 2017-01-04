@@ -107,7 +107,7 @@ deviceIndex, deviceTypes, deviceNames, deviceAddresses = instrumentCrossReferenc
 
 print fullStamp() + " Start Configuration"
 
-rfObject = createPortS(deviceTypes[0],0,deviceAddresses[0],115200,5)
+rfObject = createPortS(deviceTypes[1],1,deviceAddresses[1],115200,5)
 
 # triggering device
 time.sleep(1)
@@ -161,7 +161,7 @@ try:
     while simCurrentTime < simStopTime:
 
         # Handles
-        dataStream.append( ["TIM,"+str(simCurrentTime), rfObjects.readline()[:-1]] )
+        dataStream.append( ["TIM,"+str(simCurrentTime), rfObject.readline()[:-1]] )
 
         simCurrentTime = time.time() - simStartTime
         print fullStamp() + " Current Simulation Time = " + str(simCurrentTime)
