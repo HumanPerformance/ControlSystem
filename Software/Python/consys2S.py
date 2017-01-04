@@ -26,26 +26,9 @@ from    os.path                import expanduser
 
 # PD3D Modules
 from    timeStamp              import fullStamp
-from    configurationProtocol  import getMAC
-from    configurationProtocol  import definePaths
-from    configurationProtocol  import readConfigFile
-from    configurationProtocol  import selfID
-from    configurationProtocol  import findScenario
-from    configurationProtocol  import pullParameters
-from    configurationProtocol  import pullInstruments
-from    configurationProtocol  import instrumentCrossReference
-from    bluetoothProtocol      import createPort2
-from    bluetoothProtocol      import createPorts2
-from    bluetoothProtocol      import createPortS
-from    smarthandleProtocol    import triggerDevice2
-from    smarthandleProtocol    import triggerDevices
-from    smarthandleProtocol    import dataRead
-from    smarthandleProtocol    import dataReadStreams
-from    smarthandleProtocol    import dataWrite
-from    smarthandleProtocol    import createDataFolder
-from    smarthandleProtocol    import createDataFile
-from    smarthandleProtocol    import stopDevice2
-from    smarthandleProtocol    import stopDevices
+from    configurationProtocol  import *
+from    bluetoothProtocol      import *
+from    smarthandleProtocol    import *
 
 # ==============================================
 # Variables
@@ -124,7 +107,7 @@ deviceIndex, deviceTypes, deviceNames, deviceAddresses = instrumentCrossReferenc
 
 print fullStamp() + " Start Configuration"
 
-rfObject = createPortS(deviceTypes[1],deviceAddresses[1],115200,5)
+rfObject = createPortS(deviceTypes[0],0,deviceAddresses[0],115200,5)
 
 # triggering device
 time.sleep(1)
