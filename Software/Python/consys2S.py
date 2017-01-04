@@ -124,7 +124,7 @@ deviceIndex, deviceTypes, deviceNames, deviceAddresses = instrumentCrossReferenc
 
 print fullStamp() + " Start Configuration"
 
-rfObject = createPortS(deviceTypes[0],deviceAddresses[0],115200,5)
+rfObject = createPortS(deviceTypes[1],deviceAddresses[1],115200,5)
 
 # triggering device
 time.sleep(1)

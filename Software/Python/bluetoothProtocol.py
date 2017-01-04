@@ -6,18 +6,6 @@ The following module has been created to manage the bluetooth interface between 
 Michael Xynidis
 Fluvio L Lobo Fenoglietto
 09/01/2016
-
-
-List of functions ::
-
-X - Look for bluetooth device
-X - Pair bluetooth device
-X - Add paired device to the instrument list
-X.X - Connect to paired device
-    X.X - Create rfcomm port
-    X.X - Bind rfcomm port
-    X.X - Release rfcomm port
-
 """
 
 # Import Libraries and/or Modules

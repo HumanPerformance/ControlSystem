@@ -26,24 +26,9 @@ from    os.path                import expanduser
 
 # PD3D Modules
 from    timeStamp              import fullStamp
-from    configurationProtocol  import getMAC
-from    configurationProtocol  import definePaths
-from    configurationProtocol  import readConfigFile
-from    configurationProtocol  import selfID
-from    configurationProtocol  import findScenario
-from    configurationProtocol  import pullParameters
-from    configurationProtocol  import pullInstruments
-from    configurationProtocol  import instrumentCrossReference
-from    bluetoothProtocol      import createPorts2
-from    smarthandleProtocol    import triggerDevice2
-from    smarthandleProtocol    import triggerDevices
-from    smarthandleProtocol    import dataRead
-from    smarthandleProtocol    import dataReadStreams
-from    smarthandleProtocol    import dataWrite
-from    smarthandleProtocol    import createDataFolder
-from    smarthandleProtocol    import createDataFile
-from    smarthandleProtocol    import stopDevice2
-from    smarthandleProtocol    import stopDevices
+from    configurationProtocol  import *
+from    bluetoothProtocol      import *
+from    smarthandleProtocol    import *
 
 # ==============================================
 # Variables
@@ -119,7 +104,35 @@ deviceIndex, deviceTypes, deviceNames, deviceAddresses = instrumentCrossReferenc
 #   This loop works as a configuration step
 # ----------------------------------------------
 
+print fullStamp() + " Start Configuration"
+# Creating Serial Port for Devices
+print fullStamp() + " Creating port for SH0"
+sh0 = createPortS(deviceTypes[0],deviceAddresses[0],115200,5)
+print fullStamp() + " Creating port for SH1"
+sh1 = createPortS(deviceTypes[1],deviceAddresses[1],115200,5)
 
+# Triggering Smart Handle Devices
+print fullStamp() + " Triggering SH0"
+time.sleep(1)
+triggerDevice2(sh0,"SH")
+print fullStamp() + " Triggering SH1"
+time.sleep(1)
+triggerDevice2(sh1,"SH")
+
+# Openning Ports
+print fullStamp() + " Openning Serial Port to SH0"
+time.sleep(1)
+if sh0.isOpen() == False:
+    sh0.open()
+print fullStamp() + " Openning Serial Port to SH1"
+time.sleep(1)
+if sh1.isOpen() == False:
+    sh1.open()
+
+
+time.sleep(10)
+
+"""
 configStartTime = time.time()
 configCurrentTime = 0
 configStopTime = 20 #timers[0]
@@ -149,7 +162,9 @@ while configCurrentTime < configStopTime:
     configLoopCounter = configLoopCounter + 1
 
 # End of Configuration Loop
+"""
 
+"""
 # ----------------------------------------------
 # Simulation / Configuration Loop
 #   In this loop, connected devices will be accessed for data collection
@@ -174,11 +189,25 @@ while simCurrentTime < simStopTime:
 # End of Simulatio Loop
 
 print dataStream
+"""
 
-rfObjects[0].close()
-rfObjects[1].close()
+# Closing Open Serial Ports
+print fullStamp() + " Closing Serial Port to SH0"
+if sh0.isOpen is True:
+    sh0.close()
 time.sleep(0.25)
-stopDevices(rfObjects,deviceTypes)
+print fullStamp() + " Closing Serial Port to SH1"
+if sh1.isOpen() is True:
+    sh1.close()
+time.sleep(0.25)
+
+# Stopping Devices
+print fullStamp() + " Stopping SH0"
+stopDevice2(sh0,deviceTypes[0])
+print fullStamp() + " Stopping SH1"
+stopDevice2(sh1,deviceTypes[1])
+
+
 
 """
 # ----------------------------------------------
