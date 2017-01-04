@@ -135,44 +135,8 @@ print fullStamp() + " Openning Serial Port to SH1"
 if sh1.isOpen() == False:
     sh1.open()
 
-
-time.sleep(10)
-
-"""
-configStartTime = time.time()
-configCurrentTime = 0
-configStopTime = 20 #timers[0]
-configLoopCounter = 0
-print fullStamp() + " Starting Configuration Loop, time = " + str(configStopTime) + " seconds"
-while configCurrentTime < configStopTime:
-
-    # Connect to listed devices...
-    if configLoopCounter == 0:
-        print fullStamp() + " Connecting smart devices"
-        rfObjects = createPorts2(deviceTypes, deviceAddresses, 115200, 5, 5)
-
-        time.sleep(1)
-        print fullStamp() + " Triggering smart devices"
-        triggerDevices(rfObjects,deviceTypes)
-        
-        print fullStamp() + " Opening smart device communication"
-        time.sleep(1)
-        if rfObjects[0].isOpen() == False:
-            rfObjects[0].open()
-
-        time.sleep(1)
-        if rfObjects[1].isOpen() == False:
-            rfObjects[1].open()
-    
-    configCurrentTime = time.time() - configStartTime
-    configLoopCounter = configLoopCounter + 1
-
-# End of Configuration Loop
-"""
-
-"""
 # ----------------------------------------------
-# Simulation / Configuration Loop
+# Simulation
 #   In this loop, connected devices will be accessed for data collection
 # ----------------------------------------------
 
@@ -186,16 +150,19 @@ while simCurrentTime < simStopTime:
 
     # Handles
     dataStream.append( ["TIM,"+str(simCurrentTime),
-                        rfObjects[0].readline()[:-1],
-                        rfObjects[1].readline()[:-1]] )
+                        sh0.readline()[:-1],
+                        sh1.readline()[:-1]] )
 
     simCurrentTime = time.time() - simStartTime
+    print fullStamp() + " Current Simulation Time = " + str(simCurrentTime)
     # simLoopCounter = simLoopCounter + 1;
 
 # End of Simulatio Loop
 
-print dataStream
-"""
+# ----------------------------------------------
+# Post-Simulation
+#   In this loop, devices will be disconnected
+# ----------------------------------------------
 
 # Closing Open Serial Ports
 time.sleep(0.25)
