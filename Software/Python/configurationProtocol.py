@@ -104,7 +104,7 @@ def selfID(address, tree, root):
             return panelIndex, panelID
             break
         elif i == Npanels - 1:
-            print fullStamp() + " Panel " + str(number) + " NOT found"
+            #print fullStamp() + " Panel " + str(number) + " NOT found"
             scenarioIndex = -1
             panelID = "NA"
             return panelIndex, panelID

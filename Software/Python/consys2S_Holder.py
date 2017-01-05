@@ -22,15 +22,11 @@ import  sys
 import  os
 import  serial
 import  time
+from    threading              import Timer
 from    os.path                import expanduser
 
-# PD3D Modules
+# PD3D Modules: General
 from    timeStamp              import fullStamp
-<<<<<<< HEAD
-from    configurationProtocol  import *
-from    bluetoothProtocol      import *
-from    smarthandleProtocol    import *
-=======
 from    configurationProtocol  import getMAC
 from    configurationProtocol  import definePaths
 from    configurationProtocol  import readConfigFile
@@ -39,7 +35,11 @@ from    configurationProtocol  import findScenario
 from    configurationProtocol  import pullParameters
 from    configurationProtocol  import pullInstruments
 from    configurationProtocol  import instrumentCrossReference
+from    bluetoothProtocol      import createPort2
 from    bluetoothProtocol      import createPorts2
+from    usbProtocol            import createPort
+
+# PD3D Modules: Smart Handle
 from    smarthandleProtocol    import triggerDevice2
 from    smarthandleProtocol    import triggerDevices
 from    smarthandleProtocol    import dataRead
@@ -49,7 +49,17 @@ from    smarthandleProtocol    import createDataFolder
 from    smarthandleProtocol    import createDataFile
 from    smarthandleProtocol    import stopDevice2
 from    smarthandleProtocol    import stopDevices
->>>>>>> smartHolder
+
+# PD3D Modules: Smart Holder
+from    smartHolderProtocol    import dataRead
+from    smartHolderProtocol    import triggerDevice
+from    smartHolderProtocol    import dataRead
+from    smartHolderProtocol    import dataReadStreams
+from    smartHolderProtocol    import dataWrite
+from    smartHolderProtocol    import createDataFolder
+from    smartHolderProtocol    import createDataFile
+from    smartHolderProtocol    import stopDevice
+
 
 # ==============================================
 # Variables
@@ -71,6 +81,8 @@ except:
 # Panel self-dentification
 #   The panel obtains the mac address of the local system
 # ----------------------------------------------
+
+#mac_bt = "B8:27:EB:DD:1F:86"
 mac_bt = getMAC('eth0')
 
 # ----------------------------------------------
@@ -125,66 +137,27 @@ deviceIndex, deviceTypes, deviceNames, deviceAddresses = instrumentCrossReferenc
 #   This loop works as a configuration step
 # ----------------------------------------------
 
-<<<<<<< HEAD
-print fullStamp() + " Start Configuration"
-
-# Creating Serial Port for Devices
-time.sleep(1)
-print fullStamp() + " Creating port for SH0"
-sh0 = createPortS(deviceTypes[0],0,deviceAddresses[0],115200,5)
-
-time.sleep(1)
-print fullStamp() + " Creating port for SH1"
-sh1 = createPortS(deviceTypes[1],1,deviceAddresses[1],115200,5)
-
-# Triggering Smart Handle Devices
-time.sleep(1)
-print fullStamp() + " Triggering SH0"
-triggerDevice2(sh0,"SH")
-
-time.sleep(1)
-print fullStamp() + " Triggering SH1"
-triggerDevice2(sh1,"SH")
-
-# Openning Ports
-time.sleep(1)
-print fullStamp() + " Openning Serial Port to SH0"
-if sh0.isOpen() == False:
-    sh0.open()
-
-time.sleep(1)
-print fullStamp() + " Openning Serial Port to SH1"
-if sh1.isOpen() == False:
-    sh1.open()
-
-# ----------------------------------------------
-# Simulation
-=======
 
 configStartTime = time.time()
 configCurrentTime = 0
-configStopTime = 20 #timers[0]
+configStopTime = 10 #timers[0]
 configLoopCounter = 0
-print fullStamp() + " Starting Configuration Loop, time = " + str(configStopTime) + " seconds"
+print fullStamp() + " Starting Configuration Loop, time = %i seconds" %configStopTime
 while configCurrentTime < configStopTime:
 
     # Connect to listed devices...
     if configLoopCounter == 0:
         print fullStamp() + " Connecting smart devices"
-        rfObjects = createPorts2(deviceTypes, deviceAddresses, 115200, 5, 5)
+        rfObject = createPort(0, 250000, None)
 
         time.sleep(1)
         print fullStamp() + " Triggering smart devices"
-        triggerDevices(rfObjects,deviceTypes)
+        triggerDevice(rfObject,deviceTypes[0])
         
         print fullStamp() + " Opening smart device communication"
         time.sleep(1)
-        if rfObjects[0].isOpen() == False:
-            rfObjects[0].open()
-
-        time.sleep(1)
-        if rfObjects[1].isOpen() == False:
-            rfObjects[1].open()
+        if rfObject.isOpen() == False:
+            rfObject.open()
     
     configCurrentTime = time.time() - configStartTime
     configLoopCounter = configLoopCounter + 1
@@ -193,88 +166,64 @@ while configCurrentTime < configStopTime:
 
 # ----------------------------------------------
 # Simulation / Configuration Loop
->>>>>>> smartHolder
 #   In this loop, connected devices will be accessed for data collection
 # ----------------------------------------------
-
+'''
+def endSim():
+    print dataStream
+    print "Closing rfObject"
+    time.sleep(0.25)
+    rfObject.close()
+    time.sleep(0.25)
+    stopDevice2(rfObject,deviceTypes[0])
+    return
+'''
 simStartTime = time.time()
 simCurrentTime = 0
-simStopTime = 30
+simStopTime = 15
 # simLoopCounter = 0
-dataStream = []
-print fullStamp() + " Satrting Simulation Loop, time = " + str(simStopTime) + " seconds"
-<<<<<<< HEAD
+#dataStream = []
+print fullStamp() + " Starting Simulation Loop, time = %i seconds" %simStopTime
+#end = Timer(simStopTime, endSim)
+#end.start()
+for i in range(1,6):
+    simStartTime = time.time()
+    simCurrentTime = 0
+    dataStream=[]
 
-try:
     while simCurrentTime < simStopTime:
-
-        # Handles
-        dataStream.append( ["TIM,"+str(simCurrentTime),
-                            sh0.readline()[:-1],
-                            sh1.readline()[:-1]] )
+    
+        dataStream.append( ["TIM,%.03f" %simCurrentTime,
+                            rfObject.readline()[:-1]] )
 
         simCurrentTime = time.time() - simStartTime
-        print fullStamp() + " Current Simulation Time = " + str(simCurrentTime)
-        # simLoopCounter = simLoopCounter + 1
+
         
-except Exception as instance:
-    print fullStamp() + " Exception or Error Caught"
-    print fullStamp() + " Error Type " + str(type(instance))
-    print fullStamp() + " Error Arguments " + str(instance.args)
-    print fullStamp() + " Closing Open Ports"
-    time.sleep(1)
-    if sh0.isOpen() == True:
-        sh0.close()
-    time.sleep(0.25)
-    if sh1.isOpen() == True:
-        sh1.close()
+    '''
+    if rfObject.readline()[:-1] is not None:
+        while rfObject.in_waiting is not 0:
+            #print "Loop # " + str(i) + " TIM," + str(simCurrentTime) + " " + rfObject.readline()[:-1] + "\n"
+            time.sleep(0.05)
+            #print simCurrentTime
+            simCurrentTime = time.time() - simStartTime
 
-# End of Simulatio Loop
-
-# ----------------------------------------------
-# Post-Simulation
-#   In this loop, devices will be disconnected
-# ----------------------------------------------
-
-# Closing Open Serial Ports
-time.sleep(0.25)
-print fullStamp() + " Closing Serial Port to SH0"
-if sh0.isOpen() == True:
-    sh0.close()
-
-time.sleep(0.25)
-print fullStamp() + " Closing Serial Port to SH1"
-if sh1.isOpen() == True:
-    sh1.close()
-
-# Stopping Devices
-time.sleep(1)
-print fullStamp() + " Stopping SH0"
-stopDevice2(sh0,deviceTypes[0])
-
-time.sleep(1)
-print fullStamp() + " Stopping SH1"
-stopDevice2(sh1,deviceTypes[1])
-=======
-while simCurrentTime < simStopTime:
-
-    # Handles
-    dataStream.append( ["TIM,"+str(simCurrentTime),
-                        rfObjects[0].readline()[:-1],
-                        rfObjects[1].readline()[:-1]] )
-
-    simCurrentTime = time.time() - simStartTime
     # simLoopCounter = simLoopCounter + 1;
-
+    '''
 # End of Simulatio Loop
-
-print dataStream
->>>>>>> smartHolder
-
-rfObjects[0].close()
-rfObjects[1].close()
+    #print dataStream
+    print ''
+    print "Loop # %i" %i
+    print "First Element: %s" %dataStream[0]
+    print "Middle: %s" %dataStream[len(dataStream)/2]
+    print "End: %s" %dataStream[len(dataStream)-1]
+    print "Array Length: %i" %len(dataStream)
+    
+#print dataStream
+print fullStamp() + " Closing rfObject"
 time.sleep(0.25)
-stopDevices(rfObjects,deviceTypes)
+rfObject.close()
+time.sleep(0.25)                                          
+stopDevice(rfObject,deviceTypes[0])
 
 """
 # ----------------------------------------------

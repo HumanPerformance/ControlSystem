@@ -3,12 +3,20 @@
 	<configversion id="1.2.7" date="15 DEC 2016"/>
 	<panels>
 		<panel 		id="PAN000" type="SIP"	name="instrument_panel" 																							status="online">
+<<<<<<< HEAD
 			<device id="DEV000" type="CS"	name="control_system"		mac_bt="B8:27:EB:DD:1F:86"	mac_eth="b8:27:eb:77:b5:2c"	mac_wlan="b8:27:eb:22:e0:79"	status="available">
+=======
+			<device id="DEV000" type="CS"	name="control_system"		mac_bt="b8:27:eb:35:b4:9d"	mac_eth="b8:27:eb:77:b5:2c"	mac_wlan="b8:27:eb:22:e0:79"	status="available">
+>>>>>>> smartHolder
 				<description>
 					A Raspberry Pi-bassed controller which serves as a control point to all panel-attached devices
 				</description>
 			</device>
+<<<<<<< HEAD
 			<device id="DEV001" type="SS"	name="stethoscope"			mac_bt="00:06:66:86:60:3D" 																status="available">
+=======
+			<device id="DEV001" type="SS"	name="stethoscope"			mac_bt="00:06:66:7D:81:7D" 																status="available">
+>>>>>>> smartHolder
 				<description>
 					An electronic stethoscope providing either augmented listening or unmodified heart sounds 
 				</description>
@@ -21,6 +29,11 @@
 			<device id="DEV003" type="SH"	name="otoscope"				mac_bt="00:06:66:80:8C:A9"																status="unavailable">
 				<description>
 					No description
+				</description>
+			</device>
+			<device id="DEV004" type="HLD"	name="smartholder"			mac_bt="NONE"																			status="available">
+				<description>
+					Detect the presence of devices on the panel
 				</description>
 			</device>
 		</panel>
@@ -73,9 +86,13 @@
 				<parameter id="PARAM002" type="timer" name="tp">30</parameter>
 			</parameters>
 			<devices>
-				<device	id="DEV000" type="SD" name="ophthalmoscope">
+				<!--
+				<device	id="DEV000" type="SH" name="ophthalmoscope">
 				</device>
-				<device id="DEV001" type="SD" name="otoscope">
+				<device    id="DEV001" type="SH" name="otoscope">
+				</device>
+				-->
+				<device	id="DEV004" type="HLD" name="smartholder">
 				</device>
 			</devices>
 		</scenario>
