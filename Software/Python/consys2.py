@@ -20,6 +20,7 @@ Fluvio L. Lobo Fenoglietto 12/19/2016
 # Python modules
 import  sys
 import  os
+import  os.path
 import  serial
 import  time
 from    os.path                import expanduser
@@ -230,4 +231,25 @@ stopDevice(rfObject,deviceTypes[2])
 
 # Store Data
 
+outputDataFileDir = outputDir + "/" + executionTimeStamp
+if os.path.exists(outputDataFileDir) == False:
+    os.makedirs(outputDataFileDir)
+
+outputDataFileName = "/" + deviceNames[0] + ".txt"
+outputDataFilePath = outputDataFileDir + outputDataFileName
+
+if os.path.isfile(outputDataFilePath) == False:
+    with open(outputDataFilePath "a") as dataFile:
+        dataFile.write("===================== \n")
+        dataFile.write("Execution Time = " + executionTimeStamp + "\n")
+        dataFile.write("Scenario = " + scenarioNumber + "\n")
+        dataFile.write("Device Name = " + deviceNames[0] + "\n")
+        dataFile.write("Device Type = " + deviceTypes[0] + "\n")
+        dataFile.write("Device Address = " + deviceAddresses[0] + "\n")
+        dataFile.write("===================== \n")
+
+Nlines = len(dataStream)
+for i in range(0,Nlines):
+    with open(outputDataFilePath, "a") as dataFile:
+        dataFile.write(dataStream[i][0] + "," + dataStream[i][1] + "\n")
 
