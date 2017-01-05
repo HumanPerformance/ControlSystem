@@ -146,16 +146,30 @@ simStopTime = 30
 # simLoopCounter = 0
 dataStream = []
 print fullStamp() + " Satrting Simulation Loop, time = " + str(simStopTime) + " seconds"
-while simCurrentTime < simStopTime:
 
-    # Handles
-    dataStream.append( ["TIM,"+str(simCurrentTime),
-                        sh0.readline()[:-1],
-                        sh1.readline()[:-1]] )
+try:
+    while simCurrentTime < simStopTime:
 
-    simCurrentTime = time.time() - simStartTime
-    print fullStamp() + " Current Simulation Time = " + str(simCurrentTime)
-    # simLoopCounter = simLoopCounter + 1;
+        # Handles
+        dataStream.append( ["TIM,"+str(simCurrentTime),
+                            sh0.readline()[:-1],
+                            sh1.readline()[:-1]] )
+
+        simCurrentTime = time.time() - simStartTime
+        print fullStamp() + " Current Simulation Time = " + str(simCurrentTime)
+        # simLoopCounter = simLoopCounter + 1
+        
+except Exception as instance:
+    print fullStamp() + " Exception or Error Caught"
+    print fullStamp() + " Error Type " + str(type(instance))
+    print fullStamp() + " Error Arguments " + str(instance.args)
+    print fullStamp() + " Closing Open Ports"
+    time.sleep(1)
+    if sh0.isOpen() == True:
+        sh0.close()
+    time.sleep(0.25)
+    if sh1.isOpen() == True:
+        sh1.close()
 
 # End of Simulatio Loop
 
