@@ -24,39 +24,6 @@ from usbProtocol import *
 import smartHolderDefinitions as definitions
 
 
-# State Enquiry
-#       This function requests the status of the thermometer
-#       Input   ::      rfObject                {object}        serial object
-#       Output  ::      terminal messages       {string}        terminal messages for logging
-def statusEnquiry(rfObject):
-        print fullStamp() + " statusEnquiry()"                                          # Print function name
-        outByte = definitions.ENQ                                                       # Send ENQ / Status Enquiry command - see thermometerDefinitions.py
-        rfObject.write(outByte)
-        inByte = rfObject.read(size=1)
-        if inByte == definitions.ACK:                                                   # Check for ACK / NAK response
-                print fullStamp() + " ACK Device READY\n"                               # ACK, in this case, translates to DEVICE READY
-        elif inByte == definitions.NAK:                                                 # Check for ACK / NAK response
-                print fullStamp() + " NAK Device NOT READY\n"                           # NAK, in this case, translates to DEVICE NOT READY
-
-def debugModeON(rfObject):
-        print fullStamp() + " debugModeON()"                                            # Print function name
-        outByte = definitions.DC1                                                       # Send DC1 / Device Control 1 command - see thermometerDefinitions.py
-        rfObject.write(outByte)
-        inByte = rfObject.read(size=1)
-        if inByte == definitions.ACK:                                                   # Check for ACK / NAK response
-                print fullStamp() + " ACK Device READY"                                 # ACK, in this case, translates to DEVICE READY
-                outByte = definitions.DC1_DEBUGON                                       # Send DEBUGON / debugMode ON - see thermometerDefinitions.py
-                rfObject.write(outByte)
-                inByte = rfObject.read(size=1)
-                if inByte == definitions.ACK:
-                        print fullStamp() + " DEBUG MODE ON\n"
-                elif inByte != definitions.ACK:
-                        print fullStamp() + " Device NOT responding\n"
-        
-        elif inByte == definitions.NAK:                                                 # Check for ACK / NAK response
-                print fullStamp() + " NAK Device NOT READY\n"                           # NAK, in this case, translates to DEVICE NOT READY
-
-
 # Data Read
 #   This function captures the data written to the serial port
 def dataRead(rfObject):
@@ -76,29 +43,31 @@ def dataRead(rfObject):
         print "No data to print"
 
 def triggerDevice(rfObject,deviceName):
-    if rfObject.isOpen() == False:
+    if rfObject.isOpen() is False:
         rfObject.open()
     inString = deviceName
-    inByte = 0
+    print fullStamp() + " Triggering Device"
     while inString == deviceName:
-        print fullStamp() + " Triggering Device"
-        '''
-        while inByte != 1:
-                rfObject.write('d')     # char(d) asks if device performed calibration successfully
-                inByte = rfObject.read(size=1)
-                print inByte
-        '''
+        time.sleep(0.15)
         rfObject.write('s')
         time.sleep(1)
-        inString = rfObject.readline()[:-1]
-        print inString
+        if rfObject.in_waiting > 0:
+                inString = rfObject.readline()[:-1]
+                print fullStamp() + " Device Triggered Successfully"
+        else:
+                print fullStamp() + " Device Failed to Trigger"
+                print fullStamp() + " Reattempting..."
     rfObject.close()
 
 def stopDevice(rfObject,deviceName):
-    if rfObject.isOpen() == False:
+    if rfObject.isOpen() is False:
         rfObject.open()
+
     inString = rfObject.readline()
     while inString != deviceName:
+        rfObject.flush()
+        rfObject.reset_input_buffer()
+        rfObject.reset_output_buffer()
         print fullStamp() + " Stopping Device"
         rfObject.write('i')
         time.sleep(1)
@@ -181,3 +150,42 @@ def createDataFile(dataFilePath, instrumentName):
 #   Creates the output/text file's directory/folder
 def createDataFolder(dataFileDir):
     os.makedirs(dataFileDir)
+
+
+
+'''
+# State Enquiry
+#       This function requests the status of the thermometer
+#       Input   ::      rfObject                {object}        serial object
+#       Output  ::      terminal messages       {string}        terminal messages for logging
+def statusEnquiry(rfObject):
+        print fullStamp() + " statusEnquiry()"                                          # Print function name
+        outByte = definitions.ENQ                                                       # Send ENQ / Status Enquiry command - see thermometerDefinitions.py
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)
+        if inByte == definitions.ACK:                                                   # Check for ACK / NAK response
+                print fullStamp() + " ACK Device READY\n"                               # ACK, in this case, translates to DEVICE READY
+        elif inByte == definitions.NAK:                                                 # Check for ACK / NAK response
+                print fullStamp() + " NAK Device NOT READY\n"                           # NAK, in this case, translates to DEVICE NOT READY
+
+
+
+def debugModeON(rfObject):
+        print fullStamp() + " debugModeON()"                                            # Print function name
+        outByte = definitions.DC1                                                       # Send DC1 / Device Control 1 command - see thermometerDefinitions.py
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)
+        if inByte == definitions.ACK:                                                   # Check for ACK / NAK response
+                print fullStamp() + " ACK Device READY"                                 # ACK, in this case, translates to DEVICE READY
+                outByte = definitions.DC1_DEBUGON                                       # Send DEBUGON / debugMode ON - see thermometerDefinitions.py
+                rfObject.write(outByte)
+                inByte = rfObject.read(size=1)
+                if inByte == definitions.ACK:
+                        print fullStamp() + " DEBUG MODE ON\n"
+                elif inByte != definitions.ACK:
+                        print fullStamp() + " Device NOT responding\n"
+        
+        elif inByte == definitions.NAK:                                                 # Check for ACK / NAK response
+                print fullStamp() + " NAK Device NOT READY\n"                           # NAK, in this case, translates to DEVICE NOT READY
+
+'''
