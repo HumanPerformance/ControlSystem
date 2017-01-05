@@ -236,7 +236,6 @@ def createPort2(deviceName,deviceBTAddress,baudrate,timeout,attempts):
     rfObject.close()
     return rfObject
 
-<<<<<<< HEAD
 # Create Port -Simple
 #   Simplest varient of the create port function
 def createPortS(deviceName,portNumber,deviceBTAddress,baudrate,attempts):
@@ -251,8 +250,6 @@ def createPortS(deviceName,portNumber,deviceBTAddress,baudrate,attempts):
     rfObject.close()
     return rfObject
 
-=======
->>>>>>> smartHolder
 # Connection Check
 #   The following function verifies the connection to the desired device.
 #   The current iteration of this function uses character/string communication between the control system and the connected device.
@@ -274,7 +271,6 @@ def connectionCheck(rfObject,deviceName,deviceBTAddress,baudrate,timeout,attempt
             print fullStamp() + " Connection Attempts Limit Reached"
             print fullStamp() + " Please troubleshoot " + deviceName
 
-<<<<<<< HEAD
 # Connection Check -Simple
 #   Simplest variant of the connection check functions
 def connectionCheckS(rfObject,deviceName,portNumber,deviceBTAddress,baudrate,attempts):
@@ -290,8 +286,6 @@ def connectionCheckS(rfObject,deviceName,portNumber,deviceBTAddress,baudrate,att
             print fullStamp() + " Connection Attempts Limit Reached"
             print fullStamp() + " Please troubleshoot " + deviceName
 
-=======
->>>>>>> smartHolder
 # Port Bind
 #   This function binds the specified bluetooth device to a rfcomm port
 #   Input   ::  {string} port type, {int} port number, {string} bluetooth address of device
