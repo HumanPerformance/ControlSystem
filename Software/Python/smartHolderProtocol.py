@@ -54,6 +54,7 @@ def triggerDevice(rfObject,deviceName):
         if rfObject.in_waiting > 0:
                 inString = rfObject.readline()[:-1]
                 print fullStamp() + " Device Triggered Successfully"
+                print deviceName
         else:
                 print fullStamp() + " Device Failed to Trigger"
                 print fullStamp() + " Reattempting..."

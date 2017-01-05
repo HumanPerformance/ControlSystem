@@ -138,14 +138,14 @@ if sh1.isOpen() == False:
     sh1.open()
 
 # SmartHolder
-print fullStamp() + " Connecting smart devices"
+print fullStamp() + " Connecting Smart Holder"
 rfObject = createPort(0, 250000, None)
 
 time.sleep(1)
-print fullStamp() + " Triggering smart devices"
+print fullStamp() + " Triggering Smart Holder"
 triggerDevice(rfObject,deviceTypes[2])
 
-print fullStamp() + " Opening smart device communication"
+print fullStamp() + " Opening Serial Port to Smart Holder"
 time.sleep(1)
 if rfObject.isOpen() == False:
     rfObject.open()
