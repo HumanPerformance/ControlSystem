@@ -14,8 +14,11 @@ from smartHolderProtocol import *
 
 portNumber = 0
 rfObject = createPort(portNumber, 115200, None)
-print "Enter command: "
-rfObject.write(raw_input())
+#print "Enter command: "
+#rfObject.write(raw_input())
 time.sleep(1)
-dataRead_interrupt(rfObject)
+#dataRead_interrupt(rfObject)
 #dataRead(rfObject)
+triggerDevice(rfObject,"HLD")
+
+

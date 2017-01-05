@@ -21,7 +21,7 @@ import time
 from timeStamp import *
 from configurationProtocol import *
 from usbProtocol import *
-import thermometerDefinitions as definitions
+import smartHolderDefinitions as definitions
 
 
 # State Enquiry
@@ -79,8 +79,15 @@ def triggerDevice(rfObject,deviceName):
     if rfObject.isOpen() == False:
         rfObject.open()
     inString = deviceName
+    inByte = 0
     while inString == deviceName:
         print fullStamp() + " Triggering Device"
+        '''
+        while inByte != 1:
+                rfObject.write('d')     # char(d) asks if device performed calibration successfully
+                inByte = rfObject.read(size=1)
+                print inByte
+        '''
         rfObject.write('s')
         time.sleep(1)
         inString = rfObject.readline()[:-1]

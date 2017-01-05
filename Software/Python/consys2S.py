@@ -140,7 +140,7 @@ deviceIndex, deviceTypes, deviceNames, deviceAddresses = instrumentCrossReferenc
 
 configStartTime = time.time()
 configCurrentTime = 0
-configStopTime = 5 #timers[0]
+configStopTime = 10 #timers[0]
 configLoopCounter = 0
 print fullStamp() + " Starting Configuration Loop, time = " + str(configStopTime) + " seconds"
 while configCurrentTime < configStopTime:
@@ -148,7 +148,7 @@ while configCurrentTime < configStopTime:
     # Connect to listed devices...
     if configLoopCounter == 0:
         print fullStamp() + " Connecting smart devices"
-        rfObject = createPort(0, 115200, None)
+        rfObject = createPort(0, 250000, None)
 
         time.sleep(1)
         print fullStamp() + " Triggering smart devices"
@@ -186,16 +186,15 @@ simStopTime = 15
 print fullStamp() + " Satrting Simulation Loop, time = " + str(simStopTime) + " seconds"
 #end = Timer(simStopTime, endSim)
 #end.start()
-for i in range(1,5):
+for i in range(1,6):
     simStartTime = time.time()
     simCurrentTime = 0
     dataStream=[]
     while simCurrentTime < simStopTime:
         
         # Handles
-        
         dataStream.append( ["TIM,"+str(simCurrentTime),
-                            rfObject.readline()[:-1]] )
+                           rfObject.readline()[:-1]] )
         simCurrentTime = time.time() - simStartTime
         
         '''
@@ -210,17 +209,18 @@ for i in range(1,5):
         '''
 # End of Simulatio Loop
     #print dataStream
-    print "Array Length: " + str(len(dataStream))
+    print ''
     print "Loop # " + str(i)
     print "First Element: " + str(dataStream[0])
     print "Middle: " + str(dataStream[len(dataStream)/2])
     print "End: " + str(dataStream[len(dataStream)-1])
+    print "Array Length: " + str(len(dataStream))
     
 #print dataStream
 print "Closing rfObject"
 time.sleep(0.25)
 rfObject.close()
-time.sleep(0.25)
+time.sleep(0.25)                                          
 stopDevice(rfObject,deviceTypes[0])
 
 """
