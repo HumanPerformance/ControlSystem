@@ -197,6 +197,15 @@ except Exception as instance:
 
 # print dataStream
 
+# ----------------------------------------------
+# Post-Simulation
+#   Close Serial Ports
+#   Disconnect Devices
+#   Store Data
+# ----------------------------------------------
+
+
+# Close Serial Ports
 time.sleep(0.25)
 if sh0.isOpen() == True:
     sh0.close()
@@ -209,6 +218,7 @@ time.sleep(0.25)
 if rfObject.isOpen == True:
     rfObject.close()
 
+# Stop Devices
 time.sleep(0.25)
 stopDevice2(sh0,deviceTypes[0])
 
@@ -217,5 +227,7 @@ stopDevice2(sh1,deviceTypes[1])
 
 time.sleep(0.25)                                          
 stopDevice(rfObject,deviceTypes[2])
+
+# Store Data
 
 
