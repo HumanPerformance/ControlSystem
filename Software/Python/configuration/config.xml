@@ -3,7 +3,7 @@
 	<configversion id="1.2.7" date="15 DEC 2016"/>
 	<panels>
 		<panel 		id="PAN000" type="SIP"	name="instrument_panel" 																							status="online">
-			<device id="DEV000" type="CS"	name="control_system"		mac_bt="b8:27:eb:35:b4:9d"	mac_eth="b8:27:eb:77:b5:2c"	mac_wlan="b8:27:eb:22:e0:79"	status="available">
+			<device id="DEV000" type="CS"	name="control_system"		mac_bt="b8:27:eb:9f:1e:37"	mac_eth="b8:27:eb:35:b4:9d"	mac_wlan="b8:27:eb:22:e0:79"	status="available">
 				<description>
 					A Raspberry Pi-bassed controller which serves as a control point to all panel-attached devices
 				</description>
