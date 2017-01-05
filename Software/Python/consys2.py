@@ -107,44 +107,35 @@ deviceIndex, deviceTypes, deviceNames, deviceAddresses = instrumentCrossReferenc
 
 print fullStamp() + " Start Configuration"
 
-rfObject = createPortS(deviceTypes[1],1,deviceAddresses[1],115200,5)
-
-# triggering device
+# Creating Serial Port for Devices
 time.sleep(1)
-triggerDevice2(rfObject,"SH")
+print fullStamp() + " Creating port for SH0"
+sh0 = createPortS(deviceTypes[0],0,deviceAddresses[0],115200,5)
 
-# openning device
 time.sleep(1)
-if rfObject.isOpen() == False:
-    rfObject.open()
+print fullStamp() + " Creating port for SH1"
+sh1 = createPortS(deviceTypes[1],1,deviceAddresses[1],115200,5)
 
-"""
-configStartTime = time.time()
-configCurrentTime = 0
-configStopTime = 20 #timers[0]
-configLoopCounter = 0
-print fullStamp() + " Starting Configuration Loop, time = " + str(configStopTime) + " seconds"
-while configCurrentTime < configStopTime:
+# Triggering Smart Handle Devices
+time.sleep(1)
+print fullStamp() + " Triggering SH0"
+triggerDevice2(sh0,"SH")
 
-    # Connect to listed devices...
-    if configLoopCounter == 0:
-        print fullStamp() + " Connecting smart devices"
-        rfObject = createPortS(deviceTypes[0], deviceAddresses[0], 115200, 5)
+time.sleep(1)
+print fullStamp() + " Triggering SH1"
+triggerDevice2(sh1,"SH")
 
-        time.sleep(1)
-        print fullStamp() + " Triggering smart devices"
-        triggerDevice2(rfObject,deviceTypes[0])
-        
-        print fullStamp() + " Opening smart device communication"
-        time.sleep(1)
-        if rfObject.isOpen() == False:
-            rfObject.open()
-    
-    configCurrentTime = time.time() - configStartTime
-    configLoopCounter = configLoopCounter + 1
+# Openning Ports
+time.sleep(1)
+print fullStamp() + " Openning Serial Port to SH0"
+if sh0.isOpen() == False:
+    sh0.open()
 
-# End of Configuration Loop
-"""
+time.sleep(1)
+print fullStamp() + " Openning Serial Port to SH1"
+if sh1.isOpen() == False:
+    sh1.open()
+
 # ----------------------------------------------
 # Simulation / Configuration Loop
 #   In this loop, connected devices will be accessed for data collection
@@ -161,7 +152,9 @@ try:
     while simCurrentTime < simStopTime:
 
         # Handles
-        dataStream.append("%.02F"%simCurrentTime + "," + rfObject.readline()[:-1])
+        dataStream.append(["%.02F"%simCurrentTime,
+                           sh0.readline()[:-1],
+                           sh1.readline()[:-1]])
 
         simCurrentTime = time.time() - simStartTime
         print fullStamp() + " Current Simulation Time = " + str(simCurrentTime)
@@ -175,17 +168,27 @@ except Exception as instance:
     print fullStamp() + " Error Arguments " + str(instance.args)
     print fullStamp() + " Closing Open Ports"
     time.sleep(1)
-    if rfObject.isOpen() == True:
-        rfObject.close()
+    if sh0.isOpen() == True:
+        sh0.close()
+    time.sleep(1)
+    if sh1.isOpen() == True:
+        sh1.close()
 
 # print dataStream
 
 time.sleep(0.25)
-if rfObject.isOpen() == True:
-    rfObject.close()
-time.sleep(0.25)
-stopDevice2(rfObject,deviceTypes[0])
+if sh0.isOpen() == True:
+    sh0.close()
 
+time.sleep(0.25)
+if sh1.isOpen() == True:
+    sh1.close()
+
+time.sleep(0.25)
+stopDevice2(sh0,deviceTypes[0])
+
+time.sleep(0.25)
+stopDevice2(sh1,deviceTypes[1])
 
 
 
