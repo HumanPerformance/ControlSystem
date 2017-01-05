@@ -29,6 +29,7 @@ from    timeStamp              import fullStamp
 from    configurationProtocol  import *
 from    bluetoothProtocol      import *
 from    smarthandleProtocol    import *
+from    smartHolderProtocol    import *
 
 
 # ==============================================
@@ -136,6 +137,19 @@ print fullStamp() + " Openning Serial Port to SH1"
 if sh1.isOpen() == False:
     sh1.open()
 
+# SmartHolder
+print fullStamp() + " Connecting smart devices"
+rfObject = createPort(0, 250000, None)
+
+time.sleep(1)
+print fullStamp() + " Triggering smart devices"
+triggerDevice(rfObject,deviceTypes[2])
+
+print fullStamp() + " Opening smart device communication"
+time.sleep(1)
+if rfObject.isOpen() == False:
+    rfObject.open()
+
 # ----------------------------------------------
 # Simulation / Configuration Loop
 #   In this loop, connected devices will be accessed for data collection
@@ -146,18 +160,19 @@ simCurrentTime = 0
 simStopTime = 30
 # simLoopCounter = 0
 dataStream = []
-print fullStamp() + " Starting Simulation Loop, time = " + str(simStopTime) + " seconds"
+print fullStamp() + " Starting Simulation Loop, time = %.03f seconds" %simStopTime
 
 try:
     while simCurrentTime < simStopTime:
 
         # Handles
-        dataStream.append(["%.02F"%simCurrentTime,
+        dataStream.append(["%.02f" %simCurrentTime,
                            sh0.readline()[:-1],
-                           sh1.readline()[:-1]])
+                           sh1.readline()[:-1],
+                           rfObject.readline()[:-1]])
 
         simCurrentTime = time.time() - simStartTime
-        print fullStamp() + " Current Simulation Time = " + str(simCurrentTime)
+        print fullStamp() + " Current Simulation Time = %.03f" %simCurrentTime
         # simLoopCounter = simLoopCounter + 1;
 
         # End of Simulatio Loop
@@ -167,12 +182,18 @@ except Exception as instance:
     print fullStamp() + " Error Type " + str(type(instance))
     print fullStamp() + " Error Arguments " + str(instance.args)
     print fullStamp() + " Closing Open Ports"
+
     time.sleep(1)
     if sh0.isOpen() == True:
         sh0.close()
+
     time.sleep(1)
     if sh1.isOpen() == True:
         sh1.close()
+
+    time.sleep(1)
+    if rfObject.isOpen == True:
+        rfObject.close()
 
 # print dataStream
 
@@ -185,10 +206,16 @@ if sh1.isOpen() == True:
     sh1.close()
 
 time.sleep(0.25)
+if rfObject.isOpen == True:
+    rfObject.close()
+
+time.sleep(0.25)
 stopDevice2(sh0,deviceTypes[0])
 
 time.sleep(0.25)
 stopDevice2(sh1,deviceTypes[1])
 
+time.sleep(0.25)                                          
+stopDevice(rfObject,deviceTypes[2])
 
 
