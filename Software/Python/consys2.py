@@ -117,6 +117,10 @@ time.sleep(1)
 print fullStamp() + " Creating port for SH1"
 sh1 = createPortS(deviceTypes[1],1,deviceAddresses[1],115200,5)
 
+time.sleep(1)
+print fullStamp() + " Connecting Smart Holder"
+rfObject = createPort(0, 250000, None)
+
 # Triggering Smart Handle Devices
 time.sleep(1)
 print fullStamp() + " Triggering SH0"
@@ -125,6 +129,10 @@ triggerDevice2(sh0,"SH")
 time.sleep(1)
 print fullStamp() + " Triggering SH1"
 triggerDevice2(sh1,"SH")
+
+time.sleep(1)
+print fullStamp() + " Triggering Smart Holder"
+triggerDevice(rfObject,deviceTypes[2])
 
 # Openning Ports
 time.sleep(1)
@@ -137,16 +145,8 @@ print fullStamp() + " Openning Serial Port to SH1"
 if sh1.isOpen() == False:
     sh1.open()
 
-# SmartHolder
-print fullStamp() + " Connecting Smart Holder"
-rfObject = createPort(0, 250000, None)
-
 time.sleep(1)
-print fullStamp() + " Triggering Smart Holder"
-triggerDevice(rfObject,deviceTypes[2])
-
 print fullStamp() + " Opening Serial Port to Smart Holder"
-time.sleep(1)
 if rfObject.isOpen() == False:
     rfObject.open()
 
@@ -175,7 +175,7 @@ try:
         print fullStamp() + " Current Simulation Time = %.03f" %simCurrentTime
         # simLoopCounter = simLoopCounter + 1;
 
-        # End of Simulatio Loop
+        # End of Simulation Loop
         
 except Exception as instance:
     print fullStamp() + " Exception or Error Caught"
