@@ -3,7 +3,7 @@
 	<configversion id="1.2.7" date="15 DEC 2016"/>
 	<panels>
 		<panel 		id="PAN000" type="SIP"	name="instrument_panel" 																							status="online">
-			<device id="DEV000" type="CS"	name="control_system"		mac_bt="b8:27:eb:9f:1e:37"	mac_eth="b8:27:eb:35:b4:9d"	mac_wlan="b8:27:eb:22:e0:79"	status="available">
+			<device id="DEV000" type="CS"	name="control_system"		mac_bt="B8:27:EB:9F:1E:37"	mac_eth="b8:27:eb:35:b4:9d"	mac_wlan="b8:27:eb:22:e0:79"	status="available">
 				<description>
 					A Raspberry Pi-bassed controller which serves as a control point to all panel-attached devices
 				</description>
@@ -29,13 +29,13 @@
 				</description>
 			</device>
 		</panel>
-		<panel 		id="PAN001" type="ISP"																														status="online">
-			<device id="DEV000" type="CS"	name="control_system"		mac_bt="B8:27:EB:DD:1F:86"	mac_eth="b8:27:eb:77:b5:2c" mac_wlan="b8:27:eb:22:e0:79" 	status="available">
+		<panel 		id="PAN001" type="SIP"	name="instrument panel"																													status="online">
+			<device id="DEV000" type="CS"	name="control system"		mac_bt="B8:27:EB:77:18:D6"	mac_eth="b8:27:eb:dd:b2:7c" mac_wlan="b8:27:eb:88:e7:29" 	status="available">
 				<description>
 					A Raspberry Pi-bassed controller which serves as a control point to all panel-attached devices
 				</description>
 			</device>
-			<device id="DEV001" type="SD"	name="stethoscope"   		mac_bt="00:06:66:7D:81:7D" 																status="available">
+			<device id="DEV001" type="SD"	name="stethoscope"   		mac_bt="TBD"			 																status="available">
 				<description>
 					An electronic stethoscope providing either augmented listening or unmodified heart sounds 
 				</description>
@@ -46,21 +46,6 @@
 				</description>
 			</device>
 			<device id="DEV003" type="SD"	name="otoscope"      		mac_bt="00:06:66:80:8C:A9"																status="unavailable">
-				<description>
-					No description
-				</description>
-			</device>
-			<device id="DEV004" type="SD"	name="pulseoximeter" 		mac_bt="0006667d8180"																	status="available">
-				<description>
-					No description
-				</description>
-			</device>
-			<device id="DEV005" type="SD"	name="bloodpressure" 		mac_bt="0006667d8181"																	status="unavailable">
-				<description>
-					No description
-				</description>
-			</device>
-			<device id="DEV006" type="SD"	name="thermometer"   		mac_bt="0006667d8182"																	status="available">
 				<description>
 					No description
 				</description>
