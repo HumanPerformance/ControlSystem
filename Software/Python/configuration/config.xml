@@ -40,12 +40,12 @@
 					An electronic stethoscope providing either augmented listening or unmodified heart sounds 
 				</description>
 			</device>
-			<device id="DEV002" type="SD"	name="opthalmascope" 		mac_bt="00:06:66:80:8C:BE"																status="available">
+			<device id="DEV002" type="SD"	name="opthalmascope" 		mac_bt="00:06:66:83:89:5F"																status="available">
 				<description>
 					No description
 				</description>
 			</device>
-			<device id="DEV003" type="SD"	name="otoscope"      		mac_bt="00:06:66:80:8C:A9"																status="unavailable">
+			<device id="DEV003" type="SD"	name="otoscope"      		mac_bt="00:06:66:83:89:57"																status="unavailable">
 				<description>
 					No description
 				</description>
