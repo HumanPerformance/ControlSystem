@@ -18,7 +18,7 @@
 					No description
 				</description>
 			</device>
-			<device id="DEV003" type="SH"	name="otoscope"				mac_bt="00:06:66:80:8C:A9"																status="unavailable">
+			<device id="DEV003" type="SH"	name="otoscope"				mac_bt="00:06:66:80:8C:A9"																status="available">
 				<description>
 					No description
 				</description>
@@ -29,26 +29,46 @@
 				</description>
 			</device>
 		</panel>
-		<panel 		id="PAN001" type="SIP"	name="instrument panel"																													status="online">
+		<panel 		id="PAN001" type="SIP"	name="instrument panel"																								status="online">
 			<device id="DEV000" type="CS"	name="control system"		mac_bt="B8:27:EB:77:18:D6"	mac_eth="b8:27:eb:dd:b2:7c" mac_wlan="b8:27:eb:88:e7:29" 	status="available">
 				<description>
 					A Raspberry Pi-bassed controller which serves as a control point to all panel-attached devices
 				</description>
 			</device>
-			<device id="DEV001" type="SD"	name="stethoscope"   		mac_bt="TBD"			 																status="available">
+			<device id="DEV001" type="SS"	name="stethoscope"   		mac_bt="TBD"			 																status="available">
 				<description>
 					An electronic stethoscope providing either augmented listening or unmodified heart sounds 
 				</description>
 			</device>
-			<device id="DEV002" type="SD"	name="opthalmascope" 		mac_bt="00:06:66:83:89:5F"																status="available">
+			<device id="DEV002" type="SH"	name="opthalmascope" 		mac_bt="00:06:66:83:89:5F"																status="available">
 				<description>
 					No description
 				</description>
 			</device>
-			<device id="DEV003" type="SD"	name="otoscope"      		mac_bt="00:06:66:83:89:57"																status="unavailable">
+			<device id="DEV003" type="SH"	name="otoscope"      		mac_bt="00:06:66:83:89:57"																status="available">
 				<description>
 					No description
 				</description>
+			</device>
+		</panel>
+		<panel		id="PAN002" type="SIP"	name="instrument_panel"																								status="online">
+			<device id="DEV000" type="CS"   name="control_system"		mac_bt="B8:27:EB:DB:3C:63"  mac_eth="b8:27:eb:46:b0:39"	mac_wlan="b8:27:eb:13:e5:6c"	status="available">
+			</device>
+			<device id="DEV001"	type="SS"	name="stethoscope"			mac_bt="TBD"																			status="available">
+			</device>
+			<device id="DEV002"	type="SH"	name="ophthalmoscope"		mac_bt="00:06:66:83:89:5F"																status="available">
+			</device>
+			<device id="DEV003"	type="SH"	name="otoscope"				mac_bt="00:06:66:83:89:57"																status="available">
+			</device>
+		</panel>
+		<panel		id="PAN003"	type="SIP"	name="instrument_panel"																								status="online">
+			<device id="DEV000"	type="CS"	name="control_system"		mac_bt="B8:27:EB:DB:3C:63"	mac_eth="b8:27:eb:71:96:c9"	mac_wlan="b8:27:eb:24:c3:9c"	status="available">
+			</device>
+			<device id="DEV001"	type="SS"	name="stethoscope"			mac_bt="TBD"																			status="available">
+			</device>
+			<device id="DEV002"	type="SH"	name="ophthalmoscope"		mac_bt="00:06:66:80:8C:08"																status="available">
+			</device>
+			<device id="DEV003" type="SH"	name="otoscope"				mac_bt="00:06:66:83:89:6D"																status="available">
 			</device>
 		</panel>
 	</panels>
