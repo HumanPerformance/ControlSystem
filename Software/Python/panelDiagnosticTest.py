@@ -87,5 +87,5 @@ sh1 = createPortS(panelDeviceTypes[3],1,panelDeviceAddresses[3],115200,5)
 
 print fullStamp() + " Verifying " + panelDevices[4]
 print fullStamp() + " " + panelDevices[4] + " CANNOT be verified at the moment..."
-#time.sleep(1)
-#hld = createUSBPort(panelDeviceTypes[4],0, 250000, None)
+time.sleep(1)
+hld = createUSBPort("SCP",0, 115200, 5)

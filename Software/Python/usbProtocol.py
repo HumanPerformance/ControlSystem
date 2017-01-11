@@ -94,15 +94,20 @@ def createUSBPort(deviceName,portNumber,baudrate,attempts):
         port = "/dev/ttyUSB" + str(portNumber),
         baudrate = baudrate)
     time.sleep(1)
-    usbConnectionCheck(usbObject,deviceName,portNumber,baudrate,attempts)
-    rfObject.close()
-    return rfObject
+    #usbConnectionCheck(usbObject,deviceName,portNumber,baudrate,attempts)
+    usbObject.close()
+    return usbObject
 
 # Connection Check -Simple
 #   Simplest variant of the connection check functions
 def usbConnectionCheck(usbObject,deviceName,portNumber,baudrate,attempts):
     print fullStamp() + " usbConnectionCheck()"
+    time.sleep(1)
+    print fullStamp() + " Requesting Device Name"
+    usbObject.write('n')
+    time.sleep(1)
     inString = usbObject.readline()[:-1]
+    print inString
     if inString == deviceName:
         print fullStamp() + " Connection successfully established with " + deviceName
     else:
