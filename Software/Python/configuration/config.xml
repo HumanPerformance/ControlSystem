@@ -23,7 +23,7 @@
 					No description
 				</description>
 			</device>
-			<device id="DEV004" type="HLD"	name="smartholder"			mac_bt="NONE"																			status="available">
+			<device id="DEV004" type="HLD"	name="smart_holder"			mac_bt="NONE"																			status="available">
 				<description>
 					Detect the presence of devices on the panel
 				</description>
