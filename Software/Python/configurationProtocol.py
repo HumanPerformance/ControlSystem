@@ -173,6 +173,24 @@ def pullInstruments(panelIndex, scenarioIndex, tree, root):
         print fullStamp() + " Device found, " + deviceName
     return scenarioDeviceNames
 
+# Pull Panel Instruments
+#   The following function finds the devices associated with a selected instrument panel
+#   Input   ::  {int}           panel index
+#           ::  {structure}     tree
+#           ::  {structure}     root
+#   Output  ::  {array/list}    panel devices
+
+def pullPanelInstruments(panelIndex, tree, root):
+    print fullStamp() + " pullPanelInstruments()"
+    devicesIndex = 2
+    panelDevices = []
+    Npaneldevices = len(root[1][panelIndex])
+    for i in range(0, Npaneldevices):
+        deviceName = root[1][panelIndex][i].get("name")
+        panelDevices.append(deviceName)
+        print fullStamp() + " Device found, " + deviceName
+    return panelDevices
+
 # Instrument Cross Reference
 #   The following function cross-references the scenario devices list with the devices listed under the connected instrument panel and control system.
 #   Finally, the program generates lists with the specific devices to be triggered and their respective hardware addresses
