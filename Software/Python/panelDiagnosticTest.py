@@ -23,6 +23,7 @@ from    os.path                import expanduser
 from    timeStamp              import fullStamp
 from    configurationProtocol  import *
 from    bluetoothProtocol      import *
+from    usbProtocol            import *
 from    smarthandleProtocol    import *
 from    smartHolderProtocol    import *
 
@@ -64,9 +65,27 @@ panelIndex, panelID = selfID(mac_eth, tree, root)
 #   Then uses that list to croo-reference the addresses of the devices associated with the selected instrument panel
 #   Returns the list of device names and addresses for execution
 # ----------------------------------------------
-panelDevices = pullPanelInstruments(panelIndex, tree, root)
+panelDeviceTypes, panelDevices, panelDeviceAddresses = pullPanelInstruments(panelIndex, tree, root)
 
 # ----------------------------------------------
 # Verify each instrument associated to the panel
 # ----------------------------------------------
 
+print fullStamp() + " Verifying " + panelDevices[0]
+print fullStamp() + " " + panelDevices[0] + " has been verified..."
+
+print fullStamp() + " Verifying " + panelDevices[1]
+print fullStamp() + " " + panelDevices[1] + " CANNOT be verified at the moment..."
+
+print fullStamp() + " Verifying " + panelDevices[2]
+time.sleep(1)
+sh0 = createPortS(panelDeviceTypes[2],0,panelDeviceAddresses[2],115200,5)
+
+print fullStamp() + " Verifying " + panelDevices[3]
+time.sleep(1)
+sh1 = createPortS(panelDeviceTypes[3],1,panelDeviceAddresses[3],115200,5)
+
+print fullStamp() + " Verifying " + panelDevices[4]
+print fullStamp() + " " + panelDevices[4] + " CANNOT be verified at the moment..."
+#time.sleep(1)
+#hld = createUSBPort(panelDeviceTypes[4],0, 250000, None)

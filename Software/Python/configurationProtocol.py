@@ -183,13 +183,19 @@ def pullInstruments(panelIndex, scenarioIndex, tree, root):
 def pullPanelInstruments(panelIndex, tree, root):
     print fullStamp() + " pullPanelInstruments()"
     devicesIndex = 2
-    panelDevices = []
+    panelDeviceTypes = []
+    panelDeviceNames = []
+    panelDeviceAddresses = []
     Npaneldevices = len(root[1][panelIndex])
     for i in range(0, Npaneldevices):
+        deviceType = root[1][panelIndex][i].get("type")
         deviceName = root[1][panelIndex][i].get("name")
-        panelDevices.append(deviceName)
+        deviceBTAddress = root[1][panelIndex][i].get("mac_bt")
+        panelDeviceTypes.append(deviceType)
+        panelDeviceNames.append(deviceName)
+        panelDeviceAddresses.append(deviceBTAddress)
         print fullStamp() + " Device found, " + deviceName
-    return panelDevices
+    return panelDeviceTypes, panelDeviceNames, panelDeviceAddresses
 
 # Instrument Cross Reference
 #   The following function cross-references the scenario devices list with the devices listed under the connected instrument panel and control system.

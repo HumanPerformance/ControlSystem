@@ -20,7 +20,6 @@ Fluvio L. Lobo Fenoglietto 12/19/2016
 # Python modules
 import  sys
 import  os
-import  os.path
 import  serial
 import  time
 from    os.path                import expanduser
@@ -29,6 +28,7 @@ from    os.path                import expanduser
 from    timeStamp              import fullStamp
 from    configurationProtocol  import *
 from    bluetoothProtocol      import *
+from    usbProtocol            import *
 from    smarthandleProtocol    import *
 from    smartHolderProtocol    import *
 
@@ -198,15 +198,6 @@ except Exception as instance:
 
 # print dataStream
 
-# ----------------------------------------------
-# Post-Simulation
-#   Close Serial Ports
-#   Disconnect Devices
-#   Store Data
-# ----------------------------------------------
-
-
-# Close Serial Ports
 time.sleep(0.25)
 if sh0.isOpen() == True:
     sh0.close()
@@ -219,7 +210,6 @@ time.sleep(0.25)
 if rfObject.isOpen == True:
     rfObject.close()
 
-# Stop Devices
 time.sleep(0.25)
 stopDevice2(sh0,deviceTypes[0])
 
@@ -229,27 +219,4 @@ stopDevice2(sh1,deviceTypes[1])
 time.sleep(0.25)                                          
 stopDevice(rfObject,deviceTypes[2])
 
-# Store Data
-
-outputDataFileDir = outputDir + "/" + executionTimeStamp
-if os.path.exists(outputDataFileDir) == False:
-    os.makedirs(outputDataFileDir)
-
-outputDataFileName = "/" + deviceNames[0] + ".txt"
-outputDataFilePath = outputDataFileDir + outputDataFileName
-
-if os.path.isfile(outputDataFilePath) == False:
-    with open(outputDataFilePath "a") as dataFile:
-        dataFile.write("===================== \n")
-        dataFile.write("Execution Time = " + executionTimeStamp + "\n")
-        dataFile.write("Scenario = " + scenarioNumber + "\n")
-        dataFile.write("Device Name = " + deviceNames[0] + "\n")
-        dataFile.write("Device Type = " + deviceTypes[0] + "\n")
-        dataFile.write("Device Address = " + deviceAddresses[0] + "\n")
-        dataFile.write("===================== \n")
-
-Nlines = len(dataStream)
-for i in range(0,Nlines):
-    with open(outputDataFilePath, "a") as dataFile:
-        dataFile.write(dataStream[i][0] + "," + dataStream[i][1] + "\n")
 
