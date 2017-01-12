@@ -65,7 +65,7 @@ panelIndex, panelID = selfID(mac_eth, tree, root)
 #   Then uses that list to croo-reference the addresses of the devices associated with the selected instrument panel
 #   Returns the list of device names and addresses for execution
 # ----------------------------------------------
-panelDeviceTypes, panelDevices, panelDeviceAddresses = pullPanelInstruments(panelIndex, tree, root)
+panelDeviceIDs, panelDeviceTypes, panelDevices, panelDeviceBTAddresses, panelDevicePortNums = pullPanelInstruments(panelIndex, tree, root)
 
 # ----------------------------------------------
 # Verify each instrument associated to the panel
@@ -79,13 +79,18 @@ print fullStamp() + " " + panelDevices[1] + " CANNOT be verified at the moment..
 
 print fullStamp() + " Verifying " + panelDevices[2]
 time.sleep(1)
-sh0 = createPortS(panelDeviceTypes[2],0,panelDeviceAddresses[2],115200,5)
+sh0 = createPortS(panelDeviceTypes[2],0,panelDeviceBTAddresses[2],115200,5)
 
 print fullStamp() + " Verifying " + panelDevices[3]
 time.sleep(1)
-sh1 = createPortS(panelDeviceTypes[3],1,panelDeviceAddresses[3],115200,5)
+sh1 = createPortS(panelDeviceTypes[3],1,panelDeviceBTAddresses[3],115200,5)
 
 print fullStamp() + " Verifying " + panelDevices[4]
 time.sleep(1)
-hld = createUSBPort("HLD",0, 115200, 5)
-deviceID(hld,"HLD")
+hld = createUSBPort(panelDeviceTypes[4],panelDevicePortNums[4], 250000, 5)
+deviceID(hld,panelDeviceTypes[4])
+
+print fullStamp() + " Verifying " + panelDevices[5]
+time.sleep(1)
+hld = createUSBPort(panelDeviceTypes[5],panelDevicePortNums[5], 250000, 5)
+deviceID(hld,panelDeviceTypes[5])

@@ -49,7 +49,7 @@ def deviceID(usbObject,deviceName):
     if usbObject.isOpen() is False:
         usbObject.open()
     print fullStamp() + " Identifying Device"
-    inString = usbObject.readline()[:-1]
+    inString = usbObject.readline()[:-2]
     while inString != deviceName:
         usbObject.flush()
         usbObject.reset_input_buffer()
