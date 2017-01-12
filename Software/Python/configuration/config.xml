@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<configversion id="1.2.7" date="15 DEC 2016"/>
+	<configversion id="1.3.7" date="15 DEC 2016"/>
 	<panels>
-		<panel 		id="PAN000" type="SIP"	name="instrument_panel" 																							status="online">
-			<device id="DEV000" type="CS"	name="control_system"		mac_bt="B8:27:EB:9F:1E:37"	mac_eth="b8:27:eb:35:b4:9d"	mac_wlan="b8:27:eb:22:e0:79"	status="available">
+		<panel 		id="PAN000" type="SIP"	name="instrument_panel" 																												status="online">
+			<device id="DEV000" type="CS"	name="control_system"		mac_bt="B8:27:EB:9F:1E:37"	mac_eth="b8:27:eb:35:b4:9d"	mac_wlan="b8:27:eb:22:e0:79"	port_num="none"		status="available">
 				<description>
 					A Raspberry Pi-bassed controller which serves as a control point to all panel-attached devices
 				</description>
 			</device>
-			<device id="DEV001" type="SS"	name="stethoscope"			mac_bt="00:06:66:86:60:3D" 																status="available">
+			<device id="DEV001" type="SS"	name="stethoscope"			mac_bt="00:06:66:86:60:3D" 	mac_eth="none"				mac_wlan="none"					port_num="none"		status="available">
 				<description>
 					An electronic stethoscope providing either augmented listening or unmodified heart sounds 
 				</description>
 			</device>
-			<device id="DEV002" type="SH"	name="ophthalmoscope"		mac_bt="00:06:66:80:8C:BE"																status="available">
+			<device id="DEV002" type="SH"	name="ophthalmoscope"		mac_bt="00:06:66:80:8C:BE"	mac_eth="none"				mac_wlan="none"					port_num="0"		status="available">
 				<description>
 					No description
 				</description>
 			</device>
-			<device id="DEV003" type="SH"	name="otoscope"				mac_bt="00:06:66:80:8C:A9"																status="available">
+			<device id="DEV003" type="SH"	name="otoscope"				mac_bt="00:06:66:80:8C:A9"	mac_eth="none"				mac_wlan="none"					port_num="1"		status="available">
 				<description>
 					No description
 				</description>
 			</device>
-			<device id="DEV004" type="HLD"	name="smart_holder"			mac_bt="NONE"																			status="available">
+			<device id="DEV004" type="HLD"	name="smart_holder"			mac_bt="none"				mac_eth="none"				mac_wlan="none"					port_num="0"		status="available">
 				<description>
 					Detect the presence of devices on the panel
 				</description>
+			</device>
+			<device id="DEV005" type="SCP"	name="scope_panel"			mac_bt="none"				mac_eth="none"				mac_wlan="none"					port_num="1"		status="available">
 			</device>
 		</panel>
 		<panel 		id="PAN001" type="SIP"	name="instrument panel"																								status="online">
