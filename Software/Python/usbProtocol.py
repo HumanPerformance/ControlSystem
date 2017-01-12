@@ -103,6 +103,8 @@ def createUSBPort(deviceName,portNumber,baudrate,attempts):
 def usbConnectionCheck(usbObject,deviceName,portNumber,baudrate,attempts):
     print fullStamp() + " usbConnectionCheck()"
     time.sleep(1)
+    if usbObject.isOpen == False:
+        usbObject.open()
     print fullStamp() + " Requesting Device Name"
     usbObject.write('n')
     time.sleep(1)

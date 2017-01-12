@@ -42,6 +42,8 @@ def dataRead(rfObject):
     except:
         print "No data to print"
 
+# Device Identification
+#   This function triggers the "n" case statement within the arduino code that propmts the controller to print its name
 def deviceID(usbObject,deviceName):
     print fullStamp() + " deviceID()"
     if usbObject.isOpen() is False:
@@ -49,14 +51,15 @@ def deviceID(usbObject,deviceName):
     print fullStamp() + " Identifying Device"
     inString = usbObject.readline()[:-1]
     while inString != deviceName:
-        rfObject.flush()
-        rfObject.reset_input_buffer()
-        rfObject.reset_output_buffer()
+        usbObject.flush()
+        usbObject.reset_input_buffer()
+        usbObject.reset_output_buffer()
         print fullStamp() + " Requesting Device Name"
-        rfObject.write('n')
+        usbObject.write('n')
         time.sleep(1)
-        inString = usbObject.readline()[:-1]
+        inString = usbObject.readline()[:-2]
         print inString
+    print fullStamp() + " Successfully identified " + deviceName
     usbObject.close()   
 
 def triggerDevice(rfObject,deviceName):

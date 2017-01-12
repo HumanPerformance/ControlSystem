@@ -86,6 +86,6 @@ time.sleep(1)
 sh1 = createPortS(panelDeviceTypes[3],1,panelDeviceAddresses[3],115200,5)
 
 print fullStamp() + " Verifying " + panelDevices[4]
-print fullStamp() + " " + panelDevices[4] + " CANNOT be verified at the moment..."
 time.sleep(1)
-hld = createUSBPort("SCP",0, 115200, 5)
+hld = createUSBPort("HLD",0, 115200, 5)
+deviceID(hld,"HLD")
