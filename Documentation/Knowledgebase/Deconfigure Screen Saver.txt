@@ -1,0 +1,16 @@
+#
+# Deconfigure Screen Saver
+#
+# The following guide has been designed to help the user change some of the power settings of the Raspberry Pi
+#
+# Fluvio L Lobo Fenoglietto 01/13/2017
+
+# 01 - Open light diming configuration file 
+> sudo nano /etc/lightdm/lightdm.conf
+
+# 02 - Under the section "[SeatDefaults]", add the text;
+> xserver-command=X -s 0 -dpms
+
+# 
+# References
+# 1- https://www.bitpi.co/2015/02/14/prevent-raspberry-pi-from-sleeping/

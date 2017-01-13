@@ -1,0 +1,79 @@
+#
+# Raspberry Pi Webcam Server
+#
+# The following notes should guide the user on the process of making the Raspberry Pi a Webcam server
+#
+# Fluvio L Lobo Fenoglietto
+# 01/13/2017
+#
+
+
+# Requirements:
+# 1 - Raspberry Pi
+# 2 - USB Webcam
+
+
+# Process:
+# 01 - Always update and upgrade Raspbian
+> sudo rpi-update
+> sudo apt-get update
+> sudo apt-get upgrade
+
+# 02 - Install "motion"
+> sudo apt-get install motion
+
+# 03 - Install additional libraries
+> sudo apt-get install libav-tools
+
+# 04 - Configure "motion" by openning the configuration file;
+> sudo nano /etc/motion/motion.conf
+
+# 05 - Within the configuration file, first change the text;
+> "daemon off" to "daemon on"
+Note: This could already be configure to "on" depending on the version of raspbian or raspberry pi
+
+# 06 - Also change the text;
+> "stream_localhost on" to "stream_localhost off"
+
+# 07 - Also change the text;
+> "webcam_maxrate 1" to "webcam_maxrate 100", or just increase it to a desirable rate
+
+# 08 - Also change the text;
+> "webcontrol_localhost on" to "off"
+
+# 09 - Also change the text;
+> "output_pictures on" to "output_pictures first"
+
+# 10 - Also change the text;
+> "ffmpeg_output_movies on" to "ffmpeg_output_movies off" 
+
+# 11 - Also change "width" and "height" of the image to the desired size
+> width 640
+> height 480
+Note: These are good dimensions to try first. Just keep in mind the maximum allowed by the camera itself!
+
+# 12 - Also change the "framerate", keeping in mind the maximum set in step #6
+> framerate 100
+
+# 13 - Now exit and save changes
+
+# 14 - Setup the "daemon" from the terminal by calling;
+> sudo nano /etc/default/motion
+
+# 15 - Within the configuration file, change the text;
+> "start_motion_daemon=no" to "start_motion_daemon=yes"
+
+# 16 - Now exit and save changes
+
+# 17 - Ensure that the camera is connected
+
+# 18 - Start motion from the terminal, by executing;
+> sudo service motion start
+
+#
+# References
+#
+# 1 - https://www.raspberrypi.org/forums/viewtopic.php?f=63&t=143080
+# 2 - https://pimylifeup.com/raspberry-pi-webcam-server/
+# 3 - http://raspberrypi.stackexchange.com/questions/12378/what-permissions-does-motion-require-to-write-to-specific-directory
+
