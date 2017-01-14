@@ -1,0 +1,20 @@
+#
+# Fix Bluetooth
+#
+# This short guide was created to help troubleshoot an issue with the raspberry pi 3 bluetooth adapter not being recognized by Raspbian
+#
+# Fluvio L Lobo Fenoglietto
+# 01/14/2017
+#
+
+
+# 01 - Reboot the system first
+> sudo reboot
+
+# 02 - If that does not work, re-install the bluetooth libraries
+> sudo apt-get --reinstall install pi-bluetooth
+Note: The bluetooth icon should become active after this fix!
+
+# References
+# 01 - http://forum.modmypi.com/technical-support/bluetooth-stopped-working-on-rpi3-t612.html
+
