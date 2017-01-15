@@ -11,9 +11,17 @@
 # 01 - Reboot the system first
 > sudo reboot
 
-# 02 - If that does not work, re-install the bluetooth libraries
+# 02 - If that does not work, re-install the "system mods" libraries
+> sudo apt-get install raspberrypi-sys-mods
+Note: Depending on the version of the distribution, these may have been already installed
+
+# 03 - Then, re-install the bluetooth libraries
 > sudo apt-get --reinstall install pi-bluetooth
-Note: The bluetooth icon should become active after this fix!
+Note: The bluetooth icon may become active immediately after this step, but I would recommend following all the steps
+
+# 04 - Hard reboot on the system;
+> sudo shutdown -r now
+Note: If this does not work, repeat the process but use the "reinstall" tool for the "system mods"
 
 # References
 # 01 - http://forum.modmypi.com/technical-support/bluetooth-stopped-working-on-rpi3-t612.html
