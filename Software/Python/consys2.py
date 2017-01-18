@@ -47,7 +47,7 @@ try:
     selectedScenario = int(sys.argv[1])
     print fullStamp() + " User Executed " + inputArg[0] + ", scenario #" + inputArg[1]
 except:
-    selectedScenario = 0
+    selectedScenario = 1
 
 # ----------------------------------------------
 # Panel self-dentification
@@ -120,7 +120,7 @@ sh1 = createPortS(deviceTypes[1],1,deviceAddresses[1],115200,5)
 
 time.sleep(1)
 print fullStamp() + " Connecting Smart Holder"
-rfObject = createPort(0, 250000, None)
+hld = createPort(0, 250000, None)
 
 # Triggering Smart Handle Devices
 time.sleep(1)
@@ -133,7 +133,7 @@ triggerDevice2(sh1,"SH")
 
 time.sleep(1)
 print fullStamp() + " Triggering Smart Holder"
-triggerDevice(rfObject,deviceTypes[2])
+triggerDevice(hld,deviceTypes[2])
 
 # Openning Ports
 time.sleep(1)
@@ -148,8 +148,8 @@ if sh1.isOpen() == False:
 
 time.sleep(1)
 print fullStamp() + " Opening Serial Port to Smart Holder"
-if rfObject.isOpen() == False:
-    rfObject.open()
+if hld.isOpen() == False:
+    hld.open()
 
 # ----------------------------------------------
 # Simulation / Configuration Loop
@@ -158,7 +158,7 @@ if rfObject.isOpen() == False:
 
 simStartTime = time.time()
 simCurrentTime = 0
-simStopTime = 30
+simStopTime = timers[0] # currently just using the initial timer
 # simLoopCounter = 0
 dataStream = []
 print fullStamp() + " Starting Simulation Loop, time = %.03f seconds" %simStopTime
@@ -170,7 +170,7 @@ try:
         dataStream.append(["%.02f" %simCurrentTime,
                            sh0.readline()[:-1],
                            sh1.readline()[:-1],
-                           rfObject.readline()[:-1]])
+                           hld.readline()[:-1]])
 
         simCurrentTime = time.time() - simStartTime
         print fullStamp() + " Current Simulation Time = %.03f" %simCurrentTime
@@ -193,8 +193,8 @@ except Exception as instance:
         sh1.close()
 
     time.sleep(1)
-    if rfObject.isOpen == True:
-        rfObject.close()
+    if hld.isOpen == True:
+        hld.close()
 
 # print dataStream
 
@@ -207,8 +207,8 @@ if sh1.isOpen() == True:
     sh1.close()
 
 time.sleep(0.25)
-if rfObject.isOpen == True:
-    rfObject.close()
+if hld.isOpen == True:
+    hld.close()
 
 time.sleep(0.25)
 stopDevice2(sh0,deviceTypes[0])
@@ -217,6 +217,6 @@ time.sleep(0.25)
 stopDevice2(sh1,deviceTypes[1])
 
 time.sleep(0.25)                                          
-stopDevice(rfObject,deviceTypes[2])
+stopDevice(hld,deviceTypes[2])
 
 
