@@ -1,0 +1,16 @@
+#
+# Webcam Server using UV4L
+#
+# Given the limitations of Motion, here we explore the UV4l library for web video and audio streaming
+#
+# Fluvio L Lobo Fenoglietto
+# 01/18/2017
+
+# 01 - On the terminal, type the following command...
+> curl http://www.linux-projects.org/listing/uv4l_repo/lrkey.asc | sudo apt-key add -
+
+# 02 - Then, modify the "sources.list" file using "nano" as shown;
+> sudo nano /etc/apt/sources.list
+
+# 03 - ...and 
+> deb http://www.linux-projects.org/listing/uv4l_repo/raspbian/ jessie main
