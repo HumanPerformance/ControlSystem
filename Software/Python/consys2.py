@@ -258,4 +258,4 @@ for i in range(0,Ndevices):
 # find data directory
 # command "sudo zip -r output.zip output"
 #os.system("sudo zip -r " + dataDir + "/" + "output.zip output")
-os.system("cd " + dataDir + "; sudo zip -r output.zip output")
+os.system("cd " + dataDir + "; sudo zip -r " + panelID + ".zip output")
