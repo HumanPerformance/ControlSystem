@@ -136,7 +136,6 @@ time.sleep(1)
 print fullStamp() + " Triggering Smart Holder"
 triggerDevice(hld,deviceTypes[2])
 
-
 # Openning Ports
 time.sleep(1)
 print fullStamp() + " Openning Serial Port to SH0"
@@ -225,6 +224,7 @@ stopDevice(hld,deviceTypes[2])
 # Data Storage
 # ----------------------------------------------
 
+# Print data on device-specific text files
 Ndevices = len(deviceNames)
 Nlines = len(dataStream)
 
@@ -253,6 +253,9 @@ for i in range(0,Ndevices):
             dataFile.write(dataStream[j][0] + "," + dataStream[j][i+1] + "\n")
 
 
+# zip output folder for data delivery
 
-
-
+# find data directory
+# command "sudo zip -r output.zip output"
+#os.system("sudo zip -r " + dataDir + "/" + "output.zip output")
+os.system("cd " + dataDir + "; sudo zip -r output.zip output")
