@@ -110,6 +110,7 @@ deviceIndex, deviceTypes, deviceNames, deviceAddresses = instrumentCrossReferenc
 print fullStamp() + " Start Configuration"
 
 # Creating Serial Port for Devices
+"""
 time.sleep(1)
 print fullStamp() + " Creating port for SH0"
 sh0 = createPortS(deviceTypes[0],0,deviceAddresses[0],115200,5)
@@ -118,12 +119,14 @@ time.sleep(1)
 print fullStamp() + " Creating port for SH1"
 sh1 = createPortS(deviceTypes[1],1,deviceAddresses[1],115200,5)
 
-
+"""
 time.sleep(1)
 print fullStamp() + " Connecting Smart Holder"
 hld = createUSBPort(deviceTypes[2],1,115200,5)
 
+
 # Triggering Smart Handle Devices
+"""
 time.sleep(1)
 print fullStamp() + " Triggering SH0"
 triggerDevice2(sh0,"SH")
@@ -132,11 +135,12 @@ time.sleep(1)
 print fullStamp() + " Triggering SH1"
 triggerDevice2(sh1,"SH")
 
+"""
 time.sleep(1)
 print fullStamp() + " Triggering Smart Holder"
 triggerDevice(hld,deviceTypes[2])
 
-
+"""
 # Openning Ports
 time.sleep(1)
 print fullStamp() + " Openning Serial Port to SH0"
@@ -147,11 +151,13 @@ time.sleep(1)
 print fullStamp() + " Openning Serial Port to SH1"
 if sh1.isOpen() == False:
     sh1.open()
+"""
 
 time.sleep(1)
 print fullStamp() + " Opening Serial Port to Smart Holder"
 if hld.isOpen() == False:
     hld.open()
+
 
 # ----------------------------------------------
 # Simulation / Configuration Loop
@@ -170,8 +176,6 @@ try:
 
         # Handles
         dataStream.append(["%.02f" %simCurrentTime,
-                           sh0.readline()[:-1],
-                           sh1.readline()[:-1],
                            hld.readline()[:-1]])
 
         simCurrentTime = time.time() - simStartTime
@@ -186,6 +190,7 @@ except Exception as instance:
     print fullStamp() + " Error Arguments " + str(instance.args)
     print fullStamp() + " Closing Open Ports"
 
+    """
     time.sleep(1)
     if sh0.isOpen() == True:
         sh0.close()
@@ -194,12 +199,14 @@ except Exception as instance:
     if sh1.isOpen() == True:
         sh1.close()
 
+    """
     time.sleep(1)
     if hld.isOpen == True:
         hld.close()
                           
 # print dataStream
 
+"""
 time.sleep(0.25)
 if sh0.isOpen() == True:
     sh0.close()
@@ -208,51 +215,20 @@ time.sleep(0.25)
 if sh1.isOpen() == True:
     sh1.close()
 
+"""
 time.sleep(0.25)
 if hld.isOpen == True:
     hld.close()
-                          
+
+"""                          
 time.sleep(0.25)
 stopDevice2(sh0,deviceTypes[0])
 
 time.sleep(0.25)
 stopDevice2(sh1,deviceTypes[1])
 
+"""
 time.sleep(0.25)                                          
 stopDevice(hld,deviceTypes[2])
-
-# ----------------------------------------------
-# Data Storage
-# ----------------------------------------------
-
-Ndevices = len(deviceNames)
-Nlines = len(dataStream)
-
-dataFileDir = outputDir + "/" + executionTimeStamp
-
-if os.path.exists(dataFileDir) == False:
-    os.makedirs(dataFileDir)
-
-for i in range(0,Ndevices):
-    
-    dataFileName = "/" + deviceNames[i] + ".txt"
-    dataFilePath = dataFileDir + dataFileName
-    
-    if os.path.isfile(dataFilePath) == False:
-        
-        with open(dataFilePath, "a") as dataFile:
-            dataFile.write("===================== \n")
-            dataFile.write("Scenario = " + str(scenarioNumber) + "\n")
-            dataFile.write("Instrument = " + deviceNames[0] + "\n")
-            dataFile.write("This is a header line \n")
-            dataFile.write("===================== \n")
-    
-    for j in range(0,Nlines):
-
-        with open(dataFilePath, "a") as dataFile:
-            dataFile.write(dataStream[j][0] + "," + dataStream[j][i+1] + "\n")
-
-
-
 
 
