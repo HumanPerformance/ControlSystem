@@ -157,7 +157,7 @@ if hld.isOpen() == False:
 # Simulation / Configuration Loop
 #   In this loop, connected devices will be accessed for data collection
 # ----------------------------------------------
-
+time.sleep(5) # Adding this wait actually improved the number of values read?!?!? - use the first timer
 simStartTime = time.time()
 simCurrentTime = 0
 simStopTime = timers[0] # currently just using the initial timer
