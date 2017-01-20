@@ -279,6 +279,10 @@ def connectionCheckS(rfObject,deviceName,portNumber,deviceBTAddress,baudrate,att
     if inString == deviceName:
         print fullStamp() + " Connection successfully established with " + deviceName
     else:
+        if rfObject.isOpen() == False:
+            rfObject.open()
+        print fullStamp() + " Sending Stopping Message"
+        rfObject.write('s')
         rfObject.close()
         if attempts is not 0:
             return createPortS(deviceName,portNumber,deviceBTAddress,baudrate,attempts-1)

@@ -171,17 +171,17 @@ print fullStamp() + " Starting Simulation Loop, time = %.03f seconds" %simStopTi
 # direction = "down" to start from timer's upper bound downwards
 ###
 
-timerApp(30, timers[0], 30, "down")
+# timerApp(30, timers[0], 30, "down")
 
 try:
     while simCurrentTime < simStopTime:
-
+        
         # Handles
         dataStream.append(["%.02f" %simCurrentTime,
                            sh0.readline()[:-1],
                            sh1.readline()[:-1],
                            hld.readline()[:-1]])
-
+        
         simCurrentTime = time.time() - simStartTime
         print fullStamp() + " Current Simulation Time = %.03f" %simCurrentTime
         # simLoopCounter = simLoopCounter + 1;
@@ -193,7 +193,7 @@ except Exception as instance:
     print fullStamp() + " Error Type " + str(type(instance))
     print fullStamp() + " Error Arguments " + str(instance.args)
     print fullStamp() + " Closing Open Ports"
-
+    
     time.sleep(1)
     if sh0.isOpen() == True:
         sh0.close()
@@ -205,7 +205,7 @@ except Exception as instance:
     time.sleep(1)
     if hld.isOpen == True:
         hld.close()
-                          
+                        
 # print dataStream
 
 time.sleep(0.25)
@@ -268,3 +268,4 @@ for i in range(0,Ndevices):
 # command "sudo zip -r output.zip output"
 #os.system("sudo zip -r " + dataDir + "/" + "output.zip output")
 os.system("cd " + dataDir + "; sudo zip -r " + panelID + ".zip output")
+
