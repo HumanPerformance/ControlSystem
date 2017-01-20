@@ -26,12 +26,12 @@ from    os.path                import expanduser
 
 # PD3D Modules
 from    timeStamp              import fullStamp
+from    sequentialPrompt       import timerApp
 from    configurationProtocol  import *
 from    bluetoothProtocol      import *
 from    usbProtocol            import *
 from    smarthandleProtocol    import *
-from    smartHolderProtocol    import *
-
+from    smartHolderProtocol    import * 
 
 # ==============================================
 # Variables
@@ -163,6 +163,15 @@ simStopTime = timers[0] # currently just using the initial timer
 # simLoopCounter = 0
 dataStream = []
 print fullStamp() + " Starting Simulation Loop, time = %.03f seconds" %simStopTime
+
+###
+# timerApp(timer1, timer2, timer3, direction)
+# timer = time in SECONDS
+# direction = "up" to start counting from 0 upwards
+# direction = "down" to start from timer's upper bound downwards
+###
+
+timerApp(30, timers[0], 30, "down")
 
 try:
     while simCurrentTime < simStopTime:
