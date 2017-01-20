@@ -10,7 +10,7 @@ Date: Dec. 20th 2016
 # direction is up/down for stopwatch/countdown
 '''
 from Tkinter import *
-import timeStamp import *
+from timeStamp import *
 import time
 import threading
 import StopWatchModule
