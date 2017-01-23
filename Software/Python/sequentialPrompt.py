@@ -96,7 +96,7 @@ def fetchData(t2):
     # simLoopCounter = 0
     dataStream = []
     print fullStamp() + " Starting Simulation Loop, time = %.03f seconds" %simStopTime
-'''
+    '''
     try:
         while simCurrentTime < simStopTime:
             
@@ -129,7 +129,7 @@ def fetchData(t2):
         time.sleep(1)
         if hld.isOpen == True:
             hld.close()
-'''            
+    '''            
     if mode is 'countDown':
         sw.Reset(t2)
         sw.countDown(t2)
@@ -140,7 +140,7 @@ def fetchData(t2):
 
 def closePorts():
     print fullStamp() + " Terminating"
-'''
+    '''
     time.sleep(0.25)
     if sh0.isOpen() == True:
         sh0.close()
@@ -161,7 +161,7 @@ def closePorts():
 
     time.sleep(0.25)                                          
     stopDevice(hld,deviceTypes[2])
-'''    
+    '''    
     if mode is 'countDown':
         pass
     elif mode is 'stopWatch':
