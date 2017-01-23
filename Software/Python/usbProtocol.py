@@ -87,6 +87,39 @@ def createPort(portNumber,baudrate,timeout):
         timeout = timeout)
     return rfObject
 
+# Create USB Port
+def createUSBPort(deviceName,portNumber,baudrate,attempts):
+    print fullStamp() + " createUSBPort()"
+    usbObject = serial.Serial(
+        port = "/dev/ttyUSB" + str(portNumber),
+        baudrate = baudrate)
+    time.sleep(1)
+    #usbConnectionCheck(usbObject,deviceName,portNumber,baudrate,attempts)
+    usbObject.close()
+    return usbObject
+
+# Connection Check -Simple
+#   Simplest variant of the connection check functions
+def usbConnectionCheck(usbObject,deviceName,portNumber,baudrate,attempts):
+    print fullStamp() + " usbConnectionCheck()"
+    time.sleep(1)
+    if usbObject.isOpen == False:
+        usbObject.open()
+    print fullStamp() + " Requesting Device Name"
+    usbObject.write('n')
+    time.sleep(1)
+    inString = usbObject.readline()[:-1]
+    print inString
+    if inString == deviceName:
+        print fullStamp() + " Connection successfully established with " + deviceName
+    else:
+        usbObject.close()
+        if attempts is not 0:
+            return createUSBPort(deviceName,portNumber,baudrate,attempts-1)
+        elif attempts is 0:
+            print fullStamp() + " Connection Attempts Limit Reached"
+            print fullStamp() + " Please troubleshoot " + deviceName
+
 # Send Until ReaD
 #       This function sends an input command through the rfcomm port to the remote device
 #       The function sends such command persistently until a timeout or iteration check are met

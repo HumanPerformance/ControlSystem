@@ -10,12 +10,17 @@ Date: Dec. 20th 2016
 # direction is up/down for stopwatch/countdown
 '''
 from Tkinter import *
+from timeStamp import *
 import time
 import threading
 import StopWatchModule
+from consys2 import configure
+from consys2 import fetchData
+from consys2 import closePorts
 
 def phaseOne(t1):
-    print "Phase 1 Passed"
+    print fullStamp() + " Entering Configuration Loop"
+    configure()
     if mode is 'countDown':
         sw.Reset(t1)
         sw.countDown(t1)
@@ -25,7 +30,8 @@ def phaseOne(t1):
     return
 
 def phaseTwo(t2):
-    print "Phase 2 Passed"
+    print fullStamp() + " Fetching Data"
+    fetchData()
     if mode is 'countDown':
         sw.Reset(t2)
         sw.countDown(t2)
@@ -35,7 +41,8 @@ def phaseTwo(t2):
     return
 
 def phaseThree():
-    print "Phase 3 Passed"
+    print fullStamp() + " Terminating"
+    closePorts()
     if mode is 'countDown':
         pass
     elif mode is 'stopWatch':

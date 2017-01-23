@@ -62,6 +62,7 @@ def definePaths():
 #   Input  :: path to configuration file (string)
 #   Output :: configuration file structure
 def readConfigFile(configFile):
+    print fullStamp() + " readConfigFile()"
     tree = etree.parse(configFile)
     root = tree.getroot()
     return tree, root
@@ -74,65 +75,166 @@ def readConfigFile(configFile):
 #   Output  ::  {string}        terminal message
 def selfID(address, tree, root):
     print fullStamp() + " selfID()"
-    Npanels = len(root[0])
+    Npanels = len(root[1])
     print fullStamp() + " Found " + str(Npanels) + " instrument panels"
     for i in range(0,Npanels):
-        mac_bt = root[0][i][0].get("mac_bt")
-        mac_eth = root[0][i][0].get("mac_eth")
-        mac_wlan = root[0][i][0].get("mac_wlan")
+        mac_bt = root[1][i][0].get("mac_bt")
+        mac_eth = root[1][i][0].get("mac_eth")
+        mac_wlan = root[1][i][0].get("mac_wlan")
+        panelID = root[1][i].get("id")
         if address == mac_bt:
             print fullStamp() + " Match on BT MAC address"
             panelIndex = i
-            panelNumber = i + 1
-            return panelIndex, panelNumber
+            print fullStamp() + " Panel id = " + panelID
+            print fullStamp() + " Panel index = " + str(panelIndex)
+            return panelIndex, panelID
             break
         elif address == mac_eth:
             print fullStamp() + " Match on eth MAC address"
             panelIndex = i
-            panelNumber = i + 1
-            return panelIndex, panelNumber
+            print fullStamp() + " Panel id = " + panelID
+            print fullStamp() + " Panel index = " + str(panelIndex)
+            return panelIndex, panelID
             break
         elif address == mac_wlan:
             print fullStamp() + " Match on wlan MAC address"
             panelIndex = i
-            panelNumber = i + 1
-            return panelIndex, panelNumber
+            print fullStamp() + " Panel id = " + panelID
+            print fullStamp() + " Panel index = " + str(panelIndex)
+            return panelIndex, panelID
             break
+        elif i == Npanels - 1:
+            #print fullStamp() + " Panel " + str(number) + " NOT found"
+            scenarioIndex = -1
+            panelID = "NA"
+            return panelIndex, panelID
 
 # Find Scenario Index
 #   The following function finds the configuration file index for the scenario number passed as an input
 def findScenario(number, tree, root):
     print fullStamp() + " findScenario()"
-    Nscenarios = len(root[1])
+    Nscenarios = len(root[2])
     print fullStamp() + " Found " + str(Nscenarios) + " scenarios"
     for i in range(0,Nscenarios):
-        scenario_number = int(root[1][i].get("number"))
-        if scenario_number == number:
+        scenarioID = root[2][i].get("id")
+        scenarioNumber = int(root[2][i].get("number"))
+        if scenarioNumber == number:
             print fullStamp() + " Scenario " + str(number) + " found on index " + str(i)
+            print fullStamp() + " Scenario id = " + scenarioID
             scenarioIndex = i
             scenarioNumber = number
-            return scenarioIndex, scenarioNumber
+            return scenarioIndex, scenarioNumber, scenarioID
             break
         elif i == Nscenarios - 1:
             print fullStamp() + " Scenario " + str(number) + " NOT found"
             scenarioIndex = -1
             scenarioNumber = number
-            return scenarioIndex, scenarioNumber
+            scenarioID = "NA"
+            return scenarioIndex, scenarioNumber, scenarioID
 
-# Pull Instrument Information (CSEC-Specific)
-#   Automatically searches for the instrument information and stores data in several arrays
-#   Input  :: tree, root --> from config. file
-#   Output :: {arrays/lists} of each parameter associated with the device
-def pullInstruments(tree, root):
-    instrumentsTag = 4 # This program assumes the format of the configuration file will remain unchanged
-    deviceName = []
-    deviceBTAddress = []
-    Ndevices = len(root[instrumentsTag]) 
-    for i in range(0, Ndevices):
-        deviceName.append(root[instrumentsTag][i][0].text)
-        deviceBTAddress.append(root[instrumentsTag][i][1].text)
-    return deviceName, deviceBTAddress
-    
+# Pull Scenario Parameters
+#   The following function pulls scenario parameters from the configuration XML
+#   Input   ::  {int}           scenario index
+#           ::  {structure}     tree
+#           ::  {structure}     root
+#   Output  ::  {array/list}    timers
+
+def pullParameters(scenarioIndex, tree, root):
+    print fullStamp() + " pullParameters()"
+    parametersIndex = 1
+    timers = []
+    Nparameters = len(root[2][scenarioIndex][parametersIndex])
+    for i in range(0,Nparameters):
+        parameterType = root[2][scenarioIndex][parametersIndex][i].get("type")
+        if parameterType == "timer":
+            timerName = root[2][scenarioIndex][parametersIndex][i].get("name")
+            timerValue = int(root[2][scenarioIndex][parametersIndex][i].text)
+            timers.append(timerValue)
+            print fullStamp() + " Timer found, " + timerName + " = " + str(timerValue)
+        else:
+            print fullStamp() + " Unknown parameter '" + parameterType + "' found"
+    return timers
+
+# Pull Scenario Instruments
+#   The following function finds the devices listed under the scenario section of the configuration XML.
+#   Input   ::  {int}           scenario index
+#           ::  {structure}     tree
+#           ::  {structure}     root
+#   Output  ::  {array/list}    scenario devices
+
+def pullInstruments(panelIndex, scenarioIndex, tree, root):
+    print fullStamp() + " pullInstruments()"
+    devicesIndex = 2
+    scenarioDeviceNames = []
+    Nscenariodevices = len(root[2][scenarioIndex][devicesIndex])
+    for i in range(0, Nscenariodevices):
+        deviceName = root[2][scenarioIndex][devicesIndex][i].get("name")
+        scenarioDeviceNames.append(deviceName)
+        print fullStamp() + " Device found, " + deviceName
+    return scenarioDeviceNames
+
+# Pull Panel Instruments
+#   The following function finds the devices associated with a selected instrument panel
+#   Input   ::  {int}           panel index
+#           ::  {structure}     tree
+#           ::  {structure}     root
+#   Output  ::  {array/list}    panel devices
+
+def pullPanelInstruments(panelIndex, tree, root):
+    print fullStamp() + " pullPanelInstruments()"
+    devicesIndex = 2
+    panelDeviceIDs = []
+    panelDeviceTypes = []
+    panelDeviceNames = []
+    panelDeviceBTAddresses = []
+    panelDevicePortNums = []
+    Npaneldevices = len(root[1][panelIndex])
+    for i in range(0, Npaneldevices):
+        deviceID = root[1][panelIndex][i].get("id")
+        deviceType = root[1][panelIndex][i].get("type")
+        deviceName = root[1][panelIndex][i].get("name")
+        deviceBTAddress = root[1][panelIndex][i].get("mac_bt")
+        devicePortNum = root[1][panelIndex][i].get("port_num")
+        panelDeviceIDs.append(deviceID)
+        panelDeviceTypes.append(deviceType)
+        panelDeviceNames.append(deviceName)
+        panelDeviceBTAddresses.append(deviceBTAddress)
+        panelDevicePortNums.append(devicePortNum)
+        print fullStamp() + " Device found, " + deviceName
+    return panelDeviceIDs, panelDeviceTypes, panelDeviceNames, panelDeviceBTAddresses, panelDevicePortNums
+
+# Instrument Cross Reference
+#   The following function cross-references the scenario devices list with the devices listed under the connected instrument panel and control system.
+#   Finally, the program generates lists with the specific devices to be triggered and their respective hardware addresses
+#   Input   ::  {int}           panel index
+#           ::  {array/list}    scenario devices
+#           ::  {structure}     tree
+#           ::  {structure}     root
+#   Output  ::  {array/list}    device names
+#           ::  {array/list}    device bluetooth addresses#
+
+def instrumentCrossReference(panelIndex, scenarioDeviceNames, tree, root):
+    print fullStamp() + " instrumentCrossReference()"
+    deviceIndex = []
+    deviceTypes = []
+    deviceNames = []
+    deviceAddresses = []
+    Nscenariodevices = len(scenarioDeviceNames)
+    Npaneldevices = len(root[1][panelIndex])
+    for i in range(0,Nscenariodevices):
+        scenarioDeviceName = scenarioDeviceNames[i]
+        for j in range(0,Npaneldevices):
+            panelDeviceType = root[1][panelIndex][j].get("type")
+            panelDeviceName = root[1][panelIndex][j].get("name")
+            panelDeviceAddress = root[1][panelIndex][j].get("mac_bt")
+            if scenarioDeviceName == panelDeviceName:
+                deviceIndex.append(j)
+                deviceTypes.append(panelDeviceType)
+                deviceNames.append(panelDeviceName)
+                deviceAddresses.append(panelDeviceAddress)
+                print fullStamp() + " Matched " + panelDeviceName + ", of type " + panelDeviceType + ", with address " + panelDeviceAddress + ", on index " + str(j)
+    return deviceIndex, deviceTypes, deviceNames, deviceAddresses
+  
 """
 References
 

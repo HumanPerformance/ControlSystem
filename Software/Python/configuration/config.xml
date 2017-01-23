@@ -1,83 +1,129 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
+	<configversion id="1.3.9" date="15 DEC 2016"/>
 	<panels>
-		<panel id="pan001" status="online">
-			<device id="000" type="controlcenter" mac_bt="B8:27:EB:DD:1F:86" mac_eth="b8:27:eb:77:b5:2c" mac_wlan="b8:27:eb:22:e0:79" status="available">
+		<panel 		id="PAN000" type="SIP"	name="instrument_panel" 																															status="online">
+			<device id="DEV000" type="CS"	name="control_system"		mac_bt="B8:27:EB:9F:1E:37"	mac_eth="b8:27:eb:35:b4:9d"	mac_wlan="b8:27:eb:22:e0:79"	ip_address="10.190.102.114"		port_num="none"		status="available">
 				<description>
 					A Raspberry Pi-bassed controller which serves as a control point to all panel-attached devices
 				</description>
 			</device>
-			<device id="001" type="stethoscope"   mac="0006667d817d" 								  status="available">
+			<device id="DEV001" type="SS"	name="stethoscope"			mac_bt="00:06:66:86:60:3D" 	mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="none"		status="available">
 				<description>
 					An electronic stethoscope providing either augmented listening or unmodified heart sounds 
 				</description>
 			</device>
-			<device id="002" type="opthalmascope" mac="0006667d817e" 								  status="available">
+			<device id="DEV002" type="SH"	name="ophthalmoscope"		mac_bt="00:06:66:80:8C:BE"	mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="0"		status="available">
 				<description>
 					No description
 				</description>
 			</device>
-			<device id="003" type="otoscope"      mac="0006667d817f" 								  status="unavailable">
+			<device id="DEV003" type="SH"	name="otoscope"				mac_bt="00:06:66:80:8C:A9"	mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="1"		status="available">
 				<description>
 					No description
 				</description>
 			</device>
-			<device id="004" type="pulseoximeter" mac="0006667d8180" 								  status="available">
+			<device id="DEV004" type="HLD"	name="smart_holder"			mac_bt="none"				mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="0"		status="available">
+				<description>
+					Detect the presence of devices on the panel
+				</description>
+			</device>
+			<device id="DEV005" type="SCP"	name="scope_panel"			mac_bt="none"				mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="1"		status="available">
+			</device>
+		</panel>
+		<panel 		id="PAN001" type="SIP"	name="instrument panel"																																					status="online">
+			<device id="DEV000" type="CS"	name="control system"		mac_bt="B8:27:EB:77:18:D6"	mac_eth="b8:27:eb:dd:b2:7c" mac_wlan="b8:27:eb:88:e7:29" 	ip_address="10.190.102.117"		port_num="none"		status="available">
+				<description>
+					A Raspberry Pi-bassed controller which serves as a control point to all panel-attached devices
+				</description>
+			</device>
+			<device id="DEV001" type="SS"	name="stethoscope"   		mac_bt="TBD"			 	mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="none"		status="available">
+				<description>
+					An electronic stethoscope providing either augmented listening or unmodified heart sounds 
+				</description>
+			</device>
+			<device id="DEV002" type="SH"	name="opthalmascope" 		mac_bt="00:06:66:83:89:5F"	mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="0"		status="available">
 				<description>
 					No description
 				</description>
 			</device>
-			<device id="005" type="bloodpressure" mac="0006667d8181" 								  status="unavailable">
+			<device id="DEV003" type="SH"	name="otoscope"      		mac_bt="00:06:66:83:89:57"	mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="1"		status="available">
 				<description>
 					No description
 				</description>
 			</device>
-			<device id="006" type="thermometer"   mac="0006667d8182" 								  status="available">
-				<description>
-					No description
-				</description>
+			<device id="DEV004" type="HLD"	name="smart_holder"			mac_bt="none"				mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="0"		status="available">
+			</device>
+			<device id="DEV005" type="SCP"	name="scope_panel"			mac_bt="none"				mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="1"		status="available">
+			</device>
+		</panel>
+		<panel		id="PAN002" type="SIP"	name="instrument_panel"																																					status="online">
+			<device id="DEV000" type="CS"   name="control_system"		mac_bt="B8:27:EB:DB:3C:63"	mac_eth="b8:27:eb:71:96:c9"	mac_wlan="b8:27:eb:24:c3:9c"	ip_address="10.190.102.118"		port_num="none"		status="available">
+			</device>
+			<device id="DEV001"	type="SS"	name="stethoscope"			mac_bt="TBD"				mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="none"		status="available">
+			</device>
+			<device id="DEV002"	type="SH"	name="ophthalmoscope"		mac_bt="00:06:66:80:8C:08"  mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="0"		status="available">
+			</device>
+			<device id="DEV003"	type="SH"	name="otoscope"				mac_bt="00:06:66:83:89:6D"	mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="1"		status="available">
+			</device>
+		</panel>
+		<panel		id="PAN003"	type="SIP"	name="instrument_panel"																																					status="online">
+			<device id="DEV000"	type="CS"	name="control_system"		mac_bt="B8:27:EB:EC:1A:93"	mac_eth="b8:27:eb:46:b0:39"	mac_wlan="b8:27:eb:13:e5:6c"	ip_address="10.190.11.165"		port_num="none"		status="available">
+			</device>
+			<device id="DEV001"	type="SS"	name="stethoscope"			mac_bt="TBD"				mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="none"		status="available">
+			</device>
+			<device id="DEV002"	type="SH"	name="ophthalmoscope"		mac_bt="00:06:66:83:89:6B"	mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="0"		status="available">
+			</device>
+			<device id="DEV003" type="SH"	name="otoscope"				mac_bt="00:06:66:80:8C:13"	mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="1"		status="available">
+			</device>
+		</panel>
+		<panel		id="PAN004"	type="SIP"	name="instrument_panel"																																					status="online">
+			<device id="DEV000"	type="CS"	name="control_system"		mac_bt="B8:27:EB:54:85:0D"	mac_eth="b8:27:eb:fe:2f:a7"	mac_wlan="b8:27:eb:ab:7a:f2"	ip_address="10.190.102.166"		port_num="none"		status="available">
+			</device>
+			<device id="DEV001"	type="SS"	name="stethoscope"			mac_bt="TBD"				mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="none"		status="available">
+			</device>
+			<device id="DEV002"	type="SH"	name="ophthalmoscope"		mac_bt="00:06:66:83:58:51"	mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="0"		status="available">
+			</device>
+			<device id="DEV003" type="SH"	name="otoscope"				mac_bt="00:06:66:83:58:52"	mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="1"		status="available">
 			</device>
 		</panel>
 	</panels>
 	<scenarios>
-		<scenario id="SCN000" number="0" title="baseline">
+		<scenario id="SCN000"	number="0"	title="baseline">
+		</scenario>
+		<scenario id="SCN001" 	number="1" 	title="handles_only">
 			<narrative>
-				In this scenario, the patient presents with...
+				This scenario has been developed to test smart handle connectivity
 			</narrative>
 			<parameters>
-				<date></date>
-				<tod></tod>
-				<locale></locale>
+				<parameter id="PARAM000" type="timer" name="t0">30</parameter>
+				<parameter id="PARAM001" type="timer" name="t" >300</parameter>
+				<parameter id="PARAM002" type="timer" name="tp">30</parameter>
 			</parameters>
 			<devices>
-				<stethoscope>
-					<events>
-						<event id="001" seq="001" minutes="6:00">
-							<title>Normal heartbeat</title>
-							<heartrate>80</heartrate>
-						</event>
-						<event id="001" seq="002" minutes="6:00">
-							<title>Heart murmur</title>
-							<heartrate>100</heartrate>
-						</event>
-						<event id="001" seq="003" minutes="6:00">
-							<title>3rd heart sound</title>
-							<heartrate>100</heartrate>
-						</event>
-					</events>
-				</stethoscope>
-				<pulseoximeter>
-					<events>
-						<event id="001" seq="001" minutes="12:00">
-							<title>Moderate compromise</title>
-							<heartrate>100</heartrate>
-							<oxygen>75</oxygen>
-						</event>
-					</events>
-				</pulseoximeter>
+				<device	id="DEV000"	type="SH"	name="ophthalmoscope">
+				</device>
+				<device id="DEV001" type="SH" 	name="otoscope">
+				</device>
+				<device	id="DEV004" type="SCP" 	name="scope_panel">
+				</device>
 			</devices>
 		</scenario>
-		<scenario id="SCN001" number="1" title="murmur">
+		<scenario id="SCN002"	number="2"	title="stethoscope_only">
+			<narrative>
+				This scenario has been developed to test stethoscope connectivity
+			</narrative>
+			<parameters>
+				<parameter id="PARAM000" type="timer" name="t0">30</parameter>
+				<parameter id="PARAM001" type="timer" name="t" >300</parameter>
+				<parameter id="PARAM002" type="timer" name="tp">30</parameter>
+			</parameters>
+			<devices>
+				<device id="DEV000"	type="SS"	name="stethoscope">
+				</device>
+				<device id="DEV001"	type="HLD"	name="smart_holder">
+				</device>
+			</devices>
 		</scenario>
 	</scenarios>
 </configuration>

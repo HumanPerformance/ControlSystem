@@ -6,18 +6,6 @@ The following module has been created to manage the bluetooth interface between 
 Michael Xynidis
 Fluvio L Lobo Fenoglietto
 09/01/2016
-
-
-List of functions ::
-
-X - Look for bluetooth device
-X - Pair bluetooth device
-X - Add paired device to the instrument list
-X.X - Connect to paired device
-    X.X - Create rfcomm port
-    X.X - Bind rfcomm port
-    X.X - Release rfcomm port
-
 """
 
 # Import Libraries and/or Modules
@@ -95,18 +83,107 @@ def findSmartDevice(smartDeviceName, availableDeviceNames, availableDeviceBTAddr
 #   This function creates radio-frquency (bluetooth) communication ports for specific devices, using their corresponding address
 #   Input   ::  {array/list} "deviceName", "deviceBTAddress"
 #   Output  ::  {array/list} "btObjects"
-def createPorts(deviceName, deviceBTAddress):
-    Ndevices = len(deviceName)                                                              # Determines the number of devices listed
-    rfObject = []                                                                           # Create RF object variable/list (in case of multiple devices)
-    for i in range(0,Ndevices):     
+def createPorts(deviceNames, deviceBTAddresses, baudrate, timeout):
+    Ndevices = len(deviceNames)                                                              # Determines the number of devices listed
+    rfObjects = []                                                                           # Create RF object variable/list (in case of multiple devices)
+    for i in range(0,Ndevices):
         portRelease("rfcomm",i)                                                             # The program performs a port-release to ensure that the desired rf port is available
-        portBind("rfcomm",i,deviceBTAddress[i])
-        rfObject.append(serial.Serial("/dev/rfcomm" + str(i),115200))                       # Create and append RFComm port to the RFObject structure
-        #triggerRFInstrument(arduRFObj[i], instrumentNames[i])                              # Trigger data collection on instruments
-    return rfObject                                                                         # Return RFObject or list of objects
+        portBind("rfcomm",i,deviceBTAddresses[i])
+        rfObjects.append(serial.Serial(
+            port = "/dev/rfcomm" + str(i),
+            baudrate = baudrate,
+            bytesize = serial.EIGHTBITS,
+            parity = serial.PARITY_NONE,
+            stopbits = serial.STOPBITS_ONE,
+            timeout = timeout))
+        time.sleep(1)
+    return rfObjects
+
+# Create Ports v2
+#   This variation of the original create ports function creates multiple ports and verifies connectivity
+def createPorts2(deviceNames, deviceBTAddresses, baudrate, timeout, attempts):
+    print fullStamp() + " createPorts2()"
+    Ndevices = len(deviceNames)
+    print fullStamp() + " Connecting to " + str(Ndevices) + " device"
+    rfObjects = []
+    for i in range(0,Ndevices):
+        portNumber = i
+        portRelease('rfcomm',portNumber)
+        portBind("rfcomm",portNumber,deviceBTAddresses[i])
+        rfObjects.append(serial.Serial(
+            port = "/dev/rfcomm" + str(portNumber),
+            baudrate = baudrate,
+            bytesize = serial.EIGHTBITS,
+            parity = serial.PARITY_NONE,
+            stopbits = serial.STOPBITS_ONE,
+            timeout = timeout))
+        time.sleep(1)
+        #connectionChecks(rfObjects,deviceNames,deviceBTAddresses,baudrate,timeout,i,attempts)
+        connectionCheck2(rfObjects,i,rfObjects[i],deviceNames[i],deviceBTAddresses[i],baudrate,timeout,attempts)
+        rfObjects[i].close()
+    return rfObjects
+
+# Connection Checks
+#   This variation of the connection check function handle multiple cases assuming that its embedded in a loop
+#   This function has a recursive statement that triggers the reconnection of all ports listed, which is not desirable.
+def connectionChecks(rfObjects,deviceNames,deviceBTAddresses,baudrate,timeout,index,attempts):
+    print fullStamp() + " connectionCheck()"
+    inString = rfObjects[index].readline()[:-1]
+    if inString == deviceNames[index]:
+        print fullStamp() + " Connection successfully established with " + deviceNames[index]
+    else:
+        rfObjects[index].close()
+        if attempts is not 0:
+            return createPorts2(deviceNames,deviceBTAddresses,baudrate,timeout,attempts-1)
+        elif attempts is 0:
+            print fullStamp() + " Connection Attempts Limit Reached"
+            print fullStamp() + " Please troubleshoot " + deviceName
+
+# Add Port
+#   Solution to the dileman of connection checks. In its recursive call, this function only adds the port being checked
+def addPort(rfObjects, index, deviceName, deviceBTAddress, baudrate, timeout, attempts):
+    print fullStamp() + " addPort()"
+    portNumber = index
+    portRelease('rfcomm',portNumber)
+    portBind("rfcomm",portNumber,deviceBTAddress)
+    rfObjects.append(serial.Serial(
+        port = "/dev/rfcomm" + str(portNumber),
+        baudrate = baudrate,
+        bytesize = serial.EIGHTBITS,
+        parity = serial.PARITY_NONE,
+        stopbits = serial.STOPBITS_ONE,
+        timeout = timeout))
+    time.sleep(1)
+    connectionCheck2(rfObjects,index,rfObjects[index],deviceName,deviceBTAddress,baudrate,timeout,attempts)
+    rfObjects[i].close()
+    return rfObjects
+
+# Connection Check v2
+#   Working alternative to connection checks and add port functions
+def connectionCheck2(rfObjects,index,rfObject,deviceName,deviceBTAddress,baudrate,timeout,attempts):
+    print fullStamp() + " connectionCheck2()"
+    if rfObject.isOpen == False:
+        rfObject.open()
+    inString = rfObject.readline()[:-1]
+    if inString == deviceName:
+        print fullStamp() + " Connection successfully established with " + deviceName
+    else:
+        rfObject.close()
+        if attempts is not 0:
+            return addPort(rfObjects,index,deviceName,deviceBTAddress,baudrate,timeout,attempts-1)
+        elif attempts is 0:
+            print fullStamp() + " Connection Attempts Limit Reached"
+            print fullStamp() + " Please troubleshoot " + deviceName
 
 # Create RFComm Port
-def createPort(deviceName,deviceBTAddress,baudrate,timeout):
+#   This function establishes a RF serial communication port
+#   Input   ::  {string}    device name
+#           ::  {string}    device bluetooth address
+#           ::  {int}       baudrate
+#           ::  {int}       timeout
+#   Output  ::  {object}    serial object
+
+def createPort(deviceName,deviceBTAddress,baudrate,timeout,attempts):
     portRelease("rfcomm",0)                                                             # The program performs a port-release to ensure that the desired rf port is available
     portBind("rfcomm",0,deviceBTAddress)
     rfObject = serial.Serial(
@@ -117,14 +194,101 @@ def createPort(deviceName,deviceBTAddress,baudrate,timeout):
         stopbits = serial.STOPBITS_ONE,
         timeout = timeout)
     time.sleep(1)
-    outByte = definitions.SOH                                                                               # Send SOH (Start of Heading) byte - see protocolDefinitions.py
+    outByte = definitions.ENQ                                                                               # Send SOH (Start of Heading) byte - see protocolDefinitions.py
     rfObject.write(outByte)
     inByte = rfObject.read(size=1)
     if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response
-        print fullStamp() + " Connection Established\n"
+        print fullStamp() + " ACK Connection Established"
+        rfObject.close()
         return rfObject
     elif inByte == definitions.NAK:
-        print fullStamp() + " NAK device NOT READY\n"
+        print fullStamp() + " NAK device NOT READY"
+    else:
+        rfObject.close()
+        if attempts is not 0:
+            return createPort(deviceName,deviceBTAddress,baudrate,timeout,attempts-1)
+        elif attempts is 0:
+            print fullStamp() + " Attempts limit reached"
+            print fullStamp() + " Please troubleshoot devices"
+
+# Create Port 2
+#   This function is a variation of the standard create port function, which establishes a RF serial communication port
+#   This variation performs a character or string-based verification with the control system
+#   Input   ::  {string}    device name
+#           ::  {string}    device bluetooth address
+#           ::  {int}       baudrate                        --Communication speed, bits per minute (bpm)
+#           ::  {int}       timeout                         --Connection timeout
+#           ::  {int}       attempts                        --Number of recursive connection attempts the program will execute
+#   Output  ::  {object}    serial object
+
+def createPort2(deviceName,deviceBTAddress,baudrate,timeout,attempts):
+    portRelease("rfcomm",0)
+    portBind("rfcomm",0,deviceBTAddress)
+    rfObject = serial.Serial(
+        port = "/dev/rfcomm" + str(0),
+        baudrate = baudrate,
+        bytesize = serial.EIGHTBITS,
+        parity = serial.PARITY_NONE,
+        stopbits = serial.STOPBITS_ONE,
+        timeout = timeout)
+    time.sleep(1)
+    connectionCheck(rfObject,deviceName,deviceBTAddress,baudrate,timeout,attempts)
+    rfObject.close()
+    return rfObject
+
+# Create Port -Simple
+#   Simplest varient of the create port function
+def createPortS(deviceName,portNumber,deviceBTAddress,baudrate,attempts):
+    print fullStamp() + " createPortS()"
+    portRelease("rfcomm",portNumber)
+    portBind("rfcomm",portNumber,deviceBTAddress)
+    rfObject = serial.Serial(
+        port = "/dev/rfcomm" + str(portNumber),
+        baudrate = baudrate)
+    time.sleep(1)
+    connectionCheckS(rfObject,deviceName,portNumber,deviceBTAddress,baudrate,attempts)
+    rfObject.close()
+    return rfObject
+
+# Connection Check
+#   The following function verifies the connection to the desired device.
+#   The current iteration of this function uses character/string communication between the control system and the connected device.
+#   Input   ::  {object}    serial object
+#           ::  {string}    device name
+#           ::  {int}       attempts
+#   Output  ::  {string}    terminal messages
+
+def connectionCheck(rfObject,deviceName,deviceBTAddress,baudrate,timeout,attempts):
+    print fullStamp() + " connectionCheck()"
+    inString = rfObject.readline()[:-1]
+    if inString == deviceName:
+        print fullStamp() + " Connection successfully established with " + deviceName
+    else:
+        rfObject.close()
+        if attempts is not 0:
+            return createPort2(deviceName,deviceBTAddress,baudrate,timeout,attempts-1)
+        elif attempts is 0:
+            print fullStamp() + " Connection Attempts Limit Reached"
+            print fullStamp() + " Please troubleshoot " + deviceName
+
+# Connection Check -Simple
+#   Simplest variant of the connection check functions
+def connectionCheckS(rfObject,deviceName,portNumber,deviceBTAddress,baudrate,attempts):
+    print fullStamp() + " connectionCheck()"
+    inString = rfObject.readline()[:-1]
+    if inString == deviceName:
+        print fullStamp() + " Connection successfully established with " + deviceName
+    else:
+        if rfObject.isOpen() == False:
+            rfObject.open()
+        print fullStamp() + " Sending Stopping Message"
+        rfObject.write('s')
+        rfObject.close()
+        if attempts is not 0:
+            return createPortS(deviceName,portNumber,deviceBTAddress,baudrate,attempts-1)
+        elif attempts is 0:
+            print fullStamp() + " Connection Attempts Limit Reached"
+            print fullStamp() + " Please troubleshoot " + deviceName
 
 # Port Bind
 #   This function binds the specified bluetooth device to a rfcomm port
