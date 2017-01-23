@@ -232,7 +232,7 @@ def startSim():
 # direction = "up" to start counting from 0 upwards
 # direction = "down" to start from timer's upper bound downwards
 ###
-
+commands=['timerApp(30, timers[0], 15, "down")', 'startSim']
 parallelpy.run(timerApp(30, timers[0], 15, "down"), startSim())
 
 # Print data on device-specific text files
