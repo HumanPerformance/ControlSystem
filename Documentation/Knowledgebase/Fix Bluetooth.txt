@@ -7,6 +7,14 @@
 # 01/14/2017
 #
 
+# 00 - Ensure your raspberry pi has been fully updated
+> sudo rpi-update		#firmware
+
+Note that you may need to reboot after a firmware upgrade!
+
+> sudo apt-get dist-upgrade 	#raspbian distribution upgrade
+> sudo apt-get update		#raspbian libraries update
+> sudo apt-get upgrade		#raspbian libraries upgrade
 
 # 01 - Reboot the system first
 > sudo reboot

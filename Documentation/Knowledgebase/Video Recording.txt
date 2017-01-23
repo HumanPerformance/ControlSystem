@@ -1,0 +1,37 @@
+#
+# Video Recording
+#
+# The following guide has been written to guide the user in the process of
+
+
+# Open the apt-sources configuration file
+> sudo nano /etc/apt/sources.list
+
+# Add the following lines
+> deb http://www.deb-multimedia.org jessie main non-free
+> deb-src http://www.deb-multimedia.org jessie main non-free
+
+# Update
+> sudo apt-get update
+
+# If the error...
+> E: The method driver /usr/lib/apt/methods/https could not be found
+> N: Is the package apt-transport-https installed?
+# ...appears;
+# Install the package;
+> sudo apt-get install apt-transport-https
+# Then try...
+> sudo apt-get update
+# ...again
+
+
+# Allow apt to trust deb-multimedia's key, by typing;
+> sudo apt-get install deb-multimedia-keyring
+
+# Refresh the apt package database;
+> sduo apt-get update
+
+# Install the following libraries
+> sudo apt-get install build-essential libmp3lame-dev libvorbis-dev libtheora-dev libspeex-dev yasm pkg-config libfaac-dev libopenjpeg-dev libx264-dev
+
+
