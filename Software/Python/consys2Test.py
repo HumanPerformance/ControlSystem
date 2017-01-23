@@ -22,6 +22,7 @@ import  sys
 import  os
 import  serial
 import  time
+import  subprocess
 from    os.path                import expanduser
 
 # PD3D Modules
@@ -172,6 +173,8 @@ print fullStamp() + " Starting Simulation Loop, time = %.03f seconds" %simStopTi
 ###
 
 # timerApp(30, timers[0], 30, "down")
+print fullStamp() + " Starting SubProcess"
+subP = subprocess.Popen(['python','exeOne.py'])
 
 try:
     while simCurrentTime < simStopTime:
