@@ -26,7 +26,11 @@ from    os.path                import expanduser
 
 # PD3D Modules
 from    timeStamp              import fullStamp
-from    sequentialPrompt       import *
+from    configurationProtocol  import *
+from    bluetoothProtocol      import *
+from    usbProtocol            import *
+from    smarthandleProtocol    import *
+from    smartHolderProtocol    import *
 
 
 # ==============================================
@@ -43,7 +47,7 @@ try:
     selectedScenario = int(sys.argv[1])
     print fullStamp() + " User Executed " + inputArg[0] + ", scenario #" + inputArg[1]
 except:
-    selectedScenario = 1
+    selectedScenario = 0
 
 # ----------------------------------------------
 # Panel self-dentification
@@ -147,53 +151,72 @@ print fullStamp() + " Opening Serial Port to Smart Holder"
 if rfObject.isOpen() == False:
     rfObject.open()
 
-###
-# timerApp(timer1, timer2, timer3, direction)
-# timer = time in SECONDS
-# direction = "up" to start counting from 0 upwards
-# direction = "down" to start from timer's upper bound downwards
-###
-
-timerApp(30, 30, 15, "down")
-
-
 # ----------------------------------------------
-# Data Storage
+# Simulation / Configuration Loop
+#   In this loop, connected devices will be accessed for data collection
 # ----------------------------------------------
 
-# Print data on device-specific text files
-Ndevices = len(deviceNames)
-Nlines = len(dataStream)
+simStartTime = time.time()
+simCurrentTime = 0
+simStopTime = 30
+# simLoopCounter = 0
+dataStream = []
+print fullStamp() + " Starting Simulation Loop, time = %.03f seconds" %simStopTime
 
-dataFileDir = outputDir + "/" + executionTimeStamp
+try:
+    while simCurrentTime < simStopTime:
 
-if os.path.exists(dataFileDir) == False:
-    os.makedirs(dataFileDir)
+        # Handles
+        dataStream.append(["%.02f" %simCurrentTime,
+                           sh0.readline()[:-1],
+                           sh1.readline()[:-1],
+                           rfObject.readline()[:-1]])
 
-for i in range(0,Ndevices):
-    
-    dataFileName = "/" + deviceNames[i] + ".txt"
-    dataFilePath = dataFileDir + dataFileName
-    
-    if os.path.isfile(dataFilePath) == False:
+        simCurrentTime = time.time() - simStartTime
+        print fullStamp() + " Current Simulation Time = %.03f" %simCurrentTime
+        # simLoopCounter = simLoopCounter + 1;
+
+        # End of Simulation Loop
         
-        with open(dataFilePath, "a") as dataFile:
-            dataFile.write("===================== \n")
-            dataFile.write("Scenario = " + str(scenarioNumber) + "\n")
-            dataFile.write("Instrument = " + deviceNames[0] + "\n")
-            dataFile.write("This is a header line \n")
-            dataFile.write("===================== \n")
-    
-    for j in range(0,Nlines):
+except Exception as instance:
+    print fullStamp() + " Exception or Error Caught"
+    print fullStamp() + " Error Type " + str(type(instance))
+    print fullStamp() + " Error Arguments " + str(instance.args)
+    print fullStamp() + " Closing Open Ports"
 
-        with open(dataFilePath, "a") as dataFile:
-            dataFile.write(dataStream[j][0] + "," + dataStream[j][i+1] + "\n")
+    time.sleep(1)
+    if sh0.isOpen() == True:
+        sh0.close()
 
+    time.sleep(1)
+    if sh1.isOpen() == True:
+        sh1.close()
 
-# zip output folder for data delivery
+    time.sleep(1)
+    if rfObject.isOpen == True:
+        rfObject.close()
 
-# find data directory
-# command "sudo zip -r output.zip output"
-#os.system("sudo zip -r " + dataDir + "/" + "output.zip output")
-os.system("cd " + dataDir + "; sudo zip -r " + panelID + ".zip output")
+# print dataStream
+
+time.sleep(0.25)
+if sh0.isOpen() == True:
+    sh0.close()
+
+time.sleep(0.25)
+if sh1.isOpen() == True:
+    sh1.close()
+
+time.sleep(0.25)
+if rfObject.isOpen == True:
+    rfObject.close()
+
+time.sleep(0.25)
+stopDevice2(sh0,deviceTypes[0])
+
+time.sleep(0.25)
+stopDevice2(sh1,deviceTypes[1])
+
+time.sleep(0.25)                                          
+stopDevice(rfObject,deviceTypes[2])
+
 

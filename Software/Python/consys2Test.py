@@ -172,9 +172,9 @@ print fullStamp() + " Starting Simulation Loop, time = %.03f seconds" %simStopTi
 # direction = "down" to start from timer's upper bound downwards
 ###
 
-# timerApp(30, timers[0], 30, "down")
-print fullStamp() + " Starting SubProcess"
-subP = subprocess.Popen(['python','exeOne.py'])
+timerApp(0, timers[0], 0, "down")
+#print fullStamp() + " Starting SubProcess"
+#subP = subprocess.Popen(['python','exeOne.py'])
 
 try:
     while simCurrentTime < simStopTime:
