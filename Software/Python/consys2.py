@@ -26,12 +26,12 @@ from    os.path                import expanduser
 
 # PD3D Modules
 from    timeStamp              import fullStamp
-from    sequentialPrompt       import timerApp
 from    configurationProtocol  import *
 from    bluetoothProtocol      import *
 from    usbProtocol            import *
 from    smarthandleProtocol    import *
-from    smartHolderProtocol    import * 
+from    smartHolderProtocol    import *
+import  sequentialPrompt
 
 # ==============================================
 # Variables
@@ -108,7 +108,7 @@ deviceIndex, deviceTypes, deviceNames, deviceAddresses = instrumentCrossReferenc
 # direction = "down" to start from timer's upper bound downwards
 ###
 
-timerApp(30, timers[0], 15, "down")
+sequntialPrompt.timerApp(30, timers[0], 15, "down")
 
 # ----------------------------------------------
 # Pre-Simulation / Configuration Loop

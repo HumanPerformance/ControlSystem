@@ -14,13 +14,11 @@ from timeStamp import *
 import time
 import threading
 import StopWatchModule
-from consys2 import configure
-from consys2 import fetchData
-from consys2 import closePorts
+import consys2
 
 def phaseOne(t1):
     print fullStamp() + " Entering Configuration Loop"
-    configure()
+    consys2.configure()
     if mode is 'countDown':
         sw.Reset(t1)
         sw.countDown(t1)
@@ -31,7 +29,7 @@ def phaseOne(t1):
 
 def phaseTwo(t2):
     print fullStamp() + " Fetching Data"
-    fetchData()
+    consys2.fetchData()
     if mode is 'countDown':
         sw.Reset(t2)
         sw.countDown(t2)
@@ -42,7 +40,7 @@ def phaseTwo(t2):
 
 def phaseThree():
     print fullStamp() + " Terminating"
-    closePorts()
+    consys2.closePorts()
     if mode is 'countDown':
         pass
     elif mode is 'stopWatch':
