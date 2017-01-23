@@ -31,84 +31,11 @@ from    bluetoothProtocol      import *
 from    usbProtocol            import *
 from    smarthandleProtocol    import *
 from    smartHolderProtocol    import *
-import  sequentialPrompt
-
-# ==============================================
-# Variables
-# ==============================================
-
-# ----------------------------------------------
-# Input Terminal Variables
-#   The script reads the inputs from the terminal execution triggered by the Control Room
-#   Consys currently handles one (1) input variable, the "scenario #"
-# ----------------------------------------------
-try:
-    inputArg = sys.argv
-    selectedScenario = int(sys.argv[1])
-    print fullStamp() + " User Executed " + inputArg[0] + ", scenario #" + inputArg[1]
-except:
-    selectedScenario = 1
-
-# ----------------------------------------------
-# Panel self-dentification
-#   The panel obtains the mac address of the local system
-# ----------------------------------------------
-mac_bt = getMAC('eth0')
-
-# ----------------------------------------------
-# Timers
-# ----------------------------------------------
-executionTimeStamp = fullStamp()
-
-# ----------------------------------------------
-# Path/Directory Variables
-# ----------------------------------------------
-pythonDir, configDir, configFile, dataDir, outputDir = definePaths()
-
-# ----------------------------------------------
-# Upload Configuration XML
-# ----------------------------------------------
-tree, root = readConfigFile(configFile)
-
-# ----------------------------------------------
-# Define Panel
-#   Using the MAC address from the local system and the configuration XML, the program identifies the SIP id and index
-# ----------------------------------------------
-panelIndex, panelID = selfID(mac_bt, tree, root)
-
-# ----------------------------------------------
-# Define Scenario
-#   Using the scenario number from the terminal input and the configuration XML, the program identifies the scenarion index
-# ----------------------------------------------
-scenarioIndex, scenarioNumber, scenarioID = findScenario(selectedScenario, tree, root)
-
-# ----------------------------------------------
-# Pull Scenario Info
-#   This functions pulls relevant information about the scenarios from the configuration XML
-# ----------------------------------------------
-timers = pullParameters(scenarioIndex, tree, root)
-
-# ----------------------------------------------
-# Pull and Cross-Reference Devices
-#   This function pulls the devices to be used in the selected scenario from the configuration XML
-#   Then uses that list to croo-reference the addresses of the devices associated with the selected instrument panel
-#   Returns the list of device names and addresses for execution
-# ----------------------------------------------
-scenarioDeviceNames = pullInstruments(panelIndex, scenarioIndex, tree, root)
-deviceIndex, deviceTypes, deviceNames, deviceAddresses = instrumentCrossReference(panelIndex, scenarioDeviceNames, tree, root)
-
-# ==============================================
-# Operation
-# ==============================================
+from    sequentialPrompt       import timerApp
 
 ###
-# timerApp(timer1, timer2, timer3, direction)
-# timer = time in SECONDS
-# direction = "up" to start counting from 0 upwards
-# direction = "down" to start from timer's upper bound downwards
+# DEFINITIONS
 ###
-
-sequntialPrompt.timerApp(30, timers[0], 15, "down")
 
 # ----------------------------------------------
 # Pre-Simulation / Configuration Loop
@@ -229,6 +156,85 @@ def closePorts():
 
     time.sleep(0.25)                                          
     stopDevice(hld,deviceTypes[2])
+
+
+# ==============================================
+# Variables
+# ==============================================
+
+# ----------------------------------------------
+# Input Terminal Variables
+#   The script reads the inputs from the terminal execution triggered by the Control Room
+#   Consys currently handles one (1) input variable, the "scenario #"
+# ----------------------------------------------
+try:
+    inputArg = sys.argv
+    selectedScenario = int(sys.argv[1])
+    print fullStamp() + " User Executed " + inputArg[0] + ", scenario #" + inputArg[1]
+except:
+    selectedScenario = 1
+
+# ----------------------------------------------
+# Panel self-dentification
+#   The panel obtains the mac address of the local system
+# ----------------------------------------------
+mac_bt = getMAC('eth0')
+
+# ----------------------------------------------
+# Timers
+# ----------------------------------------------
+executionTimeStamp = fullStamp()
+
+# ----------------------------------------------
+# Path/Directory Variables
+# ----------------------------------------------
+pythonDir, configDir, configFile, dataDir, outputDir = definePaths()
+
+# ----------------------------------------------
+# Upload Configuration XML
+# ----------------------------------------------
+tree, root = readConfigFile(configFile)
+
+# ----------------------------------------------
+# Define Panel
+#   Using the MAC address from the local system and the configuration XML, the program identifies the SIP id and index
+# ----------------------------------------------
+panelIndex, panelID = selfID(mac_bt, tree, root)
+
+# ----------------------------------------------
+# Define Scenario
+#   Using the scenario number from the terminal input and the configuration XML, the program identifies the scenarion index
+# ----------------------------------------------
+scenarioIndex, scenarioNumber, scenarioID = findScenario(selectedScenario, tree, root)
+
+# ----------------------------------------------
+# Pull Scenario Info
+#   This functions pulls relevant information about the scenarios from the configuration XML
+# ----------------------------------------------
+timers = pullParameters(scenarioIndex, tree, root)
+
+# ----------------------------------------------
+# Pull and Cross-Reference Devices
+#   This function pulls the devices to be used in the selected scenario from the configuration XML
+#   Then uses that list to croo-reference the addresses of the devices associated with the selected instrument panel
+#   Returns the list of device names and addresses for execution
+# ----------------------------------------------
+scenarioDeviceNames = pullInstruments(panelIndex, scenarioIndex, tree, root)
+deviceIndex, deviceTypes, deviceNames, deviceAddresses = instrumentCrossReference(panelIndex, scenarioDeviceNames, tree, root)
+
+# ==============================================
+# Operation
+# ==============================================
+
+###
+# timerApp(timer1, timer2, timer3, direction)
+# timer = time in SECONDS
+# direction = "up" to start counting from 0 upwards
+# direction = "down" to start from timer's upper bound downwards
+###
+
+timerApp(30, timers[0], 15, "down")
+
 
 # ----------------------------------------------
 # Data Storage
