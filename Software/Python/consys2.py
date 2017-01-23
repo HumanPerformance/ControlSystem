@@ -104,7 +104,7 @@ deviceIndex, deviceTypes, deviceNames, deviceAddresses = instrumentCrossReferenc
 # direction = "down" to start from timer's upper bound downwards
 ###
 
-timerApp(30, timers[0], 15, "down")
+timerApp(30, 30, 15, "down")
 
 
 # ----------------------------------------------
