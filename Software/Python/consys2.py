@@ -26,11 +26,6 @@ from    os.path                import expanduser
 
 # PD3D Modules
 from    timeStamp              import fullStamp
-from    configurationProtocol  import *
-from    bluetoothProtocol      import *
-from    usbProtocol            import *
-from    smarthandleProtocol    import *
-from    smartHolderProtocol    import *
 from    sequentialPrompt       import *
 
 

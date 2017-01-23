@@ -9,8 +9,13 @@ Date: Dec. 20th 2016
 # t is time in seconds
 # direction is up/down for stopwatch/countdown
 '''
-from Tkinter import *
-from timeStamp import *
+from    Tkinter                import *
+from    configurationProtocol  import *
+from    bluetoothProtocol      import *
+from    usbProtocol            import *
+from    smarthandleProtocol    import *
+from    smartHolderProtocol    import *
+from    timeStamp              import fullStamp
 import time
 import threading
 import StopWatchModule
@@ -29,45 +34,45 @@ def configure(t1):
     # Creating Serial Port for Devices
     time.sleep(1)
     print fullStamp() + " Creating port for SH0"
-    sh0 = createPortS(deviceTypes[0],0,deviceAddresses[0],115200,5)
+    #sh0 = createPortS(deviceTypes[0],0,deviceAddresses[0],115200,5)
 
     time.sleep(1)
     print fullStamp() + " Creating port for SH1"
-    sh1 = createPortS(deviceTypes[1],1,deviceAddresses[1],115200,5)
+    #sh1 = createPortS(deviceTypes[1],1,deviceAddresses[1],115200,5)
 
 
     time.sleep(1)
     print fullStamp() + " Connecting Smart Holder"
-    hld = createUSBPort(deviceTypes[2],1,115200,5)
+    #hld = createUSBPort(deviceTypes[2],1,115200,5)
 
     # Triggering Smart Handle Devices
     time.sleep(1)
     print fullStamp() + " Triggering SH0"
-    triggerDevice2(sh0,"SH")
+    #triggerDevice2(sh0,"SH")
 
     time.sleep(1)
     print fullStamp() + " Triggering SH1"
-    triggerDevice2(sh1,"SH")
+    #triggerDevice2(sh1,"SH")
 
     time.sleep(1)
     print fullStamp() + " Triggering Smart Holder"
-    triggerDevice(hld,deviceTypes[2])
+    #triggerDevice(hld,deviceTypes[2])
 
     # Openning Ports
     time.sleep(1)
     print fullStamp() + " Openning Serial Port to SH0"
-    if sh0.isOpen() == False:
-        sh0.open()
+    #if sh0.isOpen() == False:
+        #sh0.open()
 
     time.sleep(1)
     print fullStamp() + " Openning Serial Port to SH1"
-    if sh1.isOpen() == False:
-        sh1.open()
+    #if sh1.isOpen() == False:
+        #sh1.open()
 
     time.sleep(1)
     print fullStamp() + " Opening Serial Port to Smart Holder"
-    if hld.isOpen() == False:
-        hld.open()
+    #if hld.isOpen() == False:
+        #hld.open()
         
     if mode is 'countDown':
         sw.Reset(t1)
@@ -91,7 +96,7 @@ def fetchData(t2):
     # simLoopCounter = 0
     dataStream = []
     print fullStamp() + " Starting Simulation Loop, time = %.03f seconds" %simStopTime
-
+'''
     try:
         while simCurrentTime < simStopTime:
             
@@ -124,7 +129,7 @@ def fetchData(t2):
         time.sleep(1)
         if hld.isOpen == True:
             hld.close()
-            
+'''            
     if mode is 'countDown':
         sw.Reset(t2)
         sw.countDown(t2)
@@ -135,7 +140,7 @@ def fetchData(t2):
 
 def closePorts():
     print fullStamp() + " Terminating"
-
+'''
     time.sleep(0.25)
     if sh0.isOpen() == True:
         sh0.close()
@@ -156,7 +161,7 @@ def closePorts():
 
     time.sleep(0.25)                                          
     stopDevice(hld,deviceTypes[2])
-    
+'''    
     if mode is 'countDown':
         pass
     elif mode is 'stopWatch':
