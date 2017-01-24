@@ -15,9 +15,8 @@ import time
 import threading
 import StopWatchModule
 
-
 def phaseOne(t1):
-    print fullStamp() + " Phase One"
+    print fullStamp() + " Phase 1 Passed"
     if mode is 'countDown':
         sw.Reset(t1)
         sw.countDown(t1)
@@ -27,32 +26,7 @@ def phaseOne(t1):
     return
 
 def phaseTwo(t2):
-    
-    dataStream = []
-    print fullStamp() + " Phase Two"
-
-    try:
-        while (sw._elapsedtime) < t2:
-            
-            # Handles
-            """
-            dataStream.append(["%.02f" %simCurrentTime,
-                               sh0.readline()[:-1],
-                               sh1.readline()[:-1],
-                               hld.readline()[:-1]])
-            """
-            #simCurrentTime = time.time() - simStartTime
-            print fullStamp() + " Current Simulation Time = %.03f" %(-1*sw._elapsedtime)
-            # simLoopCounter = simLoopCounter + 1;
-
-            # End of Simulation Loop
-            
-    except Exception as instance:
-        print fullStamp() + " Exception or Error Caught"
-        print fullStamp() + " Error Type " + str(type(instance))
-        print fullStamp() + " Error Arguments " + str(instance.args)
-        print fullStamp() + " Closing Open Ports"
-        
+    print fullStamp() + " Phase 2 Passed"
     if mode is 'countDown':
         sw.Reset(t2)
         sw.countDown(t2)
@@ -62,7 +36,7 @@ def phaseTwo(t2):
     return
 
 def phaseThree():
-    print fullStamp() + " Phase Three"
+    print fullStamp() + " Phase 3 Passed"
     if mode is 'countDown':
         pass
     elif mode is 'stopWatch':
@@ -95,8 +69,6 @@ def timerApp(t0,t1,t2,direction):
     root.bind("<Escape>", end_fullscreen)
     sw = StopWatchModule.StopWatch(root)
     sw.pack(side=TOP, expand=YES, fill=BOTH)
-
-    
     
     if direction is 'up':
         mode = 'stopWatch'
@@ -110,8 +82,7 @@ def timerApp(t0,t1,t2,direction):
 
         z = threading.Timer(t0+t1+t2, phaseThree)
         z.start()
-
-
+    
     elif direction is 'down':
         mode = 'countDown'
         sw.countDown(t0)
@@ -124,6 +95,5 @@ def timerApp(t0,t1,t2,direction):
 
         z = threading.Timer(t0+t1+t2, phaseThree)
         z.start()
-
 
     root.mainloop()

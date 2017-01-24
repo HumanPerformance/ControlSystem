@@ -22,7 +22,7 @@ import  sys
 import  os
 import  serial
 import  time
-import  subprocess
+from    multiprocessing        import Process
 from    os.path                import expanduser
 
 # PD3D Modules
@@ -165,6 +165,47 @@ simStopTime = timers[0] # currently just using the initial timer
 dataStream = []
 print fullStamp() + " Starting Simulation Loop, time = %.03f seconds" %simStopTime
 
+
+# print fullStamp() + " Starting SubProcess"
+# subP = subprocess.Popen(['python','exeOne.py'])
+def fetchData():
+    try:
+        while simCurrentTime < simStopTime:
+            
+            # Handles
+            """
+            dataStream.append(["%.02f" %simCurrentTime,
+                               sh0.readline()[:-1],
+                               sh1.readline()[:-1],
+                               hld.readline()[:-1]])
+            """
+            simCurrentTime = time.time() - simStartTime
+            print fullStamp() + " Current Simulation Time = %.03f" %simCurrentTime
+            # simLoopCounter = simLoopCounter + 1;
+
+            # End of Simulation Loop
+            
+    except Exception as instance:
+        print fullStamp() + " Exception or Error Caught"
+        print fullStamp() + " Error Type " + str(type(instance))
+        print fullStamp() + " Error Arguments " + str(instance.args)
+        print fullStamp() + " Closing Open Ports"
+
+        """
+        time.sleep(1)
+        if sh0.isOpen() == True:
+            sh0.close()
+
+        time.sleep(1)
+        if sh1.isOpen() == True:
+            sh1.close()
+
+        time.sleep(1)
+        if hld.isOpen == True:
+            hld.close()
+        """                 
+# print dataStream
+
 ###
 # timerApp(timer1, timer2, timer3, direction)
 # timer = time in SECONDS
@@ -172,46 +213,12 @@ print fullStamp() + " Starting Simulation Loop, time = %.03f seconds" %simStopTi
 # direction = "down" to start from timer's upper bound downwards
 ###
 
-timerApp(0, timers[0], 0, "down")
-#print fullStamp() + " Starting SubProcess"
-#subP = subprocess.Popen(['python','exeOne.py'])
+p1 = Process(target=timerApp(30, timers[0], 30, "down"))
+p1.start()
+p2 = Process(target=fetchData())
+p2.start()
+p1.join()
 
-try:
-    while simCurrentTime < simStopTime:
-        
-        # Handles
-        """
-        dataStream.append(["%.02f" %simCurrentTime,
-                           sh0.readline()[:-1],
-                           sh1.readline()[:-1],
-                           hld.readline()[:-1]])
-        """
-        simCurrentTime = time.time() - simStartTime
-        print fullStamp() + " Current Simulation Time = %.03f" %simCurrentTime
-        # simLoopCounter = simLoopCounter + 1;
-
-        # End of Simulation Loop
-        
-except Exception as instance:
-    print fullStamp() + " Exception or Error Caught"
-    print fullStamp() + " Error Type " + str(type(instance))
-    print fullStamp() + " Error Arguments " + str(instance.args)
-    print fullStamp() + " Closing Open Ports"
-
-    """
-    time.sleep(1)
-    if sh0.isOpen() == True:
-        sh0.close()
-
-    time.sleep(1)
-    if sh1.isOpen() == True:
-        sh1.close()
-
-    time.sleep(1)
-    if hld.isOpen == True:
-        hld.close()
-    """                 
-# print dataStream
 """
 time.sleep(0.25)
 if sh0.isOpen() == True:
