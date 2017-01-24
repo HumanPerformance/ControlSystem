@@ -217,7 +217,6 @@ p1 = Process(target=timerApp(30, timers[0], 30, "down"))
 p1.start()
 p2 = Process(target=fetchData())
 p2.start()
-p1.join()
 
 """
 time.sleep(0.25)
