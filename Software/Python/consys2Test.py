@@ -214,9 +214,9 @@ def fetchData():
 # direction = "down" to start from timer's upper bound downwards
 ###
 
-p1 = Process(target=fetchData())
+p1 = Process( target=timerApp, args=(5, timers[0], 5, "down",) )
 p1.start()
-p2 = Process(target=timerApp(5, timers[0], 5, "down"))
+p2 = Process( target=fetchData, )
 p2.start()
 
 """

@@ -38,11 +38,7 @@ class StopWatch(Frame):
             
         self._setTime(self._elapsedtime)
         self._timer = self.after(50, self._update)
-        return self._elapsedtime
-    '''
-    def elapsedTime(self):
-        return self._elapsedtime = time.time() - self._start
-    '''    
+
     def _setTime(self, elap):
         """ Set the time string to Minutes:Seconds:Hundreths """
         minutes = int(elap/60)
