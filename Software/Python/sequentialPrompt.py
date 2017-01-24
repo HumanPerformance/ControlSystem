@@ -16,7 +16,7 @@ import threading
 import StopWatchModule
 
 def phaseOne(t1):
-    print fullStamp() + " Phase 1 Passed"
+    #print fullStamp() + " Phase 1 Passed"
     if mode is 'countDown':
         sw.Reset(t1)
         sw.countDown(t1)
@@ -26,7 +26,7 @@ def phaseOne(t1):
     return
 
 def phaseTwo(t2):
-    print fullStamp() + " Phase 2 Passed"
+    #print fullStamp() + " Phase 2 Passed"
     if mode is 'countDown':
         sw.Reset(t2)
         sw.countDown(t2)
@@ -36,7 +36,7 @@ def phaseTwo(t2):
     return
 
 def phaseThree():
-    print fullStamp() + " Phase 3 Passed"
+    #print fullStamp() + " Phase 3 Passed"
     if mode is 'countDown':
         pass
     elif mode is 'stopWatch':

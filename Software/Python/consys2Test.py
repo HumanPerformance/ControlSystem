@@ -109,7 +109,7 @@ deviceIndex, deviceTypes, deviceNames, deviceAddresses = instrumentCrossReferenc
 # ----------------------------------------------
 
 print fullStamp() + " Start Configuration"
-"""
+
 # Creating Serial Port for Devices
 time.sleep(1)
 print fullStamp() + " Creating port for SH0"
@@ -119,10 +119,11 @@ time.sleep(1)
 print fullStamp() + " Creating port for SH1"
 sh1 = createPortS(deviceTypes[1],1,deviceAddresses[1],115200,5)
 
-
+"""
 time.sleep(1)
 print fullStamp() + " Connecting Smart Holder"
 hld = createUSBPort(deviceTypes[2],1,115200,5)
+"""
 
 # Triggering Smart Handle Devices
 time.sleep(1)
@@ -133,9 +134,11 @@ time.sleep(1)
 print fullStamp() + " Triggering SH1"
 triggerDevice2(sh1,"SH")
 
+"""
 time.sleep(1)
 print fullStamp() + " Triggering Smart Holder"
 triggerDevice(hld,deviceTypes[2])
+"""
 
 # Openning Ports
 time.sleep(1)
@@ -148,23 +151,27 @@ print fullStamp() + " Openning Serial Port to SH1"
 if sh1.isOpen() == False:
     sh1.open()
 
+"""
 time.sleep(1)
 print fullStamp() + " Opening Serial Port to Smart Holder"
 if hld.isOpen() == False:
     hld.open()
 """
+
 # ----------------------------------------------
 # Simulation / Configuration Loop
 #   In this loop, connected devices will be accessed for data collection
 # ----------------------------------------------
 
-def fetchData(simDuration):
+time.sleep(5)
+
+global dataStream
+dataStream = []
+def fetchData(simDuration, dataStream):
 
     simStartTime = time.time()
     simCurrentTime = 0
     simStopTime = simDuration
-    # simLoopCounter = 0
-    dataStream = []
     print fullStamp() + " Starting Simulation Loop, time = %.03f seconds" %simStopTime
 
 
@@ -175,16 +182,15 @@ def fetchData(simDuration):
         while simCurrentTime < simStopTime:
             
             # Handles
-            """
+            
             dataStream.append(["%.02f" %simCurrentTime,
                                sh0.readline()[:-1],
-                               sh1.readline()[:-1],
-                               hld.readline()[:-1]])
-            """
+                               sh1.readline()[:-1]])
+                               #hld.readline()[:-1]])
+            
             simCurrentTime = time.time() - simStartTime
             print fullStamp() + " Current Simulation Time = %.03f" %simCurrentTime
-            # simLoopCounter = simLoopCounter + 1;
-
+ 
             # End of Simulation Loop
             
     except Exception as instance:
@@ -193,7 +199,7 @@ def fetchData(simDuration):
         print fullStamp() + " Error Arguments " + str(instance.args)
         print fullStamp() + " Closing Open Ports"
 
-        """
+        
         time.sleep(1)
         if sh0.isOpen() == True:
             sh0.close()
@@ -202,12 +208,12 @@ def fetchData(simDuration):
         if sh1.isOpen() == True:
             sh1.close()
 
+        """
         time.sleep(1)
         if hld.isOpen == True:
             hld.close()
-        """                 
-# print dataStream
-
+        """
+    return dataStream
 
 ###
 # timerApp(timer1, timer2, timer3, direction)
@@ -220,12 +226,20 @@ timer1 = 5
 timer2 = timers[0]
 timer3 = 5
 simStopTime = (timer1 + timer2 + timer3)
-p1 = Process( target=timerApp, args=(timer1, timer2 , timer3, "down",) )
-p1.start()
-p2 = Process( target=fetchData, args=(simStopTime,) )
-p2.start()
+process_1 = Process( target=timerApp, args=(timer1, timer2 , timer3, "down",) )
+process_1.start()
+process_2 = Process( target=fetchData, args=(simStopTime,dataStream,) )
+process_2.start()
+process_2.join()
 
-"""
+print len(dataStream)
+print dataStream[0]
+print dataStream[10]
+print dataStream[len(dataStream)-10]
+
+print fullStamp() + " Data Collection Terminated"
+print fullStamp() + " Ending Communication with Devices"
+
 time.sleep(0.25)
 if sh0.isOpen() == True:
     sh0.close()
@@ -234,19 +248,25 @@ time.sleep(0.25)
 if sh1.isOpen() == True:
     sh1.close()
 
+print "ports closed"
+"""
 time.sleep(0.25)
 if hld.isOpen == True:
     hld.close()
-                          
+"""
+
 time.sleep(0.25)
 stopDevice2(sh0,deviceTypes[0])
 
 time.sleep(0.25)
 stopDevice2(sh1,deviceTypes[1])
 
+"""
 time.sleep(0.25)                                          
 stopDevice(hld,deviceTypes[2])
+"""
 
+"""
 # ----------------------------------------------
 # Data Storage
 # ----------------------------------------------
