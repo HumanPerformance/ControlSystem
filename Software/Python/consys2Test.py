@@ -157,18 +157,19 @@ if hld.isOpen() == False:
 # Simulation / Configuration Loop
 #   In this loop, connected devices will be accessed for data collection
 # ----------------------------------------------
-time.sleep(5) # Adding this wait actually improved the number of values read?!?!? - use the first timer
-simStartTime = time.time()
-simCurrentTime = 0
-simStopTime = timers[0] # currently just using the initial timer
-# simLoopCounter = 0
-dataStream = []
-print fullStamp() + " Starting Simulation Loop, time = %.03f seconds" %simStopTime
-
-
-# print fullStamp() + " Starting SubProcess"
-# subP = subprocess.Popen(['python','exeOne.py'])
 def fetchData():
+    time.sleep(5) # Adding this wait actually improved the number of values read?!?!? - use the first timer
+    simStartTime = time.time()
+    simCurrentTime = 0
+    simStopTime = timers[0] # currently just using the initial timer
+    # simLoopCounter = 0
+    dataStream = []
+    print fullStamp() + " Starting Simulation Loop, time = %.03f seconds" %simStopTime
+
+
+    # print fullStamp() + " Starting SubProcess"
+    # subP = subprocess.Popen(['python','exeOne.py'])
+
     try:
         while simCurrentTime < simStopTime:
             
@@ -213,9 +214,9 @@ def fetchData():
 # direction = "down" to start from timer's upper bound downwards
 ###
 
-p1 = Process(target=timerApp(30, timers[0], 30, "down"))
+p1 = Process(target=fetchData())
 p1.start()
-p2 = Process(target=fetchData())
+p2 = Process(target=timerApp(5, timers[0], 5, "down"))
 p2.start()
 
 """
