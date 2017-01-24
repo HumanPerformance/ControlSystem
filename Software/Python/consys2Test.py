@@ -157,11 +157,11 @@ if hld.isOpen() == False:
 # Simulation / Configuration Loop
 #   In this loop, connected devices will be accessed for data collection
 # ----------------------------------------------
-def fetchData():
-    time.sleep(5) # Adding this wait actually improved the number of values read?!?!? - use the first timer
+def fetchData(simDuration):
+
     simStartTime = time.time()
     simCurrentTime = 0
-    simStopTime = timers[0] # currently just using the initial timer
+    simStopTime = simDuration
     # simLoopCounter = 0
     dataStream = []
     print fullStamp() + " Starting Simulation Loop, time = %.03f seconds" %simStopTime
@@ -213,10 +213,13 @@ def fetchData():
 # direction = "up" to start counting from 0 upwards
 # direction = "down" to start from timer's upper bound downwards
 ###
-
-p1 = Process( target=timerApp, args=(5, timers[0], 5, "down",) )
+timer1 = 5
+timer2 = timers[0]
+timer3 = 5
+simStopTime = (timer1 + timer2 + timer3)
+p1 = Process( target=timerApp, args=(timer1, timer2 , timer3, "down",) )
 p1.start()
-p2 = Process( target=fetchData )
+p2 = Process( target=fetchData, args=(simStopTime,) )
 p2.start()
 
 """
