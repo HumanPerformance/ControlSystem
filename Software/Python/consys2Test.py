@@ -157,6 +157,7 @@ if hld.isOpen() == False:
 # Simulation / Configuration Loop
 #   In this loop, connected devices will be accessed for data collection
 # ----------------------------------------------
+
 def fetchData(simDuration):
 
     simStartTime = time.time()
@@ -207,12 +208,14 @@ def fetchData(simDuration):
         """                 
 # print dataStream
 
+
 ###
 # timerApp(timer1, timer2, timer3, direction)
 # timer = time in SECONDS
 # direction = "up" to start counting from 0 upwards
 # direction = "down" to start from timer's upper bound downwards
 ###
+
 timer1 = 5
 timer2 = timers[0]
 timer3 = 5

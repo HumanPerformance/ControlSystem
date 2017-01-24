@@ -1,0 +1,35 @@
+#
+# Set-Up Raspberry Pi
+#
+# The following guide should be used to set-up the raspberry pi to the most stable version for our scripts
+#
+# Fluvio L Lobo Fenoglietto
+# 01/19/2017
+#
+
+# 01 - Get the stable version of Raspbian to use (contact administrator)
+# Note that, as of 01/19/2017, the image of raspbian we use is "Jessie 2016-09-23"
+
+# 02 - Install raspbian image on SD card
+# Use Win32 Disk Imager - preferred program
+
+# 03 - Boot Raspberry Pi!
+
+# 04 - Create lab directories
+> sudo mkdir pd3d
+> sudo mkdir pd3d/repos
+> sudo mkdir pd3d/csec
+> sudo mkdir pd3d/csec/repos
+
+# Move to the "csec/repos" directory and clone the following repositories;
+> cd pd3d/csec/repos
+> sudo git clone https://github.com/pd3d/ControlSystem
+
+
+things to install...
+...py-bluez
+...zip
+...vlc
+
+# 05 - Install the following libraries;
+> sudo apt-get py-bluetooth

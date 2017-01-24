@@ -1,6 +1,16 @@
 # Control System
 The Control System (CS) module of our Smart Instrument Panel (SIP) consists of a micro-computer/controller equipped with WiFi and Bluetooth antennas, and Ethernet and USB ports for the <b> relay and collection of data </b> to/from the Control Room (CR) and other Smart Devices (SDs) integrated to the SIP.
 
+## Within our Family of Devices
+Device hierarchy has been defined by control and represented below through indentations. For instance, the CS has control over the Smart Stethoscope (SS).
+> Smart Instrument Panel (SIP)
+>> <b> Control System (CS) </b> 
+>>> Smart Stethoscope (SS) <br />
+>>> Smart Thermometer (ST) <br />
+>>> Smart Oximeter (SO) <br />
+>>> Smart Scope Panel (SSP)
+>>>> Smart Handle (SH)
+
 ## Functionality
 The CS;
 > + Receives direct commands from the CR <br />

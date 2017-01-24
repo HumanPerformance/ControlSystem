@@ -26,12 +26,11 @@ from    os.path                import expanduser
 
 # PD3D Modules
 from    timeStamp              import fullStamp
+from    sequentialPrompt       import timerApp
 from    configurationProtocol  import *
 from    bluetoothProtocol      import *
 from    usbProtocol            import *
 from    smarthandleProtocol    import *
-from    smartHolderProtocol    import *
-
 
 # ==============================================
 # Variables
@@ -120,7 +119,7 @@ sh1 = createPortS(deviceTypes[1],1,deviceAddresses[1],115200,5)
 
 time.sleep(1)
 print fullStamp() + " Connecting Smart Holder"
-rfObject = createPort(0, 250000, None)
+hld = createUSBPort(deviceTypes[2],1,115200,5)
 
 # Triggering Smart Handle Devices
 time.sleep(1)
@@ -133,7 +132,7 @@ triggerDevice2(sh1,"SH")
 
 time.sleep(1)
 print fullStamp() + " Triggering Smart Holder"
-triggerDevice(rfObject,deviceTypes[2])
+triggerDevice(hld,deviceTypes[2])
 
 # Openning Ports
 time.sleep(1)
@@ -148,30 +147,31 @@ if sh1.isOpen() == False:
 
 time.sleep(1)
 print fullStamp() + " Opening Serial Port to Smart Holder"
-if rfObject.isOpen() == False:
-    rfObject.open()
+if hld.isOpen() == False:
+    hld.open()
 
 # ----------------------------------------------
 # Simulation / Configuration Loop
 #   In this loop, connected devices will be accessed for data collection
 # ----------------------------------------------
 
+time.sleep(5) # Adding this wait actually improved the number of values read?!?!? - use the first timer
 simStartTime = time.time()
 simCurrentTime = 0
-simStopTime = 30
+simStopTime = timers[0] # currently just using the initial timer
 # simLoopCounter = 0
 dataStream = []
 print fullStamp() + " Starting Simulation Loop, time = %.03f seconds" %simStopTime
 
+
 try:
     while simCurrentTime < simStopTime:
-
         # Handles
         dataStream.append(["%.02f" %simCurrentTime,
                            sh0.readline()[:-1],
                            sh1.readline()[:-1],
-                           rfObject.readline()[:-1]])
-
+                           hld.readline()[:-1]])
+        
         simCurrentTime = time.time() - simStartTime
         print fullStamp() + " Current Simulation Time = %.03f" %simCurrentTime
         # simLoopCounter = simLoopCounter + 1;
@@ -193,8 +193,8 @@ except Exception as instance:
         sh1.close()
 
     time.sleep(1)
-    if rfObject.isOpen == True:
-        rfObject.close()
+    if hld.isOpen == True:
+        hld.close()
 
 # print dataStream
 
@@ -207,16 +207,56 @@ if sh1.isOpen() == True:
     sh1.close()
 
 time.sleep(0.25)
-if rfObject.isOpen == True:
-    rfObject.close()
-
+if hld.isOpen == True:
+    hld.close()
+                          
 time.sleep(0.25)
 stopDevice2(sh0,deviceTypes[0])
 
 time.sleep(0.25)
 stopDevice2(sh1,deviceTypes[1])
 
-time.sleep(0.25)                                          
-stopDevice(rfObject,deviceTypes[2])
+time.sleep(0.25)
+stopDevice(hld,deviceTypes[2])
+
+# ----------------------------------------------
+# Data Storage
+# ----------------------------------------------
+
+# Print data on device-specific text files
+Ndevices = len(deviceNames)
+Nlines = len(dataStream)
+
+dataFileDir = outputDir + "/" + executionTimeStamp
+
+if os.path.exists(dataFileDir) == False:
+    os.makedirs(dataFileDir)
+
+for i in range(0,Ndevices):
+    
+    dataFileName = "/" + deviceNames[i] + ".txt"
+    dataFilePath = dataFileDir + dataFileName
+    
+    if os.path.isfile(dataFilePath) == False:
+        
+        with open(dataFilePath, "a") as dataFile:
+            dataFile.write("===================== \n")
+            dataFile.write("Scenario = " + str(scenarioNumber) + "\n")
+            dataFile.write("Instrument = " + deviceNames[0] + "\n")
+            dataFile.write("This is a header line \n")
+            dataFile.write("===================== \n")
+    
+    for j in range(0,Nlines):
+
+        with open(dataFilePath, "a") as dataFile:
+            dataFile.write(dataStream[j][0] + "," + dataStream[j][i+1] + "\n")
+
+
+# zip output folder for data delivery
+
+# find data directory
+# command "sudo zip -r output.zip output"
+#os.system("sudo zip -r " + dataDir + "/" + "output.zip output")
+os.system("cd " + dataDir + "; sudo zip -r " + panelID + ".zip output")
 
 

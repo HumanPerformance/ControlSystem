@@ -1,0 +1,67 @@
+#
+# Video Recording
+#
+# The following guide has been written to guide the user in the process of
+
+
+# Open the apt-sources configuration file
+> sudo nano /etc/apt/sources.list
+
+# Add the following lines
+> deb http://www.deb-multimedia.org jessie main non-free
+> deb-src http://www.deb-multimedia.org jessie main non-free
+
+# Update
+> sudo apt-get update
+
+# If the error...
+> E: The method driver /usr/lib/apt/methods/https could not be found
+> N: Is the package apt-transport-https installed?
+# ...appears;
+# Install the package;
+> sudo apt-get install apt-transport-https
+# Then try...
+> sudo apt-get update
+# ...again
+
+
+# Allow apt to trust deb-multimedia's key, by typing;
+> sudo apt-get install deb-multimedia-keyring
+
+# Refresh the apt package database;
+> sduo apt-get update
+
+# Install the following libraries
+> sudo apt-get install build-essential libmp3lame-dev libvorbis-dev libtheora-dev libspeex-dev yasm pkg-config libfaac-dev libopenjpeg-dev libx264-dev
+
+# Now, create a folder called "software", and move into that folder
+> sudo mkdir software
+> cd software
+
+# Download the latest version of "ffmpeg"
+> sudo wget https://ffmpeg.org/releases/ffmpeg-3.2.2.tar.bz2
+# Note that you can check the actual version by going to the ffmpeg site!
+
+
+#
+cd ..
+
+mkdir src
+
+cd src
+
+tar xvjf ../software/ffmpeg-2.7.2.tar.bz2
+#
+
+#
+cd ffmpeg-2.7.2
+#
+
+#
+./configure --enable-gpl --enable-postproc --enable-swscale --enable-avfilter --enable-libmp3lame --enable-libvorbis --enable-libtheora --enable-libx264 --enable-libspeex --enable-shared --enable-pthreads --enable-libopenjpeg --enable-libfaac --enable-nonfree
+
+make
+
+sudo make install
+#
+
