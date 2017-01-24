@@ -34,4 +34,34 @@
 # Install the following libraries
 > sudo apt-get install build-essential libmp3lame-dev libvorbis-dev libtheora-dev libspeex-dev yasm pkg-config libfaac-dev libopenjpeg-dev libx264-dev
 
+# Now, create a folder called "software", and move into that folder
+> sudo mkdir software
+> cd software
+
+# Download the latest version of "ffmpeg"
+> sudo wget https://ffmpeg.org/releases/ffmpeg-3.2.2.tar.bz2
+# Note that you can check the actual version by going to the ffmpeg site!
+
+
+#
+cd ..
+
+mkdir src
+
+cd src
+
+tar xvjf ../software/ffmpeg-2.7.2.tar.bz2
+#
+
+#
+cd ffmpeg-2.7.2
+#
+
+#
+./configure --enable-gpl --enable-postproc --enable-swscale --enable-avfilter --enable-libmp3lame --enable-libvorbis --enable-libtheora --enable-libx264 --enable-libspeex --enable-shared --enable-pthreads --enable-libopenjpeg --enable-libfaac --enable-nonfree
+
+make
+
+sudo make install
+#
 
