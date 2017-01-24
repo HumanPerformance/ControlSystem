@@ -216,7 +216,7 @@ def fetchData():
 
 p1 = Process( target=timerApp, args=(5, timers[0], 5, "down",) )
 p1.start()
-p2 = Process( target=fetchData, )
+p2 = Process( target=fetchData )
 p2.start()
 
 """
