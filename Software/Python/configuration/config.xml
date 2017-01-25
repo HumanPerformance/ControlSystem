@@ -90,6 +90,20 @@
 	</panels>
 	<scenarios>
 		<scenario id="SCN000"	number="0"	title="baseline">
+			<narrative>
+				This scenario has been developed to test smart handle connectivity
+			</narrative>
+			<parameters>
+				<parameter id="PARAM000" type="timer" name="t0">30</parameter>
+				<parameter id="PARAM001" type="timer" name="t" >300</parameter>
+				<parameter id="PARAM002" type="timer" name="tp">30</parameter>
+			</parameters>
+			<devices>
+				<device	id="DEV000"	type="SH"	name="ophthalmoscope">
+				</device>
+				<device id="DEV001" type="SH" 	name="otoscope">
+				</device>
+			</devices>
 		</scenario>
 		<scenario id="SCN001" 	number="1" 	title="handles_only">
 			<narrative>
