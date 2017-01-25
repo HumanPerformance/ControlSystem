@@ -209,9 +209,11 @@ def fetchData(simDuration, dataQueue):
         if sh1.isOpen() == True:
             sh1.close()
 
+        """
         time.sleep(1)
         if hld.isOpen == True:
             hld.close()
+        """
         
     dataQueue.put(dataStream)
 
@@ -268,12 +270,8 @@ print fullStamp() + " Printing data..."
 
 Nstream = len(dataStream)
 print Nstream
-print dataStream[0]
-print dataStream[10]
-print dataStream[100]
-print dataStream[Nstream-100]
 
-"""
+
 # ----------------------------------------------
 # Data Storage
 # ----------------------------------------------
@@ -313,4 +311,4 @@ for i in range(0,Ndevices):
 # command "sudo zip -r output.zip output"
 #os.system("sudo zip -r " + dataDir + "/" + "output.zip output")
 os.system("cd " + dataDir + "; sudo zip -r " + panelID + ".zip output")
-"""
+

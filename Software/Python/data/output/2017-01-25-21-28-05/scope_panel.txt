@@ -1,0 +1,5 @@
+===================== 
+Scenario = 1
+Instrument = ophthalmoscope
+This is a header line 
+===================== 
