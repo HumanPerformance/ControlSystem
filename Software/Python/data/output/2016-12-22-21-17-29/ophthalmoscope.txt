@@ -1,6 +1,0 @@
-===================== 
-Scenario =  
-Instrument = ophthalmoscope
-This is a header line 
-===================== 
-TIM,0,116.28,PRO,255,

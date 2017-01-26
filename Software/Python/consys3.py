@@ -49,7 +49,7 @@ try:
     selectedScenario = int(sys.argv[1])
     print fullStamp() + " User Executed " + inputArg[0] + ", scenario #" + inputArg[1]
 except:
-    selectedScenario = 1
+    selectedScenario = 0
 
 # ----------------------------------------------
 # Panel self-dentification
@@ -293,11 +293,10 @@ for i in range(0,Ndevices):
     if os.path.isfile(dataFilePath) == False:
         
         with open(dataFilePath, "a") as dataFile:
-            dataFile.write("===================== \n")
-            dataFile.write("Scenario = " + str(scenarioNumber) + "\n")
-            dataFile.write("Instrument = " + deviceNames[0] + "\n")
-            dataFile.write("This is a header line \n")
-            dataFile.write("===================== \n")
+            dataFile.write("Execution Time Stamp," + executionTimeStamp + "\n")
+            dataFile.write("Scenario," + str(scenarioNumber) + "\n")
+            dataFile.write("Instrument," + deviceNames[0] + "\n")
+            dataFile.write("Data," + "\n")
     
     for j in range(0,Nlines):
 
