@@ -14,6 +14,13 @@ $ sudo apt-get install uv4l uv4l-raspicam uv4l-raspicam-extras uv4l-server uv4l-
 
 4) Wait for the packages to be installed. After that is over we need to enable secure HTTPS. To do so type the following in the terminal:
 $ sudo bash -c "openssl genrsa -out /etc/ssl/private/selfsign.key 2048 && openssl req -new -x509 -key /etc/ssl/private/selfsign.key -out /etc/ssl/private/selfsign.crt -sha256"
+	- Country Name: US
+	- State: FL
+	- Locality: Orlando
+	- Organization: IST
+	- Unit Name: PD3D
+	- Common Name: .
+	- Email: .
 
 5) After the certificates have been generated, modify the uv4l-uvc.conf and uv4l-raspicam.conf files to grab the certificates upon service start:
 
@@ -59,3 +66,5 @@ server-option = --www-ssl-certificate-file=/etc/ssl/private/selfsign.crt
  9) Use Firefox (recommended) or Chrome
  10) You might be warned that the website is not secure. Ignore (trust me!) and navigate to the website anyway.
  11) Choose the "Two-way Audio/Video" and scroll all the way down. Click "Call!" and enojy.
+
+ NOTE: In case the service is not loaded, simply unplug and re-plug the webcam for the service to load (it loads/unloads automatically)
