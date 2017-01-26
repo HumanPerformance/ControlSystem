@@ -61,10 +61,21 @@ server-option = --www-ssl-certificate-file=/etc/ssl/private/selfsign.crt
  		1 snd_usb_audio			<--- Output
  		2 snd_bcm2835			<--- Output
 
- 7) The uv4l service should launch at boot without the need for user intervention.
- 8) Navigate to https://rpiAddress:8090, where rpiAddress is the IP address of the RPi
- 9) Use Firefox (recommended) or Chrome
- 10) You might be warned that the website is not secure. Ignore (trust me!) and navigate to the website anyway.
- 11) Choose the "Two-way Audio/Video" and scroll all the way down. Click "Call!" and enojy.
+7) Last but not least, to finish configuring audio, edit or create "asound.conf":
+$ sudo nano /etc/asound.conf
 
- NOTE: In case the service is not loaded, simply unplug and re-plug the webcam for the service to load (it loads/unloads automatically)
+Then add/edit to mathc the following:
+
+pcm.!default {
+   type asym
+   playback.pcm "plug:hw:0"
+   capture.pcm "plug:dsnoop:0"
+}
+
+8) The uv4l service should launch at boot without the need for user intervention.
+9) Navigate to https://rpiAddress:8090, where rpiAddress is the IP address of the RPi
+10) Use Firefox (recommended) or Chrome
+11) You might be warned that the website is not secure. Ignore (trust me!) and navigate to the website anyway.
+12) Choose the "Two-way Audio/Video" and scroll all the way down. Click "Call!" and enojy.
+
+NOTE: In case the service is not loaded, simply unplug and re-plug the webcam for the service to load (it loads/unloads automatically)
