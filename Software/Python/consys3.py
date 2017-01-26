@@ -293,10 +293,10 @@ for i in range(0,Ndevices):
     if os.path.isfile(dataFilePath) == False:
         
         with open(dataFilePath, "a") as dataFile:
-            dataFile.write("Execution Time Stamp," + executionTimeStamp + "\n")
-            dataFile.write("Scenario," + str(scenarioNumber) + "\n")
-            dataFile.write("Instrument," + deviceNames[0] + "\n")
-            dataFile.write("Data," + "\n")
+            dataFile.write(executionTimeStamp + "\n")
+            dataFile.write(str(scenarioNumber) + "\n")
+            dataFile.write(deviceNames[0] + "\n")
+            dataFile.write("D" + "\n")
     
     for j in range(0,Nlines):
 
