@@ -27,9 +27,7 @@
 
 
 things to install...
-...py-bluez
 ...zip
-...vlc
 
 # 05 - Install the following libraries;
-> sudo apt-get py-bluetooth
+> sudo apt-get python-bluez

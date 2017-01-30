@@ -190,7 +190,8 @@ debugModeOFFButton.config(height=1,width=15)
                             
 # Find Smart Device Button
 searchDevicesButton = Button(text="Find PulseOximeter",
-                             command=lambda: connect2PulseOximeter("COM27","RNBT-76F6","00:06:66:86:76:F6", 115200, 5, 3))
+                             #command=lambda: connect2PulseOximeter("COM99","RNBT-76F6","00:06:66:86:76:F6", 115200, 5, 3))
+                             command=lambda: connect2PulseOximeter("COM101","RNBT-9830","00:06:66:7D:98:30", 115200, 5, 3))
 searchDevicesButton.place(x=310,y=365)
 searchDevicesButton.config(height=1,width=15)
 

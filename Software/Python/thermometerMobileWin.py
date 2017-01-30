@@ -185,9 +185,9 @@ debugModeOFFButton.config(height=1,width=15)
 
 # Find Smart Device Button
 searchDevicesButton = Button(text="Find Thermometer",
-                             #command=lambda: connect2Thermometer("COM29","SmartThermometer-76C5","00:06:66:86:76:C5", 115200, 5, 3))   #Device 1
+                             command=lambda: connect2Thermometer("COM95","SmartThermometer-76C5","00:06:66:86:76:C5", 115200, 5, 3))   #Device 1
                              #command=lambda: connect2Thermometer("COM22","SmartThermometer-7701","00:06:66:86:77:01", 115200, 5, 3))   #Device 2
-                             command=lambda: connect2Thermometer("COM34","SmartThermometer-D3F6","00:06:66:8C:D3:F6", 115200, 5, 3))   #Device 3
+                             #command=lambda: connect2Thermometer("COM34","SmartThermometer-D3F6","00:06:66:8C:D3:F6", 115200, 5, 3))   #Device 3
 searchDevicesButton.place(x=310,y=365)
 searchDevicesButton.config(height=1,width=15)
 
