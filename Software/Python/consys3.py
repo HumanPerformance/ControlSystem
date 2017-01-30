@@ -224,9 +224,9 @@ def fetchData(simDuration, dataQueue):
 # direction = "down" to start from timer's upper bound downwards
 ###
 
-timer1 = 5
-timer2 = 30 #timers[0]
-timer3 = 5
+timer1 = timers[0]
+timer2 = timers[1]
+timer3 = timers[2]
 simStopTime = (timer1 + timer2 + timer3)
 
 countdownProcess = Process( target=timerApp, args=(timer1, timer2 , timer3, "down",) )
