@@ -99,7 +99,7 @@
 				<parameter id="PARAM002" type="timer" name="tp">30</parameter>
 			</parameters>
 			<devices>
-				<device	id="DEV000"	type="SH"	name="ophthalmoscope">
+				<device id="DEV000" type="SH"	name="ophthalmoscope">
 				</device>
 				<device id="DEV001" type="SH" 	name="otoscope">
 				</device>
