@@ -225,7 +225,7 @@ def fetchData(simDuration, dataQueue):
 ###
 
 timer1 = 5
-timer2 = 10 #timers[0]
+timer2 = 30 #timers[0]
 timer3 = 5
 simStopTime = (timer1 + timer2 + timer3)
 
