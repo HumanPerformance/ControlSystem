@@ -42,7 +42,7 @@
 					An electronic stethoscope providing either augmented listening or unmodified heart sounds 
 				</description>
 			</device>
-			<device id="DEV002" type="SH"	name="opthalmoscope" 		mac_bt="00:06:66:83:89:5F"	mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="0"		status="available">
+			<device id="DEV002" type="SH"	name="ophthalmoscope" 		mac_bt="00:06:66:83:89:5F"	mac_eth="none"				mac_wlan="none"					ip_address="none"				port_num="0"		status="available">
 				<description>
 					No description
 				</description>
