@@ -1,0 +1,154 @@
+# Installation and implementation of BlueZ
+
+# HPH Knowledgebase
+
+# Fluvio L Lobo Fenoglietto
+# 02/04/2016
+
+
+# Updated for Raspberry Pi 3 - 06/07/2016
+
+
+
+
+# Background ::
+
+# Bluetooth is a wireless technology standard for exchanging data over short distances (using short-wavelength UHF radio waves in the ISM band from 2.4 to 2.485 GHz[4]) from fixed and mobile devices, and building personal area networks (PANs).
+
+# Bluetooth modules and/or antennas can be adapted to micro-controllers in order to communicate sensor data to a control system like the Raspberry Pi.
+# BlueZ is the original and official bluetooth protocol stack for Linux
+
+
+
+# Guide ::
+
+
+
+# 1.0- Always update and upgrade raspbian!
+
+
+
+> sudo apt-get update
+> sudo apt-get upgrade
+
+
+
+# 2.0- Install bluetooth libraries and manager
+
+
+
+> sudo apt-get install bluetooth bluez blueman
+
+
+
+# Although the Raspberry Pi 3 comes with a built-in bluetooth antenna, it does not come with bluetooth libraries.
+
+# Follow installation instructions if any...
+
+
+
+# 3.0- Reboot System
+
+
+
+> sudo reboot
+
+
+
+# 4.0- Run the scan tool to find devices in range
+
+
+
+> hcitool scan
+
+
+
+# A list of devices in range will be printed on the terminal.
+
+# Ensure that the target/desired device is listed! Otherwise, troubleshoot and repeat step 4.0...
+
+
+
+# 5.0- Pairing/Connecting Device
+
+> sudo bluetoothctl
+
+
+# This command will print information about the raspberry pi antenna, followed by the line "[bluetooth]#".
+
+# On this new line, type the following...
+
+
+
+>[bluetooth]# agent on
+
+>[bluetooth]# default-agent
+
+
+
+# For devices that need PIN codes for pairing, the user also needs to use the scanning tool built into bluetoothctl...
+
+
+
+>[bluetooth]# scan on
+
+
+
+# Note that this list will continue to be populated until the scanning is set to off, which will be done after pairing is completed...
+
+# In order to pair...
+
+
+
+>[bluetooth]# pair XX:XX:XX:XX:XX:XX
+
+
+
+# Where XXs are replaced with the device specific values...
+
+# This will be followed by the messages...
+
+
+
+> Attempting to pair with XX:XX:XX:XX:XX:XX
+
+> Request PIN code
+> [agent] Enter PIN code: YYYY
+
+
+
+# Where Ys represent the digits of the PIN code to be entered by the user...
+
+# This will be followed by the message...
+
+
+
+> Pairing successful
+
+# Now the user can stop the scanning process...
+
+
+>[bluetooth]# scan off
+
+
+
+# 6.0- Setting device as trusted
+
+
+
+> [bluetooth]# trust XX:XX:XX:XX:XX:XX
+
+
+
+# 7.0- Verify paired/trusted devices
+
+
+
+> [bluetooth]# devices
+
+
+
+
+// Refernces ::
+
+> http://www.elinux.org/RPi_Bluetooth_LE
