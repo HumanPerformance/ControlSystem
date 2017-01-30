@@ -1,0 +1,102 @@
+Stream & Record Audio/Video:
+
+1) Using the terminal, type the following:
+$ curl http://www.linux-projects.org/listing/uv4l_repo/lrkey.asc | sudo apt-key add -
+
+2) Edit the sources list and add the folloing line as follows:
+$ sudo nano /etc/apt/sources.list
+$ deb http://www.linux-projects.org/listing/uv4l_repo/raspbian/ jessie main
+
+	- Save and exit
+
+*****
+
+3) Perform a packages update and upgrade then install the following packages:
+$ sudo apt-get update && sudo apt-get upgrade
+$ sudo apt-get install uv4l uv4l-raspicam uv4l-raspicam-extras uv4l-server uv4l-uvc uv4l-xscreen uv4l-mjpegstream uv4l-dummy uv4l-raspidisp uv4l-webrtc uv4l-xmpp-bridge
+
+*****
+
+4) Wait for the packages to be installed. After that is over we need to enable secure HTTPS. To do so type the following in the terminal:
+$ sudo bash -c "openssl genrsa -out /etc/ssl/private/selfsign.key 2048 && openssl req -new -x509 -key /etc/ssl/private/selfsign.key -out /etc/ssl/private/selfsign.crt -sha256"
+
+	- Country Name: US
+	- State: FL
+	- Locality: Orlando
+	- Organization: IST
+	- Unit Name: PD3D
+	- Common Name: .
+	- Email: .
+
+*****
+
+5) After the certificates have been generated, modify the uv4l-uvc.conf file to grab the certificates upon service start:
+
+$ sudo nano /etc/uv4l/uv4l-uvc.conf
+
+	- Uncomment the following lines and modify:
+
+	server-option = --use-ssl=yes
+	server-option = --ssl-private-key-file=/etc/ssl/private/selfsign.key
+	server-option = --ssl-certificate-file=/etc/ssl/private/selfsign.crt
+	server-option = --www-port=443
+	server-option = --www-use-ssl=yes
+	server-option = --www-ssl-private-key-file=/etc/ssl/private/selfsign.key
+	server-option = --www-ssl-certificate-file=/etc/ssl/private/selfsign.crt
+
+*****
+
+6) The system loads the default sound card at boot. To use the webcam drivers instead do the following procedure:
+	- Check to see what order the cards have been loaded in
+	$ cat /proc/asound/modules
+ 		0 snd_bcm2835			<--- Output
+ 		1 snd_usb_audio			<--- Output
+
+ 	- To reorder the the loading of the cards, create a file named alsa-base.conf
+ 	$ sudo nano /etc/modprobe.d/alsa-base.conf
+
+ 	- Add the following lines (everything between the triple quotes EXCLUDING the triple quotes):
+
+'''
+# This sets the index value of the cards but doesn't reorder.
+options snd_usb_audio index=0
+options snd_bcm2835 index=1
+
+# Does the reordering.
+options snd slots=snd_usb_audio,snd_bcm2835
+'''
+
+	- Reboot the device for the changes to take effect. After reboot is complete check again on the order that the cards have been loaded in. You should see the following:
+	$ cat /proc/asound/modules
+ 		1 snd_usb_audio			<--- Output
+ 		2 snd_bcm2835			<--- Output
+
+*****
+
+7) Last but not least, to finish configuring audio, edit or create "asound.conf":
+$ sudo nano /etc/asound.conf
+
+	- Add/edit to match the following:
+
+'''
+pcm.!default {
+   type asym
+   playback.pcm "plug:hw:0"
+   capture.pcm "plug:dsnoop:0"
+}
+'''
+
+*****
+
+9) Use Firefox (recommended) or Chrome to navigate to https://rpiAddress:8090, where rpiAddress is the IP address of the RPi
+
+*****
+
+11) You might be warned that the website is not secure. Ignore/create an exception (trust me!) and navigate to the website anyway.
+
+*****
+
+12) Choose the "Two-way Audio/Video" and scroll all the way down. Click "Call!"
+
+
+NOTE: The uv4l service should launch at boot without the need for user intervention. In case the service is not loaded, simply unplug and re-plug the webcam for the service to load (service loads/unloads automatically)
