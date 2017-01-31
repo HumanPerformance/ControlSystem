@@ -75,15 +75,25 @@ def sdCardCheck(rfObject):
 #       This function requests the status of then stethoscope
 #       Input   ::      rfObject                {object}        serial object
 #       Output  ::      terminal messages       {string}        terminal messages for logging
-def statusEnquiry(rfObject):
-        print fullStamp() + " statusEnquiry()"                                                                  # Print function name
+def statusEnquiry(rfObject,attempts):
+        print fullStamp() + " statusEnquiry()"                                                                 # Print function name
+        if rfObject.isOpen() == False:
+                rfObject.open()
         outByte = definitions.ENQ                                                                               # Send ENQ / Status Enquiry command - see protocolDefinitions.py
         rfObject.write(outByte)
         inByte = rfObject.read(size=1)                                                                          # Execute sendUntilRead() from bluetoothProtocol.py
         if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
                 print fullStamp() + " ACK Device READY"                                                         # ACK, in this case, translates to DEVICE READY
-        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " NAK Device NOT READY"   
+        elif inByte == definitions.NAK:
+                print fullStamp() + " NAK Device NOT READY"
+        else:
+                rfObject.close()
+                if attempts is not 0:
+                        return statusEnquiry(rfObject,attempts-1)
+                elif attempts is 0:
+                        print fullStamp() + " Attempts limit reached"
+                        print fullStamp() + " Please troubleshoot device"
+        rfObject.close()
 
 # Operational Functions
 #       These functions deal with the normal operation of the device

@@ -20,18 +20,7 @@ attempts = 5
 rfObject = createPort(deviceName,portNumber,deviceBTAddress,baudrate,attempts)
 
 time.sleep(2)
-if rfObject.isOpen() == False:
-    rfObject.open()
-startTrackingMicStream(rfObject)
-rfObject.close()
-
-time.sleep(30)
-
-time.sleep(2)
-if rfObject.isOpen() == False:
-    rfObject.open()
-stopTrackingMicStream(rfObject)
-rfObject.close()
+statusEnquiry(rfObject,attempts)
 
 portRelease('rfcomm', 0)
 
