@@ -22,5 +22,8 @@ rfObject = createPort(deviceName,portNumber,deviceBTAddress,baudrate,attempts)
 time.sleep(2)
 statusEnquiry(rfObject,attempts)
 
+time.sleep(2)
+sdCardCheck(rfObject,attempts)
+
 portRelease('rfcomm', 0)
 

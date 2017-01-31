@@ -57,19 +57,29 @@ def deviceID(rfObject):
 #       This function commands the connected stethoscope to perform a check on the connected sd card
 #       Input   ::      rfObject                {object}        serial object
 #       Output  ::      terminal messages       {string}        terminal messages for logging
-def sdCardCheck(rfObject):
-        print fullStamp() + " sdCardCheck()"                                                                    # Print function name
-        outBytes = [definitions.DC1, definitions.DC1_SDCHECK]                                                   # Store the sequence of bytes associated with the operation, function, feature
-        for i in range(0,len(outBytes)):                                                                        # For loop for the sequential delivery of bytes using the length of the sequence for the range
+def sdCardCheck(rfObject,attempts):
+        print fullStamp() + " sdCardCheck()"
+        if rfObject.isOpen() == False:
+                rfObject.open()
+        outBytes = [definitions.DC1, definitions.DC1_SDCHECK]
+        for i in range(0,len(outBytes)):
                 rfObject.write(outBytes[i])
-                if i == (len(outBytes) - 1):                                                                  # On the last byte, the program reads the response
-                        inByte = rfObject.read(size=1)                                                          # The read is limited to a single byte (timeout predefined in the createPort() function)
+                if i == (len(outBytes) - 1):
+                        inByte = rfObject.read(size=1)
         if inByte == definitions.ACK:
-                print fullStamp() + " ACK SD Card Check Passed"                                                 # If the SD card check is successful, the remote device sends a ACK
-                print fullStamp() + " ACK Device Ready"                                                         # ACK, in this case, translates to DEVICE READY
+                print fullStamp() + " ACK SD Card Check Passed"
+                print fullStamp() + " ACK Device Ready"
         elif inByte == definitions.NAK:
-                print fullStamp() + " NAK SD Card Check Failed"                                                 # If the SD card check fails, the remote device sends a NAK
-                print fullStamp() + " NAK Device NOT Ready"                                                    # NAK, in this case, translates to DEVICE NOT READY
+                print fullStamp() + " NAK SD Card Check Failed"
+                print fullStamp() + " NAK Device NOT Ready"
+        else:
+                rfObject.close()
+                if attempts is not 0:
+                        return sdCardCheck(rfObject,attempts-1)
+                elif attempts is 0:
+                        print fullStamp() + " Attempts limit reached"
+                        print fullStamp() + " Please troubleshoot device"
+        rfObject.close()
 
 # State Enquiry
 #       This function requests the status of then stethoscope
