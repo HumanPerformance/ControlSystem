@@ -15,7 +15,7 @@ import sys
 import serial
 from timeStamp import *
 from configurationProtocol import *
-from bluetoothProtocol import *
+from bluetoothProtocol_teensy32 import *
 import stethoscopeDefinitions as definitions
 
 # System Check
