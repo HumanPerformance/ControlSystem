@@ -117,33 +117,49 @@ def statusEnquiry(rfObject,attempts):
 #       The recorded audio is then stored in the local SD
 #       Input   ::      rfObject                {object}        serial object
 #       Output  ::      terminal messages       {string}        terminal messages for logging
-def startRecording(rfObject):
-        print fullStamp() + " startRecording()"                                                                 # ...
-        outBytes = [definitions.DC3, definitions.DC3_STARTREC]                                                  # ...
-        for i in range(0,len(outBytes)):                                                                        # ...
-                rfObject.write(outBytes[i])                                                                     # ...
-                if i == (len(outBytes) - 1):                                                                    # ...
-                        inByte = rfObject.read(size=1)                                                          # ...
-        if inByte == definitions.ACK:                                                                           # ...
-                print fullStamp() + " ACK Stethoscope will START RECORDING"                                     # ACK, in this case, translates to device START RECORDING
-        elif inByte == definitions.NAK:                                                                         # ...
-                print fullStamp() + " NAK Stethoscope CANNOT START RECORDING"                                   # NAK, in this case, translates to device CANNOT START RECORDING
-           
+def startRecording(rfObject,attempts):
+        print fullStamp() + " startRecording()"                                                                 # Print function name
+        if rfObject.isOpen() == False:
+                rfObject.open()
+        outByte = definitions.STARTREC                                                                              # Send ENQ / Status Enquiry command - see protocolDefinitions.py
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)                                                                          # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK Stethoscope will START RECORDING"                                                         # ACK, in this case, translates to DEVICE READY
+        elif inByte == definitions.NAK:
+                print fullStamp() + " NAK Stethoscope CANNOT START RECORDING"
+        else:
+                rfObject.close()
+                if attempts is not 0:
+                        return startRecording(rfObject,attempts-1)
+                elif attempts is 0:
+                        print fullStamp() + " Attempts limit reached"
+                        print fullStamp() + " Please troubleshoot device"
+        rfObject.close()
+
 # Stop Recording
 #       This function commands the connected stethoscope to stop recording audio
 #       Input   ::      rfObject                {object}        serial object
 #       Output  ::      terminal messages       {string}        terminal messages for logging
-def stopRecording(rfObject):
-        print fullStamp() + " stopRecording()"                                                                  # ...
-        outBytes = [definitions.DC3, definitions.DC3_STOPREC]                                                   # ...
-        for i in range(0,len(outBytes)):                                                                        # ...
-                rfObject.write(outBytes[i])                                                                     # ...
-                if i == (len(outBytes) - 1):                                                                    # ...
-                        inByte = rfObject.read(size=1)                                                          # ...
-        if inByte == definitions.ACK:                                                                           # ...
-                print fullStamp() + " ACK Stethoscope will STOP RECORDING"                                      # If ACK, the stethoscope will STOP recording
-        elif inByte == definitions.NAK:                                                                         # ...
-                print fullStamp() + " NAK Stethoscope CANNOT STOP RECORDING"                                    # NAK, in this case, translates to CANNOT STOP RECORDING
+def stopRecording(rfObject,attempts):
+        print fullStamp() + " stopRecording()"                                                                 # Print function name
+        if rfObject.isOpen() == False:
+                rfObject.open()
+        outByte = definitions.STOPREC                                                                              # Send ENQ / Status Enquiry command - see protocolDefinitions.py
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)                                                                          # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK Stethoscope will STOP RECORDING"                                                         # ACK, in this case, translates to DEVICE READY
+        elif inByte == definitions.NAK:
+                print fullStamp() + " NAK Stethoscope CANNOT STOP RECORDING"
+        else:
+                rfObject.close()
+                if attempts is not 0:
+                        return stopRecording(rfObject,attempts-1)
+                elif attempts is 0:
+                        print fullStamp() + " Attempts limit reached"
+                        print fullStamp() + " Please troubleshoot device"
+        rfObject.close()
 
 # Start Playback
 #       This function commands the connected stethoscope to play an audio filed stored within the SD card
