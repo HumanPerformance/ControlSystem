@@ -161,42 +161,6 @@ def stopRecording(rfObject,attempts):
                         print fullStamp() + " Please troubleshoot device"
         rfObject.close()
 
-# Start Playback
-#       This function commands the connected stethoscope to play an audio filed stored within the SD card
-#       Input   ::      rfObject                {object}        serial object
-#                       timeout                 {int}           maximum wait time for serial communication
-#                       iterCheck               {int}           maximum number of iterations for serial communication
-#       Output  ::      terminal messages       {string}        terminal messages for logging
-def startPlayback(rfObject):
-        print fullStamp() + " startPlayback()"                                                                  # ...
-        outBytes = [definitions.DC3, definitions.DC3_STARTPLAY]                                                 # ...
-        for i in range(0,len(outBytes)):                                                                        # ...
-                rfObject.write(outBytes[i])                                                                     # ...
-                if i == (len(outBytes) - 1):                                                                    # ...
-                        inByte = rfObject.read(size=1)                                                          # ...
-        if inByte == definitions.ACK:                                                                           # ...
-                print fullStamp() + " ACK Stethoscope will START PLAYBACK"                                      # If ACK, the stethoscope will START PLAYBACK
-        elif inByte == definitions.NAK:                                                                         # ...
-                print fullStamp() + " NAK Stethoscope CANNOT START PLAYBACK"                                    # NAK, in this case, translates to CANNOT START PLAYBACK
-
-# Stop Playback
-#       This function commands the connected stethoscope to stop playing an audio filed stored within the SD card
-#       Input   ::      rfObject                {object}        serial object
-#                       timeout                 {int}           maximum wait time for serial communication
-#                       iterCheck               {int}           maximum number of iterations for serial communication
-#       Output  ::      terminal messages       {string}        terminal messages for logging
-def stopPlayback(rfObject):
-        print fullStamp() + " stopPlayback()"                                                                   # ...
-        outBytes = [definitions.DC3, definitions.DC3_STOPPLAY]                                                  # ...
-        for i in range(0,len(outBytes)):                                                                        # ...
-                rfObject.write(outBytes[i])                                                                     # ...
-                if i == (len(outBytes) - 1):                                                                    # ...
-                        inByte = rfObject.read(size=1)                                                          # ...
-        if inByte == definitions.ACK:                                                                           # ...
-                print fullStamp() + " ACK Stethoscope will STOP PLAYBACK"                                       # If ACK, the stethoscope will STOP PLAYBACK
-        elif inByte == definitions.NAK:                                                                         # ...
-                print fullStamp() + " NAK Stethoscope CANNOT STOP PLAYBACK"                                     # NAK, in this case, translates to CANNOT STOP PLAYBACK
-
 # Start Microphone Streaming
 #       This function commands the connected stethoscope to begin streaming audio from the microphone to the connected speakers
 #       Input   ::      rfObject                {object}        serial object
@@ -269,29 +233,70 @@ def stopTrackingMicStream(rfObject,attempts):
 
 # Normal Hear Beat Playback
 #       This function triggers the playback of a normal heart beat
-def normalHBPlayback(rfObject):
-        print fullStamp() + " normalHBPlayback()"                                                               # ...
-        outBytes = [definitions.DC4, definitions.DC4_NORMALHB]                                                  # ...
-        for i in range(0,len(outBytes)):                                                                        # ...
-                rfObject.write(outBytes[i])                                                                     # ...
-                if i == (len(outBytes) - 1):                                                                    # ...
-                        inByte = rfObject.read(size=1)                                                          # ...
-        if inByte == definitions.ACK:                                                                           # ...
-                print fullStamp() + " ACK Stethoscope will START PLAYBACK of NORMAL HEARTBEAT"                  # If ACK, the stethoscope will START PLAYBACK
-        elif inByte == definitions.NAK:                                                                         # ...
-                print fullStamp() + " NAK Stethoscope CANNOT START PLAYBACK of NORMAL HEARTBEAT"                # NAK, in this case, translates to CANNOT START PLAYBACK
+def normalHBPlayback(rfObject, attempts):
+        print fullStamp() + " normalHBPlayback()"                                                                 # Print function name
+        if rfObject.isOpen() == False:
+                rfObject.open()
+        outByte = definitions.NORMALHB                                                                              # Send ENQ / Status Enquiry command - see protocolDefinitions.py
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)                                                                          # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK Stethoscope will START PLAYBACK of NORMAL HEARTBEAT"                                                        # ACK, in this case, translates to DEVICE READY
+        elif inByte == definitions.NAK:
+                print fullStamp() + " NAK Stethoscope CANNOT START PLAYBACK of NORMAL HEARTBEAT"
+        else:
+                rfObject.close()
+                if attempts is not 0:
+                        return normalHBPlayback(rfObject,attempts-1)
+                elif attempts is 0:
+                        print fullStamp() + " Attempts limit reached"
+                        print fullStamp() + " Please troubleshoot device"
+        rfObject.close()
 
 # Early Systolic Heart Murmur
 #       This function triggers the playback of an early systolic heart mumur
-def earlyHMPlayback(rfObject):
-        print fullStamp() + " earlyHMPlayback()"                                                                # ...
-        outBytes = [definitions.DC4, definitions.DC4_ESHMURMUR]                                                 # ...
-        for i in range(0,len(outBytes)):                                                                        # ...
-                rfObject.write(outBytes[i])                                                                     # ...
-                if i == (len(outBytes) - 1):                                                                    # ...
-                        inByte = rfObject.read(size=1)                                                          # ...
-        if inByte == definitions.ACK:                                                                           # ...
-                print fullStamp() + " ACK Stethoscope will START PLAYBACK of EARLY SYSTOLIC HEART MUMUR"        # If ACK, the stethoscope will START PLAYBACK
-        elif inByte == definitions.NAK:                                                                         # ...
-                print fullStamp() + " NAK Stethoscope CANNOT START PLAYBACK of EARLY SYSTOLIC HEART MUMUR"      # NAK, in this case, translates to CANNOT START PLAYBACK
+def earlyHMPlayback(rfObject, attempts):
+        print fullStamp() + " earlyHMPlayback()"                                                                # Print function name
+        if rfObject.isOpen() == False:
+                rfObject.open()
+        outByte = definitions.ESHMURMUR                                                                              # Send ENQ / Status Enquiry command - see protocolDefinitions.py
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)                                                                          # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK Stethoscope will START PLAYBACK of EARLY SYSTOLIC HEART MUMUR"                                                        # ACK, in this case, translates to DEVICE READY
+        elif inByte == definitions.NAK:
+                print fullStamp() + " NAK Stethoscope CANNOT START PLAYBACK of EARLY SYSTOLIC HEART MUMUR" 
+        else:
+                rfObject.close()
+                if attempts is not 0:
+                        return earlyHMPlayback(rfObject,attempts-1)
+                elif attempts is 0:
+                        print fullStamp() + " Attempts limit reached"
+                        print fullStamp() + " Please troubleshoot device"
+        rfObject.close()
 
+# Stop Playback
+#       This function commands the connected stethoscope to stop playing an audio filed stored within the SD card
+#       Input   ::      rfObject                {object}        serial object
+#                       timeout                 {int}           maximum wait time for serial communication
+#                       iterCheck               {int}           maximum number of iterations for serial communication
+#       Output  ::      terminal messages       {string}        terminal messages for logging
+def stopPlayback(rfObject, attempts):
+        print fullStamp() + " stopPlayback()"                                                                 # Print function name
+        if rfObject.isOpen() == False:
+                rfObject.open()
+        outByte = definitions.STOPPLAY                                                                              # Send ENQ / Status Enquiry command - see protocolDefinitions.py
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)                                                                          # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK Stethoscope will STOP PLAYBACK"                                                         # ACK, in this case, translates to DEVICE READY
+        elif inByte == definitions.NAK:
+                print fullStamp() + " NAK Stethoscope CANNOT STOP PLAYBACK"
+        else:
+                rfObject.close()
+                if attempts is not 0:
+                        return stopPlayback(rfObject,attempts-1)
+                elif attempts is 0:
+                        print fullStamp() + " Attempts limit reached"
+                        print fullStamp() + " Please troubleshoot device"
+        rfObject.close()
