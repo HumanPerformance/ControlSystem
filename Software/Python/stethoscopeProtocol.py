@@ -323,6 +323,26 @@ def earlyHMBlending(rfObject, attempts):
                         print fullStamp() + " Please troubleshoot device"
         rfObject.close()
 
+def startBlending(rfObject,fileByte,attempts):
+        print fullStamp() + " startBlending()"                                                                # Print function name
+        if rfObject.isOpen() == False:
+                rfObject.open()
+        outByte = fileByte                                                                             # Send ENQ / Status Enquiry command - see protocolDefinitions.py
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)                                                                          # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK Stethoscope will START BLENDING of EARLY SYSTOLIC HEART MUMUR"                                                        # ACK, in this case, translates to DEVICE READY
+        elif inByte == definitions.NAK:
+                print fullStamp() + " NAK Stethoscope CANNOT START BLENDING of EARLY SYSTOLIC HEART MUMUR" 
+        else:
+                rfObject.close()
+                if attempts is not 0:
+                        return earlyHMBlending(rfObject,attempts-1)
+                elif attempts is 0:
+                        print fullStamp() + " Attempts limit reached"
+                        print fullStamp() + " Please troubleshoot device"
+        rfObject.close()
+
 # Stop Playback
 #       This function commands the connected stethoscope to stop playing an audio filed stored within the SD card
 #       Input   ::      rfObject                {object}        serial object

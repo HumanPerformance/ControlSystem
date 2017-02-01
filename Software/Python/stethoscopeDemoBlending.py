@@ -34,7 +34,11 @@ statusEnquiry(rfObject,attempts)
 
 print fullStamp() + " Triggering EARLY SYSTOLIC HEART MURMUR OVERLAY"
 time.sleep(1)
-earlyHMBlending(rfObject, attempts)
+#earlyHMBlending(rfObject, attempts)
+#fileByte = definitions.EDHMUR
+#fileByte = definitions.PEJECT
+#fileByte = definitions.ASYSL
+startBlending(rfObject,fileByte,attempts)
 
 tracking_stop_time = 20
 print fullStamp() + " Playback for %.03f seconds" %tracking_stop_time

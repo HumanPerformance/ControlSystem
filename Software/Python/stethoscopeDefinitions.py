@@ -31,6 +31,11 @@ NORMALHB = chr(0x1D)        #           Playback of Normal Heart Beat           
 ESHMURMUR = chr(0x1E)       #           Playback of Early Systolic Heart Beat           0x01            ORG
 STARTBLEND = chr(0x1F)
 STOPBLEND = chr(0x20)
+ESHMUR = chr(0x21)
+EDHMUR = chr(0x22)
+PEJECT = chr(0x23)
+PSPLITP = chr(0x24)
+ASYSL = chr(0x25)
 
 # Legend
 # STD - Standard terminology / Standard reference for command
