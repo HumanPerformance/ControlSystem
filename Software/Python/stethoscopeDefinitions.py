@@ -29,6 +29,8 @@ STARTTRACKING = chr(0x1B)   #           Start Tracking Microphone Stream for Pea
 STOPTRACKING = chr(0x1C)    #           Stop Tracking Microphone Stream for Peaks       0x06            ORG
 NORMALHB = chr(0x1D)        #           Playback of Normal Heart Beat                   0x00            ORG
 ESHMURMUR = chr(0x1E)       #           Playback of Early Systolic Heart Beat           0x01            ORG
+STARTBLEND = chr(0x1F)
+STOPBLEND = chr(0x20)
 
 # Legend
 # STD - Standard terminology / Standard reference for command

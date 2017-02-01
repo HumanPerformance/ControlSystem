@@ -300,3 +300,51 @@ def stopPlayback(rfObject, attempts):
                         print fullStamp() + " Attempts limit reached"
                         print fullStamp() + " Please troubleshoot device"
         rfObject.close()
+
+# Early Systolic Heart Murmur
+#       This function triggers the playback of an early systolic heart mumur
+def earlyHMBlending(rfObject, attempts):
+        print fullStamp() + " earlyHMBlending()"                                                                # Print function name
+        if rfObject.isOpen() == False:
+                rfObject.open()
+        outByte = definitions.STARTBLEND                                                                              # Send ENQ / Status Enquiry command - see protocolDefinitions.py
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)                                                                          # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK Stethoscope will START BLENDING of EARLY SYSTOLIC HEART MUMUR"                                                        # ACK, in this case, translates to DEVICE READY
+        elif inByte == definitions.NAK:
+                print fullStamp() + " NAK Stethoscope CANNOT START BLENDING of EARLY SYSTOLIC HEART MUMUR" 
+        else:
+                rfObject.close()
+                if attempts is not 0:
+                        return earlyHMBlending(rfObject,attempts-1)
+                elif attempts is 0:
+                        print fullStamp() + " Attempts limit reached"
+                        print fullStamp() + " Please troubleshoot device"
+        rfObject.close()
+
+# Stop Playback
+#       This function commands the connected stethoscope to stop playing an audio filed stored within the SD card
+#       Input   ::      rfObject                {object}        serial object
+#                       timeout                 {int}           maximum wait time for serial communication
+#                       iterCheck               {int}           maximum number of iterations for serial communication
+#       Output  ::      terminal messages       {string}        terminal messages for logging
+def stopBlending(rfObject, attempts):
+        print fullStamp() + " stopBlending()"                                                                 # Print function name
+        if rfObject.isOpen() == False:
+                rfObject.open()
+        outByte = definitions.STOPBLEND                                                                              # Send ENQ / Status Enquiry command - see protocolDefinitions.py
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)                                                                          # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK Stethoscope will STOP BLENDING"                                                         # ACK, in this case, translates to DEVICE READY
+        elif inByte == definitions.NAK:
+                print fullStamp() + " NAK Stethoscope CANNOT STOP BLENDING"
+        else:
+                rfObject.close()
+                if attempts is not 0:
+                        return stopBlending(rfObject,attempts-1)
+                elif attempts is 0:
+                        print fullStamp() + " Attempts limit reached"
+                        print fullStamp() + " Please troubleshoot device"
+        rfObject.close()
