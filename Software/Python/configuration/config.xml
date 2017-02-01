@@ -95,7 +95,7 @@
 			</narrative>
 			<parameters>
 				<parameter id="PARAM000" type="timer" name="t0">10</parameter>
-				<parameter id="PARAM001" type="timer" name="t" >30</parameter>
+				<parameter id="PARAM001" type="timer" name="t" >120</parameter>
 				<parameter id="PARAM002" type="timer" name="tp">10</parameter>
 			</parameters>
 			<devices>
