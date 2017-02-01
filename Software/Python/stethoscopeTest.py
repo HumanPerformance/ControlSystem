@@ -23,7 +23,25 @@ time.sleep(2)
 statusEnquiry(rfObject,attempts)
 
 time.sleep(2)
+bogusFun(rfObject,attempts)
+
+time.sleep(10)
+
+time.sleep(2)
+bogusFun2(rfObject,attempts)
+
+"""
+time.sleep(2)
 sdCardCheck(rfObject,attempts)
+
+time.sleep(2)
+startTrackingMicStream(rfObject,attempts)
+
+time.sleep(5)
+
+time.sleep(2)
+stopTrackingMicStream(rfObject,attempts)
+"""
 
 portRelease('rfcomm', 0)
 

@@ -203,33 +203,50 @@ def startMicStream(rfObject):
 #       This function commands the connected stethoscope to begin streaming audio from the microphone and find/detect peaks
 #       Input   ::      rfObject                {object}        serial object
 #       Output  ::      terminal messages       {string}        terminal messages for logging
-def startTrackingMicStream(rfObject):
-        print fullStamp() + " startTrackingMicStream()"                                                         # ...
-        outBytes = [definitions.DC3, definitions.DC3_STARTTRACKING]                                             # ...
-        for i in range(0,len(outBytes)):                                                                        # ...
-                rfObject.write(outBytes[i])                                                                     # ...
-                if i == (len(outBytes) - 1):                                                                    # ...
-                        inByte = rfObject.read(size=1)                                                          # ...
-        if inByte == definitions.ACK:                                                                           # ...
-                print fullStamp() + " ACK Stethoscope will START TRACKING STREAM"                               # If ACK, the stethoscope will START TRACKING STREAM
-        elif inByte == definitions.NAK:                                                                         # ...
-                print fullStamp() + " NAK Stethoscope CANNOT START TRACKING STREAM"                             # NAK, in this case, translates to CANNOT START TRACKING STREAM
+def startTrackingMicStream(rfObject,attempts):
+        print fullStamp() + " startTrackingMicStream()"                                                                 # Print function name
+        if rfObject.isOpen() == False:
+                rfObject.open()
+        outByte = definitions.STARTTRACKING                                                                              # Send ENQ / Status Enquiry command - see protocolDefinitions.py
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)                                                                          # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK Device will START Tracking"                                                         # ACK, in this case, translates to DEVICE READY
+        elif inByte == definitions.NAK:
+                print fullStamp() + " NAK Device CANNOT START Tracking"
+        else:
+                rfObject.close()
+                if attempts is not 0:
+                        return startTrackingMicStream(rfObject,attempts-1)
+                elif attempts is 0:
+                        print fullStamp() + " Attempts limit reached"
+                        print fullStamp() + " Please troubleshoot device"
+        rfObject.close()
+
 
 # Start Tracking Microphone Stream for Peaks
 #       This function commands the connected stethoscope to stop streaming audio from the microphone and find/detect peaks
 #       Input   ::      rfObject                {object}        serial object
 #       Output  ::      terminal messages       {string}        terminal messages for logging
-def stopTrackingMicStream(rfObject):
-        print fullStamp() + " stopTrackingMicStream()"                                                          # ...
-        outBytes = [definitions.DC3, definitions.DC3_STOPTRACKING]                                              # ...
-        for i in range(0,len(outBytes)):                                                                        # ...
-                rfObject.write(outBytes[i])                                                                     # ...
-                if i == (len(outBytes) - 1):                                                                    # ...
-                        inByte = rfObject.read(size=1)                                                          # ...
-        if inByte == definitions.ACK:                                                                           # ...
-                print fullStamp() + " ACK Stethoscope will STOP TRACKING STREAM"                                # If ACK, the stethoscope will START TRACKING STREAM
-        elif inByte == definitions.NAK:                                                                         # ...
-                print fullStamp() + " NAK Stethoscope CANNOT STOP TRACKING STREAM"                              # NAK, in this case, translates to CANNOT START TRACKING STREAM
+def stopTrackingMicStream(rfObject,attempts):
+        print fullStamp() + " stopTrackingMicStream()"                                                                 # Print function name
+        if rfObject.isOpen() == False:
+                rfObject.open()
+        outByte = definitions.STOPTRACKING                                                                            # Send ENQ / Status Enquiry command - see protocolDefinitions.py
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)                                                                          # Execute sendUntilRead() from bluetoothProtocol.py
+        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
+                print fullStamp() + " ACK Device will STOP Tracking"                                                         # ACK, in this case, translates to DEVICE READY
+        elif inByte == definitions.NAK:
+                print fullStamp() + " NAK Device CANNOT STOP Tracking"
+        else:
+                rfObject.close()
+                if attempts is not 0:
+                        return startTrackingMicStream(rfObject,attempts-1)
+                elif attempts is 0:
+                        print fullStamp() + " Attempts limit reached"
+                        print fullStamp() + " Please troubleshoot device"
+        rfObject.close()
 
 # Simulation Functions
 #       These functions deal with the simulations corresponding to the connected device
