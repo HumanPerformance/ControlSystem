@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<inventory>
+	<inventoryversion	id="1.0.0"	date="23 MAR 2017"/>
+	<devices>
+		<control_systems>
+		</control_systems>
+		<scope_panels>
+		</scope_panels>
+		<smart_handles>
+		</smart_handles>
+		<otoscopes>
+		</otoscopes>
+		<ophthalmoscope>
+		</ophthalmoscope>
+		<stethoscopes>
+		</stethoscopes>
+		<blood_pressure_cuffs>
+		</blood_pressure_cuffs>
+		<thermometers>
+			<thermometer id="TH001"	type="ATH"	name="augmented_thermometer"	mac_bt="00:06:66:8C:D3:2F"	mac_eth="none"	mac_wlan="none"	ip_address="none"/>
+		</thermometers>
+		<pulse_oximeters>
+		</pulse_oximeters>
+	</devices>
+</inventory>
