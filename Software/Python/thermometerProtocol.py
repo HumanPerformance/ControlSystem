@@ -7,6 +7,10 @@ Michael Xynidis
 Fluvio L Lobo Fenoglietto
 09/01/2016
 
+Modified by: Mohammad Odeh
+Date: Nov. 29th, 2016
+Adapted protocol to be compatible with the Smart Thermometer Project
+
 """
 
 # Import Libraries and/or Modules
@@ -22,70 +26,106 @@ import thermometerDefinitions as definitions
 # State Enquiry
 #       This function requests the status of the thermometer
 #       Input   ::      rfObject                {object}        serial object
-#                       timeout                 {int}           maximum wait time for serial communication
-#                       iterCheck               {int}           maximum number of iterations for serial communication
 #       Output  ::      terminal messages       {string}        terminal messages for logging
-def statusEnquiry(rfObject, timeout, iterCheck):
-        print " "
-        print fullStamp() + " statusEnquiry()"                                                                  # Print function name
-        outByte = definitions.ENQ                                                                               # Send ENQ / Status Enquiry command - see protocolDefinitions.py
-        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
-        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " ACK Device READY"                                                         # ACK, in this case, translates to DEVICE READY
-        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " NAK Device NOT READY"                                                     # NAK, in this case, translates to DEVICE NOT READY
+def statusEnquiry(rfObject):
+        print fullStamp() + " statusEnquiry()"                                          # Print function name
+        outByte = definitions.ENQ                                                       # Send ENQ / Status Enquiry command - see thermometerDefinitions.py
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)
+        if inByte == definitions.ACK:                                                   # Check for ACK / NAK response
+                print fullStamp() + " ACK Device READY\n"                               # ACK, in this case, translates to DEVICE READY
+        elif inByte == definitions.NAK:                                                 # Check for ACK / NAK response
+                print fullStamp() + " NAK Device NOT READY\n"                           # NAK, in this case, translates to DEVICE NOT READY
 
+'''
+                                =============> FUNCTION IS OBSOLETE FOR NOW. WILL REPURPOSE LATER. <=============
 # System Check
 #       This function commands the connected thermometer to perform a "systems check", which may consist on a routine verification of remote features
 #       Input   ::      rfObject                {object}        serial object
-#                       timeout                 {int}           maximum wait time for serial communication
-#                       iterCheck               {int}           maximum number of iterations for serial communication
 #       Output  ::      terminal messages       {string}        terminal messages for logging
-def systemCheck(rfObject, timeout, iterCheck):
-        print " "
-        print fullStamp() + " systemCheck()"                                                                    # Print function name
-        outByte = definitions.CHK                                                                               # Send CHK / System Check command - see protocolDefinitions.py
-        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
-        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " ACK Device Ready"                                                         # ACK, in this case, translates to DEVICE READY
-        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " NAK Device NOT Ready"                                                     # NAK, in this case, translates to DEVICE NOT READY
+def systemCheck(rfObject):
+        print fullStamp() + " systemCheck()"                                            # Print function name
+        outByte = definitions.CHK                                                       # Send CHK / System Check command - see thermometerDefinitions.py
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)
+        if inByte == definitions.ACK:                                                   # Check for ACK / NAK response
+                print fullStamp() + " ACK Device READY\n"                               # ACK, in this case, translates to DEVICE READY
+        elif inByte == definitions.NAK:                                                 # Check for ACK / NAK response
+                print fullStamp() + " NAK Device NOT READY\n"                           # NAK, in this case, translates to DEVICE NOT READY
+'''
+
+def debugModeON(rfObject):
+        print fullStamp() + " debugModeON()"                                            # Print function name
+        outByte = definitions.DC1                                                       # Send DC1 / Device Control 1 command - see thermometerDefinitions.py
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)
+        if inByte == definitions.ACK:                                                   # Check for ACK / NAK response
+                print fullStamp() + " ACK Device READY"                                 # ACK, in this case, translates to DEVICE READY
+                outByte = definitions.DC1_DEBUGON                                       # Send DEBUGON / debugMode ON - see thermometerDefinitions.py
+                rfObject.write(outByte)
+                inByte = rfObject.read(size=1)
+                if inByte == definitions.ACK:
+                        print fullStamp() + " DEBUG MODE ON\n"
+                elif inByte != definitions.ACK:
+                        print fullStamp() + " Device NOT responding\n"
+        
+        elif inByte == definitions.NAK:                                                 # Check for ACK / NAK response
+                print fullStamp() + " NAK Device NOT READY\n"                           # NAK, in this case, translates to DEVICE NOT READY
+
+
+def debugModeOFF(rfObject):
+        print fullStamp() + " debugModeOFF()"                                            # Print function name
+        outByte = definitions.DC1                                                       # Send CHK / System Check command - see thermometerDefinitions.py
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)
+        if inByte == definitions.ACK:                                                   # Check for ACK / NAK response
+                print fullStamp() + " ACK Device READY"                                 # ACK, in this case, translates to DEVICE READY
+                outByte = definitions.DC1_DEBUGOFF                                           # Send SIM_000 / Simulate Scenario 1 - see thermometerDefinitions.py
+                rfObject.write(outByte)
+                inByte = rfObject.read(size=1)
+                if inByte == definitions.ACK:
+                        print fullStamp() + " DEBUG MODE OFF\n"
+                elif inByte != definitions.ACK:
+                        print fullStamp() + " Device NOT responding\n"
+        
+        elif inByte == definitions.NAK:                                                 # Check for ACK / NAK response
+                print fullStamp() + " NAK Device NOT READY\n"                             # NAK, in this case, translates to DEVICE NOT READY
 
 # Start Simulation
 #       This function starts simulation
 #       Input   ::      rfObject                {object}        serial object
-#                       timeout                 {int}           maximum wait time for serial communication
-#                       iterCheck               {int}           maximum number of iterations for serial communication
 #       Output  ::      terminal messages       {string}        terminal messages for logging
-def startSIM_000(rfObject, timeout, iterCheck):
-        print " "
+
+#Fever
+def startSIM_000(rfObject):
         print fullStamp() + " Command Sent..."                                                                  # Print function name
         outByte = definitions.SIM_000                                                                   # Send SIM_000 / Simulate Scenario 1 - see protocolDefinitions.py
-        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)
         if inByte == definitions.ACK:
-            	print fullStamp() + " Simulation 1 Running"
+            	print fullStamp() + " Simulation 1 Running\n"
         elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " NAK Device NOT READY"
+                print fullStamp() + " NAK Device NOT READY\n"
 
-
-def startSIM_001(rfObject, timeout, iterCheck):
-        print " "
+# Hypothermia
+def startSIM_001(rfObject):
         print fullStamp() + " Command Sent..."                                                                  # Print function name
-        outByte = definitions.SIM_001                                                                   # Send SIM_000 / Simulate Scenario 1 - see protocolDefinitions.py
-        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)
+        outByte = definitions.SIM_001                                                                   # Send SIM_001 / Simulate Scenario 1 - see protocolDefinitions.py
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)
         if inByte == definitions.ACK:
-            	print fullStamp() + " Simulation 1 Running"
+            	print fullStamp() + " Simulation 2 Running\n"
         elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " NAK Device NOT READY"
+                print fullStamp() + " NAK Device NOT READY\n"
 
-def normalOP(rfObject, timeout, iterCheck):
-        print " "
-        print fullStamp() + " Command Sent..."                                                                  # Print function name
-        outByte = definitions.NRMOP                                                                             # Send SIM / Start Simulation - see protocolDefinitions.py
-        inByte = sendUntilRead(rfObject, outByte, timeout, iterCheck)                                           # Execute sendUntilRead() from bluetoothProtocol.py
-        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " ACK Device READY"                                                         # ACK, in this case, translates to DEVICE READY
-                print fullStamp() + " Acknowledged! Normal Operation ON"
-
-        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " NAK Device NOT READY"
+def normalOP(rfObject):
+        print fullStamp() + " Command Sent..."
+        outByte = definitions.NRMOP                                                     # Send NRMOP / Normal Operation - see thermometerDefinitions.py
+        rfObject.write(outByte)
+        inByte = rfObject.read(size=1)
+        if inByte == definitions.ACK:
+                print fullStamp() + " Acknowledged! Normal Operation ON\n"
+        elif inByte == definitions.NAK:
+                print fullStamp() + " NAK Device NOT READY\n"
+        else: 
+                print fullStamp() + " Device NOT Responding\n"
