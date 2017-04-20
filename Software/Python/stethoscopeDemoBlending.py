@@ -23,8 +23,7 @@ from    stethoscopeProtocol          import *
 print fullStamp() + " Connecting to the Stethoscope"
 deviceName = "SS"
 portNumber = 0
-#deviceBTAddress = "00:06:66:7D:99:D9"
-deviceBTAddress = "00:06:66:86:77:09"
+deviceBTAddress = "00:06:66:7D:99:D9"
 baudrate = 115200
 attempts = 5
 rfObject = createPort(deviceName,portNumber,deviceBTAddress,baudrate,attempts)
@@ -36,10 +35,9 @@ statusEnquiry(rfObject,attempts)
 print fullStamp() + " Triggering EARLY SYSTOLIC HEART MURMUR OVERLAY"
 time.sleep(1)
 #earlyHMBlending(rfObject, attempts)
-fileByte = definitions.EDHMUR
+#fileByte = definitions.EDHMUR
 #fileByte = definitions.PEJECT
 #fileByte = definitions.ASYSL
-#earlyHMBlending(rfObject, attempts)
 startBlending(rfObject,fileByte,attempts)
 
 tracking_stop_time = 20

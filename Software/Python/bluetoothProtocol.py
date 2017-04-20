@@ -193,7 +193,7 @@ def createPort(deviceName,deviceBTAddress,baudrate,timeout,attempts):
         parity = serial.PARITY_NONE,
         stopbits = serial.STOPBITS_ONE,
         timeout = timeout)
-    time.sleep(1)
+    time.sleep(2)
     outByte = definitions.ENQ                                                                               # Send SOH (Start of Heading) byte - see protocolDefinitions.py
     rfObject.write(outByte)
     inByte = rfObject.read(size=1)
