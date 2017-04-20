@@ -95,48 +95,28 @@ def debugModeOFF(rfObject):
 #       This function starts simulation
 #       Input   ::      rfObject                {object}        serial object
 #       Output  ::      terminal messages       {string}        terminal messages for logging
+
+#Fever
 def startSIM_000(rfObject):
-        print fullStamp() + " Command Sent..."
-        outByte = definitions.SIM                                                       # Send SIM / Start Simulation - see thermometerDefinitions.py
+        print fullStamp() + " Command Sent..."                                                                  # Print function name
+        outByte = definitions.SIM_000                                                                   # Send SIM_000 / Simulate Scenario 1 - see protocolDefinitions.py
         rfObject.write(outByte)
         inByte = rfObject.read(size=1)
-        if inByte == definitions.ACK:   
-                print fullStamp() + " Acknowledged! Starting Simulation"
-                outByte = definitions.SIM_000                                           # Send SIM_000 / Simulate Scenario 1 - see thermometerDefinitions.py
-                rfObject.write(outByte)
-                inByte = rfObject.read(size=1)
-                if inByte == definitions.ACK:
-                        print fullStamp() + " Simulation 1 Running\n"
-                elif inByte != definitions.ACK:
-                        print fullStamp() + " Device NOT responding\n"
-
-        elif inByte == definitions.NAK: 
+        if inByte == definitions.ACK:
+            	print fullStamp() + " Simulation 1 Running\n"
+        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
                 print fullStamp() + " NAK Device NOT READY\n"
 
-        else: 
-                print fullStamp() + " Device NOT Responding\n"
-
-
-
+# Hypothermia
 def startSIM_001(rfObject):
-        print fullStamp() + " Command Sent..."
-        outByte = definitions.SIM                                                       # Send SIM / Start Simulation - see thermometerDefinitions.py
+        print fullStamp() + " Command Sent..."                                                                  # Print function name
+        outByte = definitions.SIM_001                                                                   # Send SIM_001 / Simulate Scenario 1 - see protocolDefinitions.py
         rfObject.write(outByte)
         inByte = rfObject.read(size=1)
-        if inByte == definitions.ACK:                                                   # Check for ACK / NAK response
-                print fullStamp() + " Acknowledged! Starting Simulation"
-                outByte = definitions.SIM_001                                           # Send SIM_001 / Simulate Scenario 2 - see thermometerDefinitions.py
-                rfObject.write(outByte)
-                inByte = rfObject.read(size=1)
-                if inByte == definitions.ACK:
-                        print fullStamp() + " Simulation 2 Running\n"
-                elif inByte != definitions.ACK:
-                        print fullStamp() + " Device NOT responding\n"
-
-        elif inByte == definitions.NAK:                                                 # Check for ACK / NAK response
+        if inByte == definitions.ACK:
+            	print fullStamp() + " Simulation 2 Running\n"
+        elif inByte == definitions.NAK:                                                                         # Check for ACK / NAK response found through sendUntilRead()
                 print fullStamp() + " NAK Device NOT READY\n"
-        else: 
-                print fullStamp() + " Device NOT Responding\n"
 
 def normalOP(rfObject):
         print fullStamp() + " Command Sent..."
