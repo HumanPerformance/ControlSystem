@@ -17,10 +17,10 @@
 		<blood_pressure_cuffs>
 		</blood_pressure_cuffs>
 		<thermometers>
-			<thermometer id="TH001"	type="ATH"	name="augmented_thermometer"	mac_bt="00:06:66:8C:D3:2F"	mac_eth="none"	mac_wlan="none"	ip_address="none"/>
+			<thermometer id="TH001"	gen="002"	type="ATH"	name="augmented_thermometer"	mac_bt="00:06:66:8C:D3:2F"	mac_eth="none"	mac_wlan="none"	ip_address="none"/>
 		</thermometers>
 		<pulse_oximeters>
-			<pulse_oximeter id="PO004"	type="APO"	name="augmented_pulse_oximeter"	mac_bt="00:06:66:8C:D2:1F"	mac_eth="none"	mac_wlan="none"	ip_address="none"/>
+			<pulse_oximeter id="PO004"	gen="002"	type="APO"	name="augmented_pulse_oximeter"	mac_bt="00:06:66:8C:D2:1F"	mac_eth="none"	mac_wlan="none"	ip_address="none"/>
 		</pulse_oximeters>
 	</devices>
 </inventory>
