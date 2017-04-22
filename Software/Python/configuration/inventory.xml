@@ -13,6 +13,9 @@
 		<ophthalmoscope>
 		</ophthalmoscope>
 		<stethoscopes>
+			<stethoscope id="ST00X"	gen="001"	type="AST"	name="augmented_stethoscope"	mac_bt="00:06:66:86:77:09"	mac_eth="none"	mac_wlan="none"/>
+			<stethoscope id="ST001"	gen="002"	type="AST"	name="augmented_stethoscope"	mac_bt="00:06:66:86:60:02"	mac_eth="none"	mac_wlan="none"/>
+			<stethoscope id="ST001"	gen="003"	type="AST"	name="augmented_stethoscope"	mac_bt="00:06:66:8C:D3:F6"	mac_eth="none"	mac_wlan="none"/>
 		</stethoscopes>
 		<blood_pressure_cuffs>
 		</blood_pressure_cuffs>
