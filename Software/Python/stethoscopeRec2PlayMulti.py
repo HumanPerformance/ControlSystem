@@ -32,7 +32,7 @@ for i in range(0,len(deviceBTAddress)):
 
 print fullStamp() + " Enquiring Stethoscope Status"
 
-for i in range(0,len(deviceBTAddress)):
+for i in range(2,len(deviceBTAddress)):
     time.sleep(1)
     statusEnquiry(rfObject[i],attempts)
 
@@ -46,6 +46,11 @@ tracking_stop_time = 20
 print fullStamp() + " Record for %.03f seconds" %tracking_stop_time
 time.sleep(20)
 
+print fullStamp() + " Closing Stethoscopes Serial Port"
+for i in range(2,len(deviceBTAddress)):
+    time.sleep(1)
+    rfObject[i].close()
+
 print fullStamp() + " Stop Recording"
 for i in range(2,len(deviceBTAddress)):
     time.sleep(1)
@@ -57,6 +62,10 @@ fileByte = definitions.BRECORD
 for i in range(2,len(deviceBTAddress)):
     time.sleep(1)
     startBlending(rfObject[i],fileByte,attempts)
+
+tracking_stop_time = 20
+print fullStamp() + " Blend for %.03f seconds" %tracking_stop_time
+time.sleep(20)
 
 print fullStamp() + " Stop Blending Recorded File"
 for i in range(2,len(deviceBTAddress)):

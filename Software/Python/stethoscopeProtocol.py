@@ -118,14 +118,14 @@ def statusEnquiry(rfObject,attempts):
 #       Input   ::      rfObject                {object}        serial object
 #       Output  ::      terminal messages       {string}        terminal messages for logging
 def startRecording(rfObject,attempts):
-        print fullStamp() + " startRecording()"                                                                 # Print function name
+        print fullStamp() + " startRecording()"
         if rfObject.isOpen() == False:
                 rfObject.open()
-        outByte = definitions.STARTREC                                                                              # Send ENQ / Status Enquiry command - see protocolDefinitions.py
+        outByte = definitions.STARTREC
         rfObject.write(outByte)
-        inByte = rfObject.read(size=1)                                                                          # Execute sendUntilRead() from bluetoothProtocol.py
-        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " ACK Stethoscope will START RECORDING"                                                         # ACK, in this case, translates to DEVICE READY
+        inByte = rfObject.read(size=1)
+        if inByte == definitions.ACK:
+                print fullStamp() + " ACK Stethoscope will START RECORDING"
         elif inByte == definitions.NAK:
                 print fullStamp() + " NAK Stethoscope CANNOT START RECORDING"
         else:
@@ -142,14 +142,14 @@ def startRecording(rfObject,attempts):
 #       Input   ::      rfObject                {object}        serial object
 #       Output  ::      terminal messages       {string}        terminal messages for logging
 def stopRecording(rfObject,attempts):
-        print fullStamp() + " stopRecording()"                                                                 # Print function name
+        print fullStamp() + " stopRecording()"
         if rfObject.isOpen() == False:
                 rfObject.open()
-        outByte = definitions.STOPREC                                                                              # Send ENQ / Status Enquiry command - see protocolDefinitions.py
+        outByte = definitions.STOPREC
         rfObject.write(outByte)
-        inByte = rfObject.read(size=1)                                                                          # Execute sendUntilRead() from bluetoothProtocol.py
-        if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " ACK Stethoscope will STOP RECORDING"                                                         # ACK, in this case, translates to DEVICE READY
+        inByte = rfObject.read(size=1)                                                                          
+        if inByte == definitions.ACK:
+                print fullStamp() + " ACK Stethoscope will STOP RECORDING"
         elif inByte == definitions.NAK:
                 print fullStamp() + " NAK Stethoscope CANNOT STOP RECORDING"
         else:
