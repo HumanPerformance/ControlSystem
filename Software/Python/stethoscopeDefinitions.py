@@ -36,6 +36,7 @@ EDHMUR = chr(0x22)
 PEJECT = chr(0x23)
 PSPLITP = chr(0x24)
 ASYSL = chr(0x25)
+BRECORD = chr(0x30)         #           Blend recording (Must Record First)
 
 # Legend
 # STD - Standard terminology / Standard reference for command
