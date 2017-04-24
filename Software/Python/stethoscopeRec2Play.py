@@ -23,7 +23,9 @@ from    stethoscopeProtocol          import *
 print fullStamp() + " Connecting to the Stethoscopes"
 deviceName = "SS"
 portNumber = 0
-deviceBTAddress = "00:06:66:8C:D3:F6"
+#deviceBTAddress = "00:06:66:8C:D3:F6"
+deviceBTAddress = "00:06:66:86:60:02"
+#deviceBTAddress = "00:06:66:86:77:09"
 baudrate = 115200
 attempts = 5
 
