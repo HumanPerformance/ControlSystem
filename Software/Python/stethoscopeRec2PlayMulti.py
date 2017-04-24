@@ -42,6 +42,13 @@ for i in range(2,len(deviceBTAddress)):
     time.sleep(1)
     startRecording(rfObject[i],attempts)
 
+print fullStamp() + " Opening Stethoscopes Serial Port"
+for i in range(2,len(deviceBTAddress)):
+    time.sleep(1)
+    if rfObject[i].isOpen() == False:
+        print fullStamp() + " Opening Serial Port " + str(i)
+        rfObject[i].open()
+
 tracking_stop_time = 20
 print fullStamp() + " Record for %.03f seconds" %tracking_stop_time
 time.sleep(20)
@@ -49,13 +56,14 @@ time.sleep(20)
 print fullStamp() + " Closing Stethoscopes Serial Port"
 for i in range(2,len(deviceBTAddress)):
     time.sleep(1)
-    rfObject[i].close()
+    if rfObject[i].isOpen() == True:
+        print fullStamp() + " Closing Serial Port " + str(i)
+        rfObject[i].close()
 
 print fullStamp() + " Stop Recording"
 for i in range(2,len(deviceBTAddress)):
     time.sleep(1)
     stopRecording(rfObject[i],attempts)
-
 
 print fullStamp() + " Start Blending Recorded File"
 fileByte = definitions.BRECORD

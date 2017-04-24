@@ -1,10 +1,10 @@
 """
-Stethoscope Demo :: Recording & Tracking
+Stethoscope Demo :: Blending
 
 The following code was built to show the recording capabilities of the stethoscope
 
 Fluvio L Lobo Fenoglietto
-01/31/2017
+04/22/2017
 """
 
 # Import
@@ -20,23 +20,20 @@ from    stethoscopeProtocol          import *
 # Operation
 
 
-print fullStamp() + " Connecting to the Stethoscope"
+print fullStamp() + " Connecting to the Stethoscopes"
 deviceName = "SS"
-portNumber = 0
-#deviceBTAddress = "00:06:66:7D:99:D9"
 deviceBTAddress = "00:06:66:8C:D3:F6"
 baudrate = 115200
 attempts = 5
-rfObject = createPort(deviceName,portNumber,deviceBTAddress,baudrate,attempts)
+
+rfObject = createPort(deviceName,0,deviceBTAddress,baudrate,attempts)
 
 print fullStamp() + " Enquiring Stethoscope Status"
-time.sleep(1)
 statusEnquiry(rfObject,attempts)
 
 print fullStamp() + " Triggering Heart Rate Tracking"
 time.sleep(1)
 startRecording(rfObject,attempts)
-
 
 print fullStamp() + " Openning Stethoscope Serial Port"
 time.sleep(1)
@@ -44,7 +41,7 @@ if rfObject.isOpen() == False:
     rfObject.open()
 
 tracking_start_time = time.time()
-tracking_stop_time = 30
+tracking_stop_time = 20
 tracking_current_time = 0
 dataStream = []
 print fullStamp() + " Recording and Tracking Heart Rate for %.03f seconds" %tracking_stop_time
