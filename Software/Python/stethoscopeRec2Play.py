@@ -22,13 +22,15 @@ from    stethoscopeProtocol          import *
 
 print fullStamp() + " Connecting to the Stethoscopes"
 deviceName = "SS"
+portNumber = 0
 deviceBTAddress = "00:06:66:8C:D3:F6"
 baudrate = 115200
 attempts = 5
 
-rfObject = createPort(deviceName,0,deviceBTAddress,baudrate,attempts)
+rfObject = createPort(deviceName,portNumber,deviceBTAddress,baudrate,attempts)
 
 print fullStamp() + " Enquiring Stethoscope Status"
+time.sleep(1)
 statusEnquiry(rfObject,attempts)
 
 print fullStamp() + " Triggering Heart Rate Tracking"
@@ -60,6 +62,17 @@ rfObject.close()
 print fullStamp() + " Stopping Device Recording"
 time.sleep(1)
 stopRecording(rfObject,attempts)
+
+print fullStamp() + " Start Blending Recorded File"
+fileByte = definitions.BRECORD
+startBlending(rfObject,fileByte,attempts)
+
+tracking_stop_time = 20
+print fullStamp() + " Blend for %.03f seconds" %tracking_stop_time
+time.sleep(20)
+
+print fullStamp() + " Stop Blending Recorded File"
+stopBlending(rfObject,attempts)
 
 print fullStamp() + " Releasing Serial Port"
 time.sleep(1)
