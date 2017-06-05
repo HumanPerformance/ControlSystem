@@ -6,6 +6,11 @@ The following module has been created to manage the interface between the smart 
 Fluvio L Lobo Fenoglietto
 11/21/2016
 
+Modified by : Mohammad Odeh
+Date        : May 31st, 2017
+Changes     : Modified protocol to use PyBluez instead of PySerial
+
+NOTE: Switch from PySerial to PyBluez is still NOT complete.
 """
 
 # Import Libraries and/or Modules
@@ -120,18 +125,6 @@ def triggerDevice(rfObject,deviceName,iterCheck):
             rfObject.write('g')
             break
 
-def triggerDevice2(rfObject,deviceName):
-    if rfObject.isOpen() == False:
-        rfObject.open()
-    inString = deviceName
-    while inString == deviceName:
-        print fullStamp() + " Triggering Device"
-        rfObject.write('g')
-        time.sleep(1)
-        inString = rfObject.readline()[:-1]
-        print inString
-    rfObject.close()
-
 def triggerDevices(rfObjects,deviceNames):
     print fullStamp() + " triggerDevices()"
     Ndevices = len(rfObjects)
@@ -161,18 +154,6 @@ def stopDevice(rfObject, deviceName, iterCheck):
             print "Stopping device..."
             rfObject.write('s')
             break
-
-def stopDevice2(rfObject,deviceName):
-    if rfObject.isOpen() == False:
-        rfObject.open()
-    inString = rfObject.readline()
-    while inString != deviceName:
-        print fullStamp() + " Stopping Device"
-        rfObject.write('s')
-        time.sleep(1)
-        inString = rfObject.readline()[:-1]
-        print inString
-    rfObject.close()
 
 def stopDevices(rfObjects,deviceNames):
     print fullStamp() + " stopDevices()"
@@ -249,3 +230,74 @@ References
 4 - Print on a new line - http://stackoverflow.com/questions/2918362/writing-string-to-a-file-on-a-new-line-everytime
 5 - Check for Existance and Create Directory - http://stackoverflow.com/questions/273192/how-to-check-if-a-directory-exists-and-create-it-if-necessary
 """
+
+# ======================================================================
+# ======================> BT REDEFINED FUNCTIONS <======================
+# ======================================================================
+
+def triggerDevice2( socket, deviceName ):
+    inData, inChar = 'null', 'null'
+    inString = deviceName
+    firstReading = True
+    print( fullStamp() + " Triggering Device" )
+    socket.send('g')
+    
+    while inString == deviceName:
+        # Get rid of any chopped/truncated data
+        while inData != ('\n' or '\r' or '\0'):
+            inData = socket.recv(1)
+            #print(inData)
+
+        # Read into buffer
+        while inChar != ('\n' or '\r' or '\0'):
+            if firstReading:
+                buff = socket.recv(1)
+                firstReading = False
+                #print(buff)
+            else:
+                inChar = socket.recv(1)
+                buff += inChar
+                #print(buff)
+
+        # Write buffer into variable
+        firstReading = True
+        inChar = 'null'
+        inString = buff.strip('\n')
+        #print inString
+
+    print( inString, len(inString) )
+    print( fullStamp() + ' Device Triggered' )
+
+
+def stopDevice2( socket, deviceName ):
+    inData, inChar, inString = 'null', 'null', 'null'
+    firstReading = True
+    print( fullStamp() + " Stopping Device" )
+    socket.send('s')
+    
+    while inString != deviceName:
+        # Get rid of any chopped/truncated data
+        while inData != ('\n' or '\r' or '\0'):
+            inData = socket.recv(1)
+            #print(inData)
+
+        # Read into buffer
+        while inChar != ('\n' or '\r' or '\0'):
+            if firstReading:
+                buff = socket.recv(1)
+                firstReading = False
+                #print(buff)
+            else:
+                inChar = socket.recv(1)
+                buff += inChar
+                #print(buff)
+
+        # Write buffer into variable
+        firstReading = True
+        inChar = 'null'
+        inString = buff.strip('\n')
+        #print inString
+        
+    print( inString, len(inString) )
+    print( fullStamp() + ' Stopped' )
+

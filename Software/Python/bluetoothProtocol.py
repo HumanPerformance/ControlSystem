@@ -6,6 +6,12 @@ The following module has been created to manage the bluetooth interface between 
 Michael Xynidis
 Fluvio L Lobo Fenoglietto
 09/01/2016
+
+Modified by : Mohammad Odeh
+Date        : May 31st, 2017
+Changes     : Modified protocol to use PyBluez instead of PySerial
+
+NOTE: Switch from PySerial to PyBluez is still NOT complete.
 """
 
 # Import Libraries and/or Modules
@@ -279,7 +285,7 @@ def connectionCheckS(rfObject,deviceName,portNumber,deviceBTAddress,baudrate,att
     if inString == deviceName:
         print fullStamp() + " Connection successfully established with " + deviceName
     else:
-        if rfObject.isOpen() == False:
+        if rfObject.is_open == False:
             rfObject.open()
         print fullStamp() + " Sending Stopping Message"
         rfObject.write('s')
@@ -358,3 +364,69 @@ def timedRead(rfObject, timeout):
 #   Input   ::  {array/list} "deviceName", "deviceBTAddress"
 #   Output  ::  {array/list} "btObjects"
 
+#   Create Port
+def createBTPort( bt_addr, port ):
+    print( fullStamp() + " createBTPort()" )
+    if bluetooth.is_valid_address(bt_addr) is True:                 # Check if address is valid
+        socket = bluetooth.BluetoothSocket( bluetooth.RFCOMM )      # Create a BT socket
+        socket.connect( (bt_addr, port) )                           # Connect to socket
+        time.sleep(1)
+        BTconnectionCheck( socket )
+        return(socket)
+    else:
+        print( fullStamp() + " Invalid BT address" )
+        return 0
+
+#   Connection Check
+def BTconnectionCheck( socket ):
+    outByte = definitions.ENQ
+    socket.send(outByte)
+    inByte = socket.recv(1)     # recv(buffersize)
+
+    if inByte == definitions.ACK:
+        print( fullStamp() + " ACK Connection Established" )
+    
+    elif inByte == definitions.NAK:
+        print( fullStamp() + " NAK device NOT READY" )
+
+    else:
+        print( fullStamp() + " Please troubleshoot devices" )
+
+#   Why not?
+def closeBTPort( socket ):
+    print( fullStamp() + " closeBTPort()" )
+    socket.close()
+
+# ================
+# SH Specific Fxns
+# ================
+
+#   Create Port
+def createBTPortS( bt_addr, port, deviceName ):
+    print( fullStamp() + " createBTPort()" )
+    if bluetooth.is_valid_address(bt_addr) is True:                 # Check if address is valid
+        socket = bluetooth.BluetoothSocket( bluetooth.RFCOMM )      # Create a BT socket
+        socket.connect( (bt_addr, port) )                           # Connect to socket
+        time.sleep(1)
+        BTconnectionCheckS( socket, deviceName )
+        return(socket)
+    else:
+        print( fullStamp() + " Invalid BT address" )
+        return 0
+
+#   Connection Check
+def BTconnectionCheckS( socket, deviceName ):
+    inString = socket.recv( len(deviceName) )     # recv(buffersize)
+    if inString == deviceName:
+        print( fullStamp() + " Connection successfully established with %s" %deviceName )
+    else:
+        print( fullStamp() + " Sending Stopping Message" )
+        print( fullStamp() + " Please troubleshoot devices" )
+        socket.send('s')
+        closeBTPortS( socket )        
+
+#   Why not?
+def closeBTPortS( socket ):
+    print( fullStamp() + " closeBTPort()" )
+    socket.close()
+    print( fullStamp() + " Port Closed" )
