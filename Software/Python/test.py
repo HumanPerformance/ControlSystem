@@ -7,7 +7,7 @@ port = 1
 deviceName = "SH"
 socket = bluetooth.BluetoothSocket( bluetooth.RFCOMM )
 socket.connect( (bt_addr, port) )
-triggerDevice2(socket,deviceName)
+##triggerDevice2(socket,deviceName)
 
 ##data=''
 ##now = time.time()
@@ -17,6 +17,8 @@ triggerDevice2(socket,deviceName)
 ##while nono < 20:
 ##    data += socket.recv(115200)
 ##    nono = time.time() - now
+##
+##print(len(data))
 
-print(len(data))
-stopDevice2(socket,deviceName)
+##stopDevice2(socket,deviceName)
+##socket.close()

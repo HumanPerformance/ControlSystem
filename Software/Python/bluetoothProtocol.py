@@ -15,17 +15,181 @@ NOTE: Switch from PySerial to PyBluez is still NOT complete.
 """
 
 # Import Libraries and/or Modules
-import bluetooth
+import  bluetooth, os, time, serial
 """
         Implementation of the "bluetooth" module may require the installation of the python-bluez package
         >> sudp apt-get install python-bluez
 """
-import os
-import serial
-import time
-from timeStamp import *
-import protocolDefinitions as definitions
+import  protocolDefinitions as      definitions
+from    timeStamp           import  fullStamp
 
+# *************************************************************************
+# ======================> PyBluez Dependant Functions <====================
+# *************************************************************************
+
+# Create BlueTooth Socket
+#   Arguments   :: {string, int}    BT device address, port #
+#   Return      :: [object}         BT Socket
+def createSocket( bt_addr, port ):
+    print( fullStamp() + " createSocket()" )
+    if bluetooth.is_valid_address(bt_addr) is True:                 # Check if address is valid
+        socket = bluetooth.BluetoothSocket( bluetooth.RFCOMM )      # Create a BT socket
+        socket.connect( (bt_addr, port) )                           # Connect to socket
+        time.sleep(1)
+        if socketCheck( socket ) == True:
+            return socket
+        else:
+            print( fullStamp() + " Could NOT instantiate socket" )
+            return 0
+
+    else:
+        print( fullStamp() + " Invalid BT address" )
+        return 0
+
+
+# BlueTooth Socket Connection Check
+#   Arguments   :: {object} BT Socket
+#   Return      :: ACK=1 || NAK=0 || OTHER= -1
+def socketCheck( socket ):
+    outByte = definitions.ENQ
+    socket.send(outByte)
+    inByte = socket.recv(1)     # recv(buffersize)
+
+    if inByte == definitions.ACK:
+        print( fullStamp() + " ACK Connection Established" )
+        return 1
+    
+    elif inByte == definitions.NAK:
+        print( fullStamp() + " NAK device NOT READY" )
+        return 0
+
+    else:
+        print( fullStamp() + " Please troubleshoot device" )
+        return -1
+
+
+# BlueTooth Socket Read Line
+#   Read incoming data until EOL character is reached
+#   Arguments   :: {object, string} BT Socket, (OPTIONAL)EOL
+#   Return      :: {string}         Data transmitted over BlueTooth
+def bt_recv_end( socket, EOL=None ):
+    inData, inChar = 'null', 'null'
+    firstReading = True
+    
+    if EOL is None:
+        # Get rid of any chopped/truncated data
+        while inData != ('\n' or '\r' or '\0'):
+            inData = socket.recv(1)
+
+        # Read into buffer as long EOL is not reached
+        while inChar != ('\n' or '\r' or '\0'):
+            # If first reading, store reading directly to buffer
+            if firstReading:
+                buff = socket.recv(1)
+                firstReading = False
+
+            # Else, store reading into inChar then append to buffer
+            else:
+                inChar = socket.recv(1)
+                buff += inChar
+
+        # Return buffer
+        return buff.strip('\n')
+
+    else:
+        # Get rid of any chopped/truncated data
+        while inData != (EOL):
+            inData = socket.recv(1)
+
+        # Read into buffer as long EOL is not reached
+        while inChar != (EOL):
+            # If first reading, store reading directly to buffer
+            if firstReading:
+                buff = socket.recv(1)
+                firstReading = False
+
+            # Else, store reading into inChar then append to buffer
+            else:
+                inChar = socket.recv(1)
+                buff += inChar
+
+        # Return buffer
+        return buff.strip(EOL)
+
+
+# [BETA] A More Robust BlueTooth Socket Read Line
+#   [BETA] Read incoming data until an endmarker is reached
+#   [BETA] Arguments   :: {object, string} BT Socket, Endmarker (i.e '$5%!d')
+#   [BETA] Return      :: {string}         Data transmitted over BlueTooth
+'''
+def recv_end( socket, EOL ):
+    buff = []
+    inData = 'null'
+    
+    while True:
+        inData = socket.recv( 8192 )
+        
+        if EOL in inData:
+            buff.append( inData[:inData.find(EOL)] )
+            break
+
+        buff.append(inData)
+        
+        if len(buff) > 1:
+            #check if EOL was split
+            last_pair = buff[-2] + buff[-1]
+            
+            if EOL in last_pair:
+                buff[-2] = last_pair[:last_pair.find(EOL)]
+                buff.pop()
+                break
+                
+    return ''.join(buff)
+'''
+
+# Close BlueTooth Socket (Really unnecessary, but why not?)
+#   Arguments   :: {object} BT Socket
+#   Return      :: -
+def closeSocket( socket ):
+    print( fullStamp() + " closeBTPort()" )
+    socket.close()
+    return 1
+
+
+
+
+# ================
+# SH Specific Fxns
+# ================
+
+#   Create Port
+def createSocket_SH( bt_addr, port, deviceName ):
+    print( fullStamp() + " createBTPort()" )
+    if bluetooth.is_valid_address(bt_addr) is True:                 # Check if address is valid
+        socket = bluetooth.BluetoothSocket( bluetooth.RFCOMM )      # Create a BT socket
+        socket.connect( (bt_addr, port) )                           # Connect to socket
+        time.sleep(1)
+        socketCheck_SH( socket, deviceName )
+        return( socket )
+    else:
+        print( fullStamp() + " Invalid BT address" )
+        return 0
+
+#   Connection Check
+def socketCheck_SH( socket, deviceName ):
+    inString = socket.recv( len(deviceName) )     # recv(buffersize)
+    if inString == deviceName:
+        print( fullStamp() + " Connection successfully established with %s" %deviceName )
+    else:
+        print( fullStamp() + " Sending Stopping Message" )
+        print( fullStamp() + " Please troubleshoot devices" )
+        socket.send( 's' )
+        closeSocket( socket )    
+
+
+# *************************************************************************
+# =====================> PySerial Dependant Functions <====================
+# *************************************************************************
 
 # Find RF Device
 #   This function uses the hardware of the peripheral device or control system to scan/find bluetooth enabled devices
@@ -124,26 +288,10 @@ def createPorts2(deviceNames, deviceBTAddresses, baudrate, timeout, attempts):
             stopbits = serial.STOPBITS_ONE,
             timeout = timeout))
         time.sleep(1)
-        #connectionChecks(rfObjects,deviceNames,deviceBTAddresses,baudrate,timeout,i,attempts)
         connectionCheck2(rfObjects,i,rfObjects[i],deviceNames[i],deviceBTAddresses[i],baudrate,timeout,attempts)
         rfObjects[i].close()
     return rfObjects
 
-# Connection Checks
-#   This variation of the connection check function handle multiple cases assuming that its embedded in a loop
-#   This function has a recursive statement that triggers the reconnection of all ports listed, which is not desirable.
-def connectionChecks(rfObjects,deviceNames,deviceBTAddresses,baudrate,timeout,index,attempts):
-    print fullStamp() + " connectionCheck()"
-    inString = rfObjects[index].readline()[:-1]
-    if inString == deviceNames[index]:
-        print fullStamp() + " Connection successfully established with " + deviceNames[index]
-    else:
-        rfObjects[index].close()
-        if attempts is not 0:
-            return createPorts2(deviceNames,deviceBTAddresses,baudrate,timeout,attempts-1)
-        elif attempts is 0:
-            print fullStamp() + " Connection Attempts Limit Reached"
-            print fullStamp() + " Please troubleshoot " + deviceName
 
 # Add Port
 #   Solution to the dileman of connection checks. In its recursive call, this function only adds the port being checked
@@ -296,52 +444,6 @@ def connectionCheckS(rfObject,deviceName,portNumber,deviceBTAddress,baudrate,att
             print fullStamp() + " Connection Attempts Limit Reached"
             print fullStamp() + " Please troubleshoot " + deviceName
 
-# Port Bind
-#   This function binds the specified bluetooth device to a rfcomm port
-#   Input   ::  {string} port type, {int} port number, {string} bluetooth address of device
-#   Output  ::  None -- Terminal messages
-def portBind(portType, portNumber, deviceBTAddress):
-    print fullStamp() + " Connecting device to " + portType + str(portNumber)                    # Terminal message, program status
-    os.system("sudo " + portType + " bind /dev/" + portType + str(portNumber) + " " + deviceBTAddress)     # Bind bluetooth device to control system
-
-# Port Release
-#   This function releases the specified communication port (serial) given the type and the number
-#   Input   ::  {string} "portType", {int} "portNumber"
-#   Output  ::  None -- Terminal messages
-def portRelease(portType, portNumber):
-    print fullStamp() + " Releasing " + portType + str(portNumber)                               # Terminal message, program status
-    os.system("sudo " + portType + " release " + str(portNumber))                           # Releasing port through terminal commands
-
-# Port Message Check
-#   Reads serial port and checks for a specific input message
-#   Input   ::  {string} "inString" -- String to be compared
-
-# Send Until ReaD
-#       This function sends an input command through the rfcomm port to the remote device
-#       The function sends such command persistently until a timeout or iteration check are met
-#       Input   ::      rfObject                {object}        serial object
-#                       outByte                 {chr}           command in characters/bytes
-#                       timeout                 {int}           maximum wait time for serial communication
-#                       iterCheck               {int}           maximum number of iterations for serial communication
-#       Output  ::      inByte                  {chr}           response from remote device in characters/bytes
-#                       terminal messages       {string}        terminal messages for logging      
-def sendUntilRead(rfObject, outByte, timeout, iterCheck):
-    print fullStamp() + " sendUntilRead()"                                                                  # Printing program name
-    iterCount = 0
-    startTime = time.time()                                                                                 # Initial time, instance before entering "while loop"
-    while (time.time() - startTime) < timeout and iterCount <= iterCheck:                                   # While loop - will continue until either timeout or iteration check is reached
-        print fullStamp() + " Communication attempt " + str(iterCount) + "/" + str(iterCheck)
-        print fullStamp() + " Time = " + str(time.time()-startTime)
-        rfObject.write(outByte)                                                                             # Send CHK / System Check request
-        inByte = rfObject.read()                                                                            # Read response from remote device
-        if inByte == definitions.ACK:                                                                       # If response equals ACK / Positive Acknowledgement
-            # print fullStamp() + " ACK"                                                                    # Print terminal message, device READY / System Check Successful                                                                             
-            return inByte                                                                                   # Return the byte read from the port
-            break                                                                                           # Break out of the "while loop"
-        elif inByte == definitions.NAK:                                                                     # If response equals NAK / Negative Acknowledgement
-            # print fullStamp() + " NAK"                                                                    # Print terminal message, device NOT READY / System Check Failed
-            return inByte                                                                                   # Return the byte read from the port
-            break                                                                                           # Break out of the "while loop"
 
 # Timed Read
 #   This function reads information from the serial port for a given amount of time
@@ -357,76 +459,5 @@ def timedRead(rfObject, timeout):
             break
         elif inString == chr(0x06):
             print "ACK"
-            break
+            break    
 
-# Connect to paired device
-#   Connects to the bluetooth devices specified by the scenario configuration file
-#   Input   ::  {array/list} "deviceName", "deviceBTAddress"
-#   Output  ::  {array/list} "btObjects"
-
-#   Create Port
-def createBTPort( bt_addr, port ):
-    print( fullStamp() + " createBTPort()" )
-    if bluetooth.is_valid_address(bt_addr) is True:                 # Check if address is valid
-        socket = bluetooth.BluetoothSocket( bluetooth.RFCOMM )      # Create a BT socket
-        socket.connect( (bt_addr, port) )                           # Connect to socket
-        time.sleep(1)
-        BTconnectionCheck( socket )
-        return(socket)
-    else:
-        print( fullStamp() + " Invalid BT address" )
-        return 0
-
-#   Connection Check
-def BTconnectionCheck( socket ):
-    outByte = definitions.ENQ
-    socket.send(outByte)
-    inByte = socket.recv(1)     # recv(buffersize)
-
-    if inByte == definitions.ACK:
-        print( fullStamp() + " ACK Connection Established" )
-    
-    elif inByte == definitions.NAK:
-        print( fullStamp() + " NAK device NOT READY" )
-
-    else:
-        print( fullStamp() + " Please troubleshoot devices" )
-
-#   Why not?
-def closeBTPort( socket ):
-    print( fullStamp() + " closeBTPort()" )
-    socket.close()
-
-# ================
-# SH Specific Fxns
-# ================
-
-#   Create Port
-def createBTPortS( bt_addr, port, deviceName ):
-    print( fullStamp() + " createBTPort()" )
-    if bluetooth.is_valid_address(bt_addr) is True:                 # Check if address is valid
-        socket = bluetooth.BluetoothSocket( bluetooth.RFCOMM )      # Create a BT socket
-        socket.connect( (bt_addr, port) )                           # Connect to socket
-        time.sleep(1)
-        BTconnectionCheckS( socket, deviceName )
-        return(socket)
-    else:
-        print( fullStamp() + " Invalid BT address" )
-        return 0
-
-#   Connection Check
-def BTconnectionCheckS( socket, deviceName ):
-    inString = socket.recv( len(deviceName) )     # recv(buffersize)
-    if inString == deviceName:
-        print( fullStamp() + " Connection successfully established with %s" %deviceName )
-    else:
-        print( fullStamp() + " Sending Stopping Message" )
-        print( fullStamp() + " Please troubleshoot devices" )
-        socket.send('s')
-        closeBTPortS( socket )        
-
-#   Why not?
-def closeBTPortS( socket ):
-    print( fullStamp() + " closeBTPort()" )
-    socket.close()
-    print( fullStamp() + " Port Closed" )
