@@ -161,39 +161,21 @@ def stopRecording(rfObject,attempts):
                         print fullStamp() + " Please troubleshoot device"
         rfObject.close()
 
-# Start Microphone Streaming
-#       This function commands the connected stethoscope to begin streaming audio from the microphone to the connected speakers
-#       Input   ::      rfObject                {object}        serial object
-#                       timeout                 {int}           maximum wait time for serial communication
-#                       iterCheck               {int}           maximum number of iterations for serial communication
-#       Output  ::      terminal messages       {string}        terminal messages for logging
-def startMicStream(rfObject):
-        print fullStamp() + " startMicStream()"                                                                 # ...
-        outBytes = [definitions.DC3, definitions.DC3_STARTSTREAM]                                               # ...
-        for i in range(0,len(outBytes)):                                                                        # ...
-                rfObject.write(outBytes[i])                                                                     # ...
-                if i == (len(outBytes) - 1):                                                                    # ...
-                        inByte = rfObject.read(size=1)                                                          # ...
-        if inByte == definitions.ACK:                                                                           # ...
-                print fullStamp() + " ACK Stethoscope will START STREAMING"                                     # If ACK, the stethoscope will START STREAMING
-        elif inByte == definitions.NAK:                                                                         # ...
-                print fullStamp() + " NAK Stethoscope CANNOT START STREAMING"                                   # NAK, in this case, translates to CANNOT START STREAMING
-
-# Start Tracking Microphone Stream for Peaks
+# Start Heart Rate Monitoring
 #       This function commands the connected stethoscope to begin streaming audio from the microphone and find/detect peaks
 #       Input   ::      rfObject                {object}        serial object
 #       Output  ::      terminal messages       {string}        terminal messages for logging
-def startTrackingMicStream(rfObject,attempts):
-        print fullStamp() + " startTrackingMicStream()"                                                                 # Print function name
+def startHBMonitoring(rfObject,attempts):
+        print fullStamp() + " startHBMonitoring()"                                                                 # Print function name
         if rfObject.isOpen() == False:
                 rfObject.open()
-        outByte = definitions.STARTTRACKING                                                                              # Send ENQ / Status Enquiry command - see protocolDefinitions.py
+        outByte = definitions.STARTHBMONITOR                                                                              # Send ENQ / Status Enquiry command - see protocolDefinitions.py
         rfObject.write(outByte)
         inByte = rfObject.read(size=1)                                                                          # Execute sendUntilRead() from bluetoothProtocol.py
         if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " ACK Device will START Tracking"                                                         # ACK, in this case, translates to DEVICE READY
+                print fullStamp() + " ACK Device will START Monitoring"                                                         # ACK, in this case, translates to DEVICE READY
         elif inByte == definitions.NAK:
-                print fullStamp() + " NAK Device CANNOT START Tracking"
+                print fullStamp() + " NAK Device CANNOT START Monitoring"
         else:
                 rfObject.close()
                 if attempts is not 0:
@@ -204,21 +186,21 @@ def startTrackingMicStream(rfObject,attempts):
         rfObject.close()
 
 
-# Start Tracking Microphone Stream for Peaks
+# Start Heart Rate Monitoring
 #       This function commands the connected stethoscope to stop streaming audio from the microphone and find/detect peaks
 #       Input   ::      rfObject                {object}        serial object
 #       Output  ::      terminal messages       {string}        terminal messages for logging
-def stopTrackingMicStream(rfObject,attempts):
-        print fullStamp() + " stopTrackingMicStream()"                                                                 # Print function name
+def stopHBMonitoring(rfObject,attempts):
+        print fullStamp() + " stopHBMonitoring()"                                                                 # Print function name
         if rfObject.isOpen() == False:
                 rfObject.open()
-        outByte = definitions.STOPTRACKING                                                                            # Send ENQ / Status Enquiry command - see protocolDefinitions.py
+        outByte = definitions.STOPHBMONITOR                                                                            # Send ENQ / Status Enquiry command - see protocolDefinitions.py
         rfObject.write(outByte)
         inByte = rfObject.read(size=1)                                                                          # Execute sendUntilRead() from bluetoothProtocol.py
         if inByte == definitions.ACK:                                                                           # Check for ACK / NAK response found through sendUntilRead()
-                print fullStamp() + " ACK Device will STOP Tracking"                                                         # ACK, in this case, translates to DEVICE READY
+                print fullStamp() + " ACK Device will STOP Monitoring"                                                         # ACK, in this case, translates to DEVICE READY
         elif inByte == definitions.NAK:
-                print fullStamp() + " NAK Device CANNOT STOP Tracking"
+                print fullStamp() + " NAK Device CANNOT STOP Monitoring"
         else:
                 rfObject.close()
                 if attempts is not 0:
