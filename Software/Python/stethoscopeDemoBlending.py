@@ -34,7 +34,8 @@ statusEnquiry(rfObject,attempts)
 
 print fullStamp() + " Triggering EARLY SYSTOLIC HEART MURMUR OVERLAY"
 time.sleep(1)
-fileByte = definitions.ESMSYN
+#fileByte = definitions.ESMSYN
+fileByte = definitions.KOROT
 startBlending(rfObject,fileByte,attempts)
 
 tracking_stop_time = 40

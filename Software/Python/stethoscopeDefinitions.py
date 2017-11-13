@@ -42,3 +42,4 @@ STARTBPNORM     = chr(0x26)       # Start BP Cuff augmentation -- Normal heartra
 STARTBPBRADY    = chr(0x27)       # Start BP Cuff augmentation -- Bradycardia                          			[resp: ACK | NAK]
 STARTBPTACHY    = chr(0x28)       # Start BP Cuff augmentation -- Tachycardia                          			[resp: ACK | NAK]
 STOPBPALL       = chr(0x29)       # Stop BP Cuff augmentation                                          			[resp: ACK | NAK]
+KOROT           = chr(0x30)       # Playback of Korotkoff Sound                                        			[resp: ACK | NAK] 
