@@ -37,7 +37,7 @@ time.sleep(1)
 fileByte = definitions.ESMSYN
 startBlending(rfObject,fileByte,attempts)
 
-tracking_stop_time = 20
+tracking_stop_time = 40
 print fullStamp() + " Playback for %.03f seconds" %tracking_stop_time
 time.sleep(40)
 
