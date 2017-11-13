@@ -39,7 +39,7 @@ startBlending(rfObject,fileByte,attempts)
 
 tracking_stop_time = 20
 print fullStamp() + " Playback for %.03f seconds" %tracking_stop_time
-time.sleep(20)
+time.sleep(40)
 
 print fullStamp() + " Stopping EARLY SYSTOLIC HEART MURMUR OVERLAY"
 time.sleep(1)
