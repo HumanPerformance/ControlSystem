@@ -35,13 +35,13 @@ rfObject = createBTPort(deviceBTAddress,portNumber)
 
 print fullStamp() + " Enquiring Stethoscope Status"
 time.sleep(1)
-statusEnquiry(rfObject,attempts)
+statusEnquiry(rfObject)
 
 print fullStamp() + " Triggering EARLY SYSTOLIC HEART MURMUR OVERLAY"
 time.sleep(1)
 #fileByte = definitions.ESMSYN
 fileByte = definitions.KOROT
-startBlending(rfObject,fileByte,attempts)
+startBlending(rfObject,fileByte)
 
 tracking_stop_time = 40
 print fullStamp() + " Playback for %.03f seconds" %tracking_stop_time
@@ -49,7 +49,7 @@ time.sleep(40)
 
 print fullStamp() + " Stopping EARLY SYSTOLIC HEART MURMUR OVERLAY"
 time.sleep(1)
-stopBlending(rfObject,attempts)
+stopBlending(rfObject)
 
 print fullStamp() + " Releasing Serial Port"
 time.sleep(1)
