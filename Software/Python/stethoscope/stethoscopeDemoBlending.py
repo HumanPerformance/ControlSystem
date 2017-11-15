@@ -7,26 +7,23 @@ Fluvio L Lobo Fenoglietto
 01/31/2017
 """
 
-# Import
+# Import Modules, Libraries and/or Functions
 import  sys
 import  os
 import  serial
 import  time
 
-from    stethoscopeConfigProtocol    import *
+from    configurationProtocol    import *
 device = "stethoscope"
 homeDir, pythonDir, deviceDir = definePaths(device)
 response = addPaths(pythonDir)
-
 
 import  stethoscopeDefinitions       as     definitions
 from    os.path                      import expanduser
 from    bluetoothProtocol_teensy32   import *
 from    stethoscopeProtocol          import *
 
-# Operation
-
-
+# Demo Operation
 print fullStamp() + " Connecting to the Stethoscope"
 deviceName = "SS"
 portNumber = 0
