@@ -12,6 +12,13 @@ import  sys
 import  os
 import  serial
 import  time
+
+from    stethoscopeConfigProtocol    import *
+device = "stethoscope"
+homeDir, pythonDir, deviceDir = definePaths(device)
+response = addPaths(pythonDir)
+
+
 import  stethoscopeDefinitions       as     definitions
 from    os.path                      import expanduser
 from    bluetoothProtocol_teensy32   import *
