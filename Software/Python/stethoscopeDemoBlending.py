@@ -26,7 +26,8 @@ portNumber = 0
 deviceBTAddress = "00:06:66:8C:9C:2E"
 baudrate = 115200
 attempts = 5
-rfObject = createPort(deviceName,portNumber,deviceBTAddress,baudrate,attempts)
+#rfObject = createPort(deviceName,portNumber,deviceBTAddress,baudrate,attempts)
+rfObject = createBTPort(deviceBTAddress,portNumber)
 
 print fullStamp() + " Enquiring Stethoscope Status"
 time.sleep(1)
@@ -48,5 +49,6 @@ stopBlending(rfObject,attempts)
 
 print fullStamp() + " Releasing Serial Port"
 time.sleep(1)
-portRelease('rfcomm', 0)
+closeeBTPort(rfObject)
+#portRelease('rfcomm', 0)
 
