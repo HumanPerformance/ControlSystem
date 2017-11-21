@@ -32,10 +32,14 @@ baudrate = 115200
 attempts = 5
 #rfObject = createPort(deviceName,portNumber,deviceBTAddress,baudrate,attempts)
 rfObject = createBTPort(deviceBTAddress,portNumber)
+#rfObject.close()
 
 print fullStamp() + " Enquiring Stethoscope Status"
+#rfObject.open()
 time.sleep(1)
 statusEnquiry(rfObject)
+time.sleep(1)
+#rfObject.close()
 
 print fullStamp() + " Triggering EARLY SYSTOLIC HEART MURMUR OVERLAY"
 time.sleep(1)
