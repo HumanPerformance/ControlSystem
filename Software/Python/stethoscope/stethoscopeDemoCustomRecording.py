@@ -1,8 +1,8 @@
 """
-Stethoscope Demo :: Parsing
+Stethoscope Demo :: Custom Recording
 
 Fluvio L Lobo Fenoglietto
-11/30/2017
+12/01/2017
 """
 
 # Import
@@ -37,8 +37,8 @@ time.sleep(1)
 statusEnquiry(rfObject)
 
 print fullStamp() + " Sending String "
-outString = "HOLA"
-parseString(rfObject,outString)
+recString = "SP02HHS"
+startCustomRecording(rfObject,recString)
 
 time.sleep(20)
 
