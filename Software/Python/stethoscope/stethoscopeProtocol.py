@@ -34,7 +34,7 @@ def systemCheck( rfObject ):
     
     print( fullStamp() + " systemCheck()" )                                                             # Print function name
 
-    outByte = definitions.CHK                                                                           # Send CHK / System Check command - see protocolDefinitions.py                     
+    outByte = definitions.SDCHECK                                                                           # Send CHK / System Check command - see protocolDefinitions.py                     
     rfObject.send(outByte)
     inByte = rfObject.recv(1)                                                                           # Check for response
 

@@ -40,6 +40,8 @@ print fullStamp() + " Sending String "
 outString = "HOLA"
 parseString(rfObject,outString)
 
+print fullStamp() + " Checking SD Card"
+systemCheck(rfObject)
 
 print fullStamp() + " Releasing Serial Port"
 time.sleep(1)
