@@ -15,8 +15,8 @@
 '''
 
 from    time                        import  sleep, time     # Sleep for stability, time for timing
-from    usbProtocl                  import  createUSBPort   # Connect to USB based device
-import  os, os.path, argparse                               # Various features
+from    usbProtocol                  import  createUSBPort  # Connect to USB based device
+import  os, os.path, argparse, platform                     # Various features
 
 # ************************************************************************
 # ======================> CONSTRUCT ARGUMENT PARSER <=====================
@@ -47,10 +47,14 @@ else:
     quit()
 
 
-# Check if directory exists
+# Check if directory+file exist
     if ( os.path.exists(dst)==False ):
         # Create said directory
         os.makedirs(dst)
+
+        # Create file
+        if( os.path.isfile(fileName)==False ):
+            file(fileName, 'w').close()
 
 # ************************************************************************
 # =============================> SMARTHOLDER <============================
