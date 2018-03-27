@@ -17,7 +17,9 @@
 from    time                        import  sleep, time     # Sleep for stability, time for timing
 from    getpass                     import  getuser         # Get user name on WINDOWS
 from    usbProtocol                 import  createUSBPort   # Connect to USB based device
+from    usbProtocol                 import  createACMPort   # ... ACM variant
 from    bluetoothProtocol_teensy32  import  createBTPort    # Connect to BT based devices
+from    timeStamp                   import  fullStamp       # Time stamps
 ##from    smarthandleProtocol         import  triggerDevice   # Not sure why
 import  os, os.path, argparse, platform                     # Various features
 
@@ -26,8 +28,8 @@ import  os, os.path, argparse, platform                     # Various features
 # ************************************************************************
 ap = argparse.ArgumentParser()
 
-ap.add_argument("-t", "--time", type=int, default=30,
-                help="time span of data collection in seconds (Default = 30)")
+ap.add_argument("-t", "--time", type=int, default=15,
+                help="time span of data collection in seconds (Default = 15)")
 
 args = vars( ap.parse_args() )
 
@@ -66,14 +68,14 @@ else: pass                                                  # ...
 # ************************************************************************
 # =============================> SMARTHOLDER <============================
 # ************************************************************************
-name = "smartHoldaa"
 port = 0
 baud = 115200
-atmt = 1e0
+timeout = 1
 
 print( "Enquiring SmartHolder..." ) ,                       # [INFO] Status update
 
-SH = createUSBPort( name, port, baud, atmt )                # Create connection
+##SH = createUSBPort( port, baud, timeout )                   # Create connection
+SH = createACMPort( port, baud, timeout )                   # Create connection
 if( SH.is_open ):                                           # Check if port is open
     pass
 else:
@@ -89,11 +91,20 @@ with open( fileName, 'w' ) as f:                            # Write stuff to fil
 
     start = time()                                          # Start timer
     while( time()-start < args["time"] ):
-        if( SH.in_waiting > 0 ):                            # If there is something in buffer
-            f.write( SH.readline() )                        # Read until newline character is hit
+        inData = "{}".format(SH.readline())                 # Read until timeout is reached
+
+        if( inData == '' ):                                 # Skip empty lines
+            pass                                            # ...
+
+        elif( inData.split()[0] == 'Sensor' ):              # Check if this is the data we want
+            formatted = ( "{} {}"                           # Add time stamp
+                          .format( fullStamp(), inData ) )  # ...
+
+            print( formatted.strip('\n') )                  # [INFO] Status update
+            f.write( formatted )                            # Write to log file
 
         else:                                               # Else, don't read
-            print( time()-start )                           # [INFO] Status update
+            pass                                            # ...
             
 SH.close()                                                  # Close port and move on
 
@@ -107,25 +118,25 @@ print( "DONE" )                                             # [INFO] Status upda
 # ************************************************************************
 # =============================> THERMOMETER <============================
 # ************************************************************************
-BT_addr = "00:06:66:8C:D2:65"                               # BT MAC address
-port = 1                                                    # Port > 0
-
-print( "Enquiring Thermometer..." ) ,                       # [INFO] Status update
-
-try:
-    thermo = createBTPort( BT_addr, port )                  # Establish connection
-
-    sleep( 0.50 )                                           # Sleep for stability   
-    thermo.send( ENQ )                                      # Send ENQUIRY byte
-    inByte = thermo.recv( 1 )                               # Expect 1 byte of data
-
-    with open( fileName, 'a' ) as f:                        # Write stuff to file
-        f.write( "Thermometer...{}\n".format( inByte ) )    # ...
-
-except:
-    print( "[INFO] Error Caught [INFO]..." ) ,              # [INFO] Status update
-
-finally:
-    closeBTPort( thermo )                                   # Close port
-
-print( "DONE" )                                             # [INFO] Status update
+##BT_addr = "00:06:66:8C:D2:65"                               # BT MAC address
+##port = 1                                                    # Port > 0
+##
+##print( "Enquiring Thermometer..." ) ,                       # [INFO] Status update
+##
+##try:
+##    thermo = createBTPort( BT_addr, port )                  # Establish connection
+##
+##    sleep( 0.50 )                                           # Sleep for stability   
+##    thermo.send( ENQ )                                      # Send ENQUIRY byte
+##    inByte = thermo.recv( 1 )                               # Expect 1 byte of data
+##
+##    with open( fileName, 'a' ) as f:                        # Write stuff to file
+##        f.write( "Thermometer...{}\n".format( inByte ) )    # ...
+##
+##except:
+##    print( "[INFO] Error Caught [INFO]..." ) ,              # [INFO] Status update
+##
+##finally:
+##    closeBTPort( thermo )                                   # Close port
+##
+##print( "DONE" )                                             # [INFO] Status update

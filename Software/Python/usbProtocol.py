@@ -80,19 +80,20 @@ def findSmartDevice(smartDeviceName, availableDeviceNames, availableDeviceBTAddr
     return smartDeviceNames, smartDeviceBTAddresses                                                                      # Return RFObject or list of objects
 
 # Create USB Port
-def createPort(portNumber,baudrate,timeout):
+def createACMPort(portNumber,baudrate,timeout):
     rfObject = serial.Serial(
-        port = "/dev/ttyUSB" + str(portNumber),
+        port = "/dev/ttyACM" + str(portNumber),
         baudrate = baudrate,
         timeout = timeout)
     return rfObject
 
 # Create USB Port
-def createUSBPort(deviceName,portNumber,baudrate,attempts):
+def createUSBPort(portNumber,baudrate,timeout):
     print fullStamp() + " createUSBPort()"
     usbObject = serial.Serial(
         port = "/dev/ttyUSB" + str(portNumber),
-        baudrate = baudrate)
+        baudrate = baudrate,
+        timeout = timeout)
     time.sleep(1)
     #usbConnectionCheck(usbObject,deviceName,portNumber,baudrate,attempts)
     usbObject.close()
