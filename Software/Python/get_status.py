@@ -84,10 +84,13 @@ notReady = True
 
 print( __doc__ )                                                    # [INFO] Status update
 
-##SH = createUSBPort( port, baud, timeout )                           # Create connection
-SH = createACMPort( port, baud, timeout )                           # Create connection
+try:                                                                # Create USB connection
+    SH = createUSBPort( port, baud, timeout )                       # ...
+except:                                                             # Create ACM connection
+    SH = createACMPort( port, baud, timeout )                       # ...
+    
 if( SH.is_open ):                                                   # Check if port is open
-    pass
+    pass                                                            # ...
 else:
     SH.open()                                                       # else open it if closed
 
