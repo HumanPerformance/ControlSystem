@@ -3,15 +3,16 @@
 * Inquire about status of all devices present on panel and log to file.
 *
 *
-* VERSION: 0.2
-*   - Check for directory hierarchy
+* VERSION: 0.2.1
+*   - Wait until SmartHolder sends the SOH byte
 *
 * KNOWN ISSUES:
 *   - Danny's existance
 *
 * AUTHOR        : Mohammad Odeh
 * WRITTEN       : Mar. 26th, 2018 Year de Nuestro SeNor
-* LAST MODIFIED : Mar. 27th, 2018 Year of Our Lord
+* LAST MODIFIED : Mar. 30th, 2018 Year of Our Lord
+*
 '''
 
 from    time                        import  sleep, time     # Sleep for stability, time for timing
@@ -36,9 +37,10 @@ args = vars( ap.parse_args() )
 # ************************************************************************
 # =========================> DEFINITIONS & SETUP <========================
 # ************************************************************************
-ENQ		= chr(0x05)                                 # Enquiry.
-ACK             = chr(0x06)                                 # Positive Acknowledgement.
-NAK             = chr(0x15)                                 # Negative Acknowledgement.
+SOH             = chr(0x01)                                 # Start of Header
+ENQ		= chr(0x05)                                 # Enquiry
+ACK             = chr(0x06)                                 # Positive Acknowledgement
+NAK             = chr(0x15)                                 # Negative Acknowledgement
 
 if platform.system()=='Linux':                              # Define paths on a LINUX
 
@@ -71,6 +73,7 @@ else: pass                                                  # ...
 port = 0
 baud = 115200
 timeout = 1
+notReady = True
 
 print( "Enquiring SmartHolder..." ) ,                       # [INFO] Status update
 
@@ -80,6 +83,12 @@ if( SH.is_open ):                                           # Check if port is o
     pass
 else:
     SH.open()                                               # else open it if closed
+
+while( notReady ):                                          # Loop until we receive SOH
+    inData = SH.read( size=1 )                              # ...
+    if( inData == SOH ):                                    # ...
+        print( "Ready!" )                                   # [INFO] Status update
+        break                                               # ...
 
 sleep( 0.50 )                                               # Sleep for stability
 SH.write( ENQ )                                             # Send ENQUIRY byte
@@ -91,20 +100,17 @@ with open( fileName, 'w' ) as f:                            # Write stuff to fil
 
     start = time()                                          # Start timer
     while( time()-start < args["time"] ):
-        inData = "{}".format(SH.readline())                 # Read until timeout is reached
+        inData = "{}".format( SH.readline() )               # Read until timeout is reached
 
         if( inData == '' ):                                 # Skip empty lines
             pass                                            # ...
 
-        elif( inData.split()[0] == 'Sensor' ):              # Check if this is the data we want
+        else:                                               # Else, read incoming data
             formatted = ( "{} {}"                           # Add time stamp
                           .format( fullStamp(), inData ) )  # ...
 
             print( formatted.strip('\n') )                  # [INFO] Status update
             f.write( formatted )                            # Write to log file
-
-        else:                                               # Else, don't read
-            pass                                            # ...
             
 SH.close()                                                  # Close port and move on
 
