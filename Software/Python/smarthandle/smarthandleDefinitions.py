@@ -1,13 +1,14 @@
 """
 smarthandleDefinitions.py
 
-Definitions for the smart handles remain string/characters as of 04/18/2018
+04/18/2018 Upgraded the protocol definitions for the smart handles
 
 Fluvio L Lobo Fenoglietto
 04/18/2018
 """
 # Definition                            Name                                                Value           Class
 # ----------                            ----                                                -----           -----
+ID    = "oto"                           # Device ID for the smart handles
 START = "g"                             # START data collection                             "g"             ORG
 STOP  = "s"                             # STOP data collection                              "s"             ORG
 
