@@ -1,17 +1,9 @@
 """
-consys2.py
+consys4.py
 
-Control System 2
-
-The following script has been design to coordinate the device triggering, time-monitoring, and data collection of the instrument panels.
-The script executes the foloowing sequence:
-
-1 - Panel identification
-2 - Scenario identification
-3 - Pull instruments
-4 - Pull parameters
+Latest version of the control system execution software
             
-Fluvio L. Lobo Fenoglietto 12/19/2016
+Fluvio L. Lobo Fenoglietto 04/18/2018
 """
 
 # ==============================================
@@ -22,14 +14,19 @@ import  sys
 import  os
 import  serial
 import  time
-from    os.path                import expanduser
+from    os.path                     import expanduser
 
-# PD3D Modules
-from    timeStamp              import fullStamp
-from    configurationProtocol  import *
-from    bluetoothProtocol      import *
-from    smarthandleProtocol    import *
+# PD3D modules
+from    configurationProtocol       import *
+device = "smarthandle"
+homeDir, pythonDir, deviceDir = definePaths(device)
+response = addPaths(pythonDir)
 
+from    timeStamp                   import fullStamp
+from    bluetoothProtocol_teensy32  import *
+#from    smarthandleProtocol    import *
+
+"""
 # ==============================================
 # Variables
 # ==============================================
@@ -119,6 +116,7 @@ if rfObject.isOpen() == False:
     rfObject.open()
 
 """
+"""
 configStartTime = time.time()
 configCurrentTime = 0
 configStopTime = 20 #timers[0]
@@ -144,6 +142,7 @@ while configCurrentTime < configStopTime:
     configLoopCounter = configLoopCounter + 1
 
 # End of Configuration Loop
+"""
 """
 # ----------------------------------------------
 # Simulation / Configuration Loop
@@ -186,4 +185,4 @@ if rfObject.isOpen() == True:
 time.sleep(0.25)
 stopDevice2(rfObject,deviceTypes[0])
 
-
+"""
