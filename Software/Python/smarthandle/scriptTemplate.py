@@ -14,10 +14,9 @@ device = "smarthandle"
 homeDir, pythonDir, deviceDir = definePaths(device)
 response = addPaths(pythonDir)
 
-import  stethoscopeDefinitions       as     definitions
+import  smarthandleDefinitions       as     definitions
 from    os.path                      import expanduser
 from    bluetoothProtocol_teensy32   import *
-from    stethoscopeProtocol          import *
 
 # Operation
-print "hola"
+
