@@ -32,6 +32,7 @@ response = addPaths(stetDir)
 
 from    timeStamp                   import fullStamp
 from    bluetoothProtocol_teensy32  import *
+from    smarthandleProtocol         import *
 
 
 # ==============================================
@@ -64,6 +65,18 @@ print fullStamp() + " Connecting to panel devices "
 
 smarthandle_bt_object = createBTPort( smarthandle_bt_address[0], 1 )
 
+# triggering device
+startDataStream( smarthandle_bt_object, 20 )
+
+for i in range(0,100):
+    time.sleep(0.10)
+    inString = smarthandle_bt_object.recv(128)
+    print inString
+
+
+stopDataStream( smarthandle_bt_object, 20 )
+
+smarthandle_bt_object.close()
 
 """
 rfObject = createPortS(deviceTypes[1],1,deviceAddresses[1],115200,5)

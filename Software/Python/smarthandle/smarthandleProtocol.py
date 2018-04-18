@@ -18,23 +18,25 @@ import smarthandleDefinitions as definitions
 
 # Functions
 
-def startDataStream(rfObject):
-    for i in range(0, 100):
+def startDataStream(rfObject, count):
+    for i in range(0, count):
         time.sleep(0.10)
-        inString = rfObject.recv(32)
+        inString = rfObject.recv(32).replace('\n','')
+        print inString
         if inString == definitions.ID:
             rfObject.send( definitions.START )
             print fullStamp() + " Trigger sent to smart handle "
-        elif i = 99:
+        elif i == (count - 1):
             print fullStamp() + " Triggering complete "
 
 
-def stopDataStream(rfObject):
-    for i in range(0, 100):
+def stopDataStream(rfObject, count):
+    print fullStamp() + " Stop sent to smart handle "
+    for i in range(0, count):
         rfObject.send( definitions.STOP )
-        print fullStamp() + " Stop sent to smart handle "
         time.sleep(0.10)
         inString = rfObject.recv(32)
+        print inString
         if inString == definitions.ID:
             print fullStamp() + " Device stopped successfully "
 
