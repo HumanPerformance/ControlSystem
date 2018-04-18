@@ -18,92 +18,54 @@ from    os.path                     import expanduser
 
 # PD3D modules
 from    configurationProtocol       import *
-device = "smarthandle"
-homeDir, pythonDir, deviceDir = definePaths(device)
+shan    = "smarthandle"
+#shol    = "smartholder"
+stet    = "stethoscope"
+homeDir, pythonDir, shanDir = definePaths(shan)
+#homeDir, pythonDir, sholDir = definePaths(shol)
+homeDir, pythonDir, stetDir = definePaths(stet)
+
 response = addPaths(pythonDir)
+response = addPaths(shanDir)
+#response = addPaths(sholDir)
+response = addPaths(stetDir)
 
 from    timeStamp                   import fullStamp
 from    bluetoothProtocol_teensy32  import *
-#from    smarthandleProtocol    import *
 
-"""
+
 # ==============================================
 # Variables
 # ==============================================
-
-# ----------------------------------------------
-# Input Terminal Variables
-#   The script reads the inputs from the terminal execution triggered by the Control Room
-#   Consys currently handles one (1) input variable, the "scenario #"
-# ----------------------------------------------
-try:
-    inputArg = sys.argv
-    selectedScenario = int(sys.argv[1])
-    print fullStamp() + " User Executed " + inputArg[0] + ", scenario #" + inputArg[1]
-except:
-    selectedScenario = 0
-
-# ----------------------------------------------
-# Panel self-dentification
-#   The panel obtains the mac address of the local system
-# ----------------------------------------------
-mac_bt = getMAC('eth0')
 
 # ----------------------------------------------
 # Timers
 # ----------------------------------------------
 executionTimeStamp = fullStamp()
 
-# ----------------------------------------------
-# Path/Directory Variables
-# ----------------------------------------------
-pythonDir, configDir, configFile, dataDir, outputDir = definePaths()
 
-# ----------------------------------------------
-# Upload Configuration XML
-# ----------------------------------------------
-tree, root = readConfigFile(configFile)
-
-# ----------------------------------------------
-# Define Panel
-#   Using the MAC address from the local system and the configuration XML, the program identifies the SIP id and index
-# ----------------------------------------------
-panelIndex, panelID = selfID(mac_bt, tree, root)
-
-# ----------------------------------------------
-# Define Scenario
-#   Using the scenario number from the terminal input and the configuration XML, the program identifies the scenarion index
-# ----------------------------------------------
-scenarioIndex, scenarioNumber, scenarioID = findScenario(selectedScenario, tree, root)
-
-# ----------------------------------------------
-# Pull Scenario Info
-#   This functions pulls relevant information about the scenarios from the configuration XML
-# ----------------------------------------------
-timers = pullParameters(scenarioIndex, tree, root)
-
-# ----------------------------------------------
-# Pull and Cross-Reference Devices
-#   This function pulls the devices to be used in the selected scenario from the configuration XML
-#   Then uses that list to croo-reference the addresses of the devices associated with the selected instrument panel
-#   Returns the list of device names and addresses for execution
-# ----------------------------------------------
-scenarioDeviceNames = pullInstruments(panelIndex, scenarioIndex, tree, root)
-deviceIndex, deviceTypes, deviceNames, deviceAddresses = instrumentCrossReference(panelIndex, scenarioDeviceNames, tree, root)
 
 # ==============================================
 # Operation
 # ==============================================
 
-# ----------------------------------------------
-# Pre-Simulation / Configuration Loop
-#   The following while-loop will preceed the simulatio loop
-#   This loop works as a configuration step
-# ----------------------------------------------
+# Device connection 
 
 
-print fullStamp() + " Start Configuration"
+print fullStamp() + " OPERATION "
+print fullStamp() + " Begin device configuration "
 
+# the following section must be changed to use the old .XML scheme ---- #
+smarthandle_bt_address = (["00:06:66:83:89:5F",
+                           "00:06:66:83:89:5F"])
+# --------------------------------------------------------------------- #
+
+print fullStamp() + " Connecting to panel devices "
+
+smarthandle_bt_object = createBTPort( smarthandle_bt_address[0], 1 )
+
+
+"""
 rfObject = createPortS(deviceTypes[1],1,deviceAddresses[1],115200,5)
 
 # triggering device
@@ -115,8 +77,8 @@ time.sleep(1)
 if rfObject.isOpen() == False:
     rfObject.open()
 
-"""
-"""
+
+
 configStartTime = time.time()
 configCurrentTime = 0
 configStopTime = 20 #timers[0]
