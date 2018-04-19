@@ -30,6 +30,51 @@ def startDataStream(rfObject, count):
             print fullStamp() + " Triggering complete "
 
 
+def readDataStream( socket, EOL=None ):
+    inData, inChar = 'null', 'null'
+    firstReading = True
+    
+    if EOL is None:
+        # Get rid of any chopped/truncated data
+        while inData != ('\n' or '\r' or '\0'):
+            inData = socket.recv(1)
+
+        # Read into buffer as long EOL is not reached
+        while inChar != ('\n' or '\r' or '\0'):
+            # If first reading, store reading directly to buffer
+            if firstReading:
+                buff = socket.recv(1)
+                firstReading = False
+
+            # Else, store reading into inChar then append to buffer
+            else:
+                inChar = socket.recv(1)
+                buff += inChar
+
+        # Return buffer
+        return buff.strip('\n')
+
+    else:
+        # Get rid of any chopped/truncated data
+        while inData != (EOL):
+            inData = socket.recv(1)
+
+        # Read into buffer as long EOL is not reached
+        while inChar != (EOL):
+            # If first reading, store reading directly to buffer
+            if firstReading:
+                buff = socket.recv(1)
+                firstReading = False
+
+            # Else, store reading into inChar then append to buffer
+            else:
+                inChar = socket.recv(1)
+                buff += inChar
+
+        # Return buffer
+        return buff.strip(EOL)   
+
+
 def stopDataStream(rfObject, count):
     print fullStamp() + " Stop sent to smart handle "
     for i in range(0, count):

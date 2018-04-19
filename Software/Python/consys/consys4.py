@@ -69,8 +69,8 @@ smarthandle_bt_object = createBTPort( smarthandle_bt_address[0], 1 )
 startDataStream( smarthandle_bt_object, 20 )
 
 for i in range(0,100):
-    time.sleep(0.10)
-    inString = smarthandle_bt_object.recv(128)
+    # time.sleep(0.10)
+    inString = readDataStream( smarthandle_bt_object, '\n' )
     print inString
 
 
