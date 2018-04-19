@@ -42,9 +42,8 @@ from    smarthandleProtocol         import *
 # ----------------------------------------------
 # Timers
 # ----------------------------------------------
-executionTimeStamp = fullStamp()
-
-
+executionTimeStamp  = fullStamp()
+simDuration         = 20                            # seconds
 
 # ==============================================
 # Operation
@@ -68,13 +67,23 @@ smarthandle_bt_object = createBTPort( smarthandle_bt_address[0], 1 )
 # triggering device
 startDataStream( smarthandle_bt_object, 20 )
 
-for i in range(0,100):
-    # time.sleep(0.10)
-    inString = readDataStream( smarthandle_bt_object, '\n' )
-    print inString
 
+# data collection
+simStartTime        = time.time()
+simCurrentTime      = 0                             # seconds
+simStopTime         = simDuration                   # seconds
+
+dataStream          = []
+
+while simCurrentTime < simStopTime:
+
+    dataStream.append( ["%.02f" %simCurrentTime, readDataStream( smarthandle_bt_object, '\n' )] )
+
+    simCurrentTime = time.time() - simStartTime
 
 stopDataStream( smarthandle_bt_object, 20 )
+
+print dataStream
 
 smarthandle_bt_object.close()
 
