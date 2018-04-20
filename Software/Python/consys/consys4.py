@@ -60,27 +60,50 @@ print fullStamp() + " Begin device configuration "
 smarthandle_bt_address = (["00:06:66:83:89:5F",
                            "00:06:66:83:89:5F"])
 # --------------------------------------------------------------------- #
+port = 0
+baud = 115200
+timeout = 1
+notReady = True
 
 print fullStamp() + " Connecting to panel devices "
 
 smarthandle_bt_object   = createBTPort( smarthandle_bt_address[0], 1 )
 
 try:
-    smartholder_usb_object  = createUSBPort( 0, 115200, 1 )
+    smartholder_usb_object  = createUSBPort( port, baud, timeout )
 except:
-    smartholder_usb_object  = createACMPort( 0, 115200, 1 )
+    smartholder_usb_object  = createACMPort( port, baud, timeout )
 
 if smartholder_usb_object.is_open:
     pass
 else:
     smartholder_usb_object.open()
 
+while( notReady ):                                                  # Loop until we receive SOH
+    inData = SH.read( size=1 )                                      # ...
+    if( inData == SOH ):                                            # ...
+        print( "{} [INFO] SOH Received".format( fullStamp() ) )     # [INFO] Status update
+        break                                                       # ...
 
-while True:
-    time.sleep(0.50)
-    smartholder_usb_object.write( chr(0x05) )
-    time.sleep(0.25)
-    print smartholder_usb_object.readline()
+time.sleep(0.50)                                                    # Sleep for stability!
+smartholder_usb_object.write( chr(0x05) )                           # Send an enquiry
+
+while( notReady ):                                                  # Loop until we are ready to start simulation
+    
+    inData = "{}".format( SH.readline() )                           # Read until timeout is reached
+    if( inData == '' ):                                             # Skip empty lines
+        pass                                                        # ...
+
+    else:                                                           # Else, read incoming data
+        for line in inData:                                         # Iterate over inData contents
+            split_line = line.split()                               # Split line contents
+
+        formatted = ( "{} {}: {}".format( t(), split_line[1], split_line[2] ) )     # Construct string
+        print( formatted.strip('\n') )                              # [INFO] Status update
+
+        if( split_line[2] == '0' ):                                 # If device is not on holder
+            print( "Device ready for simulation scenario" )         # ...
+            break                                                   # Break out of loop!
 
 # triggering device
 startDataStream( smarthandle_bt_object, 20 )
