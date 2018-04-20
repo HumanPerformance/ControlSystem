@@ -39,6 +39,10 @@ from    smarthandleProtocol         import *
 # ==============================================
 # Variables
 # ==============================================
+SOH             = chr(0x01)                                         # Start of Header
+ENQ		= chr(0x05)                                         # Enquiry
+ACK             = chr(0x06)                                         # Positive Acknowledgement
+NAK             = chr(0x15)                                         # Negative Acknowledgement
 
 # ----------------------------------------------
 # Timers
@@ -80,25 +84,24 @@ else:
     smartholder_usb_object.open()
 
 while( notReady ):                                                  # Loop until we receive SOH
-    inData = SH.read( size=1 )                                      # ...
+    inData = smartholder_usb_object.read( size=1 )                                      # ...
     if( inData == SOH ):                                            # ...
         print( "{} [INFO] SOH Received".format( fullStamp() ) )     # [INFO] Status update
         break                                                       # ...
 
 time.sleep(0.50)                                                    # Sleep for stability!
-smartholder_usb_object.write( chr(0x05) )                           # Send an enquiry
+
 
 while( notReady ):                                                  # Loop until we are ready to start simulation
     
-    inData = "{}".format( SH.readline() )                           # Read until timeout is reached
+    inData = "{}".format( smartholder_usb_object.readline() )                           # Read until timeout is reached
     if( inData == '' ):                                             # Skip empty lines
         pass                                                        # ...
 
     else:                                                           # Else, read incoming data
-        for line in inData:                                         # Iterate over inData contents
-            split_line = line.split()                               # Split line contents
+        split_line = inData.split()                               # Split line contents
 
-        formatted = ( "{} {}: {}".format( t(), split_line[1], split_line[2] ) )     # Construct string
+        formatted = ( "{} {} {}".format( fullStamp(), split_line[1], split_line[2] ) )     # Construct string
         print( formatted.strip('\n') )                              # [INFO] Status update
 
         if( split_line[2] == '0' ):                                 # If device is not on holder
