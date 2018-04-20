@@ -19,19 +19,20 @@ from    os.path                     import expanduser
 # PD3D modules
 from    configurationProtocol       import *
 shan    = "smarthandle"
-#shol    = "smartholder"
+shol    = "smartholder"
 stet    = "stethoscope"
 homeDir, pythonDir, shanDir = definePaths(shan)
-#homeDir, pythonDir, sholDir = definePaths(shol)
+homeDir, pythonDir, sholDir = definePaths(shol)
 homeDir, pythonDir, stetDir = definePaths(stet)
 
 response = addPaths(pythonDir)
 response = addPaths(shanDir)
-#response = addPaths(sholDir)
+response = addPaths(sholDir)
 response = addPaths(stetDir)
 
 from    timeStamp                   import fullStamp
 from    bluetoothProtocol_teensy32  import *
+from    usbProtocol                 import *
 from    smarthandleProtocol         import *
 
 
@@ -86,6 +87,8 @@ stopDataStream( smarthandle_bt_object, 20 )
 print dataStream
 
 smarthandle_bt_object.close()
+
+
 
 """
 rfObject = createPortS(deviceTypes[1],1,deviceAddresses[1],115200,5)
