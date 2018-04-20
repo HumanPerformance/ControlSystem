@@ -1,9 +1,10 @@
 """
-consys4.py
+consys4P3.py
 
+Version to be executed on Python 3+
 Latest version of the control system execution software
             
-Fluvio L. Lobo Fenoglietto 04/18/2018
+Fluvio L. Lobo Fenoglietto 04/19/2018
 """
 
 # ==============================================
@@ -53,15 +54,15 @@ simDuration         = 20                            # seconds
 # Device connection 
 
 
-print fullStamp() + " OPERATION "
-print fullStamp() + " Begin device configuration "
+print( fullStamp() + " OPERATION " )
+print( fullStamp() + " Begin device configuration " )
 
 # the following section must be changed to use the old .XML scheme ---- #
 smarthandle_bt_address = (["00:06:66:83:89:5F",
                            "00:06:66:83:89:5F"])
 # --------------------------------------------------------------------- #
 
-print fullStamp() + " Connecting to panel devices "
+print( fullStamp() + " Connecting to panel devices " )
 
 smarthandle_bt_object   = createBTPort( smarthandle_bt_address[0], 1 )
 
@@ -70,17 +71,13 @@ try:
 except:
     smartholder_usb_object  = createACMPort( 0, 115200, 1 )
 
-if smartholder_usb_object.is_open:
+if( smartholder_usb_object.is_open() ):
     pass
 else:
     smartholder_usb_object.open()
 
-
-while True:
-    time.sleep(0.50)
-    smartholder_usb_object.write( chr(0x05) )
-    time.sleep(0.25)
-    print smartholder_usb_object.readline()
+inData = smartholder_usb_object.read(1)
+print( inData )
 
 # triggering device
 startDataStream( smarthandle_bt_object, 20 )
@@ -93,7 +90,7 @@ simStopTime         = simDuration                   # seconds
 
 dataStream          = []
 
-while simCurrentTime < simStopTime:
+while( simCurrentTime < simStopTime ):
 
     dataStream.append( ["%.02f" %simCurrentTime, readDataStream( smarthandle_bt_object, '\n' )] )
 
@@ -101,7 +98,7 @@ while simCurrentTime < simStopTime:
 
 stopDataStream( smarthandle_bt_object, 20 )
 
-print dataStream
+print( dataStream )
 
 smarthandle_bt_object.close()
 
