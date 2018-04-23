@@ -18,6 +18,19 @@ import smarthandleDefinitions as definitions
 
 # Functions
 
+# startDataStream -v.2.0
+def startDataStream( socket, count, EOL=None):
+    for i in range(0, count):
+        buff = readDataStream( socket, EOL=None )
+        print( buff )
+        if buff == definitions.ID:
+            socket.send( definitions.START )
+            print( fullStamp() + " Trigger sent to smart handle " )
+        elif i == ( count -1 ):
+            print( fullStamp() + " Triggering complete " )
+
+"""
+startDataStream -v.1.0
 def startDataStream(rfObject, count):
     for i in range(0, count):
         time.sleep(0.10)
@@ -28,7 +41,7 @@ def startDataStream(rfObject, count):
             print fullStamp() + " Trigger sent to smart handle "
         elif i == (count - 1):
             print fullStamp() + " Triggering complete "
-
+"""
 
 def readDataStream( socket, EOL=None ):
     inData, inChar = 'null', 'null'

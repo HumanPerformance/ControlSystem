@@ -120,7 +120,7 @@ while( notReady ):                                                  # Loop until
             break                                                   # Break out of loop!
 """
 # triggering device
-startDataStream( smarthandle_bt_object, 20 )
+startDataStream( smarthandle_bt_object, 20, '\n')
 
 
 # data collection
