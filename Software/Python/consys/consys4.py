@@ -81,7 +81,11 @@ notReady = True
 
 print fullStamp() + " Connecting to panel devices "
 
-smarthandle_bt_object   = createBTPort( smarthandle_bt_address[0], 1 )
+N_smarthandles = 2
+smarthandle_bt_object = []
+for i in range(0, N_smarthandles):
+    smarthandle_bt_object.append( createBTPort( smarthandle_bt_address[i], 1 ) )            # Connecting to bluetooth handle
+    startDataStream( smarthandle_bt_object[i], 20, '\n' )                                   # Starting data streaming
 
 """
 try:
@@ -120,7 +124,7 @@ while( notReady ):                                                  # Loop until
             break                                                   # Break out of loop!
 """
 # triggering device
-startDataStream( smarthandle_bt_object, 20, '\n' )
+# startDataStream( smarthandle_bt_object, 20, '\n' )
 
 
 # data collection
@@ -132,15 +136,17 @@ dataStream          = []
 
 while simCurrentTime < simStopTime:
 
-    dataStream.append( ["%.02f" %simCurrentTime, readDataStream( smarthandle_bt_object, '\n' )] )
+    dataStream.append( ["%.02f" %simCurrentTime, readDataStream( smarthandle_bt_object[1], '\n' )] )
 
     simCurrentTime = time.time() - simStartTime
 
-stopDataStream( smarthandle_bt_object, 20, '\n' )
-
+for i in range(0, N_smarthandles):
+    stopDataStream( smarthandle_bt_object[i], 20, '\n' )                                    # Stop streaming data
+    smarthandle_bt_object[i].close()                                                        # Closing bluetooth port
+    
 print dataStream
 
-smarthandle_bt_object.close()
+
 
 
 
