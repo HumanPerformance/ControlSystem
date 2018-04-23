@@ -85,7 +85,7 @@ notReady = True
 
 print fullStamp() + " Connecting to panel devices "
 
-N_smarthandles = 2
+N_smarthandles = 1
 smarthandle_bt_object = []
 for i in range(0, N_smarthandles):
     smarthandle_bt_object.append( createBTPort( smarthandle_bt_address[i], 1 ) )            # Connecting to bluetooth handle
@@ -142,23 +142,24 @@ dataStream          = []
 dataStreamOne       = []
 dataStreamTwo       = []
 
-while simCurrentTime < simStopOne:
+while( simCurrentTime < simStopOne):
 
     dataStreamOne.append( ["%.02f" %simCurrentTime, readDataStream( smarthandle_bt_object[0], '\n' )] )
 
     simCurrentTime = time.time() - simStartTime
 
-while simCurrentTime < simStopOne:
+#while( (simCurrentTime > simStopOne) and (simCurrentTime < simStopTwo)):
 
-    dataStreamTwo.append( ["%.02f" %simCurrentTime, readDataStream( smarthandle_bt_object[1], '\n' )] )
+#    dataStreamTwo.append( ["%.02f" %simCurrentTime, readDataStream( smarthandle_bt_object[1], '\n' )] )
 
-    simCurrentTime = time.time() - simStartTime
+#    simCurrentTime = time.time() - simStartTime
 
 for i in range(0, N_smarthandles):
+    time.sleep(0.50)
     stopDataStream( smarthandle_bt_object[i], 20, '\n' )                                    # Stop streaming data
     smarthandle_bt_object[i].close()                                                        # Closing bluetooth port
     
-print dataStream
+#print dataStream
 
 
 # ==============================================
@@ -184,3 +185,21 @@ else:
 otoscope_output_file        = "oto.txt"
 ophthalmoscope_output_file  = "ophtho.txt"
 
+N_lines_one = len( dataStreamOne )
+N_lines_two = len( dataStreamTwo )
+
+for i in range(0, N_lines_one):
+    if( i == 0 ):
+        with open(otoscope_output_file, 'a') as dataFile:
+            dataFile.write( fullStamp() + " Smart Handle = " + "otoscope" + '\n' )
+            dataFile.write( fullStamp() + " Bluetooth Address = " + otoscope_bt_address + '\n')
+    with open(otoscope_output_file, 'a') as dataFile:
+        dataFile.write( dataStreamOne[i][0] + "," + dataStreamOne[i][1] + '\n' )
+
+for i in range(0, N_lines_two):
+    if( i == 0 ):
+        with open(ophthalmoscope_output_file, 'a') as dataFile:
+            dataFile.write( fullStamp() + " Smart Handle = " + "ophthalmoscope" + '\n' )
+            dataFile.write( fullStamp() + " Bluetooth Address = " + ophthalmoscope_bt_address + '\n')
+    with open(ophthalmoscope_output_file, 'a') as dataFile:
+        dataFile.write( dataStreamTwo[i][0] + "," + dataStreamTwo[i][1] + '\n' )
