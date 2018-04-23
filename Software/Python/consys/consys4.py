@@ -120,7 +120,7 @@ while( notReady ):                                                  # Loop until
             break                                                   # Break out of loop!
 """
 # triggering device
-startDataStream( smarthandle_bt_object, 20, '\n')
+startDataStream( smarthandle_bt_object, 20, '\n' )
 
 
 # data collection
@@ -136,7 +136,7 @@ while simCurrentTime < simStopTime:
 
     simCurrentTime = time.time() - simStartTime
 
-stopDataStream( smarthandle_bt_object, 20 )
+stopDataStream( smarthandle_bt_object, 20, '\n' )
 
 print dataStream
 

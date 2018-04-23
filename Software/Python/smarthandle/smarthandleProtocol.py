@@ -25,7 +25,7 @@ def startDataStream( socket, count, EOL=None):
         #print( buff )
         if( buff == definitions.ID ):
             socket.send( definitions.START )
-            print( fullStamp() + " Trigger sent to smart handle " )
+            print( fullStamp() + " START trigger sent to smart handle " )
         elif( len( buff ) > ( 2*len( definitions.ID ))):
             print( fullStamp() + " Triggering Completed Successfully " )
             break        
@@ -90,7 +90,22 @@ def readDataStream( socket, EOL=None ):
         # Return buffer
         return buff.strip(EOL)   
 
+# stopDataStream -v.2.0
+def stopDataStream( socket, count, EOL=None ):
+    for i in range(0, count):
+        buff = readDataStream( socket, EOL=None )
+        #print( buff )
+        if( len( buff ) > ( 2*len( definitions.ID )) ):
+            socket.send( definitions.STOP )
+            print( fullStamp() + " STOP trigger sent to smart handle " )
+        elif( buff == definitions.ID ):
+            print( fullStamp() + " Stopping Completed Successfully " )
+            break        
+        elif( i == ( count - 1 )):
+            print( fullStamp() + " Stopping Incomplete - Troubleshoot device " )
 
+"""
+stopDataStream -v.1.0
 def stopDataStream(rfObject, count):
     print fullStamp() + " Stop sent to smart handle "
     for i in range(0, count):
@@ -100,4 +115,4 @@ def stopDataStream(rfObject, count):
         print inString
         if inString == definitions.ID:
             print fullStamp() + " Device stopped successfully "
-
+"""
