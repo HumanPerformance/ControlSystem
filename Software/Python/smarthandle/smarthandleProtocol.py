@@ -22,12 +22,15 @@ import smarthandleDefinitions as definitions
 def startDataStream( socket, count, EOL=None):
     for i in range(0, count):
         buff = readDataStream( socket, EOL=None )
-        print( buff )
-        if buff == definitions.ID:
+        #print( buff )
+        if( buff == definitions.ID ):
             socket.send( definitions.START )
             print( fullStamp() + " Trigger sent to smart handle " )
-        elif i == ( count -1 ):
-            print( fullStamp() + " Triggering complete " )
+        elif( len( buff ) > ( 2*len( definitions.ID ))):
+            print( fullStamp() + " Triggering Completed Successfully " )
+            break        
+        elif( i == ( count -1 )):
+            print( fullStamp() + " Triggering Incomplete - Troubleshoot device " )
 
 """
 startDataStream -v.1.0
