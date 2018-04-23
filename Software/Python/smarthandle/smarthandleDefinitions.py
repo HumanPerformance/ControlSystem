@@ -8,7 +8,7 @@ Fluvio L Lobo Fenoglietto
 """
 # Definition                            Name                                                Value           Class
 # ----------                            ----                                                -----           -----
-ID    = "oto"                           # Device ID for the smart handles
+ID    = "sh"                            # Device ID for the smart handles
 START = "g"                             # START data collection                             "g"             ORG
 STOP  = "s"                             # STOP data collection                              "s"             ORG
 

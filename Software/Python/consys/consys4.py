@@ -47,10 +47,12 @@ from    smarthandleProtocol         import *
 otoscope_bt_address         = "00:06:66:83:89:6D"
 ophthalmoscope_bt_address   = "00:06:66:80:8C:08"
 
+"""
 SOH             = chr(0x01)                                         # Start of Header
 ENQ		= chr(0x05)                                         # Enquiry
 ACK             = chr(0x06)                                         # Positive Acknowledgement
 NAK             = chr(0x15)                                         # Negative Acknowledgement
+"""
 
 # ----------------------------------------------
 # Timers
@@ -81,6 +83,7 @@ print fullStamp() + " Connecting to panel devices "
 
 smarthandle_bt_object   = createBTPort( smarthandle_bt_address[0], 1 )
 
+"""
 try:
     smartholder_usb_object  = createUSBPort( port, baud, timeout )
 except:
@@ -115,7 +118,7 @@ while( notReady ):                                                  # Loop until
         if( split_line[1] == '1:' and split_line[2] == '0' ):                                 # If device is not on holder
             print( "Device ready for simulation scenario" )         # ...
             break                                                   # Break out of loop!
-
+"""
 # triggering device
 startDataStream( smarthandle_bt_object, 20 )
 
