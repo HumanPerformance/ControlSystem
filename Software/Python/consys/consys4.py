@@ -104,7 +104,7 @@ while( notReady ):                                                  # Loop until
         formatted = ( "{} {} {}".format( fullStamp(), split_line[1], split_line[2] ) )     # Construct string
         print( formatted.strip('\n') )                              # [INFO] Status update
 
-        if( split_line[2] == '0' ):                                 # If device is not on holder
+        if( split_line[1] == '1:' and split_line[2] == '0' ):                                 # If device is not on holder
             print( "Device ready for simulation scenario" )         # ...
             break                                                   # Break out of loop!
 
