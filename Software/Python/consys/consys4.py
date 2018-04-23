@@ -85,7 +85,7 @@ notReady = True
 
 print fullStamp() + " Connecting to panel devices "
 
-N_smarthandles = 1
+N_smarthandles = 2
 smarthandle_bt_object = []
 for i in range(0, N_smarthandles):
     smarthandle_bt_object.append( createBTPort( smarthandle_bt_address[i], 1 ) )            # Connecting to bluetooth handle
@@ -148,11 +148,11 @@ while( simCurrentTime < simStopOne):
 
     simCurrentTime = time.time() - simStartTime
 
-#while( (simCurrentTime > simStopOne) and (simCurrentTime < simStopTwo)):
+while( (simCurrentTime > simStopOne) and (simCurrentTime < simStopTwo)):
 
-#    dataStreamTwo.append( ["%.02f" %simCurrentTime, readDataStream( smarthandle_bt_object[1], '\n' )] )
+    dataStreamTwo.append( ["%.02f" %simCurrentTime, readDataStream( smarthandle_bt_object[1], '\n' )] )
 
-#    simCurrentTime = time.time() - simStartTime
+    simCurrentTime = time.time() - simStartTime
 
 for i in range(0, N_smarthandles):
     time.sleep(0.50)
@@ -182,8 +182,8 @@ if( path.exists( stampedDir ) == False ):
 else:
     print( fullStamp() + " Found time-stamped directory " )
 
-otoscope_output_file        = "oto.txt"
-ophthalmoscope_output_file  = "ophtho.txt"
+otoscope_output_file        = stampedDir + "oto.txt"
+ophthalmoscope_output_file  = stampedDir + "ophtho.txt"
 
 N_lines_one = len( dataStreamOne )
 N_lines_two = len( dataStreamTwo )
