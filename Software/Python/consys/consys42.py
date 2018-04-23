@@ -47,9 +47,15 @@ from    smarthandleProtocol         import *
 # ----------------------------------------------
 # Devices
 # ----------------------------------------------
+smarthandle_name            = (["Otoscope",
+                                "Ophthalmoscope"])
 
 otoscope_bt_address         = "00:06:66:83:89:6D"
 ophthalmoscope_bt_address   = "00:06:66:80:8C:08"
+
+smarthandle_bt_address      = ([otoscope_bt_address,
+                                ophthalmoscope_bt_address])
+
 
 """
 SOH             = chr(0x01)                                         # Start of Header
@@ -62,38 +68,37 @@ NAK             = chr(0x15)                                         # Negative A
 # Timers
 # ----------------------------------------------
 executionTimeStamp  = fullStamp()
-simDuration         = 40                            # seconds
 
 # ==============================================
 # Operation
 # ==============================================
 
-# Device connection 
-
-
+# ----------------------------------------------------------------------------------------- #
+# Configuration
+# ----------------------------------------------------------------------------------------- #
 print fullStamp() + " OPERATION "
 print fullStamp() + " Begin device configuration "
 
 # the following section must be changed to use the old .XML scheme ---- #
-smarthandle_bt_address = ([otoscope_bt_address,
-                           ophthalmoscope_bt_address])
+
 # --------------------------------------------------------------------- #
 port = 0
 baud = 115200
 timeout = 1
 notReady = True
 
-print fullStamp() + " Connecting to panel devices "
-
+print( fullStamp() + " Connecting to panel devices " )
+print( fullStamp() + " Connecting to smart handles " )
 N_smarthandles = 2
 smarthandle_bt_object = []
 for i in range(0, N_smarthandles):
     smarthandle_bt_object.append( createBTPort( smarthandle_bt_address[i], 1 ) )            # Connecting to bluetooth handle
     startDataStream( smarthandle_bt_object[i], 20, '\n' )                                   # Starting data streaming
 
+print( fullStamp() + " Connecting to smart holders " )
 
 try:
-    smartholder_usb_object  = createUSBPort( port, baud, timeout )
+    smartholder_usb_object  = createUSBPort( port, baud, timeout )                          # test USB vs ACM port issue
 except:
     smartholder_usb_object  = createACMPort( port, baud, timeout )
 
@@ -102,42 +107,52 @@ if smartholder_usb_object.is_open:
 else:
     smartholder_usb_object.open()
 
-while( notReady ):                                                  # Loop until we receive SOH
-    inData = smartholder_usb_object.read( size=1 )                                      # ...
-    if( inData == SOH ):                                            # ...
-        print( "{} [INFO] SOH Received".format( fullStamp() ) )     # [INFO] Status update
-        break                                                       # ...
+while( notReady ):                                                                          # Loop until we receive SOH
+    inData = smartholder_usb_object.read( size=1 )                                          # ...
+    if( inData == SOH ):                                                                    # ...
+        print( "{} [INFO] SOH Received".format( fullStamp() ) )                             # [INFO] Status update
+        break                                                                               # ...
 
-time.sleep(0.50)                                                    # Sleep for stability!
-
-
-while( notReady ):                                                  # Loop until we are ready to start simulation
-    
-    inData = "{}".format( smartholder_usb_object.readline() )                           # Read until timeout is reached
-    if( inData == '' ):                                             # Skip empty lines
-        pass                                                        # ...
-
-    else:                                                           # Else, read incoming data
-        split_line = inData.split()                               # Split line contents
-
-        formatted = ( "{} {} {}".format( fullStamp(), split_line[1], split_line[2] ) )     # Construct string
-        print( formatted.strip('\n') )                              # [INFO] Status update
-
-        if( split_line[1] == '1:' and split_line[2] == '0' ):                                 # If device is not on holder
-            print( "Device ready for simulation scenario" )         # ...
-            break                                                   # Break out of loop!
+time.sleep(0.50)                                                                            # Sleep for stability!
 
 
-# data collection
+# ----------------------------------------------------------------------------------------- #
+# Data Gathering
+# ----------------------------------------------------------------------------------------- #
+
+# Variables
 simStartTime        = time.time()
-simCurrentTime      = 0                             # seconds
-simStopTime         = simDuration                   # seconds
-simStopOne          = simDuration/2.0
-simStopTwo          = simDuration
+simCurrentTime      = 0                                                                     # seconds
+simStopTime         = simDuration                                                           # seconds
+simDuration         = 40                                                                    # seconds
 
 dataStream          = []
 dataStreamOne       = []
 dataStreamTwo       = []
+
+holder_flag         = 0
+
+while( simCurrentTime < simDuration ):
+
+    holder_data = "{}".format( smartholder_usb_object.readline() )                          # Read until timeout is reached
+    if( holder_data == '' ):
+        pass
+    else:
+        split_line = holder_data.split()                                                    # Split incoming data
+        formatted = ( "{} {} {}".format( fullStamp(), split_line[1], split_line[2] ) )      # Construct string
+        print( formatted.strip('\n') )                                                      # [INFO] Status update
+
+        if( split_line[1] == '1:' and split_line[2] == '0' ):
+            print( fullStamp() + " " + smarthandle_name[0] + " has been removed " )
+            holder_flag = 1                                                                 # device 
+            dataStreamOne.append( ["%.02f" %simCurrentTime, readDataStream( smarthandle_bt_object[0], '\n' )] )
+
+        elif( split_line[1] == '2:' and split_line[2] == '0' ):
+            print( fullStamp() + " " + smarthandle_name[1] + " has been removed " )
+
+            
+            dataStreamTwo.append( ["%.02f" %simCurrentTime, readDataStream( smarthandle_bt_object[1], '\n' )] )
+
 
 while( simCurrentTime < simStopOne):
 
