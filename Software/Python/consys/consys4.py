@@ -39,6 +39,14 @@ from    smarthandleProtocol         import *
 # ==============================================
 # Variables
 # ==============================================
+
+# ----------------------------------------------
+# Devices
+# ----------------------------------------------
+
+otoscope_bt_address         = "00:06:66:83:89:6D"
+ophthalmoscope_bt_address   = "00:06:66:80:8C:08"
+
 SOH             = chr(0x01)                                         # Start of Header
 ENQ		= chr(0x05)                                         # Enquiry
 ACK             = chr(0x06)                                         # Positive Acknowledgement
@@ -61,8 +69,8 @@ print fullStamp() + " OPERATION "
 print fullStamp() + " Begin device configuration "
 
 # the following section must be changed to use the old .XML scheme ---- #
-smarthandle_bt_address = (["00:06:66:83:89:5F",
-                           "00:06:66:83:89:5F"])
+smarthandle_bt_address = ([otoscope_bt_address,
+                           ophthalmoscope_bt_address])
 # --------------------------------------------------------------------- #
 port = 0
 baud = 115200
