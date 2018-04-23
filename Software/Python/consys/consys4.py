@@ -15,6 +15,7 @@ import  os
 import  serial
 import  time
 from    os.path                     import expanduser
+from    os                          import getcwd, path, makedirs
 
 # PD3D modules
 from    configurationProtocol       import *
@@ -61,7 +62,7 @@ NAK             = chr(0x15)                                         # Negative A
 # Timers
 # ----------------------------------------------
 executionTimeStamp  = fullStamp()
-simDuration         = 20                            # seconds
+simDuration         = 40                            # seconds
 
 # ==============================================
 # Operation
@@ -134,12 +135,22 @@ while( notReady ):                                                  # Loop until
 simStartTime        = time.time()
 simCurrentTime      = 0                             # seconds
 simStopTime         = simDuration                   # seconds
+simStopOne          = simDuration/2.0
+simStopTwo          = simDuration
 
 dataStream          = []
+dataStreamOne       = []
+dataStreamTwo       = []
 
-while simCurrentTime < simStopTime:
+while simCurrentTime < simStopOne:
 
-    dataStream.append( ["%.02f" %simCurrentTime, readDataStream( smarthandle_bt_object[1], '\n' )] )
+    dataStreamOne.append( ["%.02f" %simCurrentTime, readDataStream( smarthandle_bt_object[0], '\n' )] )
+
+    simCurrentTime = time.time() - simStartTime
+
+while simCurrentTime < simStopOne:
+
+    dataStreamTwo.append( ["%.02f" %simCurrentTime, readDataStream( smarthandle_bt_object[1], '\n' )] )
 
     simCurrentTime = time.time() - simStartTime
 
@@ -150,7 +161,28 @@ for i in range(0, N_smarthandles):
 print dataStream
 
 
+# ==============================================
+# Output
+# ==============================================
 
+outDir = consDir + "output/"
+if( path.exists( outDir ) == False ):
+    print( fullStamp() + " Output directory not present " )
+    print( fullStamp() + " Generating output directory " )
+    makedirs( outDir )
+else:
+    print( fullStamp() + " Found output directory " )
+
+stampedDir = outDir + fullStamp() + "/"
+if( path.exists( stampedDir ) == False ):
+    print( fullStamp() + " Time-stamped directory not present " )
+    print( fullStamp() + " Generating time-stamped directory " )
+    makedirs( stampedDir )
+else:
+    print( fullStamp() + " Found time-stamped directory " )
+
+otoscope_output_file        = "oto.txt"
+ophthalmoscope_output_file  = "ophtho.txt"
 
 
 """
