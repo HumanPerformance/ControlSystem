@@ -18,14 +18,17 @@ from    os.path                     import expanduser
 
 # PD3D modules
 from    configurationProtocol       import *
+cons    = "consys"
 shan    = "smarthandle"
 shol    = "smartholder"
 stet    = "stethoscope"
+homeDir, pythonDir, consDir = definePaths(cons)
 homeDir, pythonDir, shanDir = definePaths(shan)
 homeDir, pythonDir, sholDir = definePaths(shol)
 homeDir, pythonDir, stetDir = definePaths(stet)
 
 response = addPaths(pythonDir)
+response = addPaths(consDir)
 response = addPaths(shanDir)
 response = addPaths(sholDir)
 response = addPaths(stetDir)
