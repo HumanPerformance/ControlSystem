@@ -27,20 +27,40 @@
 # ************************************************************************
 
 # Python modules
-import  sys, time, bluetooth, serial, argparse                  # 'nuff said
-import  Adafruit_ADS1x15                                        # Required library for ADC converter
-from    PyQt4               import QtCore, QtGui, Qt            # PyQt4 libraries required to render display
-from    PyQt4.Qwt5          import Qwt                          # Same here, boo-boo!
-from    numpy               import interp                       # Required for mapping values
-from    threading           import Thread                       # Run functions in "parallel"
-from    os                  import getcwd, path, makedirs       # Pathname manipulation for saving data output
+import  sys, time, bluetooth, serial, argparse                                      # 'nuff said
+import  Adafruit_ADS1x15                                                            # Required library for ADC converter
+from    PyQt4                                   import QtCore, QtGui, Qt            # PyQt4 libraries required to render display
+from    PyQt4.Qwt5                              import Qwt                          # Same here, boo-boo!
+from    numpy                                   import interp                       # Required for mapping values
+from    threading                               import Thread                       # Run functions in "parallel"
+from    os                                      import getcwd, path, makedirs       # Pathname manipulation for saving data output
 
 # PD3D modules
-from    dial                        import Ui_MainWindow        # Imports pre-built dial guage from dial.py
-from    timeStamp                   import fullStamp            # Show date/time on console output
-from    stethoscopeProtocol         import *			# import all functions from the stethoscope protocol
-from    bluetoothProtocol_teensy32  import *			# import all functions from the bluetooth protocol -teensy3.2
-import  stethoscopeDefinitions      as     definitions
+from    dial                                    import Ui_MainWindow                # Imports pre-built dial guage from dial.py
+from    configurationProtocol                   import *
+cons    = "consys"
+shan    = "smarthandle"
+shol    = "smartholder"
+stet    = "stethoscope"
+bpcu    = "bloodpressurecuff"
+
+homeDir, pythonDir, consDir = definePaths(cons)
+homeDir, pythonDir, shanDir = definePaths(shan)
+homeDir, pythonDir, sholDir = definePaths(shol)
+homeDir, pythonDir, stetDir = definePaths(stet)
+homeDir, pythonDir, bpcuDir = definePaths(bpcu)
+
+response = addPaths(pythonDir)
+response = addPaths(consDir)
+response = addPaths(shanDir)
+response = addPaths(sholDir)
+response = addPaths(stetDir)
+response = addPaths(bpcuDir)
+
+from    timeStamp                               import fullStamp
+from    bluetoothProtocol_teensy32              import *
+from    stethoscopeProtocol                     import *
+import  stethoscopeDefinitions                  as     definitions
 
 # ************************************************************************
 # CONSTRUCT ARGUMENT PARSER 
@@ -55,7 +75,7 @@ ap.add_argument( "--directory", type=str, default='output',
                 help="Set directory" )
 ap.add_argument( "--destination", type=str, default="output.txt",
                 help="Set destination" )
-ap.add_argument( "--stethoscope", type=str, default="00:06:66:D0:E4:94",
+ap.add_argument( "--stethoscope", type=str, default="00:06:66:8C:D3:F6",
                 help="Choose stethoscope" )
 ap.add_argument( "-m", "--mode", type=str, default="REC",
                 help="Mode to operate under; SIM: Simulation || REC: Recording" )
@@ -266,7 +286,7 @@ class Worker( QtCore.QThread ):
             
             self.wFreqTrigger = time.time()                                         # Reset wFreqTrigger
 
-            #print( "SIM %r" %(self.playback) )                                      # Print to STDOUT
+            print( "SIM %r" %(self.playback) )                                      # Print to STDOUT
             
             # Write to file
             dataStream = "%.02f, %.2f, %.2f\n" %( time.time()-self.startTime,       # Format readings
@@ -315,7 +335,8 @@ class Worker( QtCore.QThread ):
         
         if( self.owner.init_rec == True ):
             self.owner.init_rec = False
-            startCustomRecording( self.rfObject, self.owner.destination )           # If all is good, start recording
+            #statusEnquiry( self.rfObject )
+            #startCustomRecording( self.rfObject, self.owner.destination )           # If all is good, start recording
 
         else: pass
             

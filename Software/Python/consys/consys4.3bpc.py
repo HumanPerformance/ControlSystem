@@ -14,25 +14,30 @@ import  sys
 import  os
 import  serial
 import  time
+import  pexpect
 from    os.path                     import expanduser
 from    os                          import getcwd, path, makedirs
 
 # PD3D modules
-from    configurationProtocol       import *
+from    configurationProtocol                   import *
 cons    = "consys"
 shan    = "smarthandle"
 shol    = "smartholder"
 stet    = "stethoscope"
+bpcu    = "bloodpressurecuff"
+
 homeDir, pythonDir, consDir = definePaths(cons)
 homeDir, pythonDir, shanDir = definePaths(shan)
 homeDir, pythonDir, sholDir = definePaths(shol)
 homeDir, pythonDir, stetDir = definePaths(stet)
+homeDir, pythonDir, bpcuDir = definePaths(bpcu)
 
 response = addPaths(pythonDir)
 response = addPaths(consDir)
 response = addPaths(shanDir)
 response = addPaths(sholDir)
 response = addPaths(stetDir)
+response = addPaths(bpcuDir)
 
 from    timeStamp                   import fullStamp
 from    bluetoothProtocol_teensy32  import *
@@ -49,7 +54,7 @@ from    stethoscopeProtocol         import *
 # Devices
 # ----------------------------------------------
 stethoscope_name = "stethoscope"
-stethoscopes_bt_address = (["00:06:66:xx:xx:xx"])
+stethoscopes_bt_address = (["00:06:66:8C:D3:F6"])
 
 
 SOH             			= chr(0x01)                                         			# Start of Header
@@ -73,8 +78,23 @@ executionTimeStamp  = fullStamp()
 print fullStamp() + " OPERATION "
 print fullStamp() + " Begin device configuration "
 
+
+# pressure meter
+
+rfObject = createBTPort( "00:06:66:8C:D3:F6", 1 )
+
+cmd = "sudo python " + bpcuDir + "pressureDialGauge2.py"
+pressure_meter = pexpect.spawn( cmd, timeout=None )
+
+while( True ):
+    for line in pressure_meter:
+        out = line.strip('\n\r')
+        print( out )
+
 """
 connect to stethoscope here or let the blood pressure cuff handle it
+"""
+
 """
 port = 0
 baud = 115200
@@ -125,7 +145,6 @@ while( simCurrentTime < simDuration ):
         formatted = ( "{} {} {}".format( fullStamp(), split_line[1], split_line[2] ) )      # Construct string
         print( formatted.strip('\n') )                                                     # [INFO] Status update
 
-        """
         if( split_line[1] == '1:' and split_line[2] == '0' ):
             print( fullStamp() + " " + smarthandle_name[0] + " has been removed " )
             holder_flag[0] = 0
@@ -146,17 +165,18 @@ while( simCurrentTime < simDuration ):
                                   str( holder_flag[0] ),
                                   str( holder_flag[1] ),
                                   '\n'])
-        """
 
     simCurrentTime = time.time() - simStartTime												# update time
 
+
+        
 # ----------------------------------------------------------------------------------------- #
 # Device Deactivation
 # ----------------------------------------------------------------------------------------- #
 
 
 
-"""
+
 # ========================================================================================= #
 # Output
 # ========================================================================================= #
