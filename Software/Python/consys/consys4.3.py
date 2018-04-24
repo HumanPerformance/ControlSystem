@@ -118,7 +118,7 @@ time.sleep(0.50)                                                                
 # Variables
 simStartTime        = time.time()
 simCurrentTime      = 0                                                                     # seconds
-simDuration         = 120                                                                   # seconds
+simDuration         = 30                                                                   # seconds
 simStopTime         = simDuration                                                           # seconds
 
 smarthandle_data 						= {} 												# dictionary structure to contain incoming smarthandle data
@@ -138,6 +138,7 @@ holder_flag         = ([1,1]) 																# flag for presence or absence of 
 while( simCurrentTime < simDuration ):
 
     holder_data = "{}".format( smartholder_usb_object.readline() )                          # Read until timeout is reached
+    #print( holder_data )
     if( holder_data == '' ):
         pass
     else:
@@ -166,12 +167,13 @@ while( simCurrentTime < simDuration ):
                                   str( holder_flag[1] ),
                                   '\n'])
 
-        for i in range(0, N_smarthandles):
-            if( holder_flag[i] == 0 ):
-                print( fullStamp() + " Streaming data from " + smarthandle_name[i] )
-                smarthandle_data[smarthandle_name[i]].append( ["%.02f" %simCurrentTime,
-                                                               readDataStream( smarthandle_bt_object[i],
-                                                               '\n' )] )
+    for i in range(0, N_smarthandles):
+        #print( holder_flag )
+        if( holder_flag[i] == 0 ):
+            print( fullStamp() + " Streaming data from " + smarthandle_name[i] )
+            smarthandle_data[smarthandle_name[i]].append( ["%.02f" %simCurrentTime,
+                                                           readDataStream( smarthandle_bt_object[i],
+                                                           '\n' )] )
     simCurrentTime = time.time() - simStartTime												# update time
 
 # ----------------------------------------------------------------------------------------- #
