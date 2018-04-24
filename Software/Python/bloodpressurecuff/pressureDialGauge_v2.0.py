@@ -22,18 +22,18 @@
 *
 '''
 
-# ************************************************************************
-# IMPORT MODULES
-# ************************************************************************
+# ========================================================================================= #
+# Import Libraries and/or Modules
+# ========================================================================================= #
 
 # Python modules
-import  sys, time, bluetooth, serial, argparse                                      # 'nuff said
-import  Adafruit_ADS1x15                                                            # Required library for ADC converter
-from    PyQt4                                   import QtCore, QtGui, Qt            # PyQt4 libraries required to render display
-from    PyQt4.Qwt5                              import Qwt                          # Same here, boo-boo!
-from    numpy                                   import interp                       # Required for mapping values
-from    threading                               import Thread                       # Run functions in "parallel"
-from    os                                      import getcwd, path, makedirs       # Pathname manipulation for saving data output
+import  sys, time, bluetooth, serial, argparse                                              # 'nuff said
+import  Adafruit_ADS1x15                                                                    # Required library for ADC converter
+from    PyQt4                                   import QtCore, QtGui, Qt                    # PyQt4 libraries required to render display
+from    PyQt4.Qwt5                              import Qwt                                  # Same here, boo-boo!
+from    numpy                                   import interp                               # Required for mapping values
+from    threading                               import Thread                               # Run functions in "parallel"
+from    os                                      import getcwd, path, makedirs               # Pathname manipulation for saving data output
 
 # PD3D modules
 from    dial_v2                                 import Ui_MainWindow
@@ -62,9 +62,17 @@ from    bluetoothProtocol_teensy32              import *
 from    stethoscopeProtocol                     import *
 import  stethoscopeDefinitions                  as     definitions
 
-# ************************************************************************
-# CONSTRUCT ARGUMENT PARSER 
-# ************************************************************************
+
+# ========================================================================================= #
+# Variables
+# ========================================================================================= #
+
+executionTimeStamp = fullStamp()                                                            # generating execution time stamp 
+
+# ----------------------------------------------------------------------------------------- #
+# Constructing argument parser
+# ----------------------------------------------------------------------------------------- #
+
 ap = argparse.ArgumentParser()
 
 ap.add_argument( "-f", "--frequency", type=int, default=0.25,
@@ -82,9 +90,10 @@ ap.add_argument( "-m", "--mode", type=str, default="REC",
 
 args = vars( ap.parse_args() )
 
-# ************************************************************************
-# SETUP PROGRAM
-# ************************************************************************
+
+# ========================================================================================= #
+# Program Configuration
+# ========================================================================================= #
 
 class MyWindow(QtGui.QMainWindow):
 
@@ -132,7 +141,7 @@ class MyWindow(QtGui.QMainWindow):
         self.mode = args["mode"]
 
         # Boolean to control recording function
-        self.init_rec = True
+        #self.init_rec = True
 
         # List all available BT devices
         self.ui.Dial.setEnabled( True )
@@ -203,18 +212,29 @@ class MyWindow(QtGui.QMainWindow):
         """
         
         # Create data output folder/file
-        self.dataFileDir = getcwd() + "/dataOutput/" + self.directory
-        self.dataFileName = self.dataFileDir + "/" + self.destination
-        if( path.exists(self.dataFileDir) ) == False:
-            makedirs( self.dataFileDir )
-            print( fullStamp() + " Created data output folder" )
+        outDir = consDir + "output/"                                                        # find or generate the main output directory
+        if( path.exists( outDir ) == False ):
+            print( fullStamp() + " Output directory not present " )
+            print( fullStamp() + " Generating output directory " )
+            makedirs( outDir )
+        else:
+            print( fullStamp() + " Found output directory " )
+
+        stampedDir = outDir + executionTimeStamp + "/"                                      # find or generate the time-stamped output directory
+        if( path.exists( stampedDir ) == False ):
+            print( fullStamp() + " Time-stamped directory not present " )
+            print( fullStamp() + " Generating time-stamped directory " )
+            makedirs( stampedDir )
+        else:
+            print( fullStamp() + " Found time-stamped directory " )
+        
+        self.dataFileDir = stampedDir
+        self.dataFileName = stampedDir + "bpcu.txt"
 
         # Write basic information to the header of the data output file
         with open( self.dataFileName, "w" ) as f:
-            f.write( "Date/Time: " + fullStamp() + "\n" )
-            f.write( "Scenario: #" + str(scenarioNumber) + "\n" )
+            f.write( "Date/Time: " + executionTimeStamp + "\n" )
             f.write( "Device Name: " + deviceName + "\n" )
-            f.write( "Stethoscope ID: " + self.address + "\n" )
             f.write( "Units: seconds, kPa, mmHg" + "\n" )
             f.close()
             print( fullStamp() + " Created data output .txt file" )
@@ -231,9 +251,9 @@ class MyWindow(QtGui.QMainWindow):
         QtCore.QThread.sleep( 2 )                               # this delay may be essential
 
 
-# ************************************************************************
-# CLASS FOR OPTIONAL INDEPENDENT THREAD
-# ************************************************************************
+# ========================================================================================= #
+# Class for optional, independent thread
+# ========================================================================================= #
 
 class Worker( QtCore.QThread ):
 
@@ -292,7 +312,7 @@ class Worker( QtCore.QThread ):
             
             self.wFreqTrigger = time.time()                                         # Reset wFreqTrigger
 
-            print( "SIM %r" %(self.playback) )                                      # Print to STDOUT
+            #print( "SIM %r" %(self.playback) )                                      # Print to STDOUT
             
             # Write to file
             dataStream = "%.02f, %.2f, %.2f\n" %( time.time()-self.startTime,       # Format readings
@@ -350,21 +370,21 @@ class Worker( QtCore.QThread ):
         else: pass
     """   
             
-# ************************************************************************
-# ===========================> SETUP PROGRAM <===========================
-# ************************************************************************
-port = 1                                                                            # Port number to use in communication
-deviceName = "ABPC"                                                                 # Designated device name
-scenarioNumber = 1                                                                  # Device number
+# ========================================================================================= #
+# SETUP
+# ========================================================================================= #
+port = 1                                                                                    # Port number to use in communication
+deviceName = "Blood Pressure Cuff"                                                          # Designated device name
+scenarioNumber = 1                                                                          # Device number
 
-V_supply = 3.3                                                                      # Supply voltage to the pressure sensor
+V_supply = 3.3                                                                              # Supply voltage to the pressure sensor
 
-ADC = Adafruit_ADS1x15.ADS1115()                                                    # Initialize ADC
-GAIN = 1                                                                            # Read values in the range of +/-4.096V
+ADC = Adafruit_ADS1x15.ADS1115()                                                            # Initialize ADC
+GAIN = 1                                                                                    # Read values in the range of +/-4.096V
 
-# ************************************************************************
-# =========================> MAKE IT ALL HAPPEN <=========================
-# ************************************************************************
+# ========================================================================================= #
+# MAIN
+# ========================================================================================= #
 
 def main():
     
