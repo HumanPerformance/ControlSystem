@@ -57,12 +57,11 @@ smarthandle_bt_address      = ([otoscope_bt_address,
                                 ophthalmoscope_bt_address])
 
 
-"""
-SOH             = chr(0x01)                                         # Start of Header
-ENQ		= chr(0x05)                                         # Enquiry
-ACK             = chr(0x06)                                         # Positive Acknowledgement
-NAK             = chr(0x15)                                         # Negative Acknowledgement
-"""
+SOH             			= chr(0x01)                                         			# Start of Header
+ENQ							= chr(0x05)                                         			# Enquiry
+ACK             			= chr(0x06)                                         			# Positive Acknowledgement
+NAK             			= chr(0x15)                                         			# Negative Acknowledgement
+
 
 # ----------------------------------------------
 # Timers
@@ -74,14 +73,11 @@ executionTimeStamp  = fullStamp()
 # ==============================================
 
 # ----------------------------------------------------------------------------------------- #
-# Configuration
+# Device Configuration, Connection and Activation
 # ----------------------------------------------------------------------------------------- #
 print fullStamp() + " OPERATION "
 print fullStamp() + " Begin device configuration "
 
-# the following section must be changed to use the old .XML scheme ---- #
-
-# --------------------------------------------------------------------- #
 port = 0
 baud = 115200
 timeout = 1
@@ -115,7 +111,6 @@ while( notReady ):                                                              
 
 time.sleep(0.50)                                                                            # Sleep for stability!
 
-
 # ----------------------------------------------------------------------------------------- #
 # Data Gathering
 # ----------------------------------------------------------------------------------------- #
@@ -130,7 +125,7 @@ dataStream          = []
 dataStreamOne       = []
 dataStreamTwo       = []
 
-holder_flag         = 0
+holder_flag         = ([1,1]) 																# flag for presence or absence of device
 
 while( simCurrentTime < simDuration ):
 
@@ -144,27 +139,37 @@ while( simCurrentTime < simDuration ):
 
         if( split_line[1] == '1:' and split_line[2] == '0' ):
             print( fullStamp() + " " + smarthandle_name[0] + " has been removed " )
-            holder_flag = 1                                                                 # device 
-            dataStreamOne.append( ["%.02f" %simCurrentTime, readDataStream( smarthandle_bt_object[0], '\n' )] )
+            holder_flag[0] = 0                                                              # device one out of the holder
+		
+		elif( split_line[1] == '1:' and split_line[2] == '1' ):
+			print( fullStamp() + " " + smarthandle_name[0] + " has been stored " )
+            holder_flag[0] = 1                                                              # device one in the holder		
 
         elif( split_line[1] == '2:' and split_line[2] == '0' ):
             print( fullStamp() + " " + smarthandle_name[1] + " has been removed " )
+			holder_flag[1] = 0																# ...
+		
+		elif( split_line[1] == '2:' and split_line[2] == '1' ):
+            print( fullStamp() + " " + smarthandle_name[1] + " has been stored " )
+			holder_flag[1] = 1																# ...
+		
+	if( holder_flag[0] == 0 ):
+		print( fullStamp() + " Streaming data from " + smarthandle_name[0] )
+		dataStreamOne.append( ["%.02f" %simCurrentTime,
+							   readDataStream( smarthandle_bt_object[0],
+							   '\n' )] )
+		
+	elif( holder_flag[1] == 0 ):
+		print( fullStamp() + " Streaming data from " + smarthandle_name[1] )
+		dataStreamTwo.append( ["%.02f" %simCurrentTime,
+							   readDataStream( smarthandle_bt_object[1],
+							   '\n' )] )
 
-            
-            dataStreamTwo.append( ["%.02f" %simCurrentTime, readDataStream( smarthandle_bt_object[1], '\n' )] )
+	simCurrentTime = time.time() - simStartTime
 
-
-while( simCurrentTime < simStopOne):
-
-    dataStreamOne.append( ["%.02f" %simCurrentTime, readDataStream( smarthandle_bt_object[0], '\n' )] )
-
-    simCurrentTime = time.time() - simStartTime
-
-while( (simCurrentTime > simStopOne) and (simCurrentTime < simStopTwo)):
-
-    dataStreamTwo.append( ["%.02f" %simCurrentTime, readDataStream( smarthandle_bt_object[1], '\n' )] )
-
-    simCurrentTime = time.time() - simStartTime
+# ----------------------------------------------------------------------------------------- #
+# Device Deactivation
+# ----------------------------------------------------------------------------------------- #
 
 for i in range(0, N_smarthandles):
     time.sleep(0.50)
