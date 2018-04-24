@@ -25,12 +25,13 @@ def startDataStream( socket, count, EOL=None):
         #print( buff )
         if( buff == definitions.ID ):
             socket.send( definitions.START )
-            print( fullStamp() + " START trigger sent to smart handle " )
+            #print( fullStamp() + " START trigger sent to smart handle " )
         elif( len( buff ) > ( 2*len( definitions.ID ))):
-            print( fullStamp() + " Triggering Completed Successfully " )
+            #print( fullStamp() + " Triggering Completed Successfully " )
             break        
         elif( i == ( count -1 )):
-            print( fullStamp() + " Triggering Incomplete - Troubleshoot device " )
+            #print( fullStamp() + " Triggering Incomplete - Troubleshoot device " )
+            break
 
 """
 startDataStream -v.1.0
@@ -97,12 +98,13 @@ def stopDataStream( socket, count, EOL=None ):
         #print( buff )
         if( len( buff ) > ( 2*len( definitions.ID )) ):
             socket.send( definitions.STOP )
-            print( fullStamp() + " STOP trigger sent to smart handle " )
+            #print( fullStamp() + " STOP trigger sent to smart handle " )
         elif( buff == definitions.ID ):
-            print( fullStamp() + " Stopping Completed Successfully " )
+            #print( fullStamp() + " Stopping Completed Successfully " )
             break        
         elif( i == ( count - 1 )):
-            print( fullStamp() + " Stopping Incomplete - Troubleshoot device " )
+            #print( fullStamp() + " Stopping Incomplete - Troubleshoot device " )
+            break
 
 """
 stopDataStream -v.1.0

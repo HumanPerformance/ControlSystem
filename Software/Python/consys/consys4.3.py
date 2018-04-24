@@ -106,7 +106,7 @@ else:
 while( notReady ):                                                                          # Loop until we receive SOH
     inData = smartholder_usb_object.read( size=1 )                                          # ...
     if( inData == SOH ):                                                                    # ...
-        print( "{} [INFO] SOH Received".format( fullStamp() ) )                             # [INFO] Status update
+        #print( "{} [INFO] SOH Received".format( fullStamp() ) )                             # [INFO] Status update
         break                                                                               # ...
 
 time.sleep(0.50)                                                                            # Sleep for stability!
@@ -118,7 +118,7 @@ time.sleep(0.50)                                                                
 # Variables
 simStartTime        = time.time()
 simCurrentTime      = 0                                                                     # seconds
-simDuration         = 30                                                                   # seconds
+simDuration         = 20                                                                    # seconds
 simStopTime         = simDuration                                                           # seconds
 
 smarthandle_data 						= {} 												# dictionary structure to contain incoming smarthandle data
@@ -135,6 +135,7 @@ dataStreamTwo       = []
 
 holder_flag         = ([1,1]) 																# flag for presence or absence of device
 
+print( fullStamp() + " " + str( simDuration ) + " sec. simulation begins now " )                   # Statement confirming simulation start
 while( simCurrentTime < simDuration ):
 
     holder_data = "{}".format( smartholder_usb_object.readline() )                          # Read until timeout is reached
@@ -144,7 +145,7 @@ while( simCurrentTime < simDuration ):
     else:
         split_line = holder_data.split()                                                    # Split incoming data
         formatted = ( "{} {} {}".format( fullStamp(), split_line[1], split_line[2] ) )      # Construct string
-        print( formatted.strip('\n') )                                                      # [INFO] Status update
+        #print( formatted.strip('\n') )                                                     # [INFO] Status update
 
         if( split_line[1] == '1:' and split_line[2] == '0' ):
             print( fullStamp() + " " + smarthandle_name[0] + " has been removed " )
@@ -170,7 +171,7 @@ while( simCurrentTime < simDuration ):
     for i in range(0, N_smarthandles):
         #print( holder_flag )
         if( holder_flag[i] == 0 ):
-            print( fullStamp() + " Streaming data from " + smarthandle_name[i] )
+            # print( fullStamp() + " Streaming data from " + smarthandle_name[i] )
             smarthandle_data[smarthandle_name[i]].append( ["%.02f" %simCurrentTime,
                                                            readDataStream( smarthandle_bt_object[i],
                                                            '\n' )] )
