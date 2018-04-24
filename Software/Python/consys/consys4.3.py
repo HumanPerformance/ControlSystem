@@ -118,12 +118,12 @@ time.sleep(0.50)                                                                
 # Variables
 simStartTime        = time.time()
 simCurrentTime      = 0                                                                     # seconds
+simDuration         = 120                                                                   # seconds
 simStopTime         = simDuration                                                           # seconds
-simDuration         = 40                                                                    # seconds
 
 smarthandle_data 						= {} 												# dictionary structure to contain incoming smarthandle data
-smarthandle_data.[smarthandle_name[0]] 	= []
-smarthandle_data.[smarthandle_name[1]] 	= []
+smarthandle_data[smarthandle_name[0]] 	= []
+smarthandle_data[smarthandle_name[1]] 	= []
 
 smartholder_data 						= [] 												# empty array for smart holder data
 
@@ -147,40 +147,32 @@ while( simCurrentTime < simDuration ):
 
         if( split_line[1] == '1:' and split_line[2] == '0' ):
             print( fullStamp() + " " + smarthandle_name[0] + " has been removed " )
-            holder_flag[0] = 0                                                              # device one out of the holder
-		
-		elif( split_line[1] == '1:' and split_line[2] == '1' ):
-			print( fullStamp() + " " + smarthandle_name[0] + " has been stored " )
+            holder_flag[0] = 0
+
+        elif( split_line[1] == '1:' and split_line[2] == '1' ):
+            print( fullStamp() + " " + smarthandle_name[0] + " has been stored " )
             holder_flag[0] = 1                                                              # device one in the holder		
 
         elif( split_line[1] == '2:' and split_line[2] == '0' ):
             print( fullStamp() + " " + smarthandle_name[1] + " has been removed " )
-			holder_flag[1] = 0																# ...
-		
-		elif( split_line[1] == '2:' and split_line[2] == '1' ):
+            holder_flag[1] = 0
+
+        elif( split_line[1] == '2:' and split_line[2] == '1' ):
             print( fullStamp() + " " + smarthandle_name[1] + " has been stored " )
-			holder_flag[1] = 1																# ...
-		
-		smartholder_data.append( ["%.02f" %simCurrentTime,									# stream or store the holder status
-									  str( holder_flag[0] ),
-									  str( holder_flag[1] ),
-									  '\n'])
-	
-	for i in range(0, N_smarthandles):
-		if( holder_flag[i] == 0 ):
-			print( fullStamp() + " Streaming data from " + smarthandle_name[i] )
-			smarthandle_data.[smarthandle_name[i]].append( ["%.02f" %simCurrentTime,
-															readDataStream( smarthandle_bt_object[i],
-															'\n' )] )
-	
-	""" --leaving this here in case the for loop does not work	
-	elif( holder_flag[1] == 0 ):
-		print( fullStamp() + " Streaming data from " + smarthandle_name[1] )
-		dataStreamTwo.append( ["%.02f" %simCurrentTime,
-							   readDataStream( smarthandle_bt_object[1],
-							   '\n' )] )
-	"""
-	simCurrentTime = time.time() - simStartTime												# update time
+            holder_flag[1] = 1
+
+        smartholder_data.append( ["%.02f" %simCurrentTime,
+                                  str( holder_flag[0] ),
+                                  str( holder_flag[1] ),
+                                  '\n'])
+
+        for i in range(0, N_smarthandles):
+            if( holder_flag[i] == 0 ):
+                print( fullStamp() + " Streaming data from " + smarthandle_name[i] )
+                smarthandle_data[smarthandle_name[i]].append( ["%.02f" %simCurrentTime,
+                                                               readDataStream( smarthandle_bt_object[i],
+                                                               '\n' )] )
+    simCurrentTime = time.time() - simStartTime												# update time
 
 # ----------------------------------------------------------------------------------------- #
 # Device Deactivation
@@ -219,8 +211,8 @@ smarthandle_output_filename = ([ stampedDir + "oto.txt",
 								 stampedDir + "ophtho.txt" ])
 smartholder_output_filename = stampedDir + "holder.txt"
 
-N_lines = ([ len( smarthandle_data.[smarthandle_name[0]] ),
-			 len( smarthandle_data.[smarthandle_name[1]] ),
+N_lines = ([ len( smarthandle_data[smarthandle_name[0]] ),
+			 len( smarthandle_data[smarthandle_name[1]] ),
 			 len( smartholder_data ) ])
 
 for i in range(0, len( N_lines )):
@@ -231,7 +223,7 @@ for i in range(0, len( N_lines )):
 					dataFile.write( fullStamp() + " Smart Handle = " + smarthandle_name[i] + '\n' )
 					dataFile.write( fullStamp() + " Bluetooth Address = " + smarthandle_bt_address[i] + '\n')
 			with open(smarthandle_output_filename[i], 'a') as dataFile:
-				dataFile.write( smarthandle_data.[smarthandle_name[i]][j][0] + "," + smarthandle_data.[smarthandle_name[i]][j][1] + '\n' )
+				dataFile.write( smarthandle_data[smarthandle_name[i]][j][0] + "," + smarthandle_data[smarthandle_name[i]][j][1] + '\n' )
 	else:
 		for j in range(0, N_lines[i]):
 			if( j == 0 ):
