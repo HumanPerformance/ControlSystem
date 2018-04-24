@@ -81,11 +81,12 @@ print fullStamp() + " Begin device configuration "
 
 # pressure meter
 
-rfObject = createBTPort( "00:06:66:8C:D3:F6", 1 )
+#rfObject = createBTPort( "00:06:66:8C:D3:F6", 1 )
 
-cmd = "sudo python " + bpcuDir + "pressureDialGauge2.py"
+cmd = "sudo python " + bpcuDir + "pressureDialGauge2.py --mode SIM"
 pressure_meter = pexpect.spawn( cmd, timeout=None )
 
+# the following while loop should be the foundation for the simulation loop of this script
 while( True ):
     for line in pressure_meter:
         out = line.strip('\n\r')

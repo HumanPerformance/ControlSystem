@@ -100,7 +100,7 @@ class MyWindow(QtGui.QMainWindow):
         self.thread = Worker( self )
 
         # Close rfObject socket on exit
-        self.ui.pushButtonQuit.clicked.connect( self.cleanUp )
+        #self.ui.pushButtonQuit.clicked.connect( self.cleanUp )
 
         # Setup gauge-needle dimensions
         self.ui.Dial.setOrigin( 90.0 )
@@ -142,17 +142,20 @@ class MyWindow(QtGui.QMainWindow):
         # set timeout function for updates
         self.ctimer = QtCore.QTimer()
         self.ctimer.start( 10 )
-        QtCore.QObject.connect( self.ctimer, QtCore.SIGNAL( "timeout()" ), self.UpdateDisplay )
+        #QtCore.QObject.connect( self.ctimer, QtCore.SIGNAL( "timeout()" ), self.UpdateDisplay )
 
         # Create logfile
         self.setup_log()
 
 # ------------------------------------------------------------------------
-
+    """
+    --- v1.0
+    --- Removed as this will be done externally
+    
     def connectStethoscope( self ):
-        """
-        Connects to stethoscope.
-        """
+        
+        #Connects to stethoscope.
+        
         self.thread.deviceBTAddress = str( self.address )
         self.ui.Dial.setEnabled( True )
         self.ui.pushButtonPair.setEnabled( False )
@@ -164,7 +167,7 @@ class MyWindow(QtGui.QMainWindow):
         self.ctimer = QtCore.QTimer()
         self.ctimer.start( 10 )
         QtCore.QObject.connect( self.ctimer, QtCore.SIGNAL( "timeout()" ), self.UpdateDisplay )
-
+    """
 # ------------------------------------------------------------------------
  
     def UpdateDisplay(self):
@@ -177,18 +180,21 @@ class MyWindow(QtGui.QMainWindow):
             self.lastPressureValue = self.pressureValue
 
 # ------------------------------------------------------------------------
-
+    """
+    --- v1.0
+    --- Removed as this will be done externally
+    
     def scan_rfObject( self ):
-        """
+        
         Scan for available BT devices.
         Returns a list of tuples (num, name)
-        """
+        
         available = []
         BT_name, BT_address = findSmartDevice( self.address )
         if BT_name != 0:
             available.append( (BT_name[0], BT_address[0]) )
             return( available )
-
+    """
 # ------------------------------------------------------------------------
 
     def setup_log( self ):
@@ -327,11 +333,14 @@ class Worker( QtCore.QThread ):
             print( fullStamp() + " Error Arguments " + str(instance.args) )         # ...
 
 # ------------------------------------------------------------------------
+    """
+    --- v1.0
+    --- Removed as this will be done externally
 
     def rec_mode( self ):
-        """
-        In charge of triggering recordings
-        """
+        
+        #In charge of triggering recordings
+        
         
         if( self.owner.init_rec == True ):
             self.owner.init_rec = False
@@ -339,7 +348,7 @@ class Worker( QtCore.QThread ):
             #startCustomRecording( self.rfObject, self.owner.destination )           # If all is good, start recording
 
         else: pass
-            
+    """   
             
 # ************************************************************************
 # ===========================> SETUP PROGRAM <===========================
