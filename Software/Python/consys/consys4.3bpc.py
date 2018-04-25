@@ -17,6 +17,8 @@ import  time
 import  pexpect
 from    os.path                     import expanduser
 from    os                          import getcwd, path, makedirs
+from    threading                   import Thread
+from    Queue                       import Queue
 
 # PD3D modules
 from    configurationProtocol                   import *
@@ -45,6 +47,30 @@ from    usbProtocol                 import *
 from    smarthandleProtocol         import *
 from    stethoscopeProtocol         import *
 
+
+# ========================================================================================= #
+# Functions
+# ========================================================================================= #
+
+def readGauge( initialCall, Q ):
+    # start blood pressure cuff and digital dial ---------------------------------------------- #
+    print( fullStamp() + " Connecting to blood pressure cuff " )
+    mode            = "SIM"
+    lower_pressure  = 85.0                                                                      # units in mmHg
+    higher_pressure = 145.0                                                                     # ...
+
+    cmd = "sudo python " + bpcuDir + "pressureDialGauge_v2.0.py --mode SIM --lower_pressure " + str(lower_pressure) + " --higher_pressure " + str(higher_pressure)
+    pressure_meter = pexpect.spawn( cmd, timeout=None )
+
+    if( initialCall ):
+        Q.put( pressure_meter )                                                                 # Place variable in queue for retrival
+        initialCall = False
+        
+    for line in pressure_meter:
+        out = line.strip('\n\r')
+        print( out )
+
+    #pressure_meter.close()
 
 # ========================================================================================= #
 # Variables
@@ -112,16 +138,22 @@ time.sleep(0.50)                                                                
 
 
 # start blood pressure cuff and digital dial ---------------------------------------------- #
-print( fullStamp() + " Connecting to blood pressure cuff " )
-mode            = "SIM"
-lower_pressure  = 85.0                                                                      # units in mmHg
-higher_pressure = 145.0                                                                     # ...
+##print( fullStamp() + " Connecting to blood pressure cuff " )
+##mode            = "SIM"
+##lower_pressure  = 85.0                                                                      # units in mmHg
+##higher_pressure = 145.0                                                                     # ...
+##
+##cmd = "sudo python " + bpcuDir + "pressureDialGauge_v2.0.py --mode SIM --lower_pressure " + str(lower_pressure) + " --higher_pressure " + str(higher_pressure)
+##pressure_meter = pexpect.spawn( cmd, timeout=None )
+#line = pressure_meter.read_nonblocking(size=100, timeout=10)
 
-cmd = "sudo python " + bpcuDir + "pressureDialGauge_v2.0.py --mode SIM --lower_pressure " + str(lower_pressure) + " --higher_pressure " + str(higher_pressure)
-pressure_meter = pexpect.spawn( cmd, timeout=None )
-for line in pressure_meter:                                                                 # flushing initial lines and comments from dial function
-    out = line.strip('\n\r')
-    print( out )
+#print( "done flushing" )                                                                # flushing initial lines and comments from dial function
+
+q_pressure_meter = Queue( maxsize=0 )                                                   # Define queue
+t_pressure_meter = Thread( target=readGauge, args=( True, q_pressure_meter, ) )         # Define thread
+t_pressure_meter.start()                                                                # Start thread
+
+pexpectChild = q_pressure_meter.get()
 
 # ----------------------------------------------------------------------------------------- #
 # Data Gathering
@@ -145,7 +177,7 @@ holder_flag         = 1                                          			    # single
 print( fullStamp() + " " + str( simDuration ) + " sec. simulation begins now " )            # Statement confirming simulation start
 
 while( simCurrentTime < simDuration ):
-
+    
     holder_data = "{}".format( smartholder_usb_object.readline() )                          # Read until timeout is reached
 
     if( holder_data == '' ):                                                                # if the holder data is empty, do nothing
@@ -155,73 +187,12 @@ while( simCurrentTime < simDuration ):
         formatted = ( "{} {} {}".format( fullStamp(), split_line[1], split_line[2] ) )      # Construct string
         print( formatted.strip('\n') )                                                      # [INFO] Status update
 
-        """
-        if( split_line[1] == '1:' and split_line[2] == '0' ):
-            print( fullStamp() + " " + smarthandle_name[0] + " has been removed " )
-            holder_flag[0] = 0
+    simCurrentTime = time.time() - simStartTime
 
-        elif( split_line[1] == '1:' and split_line[2] == '1' ):
-            print( fullStamp() + " " + smarthandle_name[0] + " has been stored " )
-            holder_flag[0] = 1                                                              # device one in the holder		
-
-        elif( split_line[1] == '2:' and split_line[2] == '0' ):
-            print( fullStamp() + " " + smarthandle_name[1] + " has been removed " )
-            holder_flag[1] = 0
-
-        elif( split_line[1] == '2:' and split_line[2] == '1' ):
-            print( fullStamp() + " " + smarthandle_name[1] + " has been stored " )
-            holder_flag[1] = 1
-        
-
-        smartholder_data.append( ["%.02f" %simCurrentTime,
-                                  str( holder_flag[0] ),
-                                  str( holder_flag[1] ),
-                                  '\n'])
-        """
-    line = pressure_meter.readline()
-    out = line.strip('\n\r')
-    print( out )
-
-
-
+pexpectChild.close()
 
 """
-while( simCurrentTime < simDuration ):
-
-    holder_data = "{}".format( smartholder_usb_object.readline() )                          # Read until timeout is reached
-    #print( holder_data )
-    if( holder_data == '' ):
-        pass
-    else:
-        split_line = holder_data.split()                                                    # Split incoming data
-        formatted = ( "{} {} {}".format( fullStamp(), split_line[1], split_line[2] ) )      # Construct string
-        print( formatted.strip('\n') )                                                     # [INFO] Status update
-
-        if( split_line[1] == '1:' and split_line[2] == '0' ):
-            print( fullStamp() + " " + smarthandle_name[0] + " has been removed " )
-            holder_flag[0] = 0
-
-        elif( split_line[1] == '1:' and split_line[2] == '1' ):
-            print( fullStamp() + " " + smarthandle_name[0] + " has been stored " )
-            holder_flag[0] = 1                                                              # device one in the holder		
-
-        elif( split_line[1] == '2:' and split_line[2] == '0' ):
-            print( fullStamp() + " " + smarthandle_name[1] + " has been removed " )
-            holder_flag[1] = 0
-
-        elif( split_line[1] == '2:' and split_line[2] == '1' ):
-            print( fullStamp() + " " + smarthandle_name[1] + " has been stored " )
-            holder_flag[1] = 1
-
-        smartholder_data.append( ["%.02f" %simCurrentTime,
-                                  str( holder_flag[0] ),
-                                  str( holder_flag[1] ),
-                                  '\n'])
-
-    simCurrentTime = time.time() - simStartTime												# update time
-
-
-        
+											     
 # ----------------------------------------------------------------------------------------- #
 # Device Deactivation
 # ----------------------------------------------------------------------------------------- #
