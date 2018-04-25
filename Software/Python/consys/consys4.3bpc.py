@@ -80,7 +80,7 @@ def readGauge( initialCall, Q ):
 # ----------------------------------------------
 # Devices
 # ----------------------------------------------
-stethoscope_name = "stethoscope"
+stethoscope_name = "Stethoscope"
 stethoscope_bt_address = (["00:06:66:8C:D3:F6"])
 
 

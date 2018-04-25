@@ -219,19 +219,19 @@ class MyWindow(QtGui.QMainWindow):
         # Create data output folder/file
         outDir = consDir + "output/"                                                        # find or generate the main output directory
         if( path.exists( outDir ) == False ):
-            print( fullStamp() + " Output directory not present " )
-            print( fullStamp() + " Generating output directory " )
+            #print( fullStamp() + " Output directory not present " )
+            #print( fullStamp() + " Generating output directory " )
             makedirs( outDir )
-        else:
-            print( fullStamp() + " Found output directory " )
+        #else:
+            #print( fullStamp() + " Found output directory " )                          
 
         stampedDir = outDir + executionTimeStamp + "/"                                      # find or generate the time-stamped output directory
         if( path.exists( stampedDir ) == False ):
-            print( fullStamp() + " Time-stamped directory not present " )
-            print( fullStamp() + " Generating time-stamped directory " )
+            #print( fullStamp() + " Time-stamped directory not present " )
+            #print( fullStamp() + " Generating time-stamped directory " )
             makedirs( stampedDir )
-        else:
-            print( fullStamp() + " Found time-stamped directory " )
+        #else:
+            #print( fullStamp() + " Found time-stamped directory " )
         
         self.dataFileDir = stampedDir
         self.dataFileName = stampedDir + "bpcu.txt"
@@ -242,7 +242,7 @@ class MyWindow(QtGui.QMainWindow):
             f.write( "Device Name: " + deviceName + "\n" )
             f.write( "Units: seconds, kPa, mmHg" + "\n" )
             f.close()
-            print( fullStamp() + " Created data output .txt file" )
+            #print( fullStamp() + " Created data output .txt file" )
 
 # ------------------------------------------------------------------------
 
@@ -252,7 +252,7 @@ class MyWindow(QtGui.QMainWindow):
         Stops recording and closes communication with device
         """
         
-        print( fullStamp() + " Goodbye!" )
+        #print( fullStamp() + " Goodbye!" )
         QtCore.QThread.sleep( 2 )                               # this delay may be essential
 
 
@@ -274,7 +274,7 @@ class Worker( QtCore.QThread ):
     def __init__( self, parent = None ):
         QtCore.QThread.__init__( self, parent )
         # self.exiting = False # not sure what this line is for
-        print( fullStamp() + " Initializing Worker Thread" )
+        #print( fullStamp() + " Initializing Worker Thread" )
         self.owner = parent
         self.start()
 
