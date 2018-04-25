@@ -319,7 +319,8 @@ class Worker( QtCore.QThread ):
             
             self.wFreqTrigger = time.time()                                         # Reset wFreqTrigger
 
-            print( str(P_Pscl) + ", " + str(P_mmHg) + ", SIM %r" %(self.playback) )                                      # Print to STDOUT
+            if( self.playback == True ):
+                print( str(P_mmHg) + ", SIM %r" %(self.playback) )                                      # Print to STDOUT
             
             # Write to file
             dataStream = "%.02f, %.2f, %.2f\n" %( time.time()-self.startTime,       # Format readings
