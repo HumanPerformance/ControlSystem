@@ -30,7 +30,7 @@ def definePaths(device):
         homeDir = "/home/pi"
         pythonDir = homeDir + "/pd3d/csec/repos/ControlSystem/Software/Python"
         deviceDir = pythonDir + "/" + device + "/"
-    print deviceDir
+    #print deviceDir
     return homeDir, pythonDir, deviceDir
 
 # ======================================= #

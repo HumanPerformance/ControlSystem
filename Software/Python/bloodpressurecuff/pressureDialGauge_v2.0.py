@@ -79,7 +79,7 @@ ap.add_argument( "-f", "--frequency", type=int, default=0.25,                   
                 help="Set sampling frequency (in secs).\nDefault=1" )
 ap.add_argument( "-d", "--debug", action='store_true',                                      # debug mode --mo
                 help="Invoke flag to enable debugging" )
-#ap.add_argument( "--directory", type=str, default='output',                                 # directory --will remove
+#ap.add_argument( "--directory", type=str, default='output',                                # directory --will remove
 #                help="Set directory" )
 #ap.add_argument( "--destination", type=str, default="output.txt",
 #                help="Set destination" )
@@ -87,9 +87,9 @@ ap.add_argument( "-d", "--debug", action='store_true',                          
 #                help="Choose stethoscope" )
 ap.add_argument( "-m", "--mode", type=str, default="REC",                                   # reconrding or simulation mode
                 help="Mode to operate under; SIM: Simulation || REC: Recording" )
-ap.add_argument( "-lp", "--lower_pressure", type=str, default=75,                       # set lower pressure limit as an input (for SIM only)
+ap.add_argument( "-lp", "--lower_pressure", type=str, default=75,                           # set lower pressure limit as an input (for SIM only)
                 help="Lower Pressure Limit (only for SIM)" )
-ap.add_argument( "-hp", "--higher_pressure", type=str, default=125,                     # set higher pressure limit as an input (for SIM only)
+ap.add_argument( "-hp", "--higher_pressure", type=str, default=125,                         # set higher pressure limit as an input (for SIM only)
                 help="Higher Pressure Limit (only for SIM)" )
 args = vars( ap.parse_args() )
 
@@ -144,8 +144,6 @@ class MyWindow(QtGui.QMainWindow):
         self.mode           = args["mode"]
         self.lp             = args["lower_pressure"]
         self.hp             = args["higher_pressure"]
-        print( self.lp )
-        print( self.hp )
 
         # Boolean to control recording function
         #self.init_rec = True
@@ -265,8 +263,9 @@ class MyWindow(QtGui.QMainWindow):
 class Worker( QtCore.QThread ):
 
     # Create flags for what mode we are running
-    normal = True
-    playback = False
+    normal      = True                                                                      # normal state, out of the simulated pressure range
+    playback    = False                                                                     # simulated state, within the simulated pressure range
+    recent      = playback                                                                  # most recent state                                                                  
     
     # Define sasmpling frequency (units: sec) controls writing frequency
     wFreq = args["frequency"]
@@ -319,8 +318,9 @@ class Worker( QtCore.QThread ):
             
             self.wFreqTrigger = time.time()                                         # Reset wFreqTrigger
 
-            if( self.playback == True ):
-                print( str(P_mmHg) + ", SIM %r" %(self.playback) )                                      # Print to STDOUT
+            if( self.playback is not self.recent ):
+                print( str(P_mmHg) + ", SIM %r" %(self.playback) )
+                self.recent = self.playback
             
             # Write to file
             dataStream = "%.02f, %.2f, %.2f\n" %( time.time()-self.startTime,       # Format readings

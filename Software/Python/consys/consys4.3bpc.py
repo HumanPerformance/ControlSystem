@@ -121,7 +121,7 @@ cmd = "sudo python " + bpcuDir + "pressureDialGauge_v2.0.py --mode SIM --lower_p
 pressure_meter = pexpect.spawn( cmd, timeout=None )
 for line in pressure_meter:                                                                 # flushing initial lines and comments from dial function
     out = line.strip('\n\r')
-    #print( out )
+    print( out )
 
 # ----------------------------------------------------------------------------------------- #
 # Data Gathering
