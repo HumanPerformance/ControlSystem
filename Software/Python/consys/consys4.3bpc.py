@@ -186,7 +186,7 @@ while( simCurrentTime < simDuration ):
             holder_flag = 1
 
         smartholder_data.append( ["%.02f" %simCurrentTime,
-                                  holder_flag,
+                                  str( holder_flag ),
                                   '\n'])
 
     # checking pressure values ------------------------------------------------------------ #
@@ -231,7 +231,7 @@ elif( scenario == 1 ):
 elif( scenario == 2 ):
     statusEnquiry( stethoscope_bt_object )
 
-"""
+
 # ========================================================================================= #
 # Output
 # ========================================================================================= #
@@ -245,7 +245,7 @@ if( path.exists( outDir ) == False ):
 else:
     print( fullStamp() + " Found output directory " )
 
-stampedDir = outDir + fullStamp() + "/"
+stampedDir = outDir + executionTimeStamp + "/"
 if( path.exists( stampedDir ) == False ):
     print( fullStamp() + " Time-stamped directory not present " )
     print( fullStamp() + " Generating time-stamped directory " )
@@ -253,30 +253,15 @@ if( path.exists( stampedDir ) == False ):
 else:
     print( fullStamp() + " Found time-stamped directory " )
 
-
-smarthandle_output_filename = ([ stampedDir + "oto.txt",
-								 stampedDir + "ophtho.txt" ])
 smartholder_output_filename = stampedDir + "holder.txt"
 
-N_lines = ([ len( smarthandle_data[smarthandle_name[0]] ),
-			 len( smarthandle_data[smarthandle_name[1]] ),
-			 len( smartholder_data ) ])
+N_lines = len( smartholder_data )
 
-for i in range(0, len( N_lines )):
-	if( i < N_smarthandles ):
-		for j in range(0, N_lines[i]):
-			if( j == 0 ):
-				with open(smarthandle_output_filename[i], 'a') as dataFile:
-					dataFile.write( fullStamp() + " Smart Handle = " + smarthandle_name[i] + '\n' )
-					dataFile.write( fullStamp() + " Bluetooth Address = " + smarthandle_bt_address[i] + '\n')
-			with open(smarthandle_output_filename[i], 'a') as dataFile:
-				dataFile.write( smarthandle_data[smarthandle_name[i]][j][0] + "," + smarthandle_data[smarthandle_name[i]][j][1] + '\n' )
-	else:
-		for j in range(0, N_lines[i]):
-			if( j == 0 ):
-				with open(smartholder_output_filename, 'a') as dataFile:
-					dataFile.write( fullStamp() + " Smart Holder " + '\n' )
-					dataFile.write( fullStamp() + " COM Port = " + str( port ) + '\n')
-			with open(smartholder_output_filename, 'a') as dataFile:
-				dataFile.write( smartholder_data[j][0] + "," + smartholder_data[j][1] + "," + smartholder_data[j][2] + '\n' )
-"""
+for i in range(0, N_lines):
+        if( i == 0 ):
+                with open(smartholder_output_filename, 'a') as dataFile:
+                        dataFile.write( fullStamp() + " Smart Holder for = " + stethoscope_name + '\n' )
+                        dataFile.write( fullStamp() + " COM Port = " + str( port ) + '\n')
+        with open(smartholder_output_filename, 'a') as dataFile:
+                dataFile.write( smartholder_data[i][0] + "," + smartholder_data[i][1] + '\n' )
+
