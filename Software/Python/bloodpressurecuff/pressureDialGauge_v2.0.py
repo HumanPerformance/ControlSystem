@@ -75,17 +75,17 @@ executionTimeStamp = fullStamp()                                                
 
 ap = argparse.ArgumentParser()
 
-ap.add_argument( "-f", "--frequency", type=int, default=0.25,
+ap.add_argument( "-f", "--frequency", type=int, default=0.25,                               # sampling frequency for pressure measurement
                 help="Set sampling frequency (in secs).\nDefault=1" )
-ap.add_argument( "-d", "--debug", action='store_true',
+ap.add_argument( "-d", "--debug", action='store_true',                                      # debug mode --mo
                 help="Invoke flag to enable debugging" )
-ap.add_argument( "--directory", type=str, default='output',
-                help="Set directory" )
-ap.add_argument( "--destination", type=str, default="output.txt",
-                help="Set destination" )
-ap.add_argument( "--stethoscope", type=str, default="00:06:66:8C:D3:F6",
-                help="Choose stethoscope" )
-ap.add_argument( "-m", "--mode", type=str, default="REC",
+#ap.add_argument( "--directory", type=str, default='output',                                 # directory --will remove
+#                help="Set directory" )
+#ap.add_argument( "--destination", type=str, default="output.txt",
+#                help="Set destination" )
+#ap.add_argument( "--stethoscope", type=str, default="00:06:66:8C:D3:F6",
+#                help="Choose stethoscope" )
+ap.add_argument( "-m", "--mode", type=str, default="REC",                                   # reconrding or simulation mode
                 help="Mode to operate under; SIM: Simulation || REC: Recording" )
 
 args = vars( ap.parse_args() )

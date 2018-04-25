@@ -1,4 +1,4 @@
 import time
 
-time.sleep(20)
+time.sleep(2)
 print("bruh")
