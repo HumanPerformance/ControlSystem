@@ -81,8 +81,8 @@ ap.add_argument( "-d", "--debug", action='store_true',                          
                 help="Invoke flag to enable debugging" )
 #ap.add_argument( "--directory", type=str, default='output',                                # directory --will remove
 #                help="Set directory" )
-#ap.add_argument( "--destination", type=str, default="output.txt",
-#                help="Set destination" )
+ap.add_argument( "--destination", type=str, default="output.txt",
+                help="Output directory" )
 #ap.add_argument( "--stethoscope", type=str, default="00:06:66:8C:D3:F6",
 #                help="Choose stethoscope" )
 ap.add_argument( "-m", "--mode", type=str, default="REC",                                   # reconrding or simulation mode
@@ -139,7 +139,7 @@ class MyWindow(QtGui.QMainWindow):
 
         # Unpack argumnet parser parameters as attributes
         # self.directory      = args["directory"]
-        # self.destination    = args["destination"]
+        self.destination    = args["destination"]
         # self.address        = args["stethoscope"]
         self.mode           = args["mode"]
         self.lp             = args["lower_pressure"]
@@ -225,7 +225,7 @@ class MyWindow(QtGui.QMainWindow):
         #else:
             #print( fullStamp() + " Found output directory " )                          
 
-        stampedDir = outDir + executionTimeStamp + "/"                                      # find or generate the time-stamped output directory
+        stampedDir = outDir + args["destination"] + "/"                                      # find or generate the time-stamped output directory
         if( path.exists( stampedDir ) == False ):
             #print( fullStamp() + " Time-stamped directory not present " )
             #print( fullStamp() + " Generating time-stamped directory " )

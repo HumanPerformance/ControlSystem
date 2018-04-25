@@ -48,6 +48,8 @@ from    smarthandleProtocol         import *
 from    stethoscopeProtocol         import *
 
 
+executionTimeStamp  = fullStamp()
+
 # ========================================================================================= #
 # Functions
 # ========================================================================================= #
@@ -59,7 +61,7 @@ def readGauge( initialCall, Q ):
     lower_pressure  = 85.0                                                                      # units in mmHg
     higher_pressure = 145.0                                                                     # ...
 
-    cmd = "sudo python " + bpcuDir + "pressureDialGauge_v2.0.py --mode SIM --lower_pressure " + str(lower_pressure) + " --higher_pressure " + str(higher_pressure)
+    cmd = "sudo python " + bpcuDir + "pressureDialGauge_v2.0.py --destination " + executionTimeStamp + " --mode SIM --lower_pressure " + str(lower_pressure) + " --higher_pressure " + str(higher_pressure)
     pressure_meter = pexpect.spawn( cmd, timeout=None )
 
     if( initialCall ):
@@ -89,11 +91,6 @@ ENQ							= chr(0x05)                                         			# Enquiry
 ACK             			= chr(0x06)                                         			# Positive Acknowledgement
 NAK             			= chr(0x15)                                         			# Negative Acknowledgement
 
-
-# ----------------------------------------------
-# Timers
-# ----------------------------------------------
-executionTimeStamp  = fullStamp()
 
 # ========================================================================================= #
 # Operation
@@ -235,11 +232,10 @@ elif( scenario == 2 ):
     statusEnquiry( stethoscope_bt_object )
 
 """
-
-
 # ========================================================================================= #
 # Output
 # ========================================================================================= #
+print( fullStamp() + " Writting data to file " )
 
 outDir = consDir + "output/"
 if( path.exists( outDir ) == False ):
