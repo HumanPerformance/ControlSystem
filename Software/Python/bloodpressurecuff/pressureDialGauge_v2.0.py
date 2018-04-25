@@ -240,7 +240,7 @@ class MyWindow(QtGui.QMainWindow):
         with open( self.dataFileName, "w" ) as f:
             f.write( "Date/Time: " + executionTimeStamp + "\n" )
             f.write( "Device Name: " + deviceName + "\n" )
-            f.write( "Units: seconds, kPa, mmHg" + "\n" )
+            f.write( "Units: seconds, kPa, mmHg, SIM" + "\n" )
             f.close()
             #print( fullStamp() + " Created data output .txt file" )
 
@@ -327,8 +327,10 @@ class Worker( QtCore.QThread ):
                 self.recent = self.playback
             
             # Write to file
-            dataStream = "%.02f, %.2f, %.2f\n" %( time.time()-self.startTime,       # Format readings
-                                                  P_Pscl, P_mmHg )                  # into desired form
+            dataStream = "%.02f, %.2f, %.2f, %r\n" %( time.time()-self.startTime,       # Format readings
+                                                      P_Pscl,
+                                                      P_mmHg,
+                                                      self.playback )
             with open( self.owner.dataFileName, "a" ) as f:
                 f.write( dataStream )                                               # Write to file
                 f.close()                                                           # Close file
