@@ -68,7 +68,8 @@ def readGauge( initialCall, Q ):
         
     for line in pressure_meter:
         out = line.strip('\n\r')
-        print( out )
+        Q.put( out )
+        #print( out )
 
     #pressure_meter.close()
 
@@ -190,7 +191,10 @@ while( simCurrentTime < simDuration ):
         smartholder_data.append( ["%.02f" %simCurrentTime,
                                   holder_flag,
                                   '\n'])
-
+        
+    if( q_pressure_meter.empty() == False ):
+        print( q_pressure_meter.get( block=False ) + "--" )
+        
     simCurrentTime = time.time() - simStartTime
 											     
 # ----------------------------------------------------------------------------------------- #
