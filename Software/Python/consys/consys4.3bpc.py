@@ -54,7 +54,7 @@ from    stethoscopeProtocol         import *
 # Devices
 # ----------------------------------------------
 stethoscope_name = "stethoscope"
-stethoscopes_bt_address = (["00:06:66:8C:D3:F6"])
+stethoscope_bt_address = (["00:06:66:8C:D3:F6"])
 
 
 SOH             			= chr(0x01)                                         			# Start of Header
@@ -78,29 +78,20 @@ executionTimeStamp  = fullStamp()
 print fullStamp() + " OPERATION "
 print fullStamp() + " Begin device configuration "
 
+# connecting to panel devices
+print( fullStamp() + " Connecting to panel devices " )
 
-# pressure meter
+# connecting to stethoscope --------------------------------------------------------------- #
+print( fullStamp() + " Connecting to stethoscope " )
+stethoscope_bt_object = createBTPort( stethoscope_bt_address[0], 1 )                        # using bluetooth protocol commands
 
-#rfObject = createBTPort( "00:06:66:8C:D3:F6", 1 )
-
-cmd = "sudo python " + bpcuDir + "pressureDialGauge_v2.0.py --mode SIM --lower_pressure 85 --higher_pressure 145"
-pressure_meter = pexpect.spawn( cmd, timeout=None )
-
-# the following while loop should be the foundation for the simulation loop of this script
-while( True ):
-    for line in pressure_meter:
-        out = line.strip('\n\r')
-        print( out )
-
-"""
-connect to stethoscope here or let the blood pressure cuff handle it
-"""
-
-"""
+# connecting to smart holders ------------------------------------------------------------- #
+print( fullStamp() + " Connecting to smart holders " )
 port = 0
 baud = 115200
 timeout = 1
 notReady = True
+
 try:
     smartholder_usb_object  = createUSBPort( port, baud, timeout )                          # test USB vs ACM port issue
 except:
@@ -114,11 +105,31 @@ else:
 while( notReady ):                                                                          # Loop until we receive SOH
     inData = smartholder_usb_object.read( size=1 )                                          # ...
     if( inData == SOH ):                                                                    # ...
-        #print( "{} [INFO] SOH Received".format( fullStamp() ) )                             # [INFO] Status update
+        print( "{} [INFO] SOH Received".format( fullStamp() ) )                             # [INFO] Status update
         break                                                                               # ...
 
 time.sleep(0.50)                                                                            # Sleep for stability!
 
+
+# start blood pressure cuff and digital dial ---------------------------------------------- #
+
+mode            = "SIM"
+lower_pressure  = 85.0                                                                      # units in mmHg
+higher_pressure = 145.0                                                                     # ...
+
+cmd = "sudo python " + bpcuDir + "pressureDialGauge_v2.0.py --mode SIM --lower_pressure " + str(lower_pressure) + " --higher_pressure " + str(higher_pressure)
+pressure_meter = pexpect.spawn( cmd, timeout=None )
+
+# the following while loop should be the foundation for the simulation loop of this script
+while( True ):
+    for line in pressure_meter:
+        out = line.strip('\n\r')
+        print( out )
+
+
+
+
+"""
 # ----------------------------------------------------------------------------------------- #
 # Data Gathering
 # ----------------------------------------------------------------------------------------- #
@@ -224,6 +235,4 @@ for i in range(0, len( N_lines )):
 					dataFile.write( fullStamp() + " COM Port = " + str( port ) + '\n')
 			with open(smartholder_output_filename, 'a') as dataFile:
 				dataFile.write( smartholder_data[j][0] + "," + smartholder_data[j][1] + "," + smartholder_data[j][2] + '\n' )
-
-
 """
