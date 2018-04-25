@@ -175,7 +175,7 @@ while( simCurrentTime < simDuration ):
     else:
         split_line = holder_data.split()                                                    # Split incoming data
         formatted = ( "{} {} {}".format( fullStamp(), split_line[1], split_line[2] ) )      # Construct string
-        print( formatted.strip('\n') )                                                      # [INFO] Status update
+        #print( formatted.strip('\n') )                                                      # [INFO] Status update
 
         if( split_line[1] == '1:' and split_line[2] == '0' ):
             print( fullStamp() + " " + stethoscope_name + " has been removed " )
