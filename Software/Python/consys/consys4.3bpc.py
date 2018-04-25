@@ -164,11 +164,13 @@ simStopTime         = simDuration                                               
 
 smartholder_data    = [] 								    # empty array for smart holder data
 holder_flag         = 1                                          			    # single sensor flag
+bpc_flag            = 0                                                                     # blood pressure sim region flag
 
 print( fullStamp() + " " + str( simDuration ) + " sec. simulation begins now " )            # Statement confirming simulation start
 
 while( simCurrentTime < simDuration ):
-    
+
+    # checking holder data ---------------------------------------------------------------- #
     holder_data = "{}".format( smartholder_usb_object.readline() )                          # Read until timeout is reached
 
     if( holder_data == '' ):                                                                # if the holder data is empty, do nothing
@@ -182,8 +184,6 @@ while( simCurrentTime < simDuration ):
             print( fullStamp() + " " + stethoscope_name + " has been removed " )
             holder_flag = 0
 
-            statusEnquiry( stethoscope_bt_object )
-
         elif( split_line[1] == '1:' and split_line[2] == '1' ):
             print( fullStamp() + " " + stethoscope_name + " has been stored " )
             holder_flag = 1
@@ -191,9 +191,31 @@ while( simCurrentTime < simDuration ):
         smartholder_data.append( ["%.02f" %simCurrentTime,
                                   holder_flag,
                                   '\n'])
-        
+
+    # checking pressure values ------------------------------------------------------------ #
     if( q_pressure_meter.empty() == False ):
-        print( q_pressure_meter.get( block=False ) + "--" )
+        line = q_pressure_meter.get( block=False )
+        split_line = line.split(" ")
+        if( len( split_line ) <= 2 ):
+            bpc_flag = int(split_line[1])
+            if( bpc_flag == 1 ):
+                print( fullStamp() + " Within simulated pressure range " )
+            elif( bpc_flag == 0 ):
+                print( fullStamp() + " Outside simulated pressure range " )
+
+    # interaction ------------------------------------------------------------------------- #
+    if( scenario == 0 ):
+        if( holder_flag == 0 ):
+            statusEnquiry( stethoscope_bt_object )
+
+    elif( scenario == 1 ):
+        if( holder_flag == 0 ):
+            statusEnquiry( stethoscope_bt_object ) # replace for blending
+
+    elif( scenario == 2 ):
+        if( holder_flag == 0 and bpc_flag == 1):
+            statusEnquiry( stethoscope_bt_object ) # replace for blending
+            
         
     simCurrentTime = time.time() - simStartTime
 											     
@@ -203,6 +225,14 @@ while( simCurrentTime < simDuration ):
 print( fullStamp() + " Closing blood pressure cuff connection " )
 pexpectChild.close()
 
+
+print( fullStamp() + " Disconnecting " + stethoscope_name )
+if( scenario == 0 ):
+    statusEnquiry( stethoscope_bt_object ) # replace with stop recording
+elif( scenario == 1 ):
+    statusEnquiry( stethoscope_bt_object ) # replace with stop recording and blending
+elif( scenario == 2 ):
+    statusEnquiry( stethoscope_bt_object )
 
 """
 

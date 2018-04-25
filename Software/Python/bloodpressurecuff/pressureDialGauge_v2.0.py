@@ -319,7 +319,11 @@ class Worker( QtCore.QThread ):
             self.wFreqTrigger = time.time()                                         # Reset wFreqTrigger
 
             if( self.playback is not self.recent ):
-                print( str(P_mmHg) + ", SIM %r" %(self.playback) )
+                if( self.playback == True ):
+                    print( "SIM, 1")                                                # within simulated pressure range
+                elif( self.playback == False ):
+                    print( "SIM, 0")                                                # outside simulated pressure range
+                #print( "SIM %r" %(self.playback) )
                 self.recent = self.playback
             
             # Write to file
