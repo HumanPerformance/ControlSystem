@@ -87,7 +87,10 @@ ap.add_argument( "-d", "--debug", action='store_true',                          
 #                help="Choose stethoscope" )
 ap.add_argument( "-m", "--mode", type=str, default="REC",                                   # reconrding or simulation mode
                 help="Mode to operate under; SIM: Simulation || REC: Recording" )
-
+ap.add_argument( "-lp", "--lower_pressure", type=str, default=75,                       # set lower pressure limit as an input (for SIM only)
+                help="Lower Pressure Limit (only for SIM)" )
+ap.add_argument( "-hp", "--higher_pressure", type=str, default=125,                     # set higher pressure limit as an input (for SIM only)
+                help="Higher Pressure Limit (only for SIM)" )
 args = vars( ap.parse_args() )
 
 
@@ -135,10 +138,14 @@ class MyWindow(QtGui.QMainWindow):
         self.ui.Dial.setValue( 0 )
 
         # Unpack argumnet parser parameters as attributes
-        self.directory = args["directory"]
-        self.destination = args["destination"]
-        self.address = args["stethoscope"]
-        self.mode = args["mode"]
+        # self.directory      = args["directory"]
+        # self.destination    = args["destination"]
+        # self.address        = args["stethoscope"]
+        self.mode           = args["mode"]
+        self.lp             = args["lower_pressure"]
+        self.hp             = args["higher_pressure"]
+        print( self.lp )
+        print( self.hp )
 
         # Boolean to control recording function
         #self.init_rec = True
@@ -151,7 +158,7 @@ class MyWindow(QtGui.QMainWindow):
         # set timeout function for updates
         self.ctimer = QtCore.QTimer()
         self.ctimer.start( 10 )
-        #QtCore.QObject.connect( self.ctimer, QtCore.SIGNAL( "timeout()" ), self.UpdateDisplay )
+        QtCore.QObject.connect( self.ctimer, QtCore.SIGNAL( "timeout()" ), self.UpdateDisplay )
 
         # Create logfile
         self.setup_log()
@@ -312,7 +319,7 @@ class Worker( QtCore.QThread ):
             
             self.wFreqTrigger = time.time()                                         # Reset wFreqTrigger
 
-            #print( "SIM %r" %(self.playback) )                                      # Print to STDOUT
+            print( str(P_Pscl) + ", " + str(P_mmHg) + ", SIM %r" %(self.playback) )                                      # Print to STDOUT
             
             # Write to file
             dataStream = "%.02f, %.2f, %.2f\n" %( time.time()-self.startTime,       # Format readings
@@ -332,16 +339,18 @@ class Worker( QtCore.QThread ):
         """
         In charge of triggering simulations
         """
+        lp = float( args["lower_pressure"] )
+        hp = float( args["higher_pressure"] )
         
         # Error handling (1)
         try:
             # Entering simulation pressure interval
-            if (P >= 75) and (P <= 125) and (self.playback == False):
+            if (P >= lp) and (P <= hp) and (self.playback == False):
                 self.normal = False                                                 # Turn OFF normal playback
                 self.playback = True                                                # Turn on simulation
 
             # Leaving simulation pressure interval
-            elif ((P < 75) or (P > 125)) and (self.normal == False):
+            elif ((P < lp) or (P > hp)) and (self.normal == False):
                 self.normal = True                                                  # Turn ON normal playback
                 self.playback = False                                               # Turn OFF simulation
 
