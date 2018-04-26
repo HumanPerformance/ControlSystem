@@ -140,7 +140,8 @@ time.sleep(0.50)                                                                
 # start blood pressure cuff and digital dial ---------------------------------------------- #
 print( fullStamp() + " Connecting to blood pressure cuff " )
 q_pressure_meter = Queue( maxsize=0 )                                                   # Define queue
-t_pressure_meter = Thread( target=readGauge, args=( True, q_pressure_meter, ) )         # Define thread
+t_pressure_meter = Thread( target=readGauge, args=( True, q_pressure_meter, ) )# Define thread
+t_pressure_meter.daemon = True
 t_pressure_meter.start()                                                                # Start thread
 
 pexpectChild = q_pressure_meter.get()
@@ -266,6 +267,10 @@ for i in range(0, N_lines):
                         dataFile.write( fullStamp() + " COM Port = " + str( port ) + '\n')
         with open(smartholder_output_filename, 'a') as dataFile:
                 dataFile.write( smartholder_data[i][0] + "," + smartholder_data[i][1] + '\n' )
+
+if( t_pressure_meter.isAlive() ):
+    print( "Closing thread" )
+    t_pressure_meter.join(2.0)
 
 print( fullStamp() + " Program Completed " )
 
