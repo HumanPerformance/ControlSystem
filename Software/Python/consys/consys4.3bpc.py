@@ -224,7 +224,6 @@ while( simCurrentTime < simDuration ):
 print( fullStamp() + " Closing blood pressure cuff connection " )
 pexpectChild.close()
 
-
 print( fullStamp() + " Disconnecting " + stethoscope_name )
 if( scenario == 0 ):
     statusEnquiry( stethoscope_bt_object ) # replace with stop recording
@@ -233,6 +232,7 @@ elif( scenario == 1 ):
 elif( scenario == 2 ):
     statusEnquiry( stethoscope_bt_object )
 
+stethoscope_bt_object.close()
 
 # ========================================================================================= #
 # Output
@@ -266,4 +266,6 @@ for i in range(0, N_lines):
                         dataFile.write( fullStamp() + " COM Port = " + str( port ) + '\n')
         with open(smartholder_output_filename, 'a') as dataFile:
                 dataFile.write( smartholder_data[i][0] + "," + smartholder_data[i][1] + '\n' )
+
+print( fullStamp() + " Program Completed " )
 
