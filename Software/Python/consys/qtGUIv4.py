@@ -1036,7 +1036,7 @@ PANEL_COMMAND = {
 "reset"     : "sudo reboot",
 "test"      : "sudo python pd3d/csec/repos/ControlSystem/Software/Python/consys/status.py",
 "consys"    : "sudo python pd3d/csec/repos/ControlSystem/Software/Python/consys/printme.py",
-"scene1"    : "sudo python pd3d/csec/repos/ControlSystem/Software/Python/consys/status.py",
+"scene1"    : "sudo python pd3d/csec/repos/ControlSystem/Software/Python/consys/consys4.3.py",
 "scene2"    : "sudo ls"
 }
 
