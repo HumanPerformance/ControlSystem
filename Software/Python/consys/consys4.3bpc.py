@@ -61,6 +61,7 @@ def readGauge( initialCall, Q ):
     lower_pressure  = 85.0                                                                      # units in mmHg
     higher_pressure = 145.0                                                                     # ...
 
+    pexpect.run("DISPLAY:=0")
     cmd = "sudo python " + bpcuDir + "pressureDialGauge_v2.0.py --destination " + executionTimeStamp + " --mode SIM --lower_pressure " + str(lower_pressure) + " --higher_pressure " + str(higher_pressure)
     pressure_meter = pexpect.spawn( cmd, timeout=None )
 
