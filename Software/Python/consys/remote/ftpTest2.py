@@ -9,8 +9,8 @@ username = 'pi'
 password = 'raspberry'
 
 #files = ['file1', 'file2', 'file3', 'file4']
-remote_path = '/home/pi/Desktop/output/hola.txt'
-local_path = 'C:/Users/fluviolobo/Desktop/hola.txt'
+remote_path = '/home/pi/pd3d/csec/repos/ControlSystem/Software/Python/consys/output.zip'
+local_path = 'C:/Users/fluviolobo/Desktop/output.zip'
 
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())

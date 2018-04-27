@@ -180,18 +180,21 @@ while( simCurrentTime < simDuration ):
 # ----------------------------------------------------------------------------------------- #
 # Device Deactivation
 # ----------------------------------------------------------------------------------------- #
-
+print( fullStamp() + " Disconnecting devices " )
+print( fullStamp() + " Disconnecting bluetooth devices " )
 for i in range(0, N_smarthandles):
     time.sleep(0.50)
     stopDataStream( smarthandle_bt_object[i], 20, '\n' )                                    # Stop streaming data
     smarthandle_bt_object[i].close()                                                        # Closing bluetooth port
-    
-#print dataStream
 
+print( fullStamp() + " Disconnecting usb devices " )
+if( smartholder_usb_object.is_open ):
+    smartholder_usb_object.close()
 
 # ========================================================================================= #
 # Output
 # ========================================================================================= #
+print( fullStamp() + " Writing data to file " )
 
 outDir = consDir + "output/"
 if( path.exists( outDir ) == False ):
@@ -238,4 +241,10 @@ for i in range(0, len( N_lines )):
 
 
 # zipping output
+print( fullStamp() + " Compressing data " )
 os.system("cd " + consDir + "; sudo zip -r " + consDir + "output.zip output")
+
+# ----------------------------------------------------------------------------------------- #
+# END
+# ----------------------------------------------------------------------------------------- #
+print( fullStamp() + " Program completed " )
