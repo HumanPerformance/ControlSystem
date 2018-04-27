@@ -237,23 +237,5 @@ for i in range(0, len( N_lines )):
 				dataFile.write( smartholder_data[j][0] + "," + smartholder_data[j][1] + "," + smartholder_data[j][2] + '\n' )
 
 
-""" ---leaving this as backup
-N_lines_one = len( dataStreamOne )
-N_lines_two = len( dataStreamTwo )
-
-for i in range(0, N_lines_one):
-    if( i == 0 ):
-        with open(otoscope_output_file, 'a') as dataFile:
-            dataFile.write( fullStamp() + " Smart Handle = " + "otoscope" + '\n' )
-            dataFile.write( fullStamp() + " Bluetooth Address = " + otoscope_bt_address + '\n')
-    with open(otoscope_output_file, 'a') as dataFile:
-        dataFile.write( dataStreamOne[i][0] + "," + dataStreamOne[i][1] + '\n' )
-
-for i in range(0, N_lines_two):
-    if( i == 0 ):
-        with open(ophthalmoscope_output_file, 'a') as dataFile:
-            dataFile.write( fullStamp() + " Smart Handle = " + "ophthalmoscope" + '\n' )
-            dataFile.write( fullStamp() + " Bluetooth Address = " + ophthalmoscope_bt_address + '\n')
-    with open(ophthalmoscope_output_file, 'a') as dataFile:
-        dataFile.write( dataStreamTwo[i][0] + "," + dataStreamTwo[i][1] + '\n' )
-"""
+# zipping output
+os.system("cd " + consDir + "; sudo zip -r " + consDir + "output.zip output")
