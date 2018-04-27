@@ -225,7 +225,7 @@ while( simCurrentTime < simDuration ):
 print( fullStamp() + " Closing blood pressure cuff connection " )
 pexpectChild.close()
 
-print( fullStamp() + " Disconnecting " + stethoscope_name )
+print( fullStamp() + " Disconnecting bluetooth devices " )
 if( scenario == 0 ):
     statusEnquiry( stethoscope_bt_object ) # replace with stop recording
 elif( scenario == 1 ):
@@ -234,6 +234,10 @@ elif( scenario == 2 ):
     statusEnquiry( stethoscope_bt_object )
 
 stethoscope_bt_object.close()
+
+print( fullStamp() + " Disconnecting usb devices " )
+if( smartholder_usb_object.is_open ):
+    smartholder_usb_object.close()
 
 # ========================================================================================= #
 # Output
@@ -272,5 +276,13 @@ if( t_pressure_meter.isAlive() ):
     print( "Closing thread" )
     t_pressure_meter.join(2.0)
 
-print( fullStamp() + " Program Completed " )
+# zipping output
+print( fullStamp() + " Compressing data " )
+os.system("cd " + consDir + "; sudo zip -r " + consDir + "output.zip output")
+
+# ----------------------------------------------------------------------------------------- #
+# END
+# ----------------------------------------------------------------------------------------- #
+print( fullStamp() + " Program completed " )
+
 
