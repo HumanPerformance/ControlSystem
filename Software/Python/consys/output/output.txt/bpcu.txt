@@ -1,3 +1,0 @@
-Date/Time: 2018-04-26-18-27-34
-Device Name: Blood Pressure Cuff
-Units: seconds, kPa, mmHg, SIM
