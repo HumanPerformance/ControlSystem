@@ -72,6 +72,8 @@ def create_status_directories( consDir, executionTimeStamp ):
     else:
         print( fullStamp() + " Found time-stamped directory " )
 
+    return statusDir, stampedDir
+
 def write_status_to_file( status_filename, message ):
     with open( status_filename, 'a' ) as dataFile:
         dataFile.write( fullStamp() + " " + message )
@@ -112,8 +114,9 @@ try:
     stethoscope_bt_object = createBTPort( stethoscope_bt_address[0], 1 )                        # using bluetooth protocol commands
 except bluetooth.btcommon.BluetoothError as bluetoothError:
     print( fullStamp() + " Stethoscope unavailable " )
-    create_status_directories( consDir, executionTimeStamp )
-    write_status_to_file( "log.txt", bluetoothError )
+    statusDir, stampedDir = create_status_directories( consDir, executionTimeStamp )
+    status_filename = stampedDir + "logo.txt"
+    write_status_to_file( status_filename, serialError )
     sys.exit( fullStamp() + " ERROR: Device missing " )
 
 # connecting to smart holders ------------------------------------------------------------- #
@@ -131,8 +134,9 @@ except serial.serialutil.SerialException as serialError:
         smartholder_usb_object  = createACMPort( port, baud, timeout )
     except serial.serialutil.SerialException as serialError:
         print( fullStamp() + " Smart Holder unavailable " )
-        create_status_directories( consDir, executionTimeStamp )
-        write_status_to_file( "log.txt", serialError )
+        statusDir, stampedDir = create_status_directories( consDir, executionTimeStamp )
+        status_filename = stampedDir + "logo.txt"
+        write_status_to_file( status_filename, serialError )
         sys.exit( fullStamp() + " ERROR: Device missing " )
 
 if smartholder_usb_object.is_open:
