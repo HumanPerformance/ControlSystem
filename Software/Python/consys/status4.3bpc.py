@@ -102,7 +102,7 @@ NAK             			= chr(0x15)                                         # Negativ
 # ----------------------------------------------------------------------------------------- #
 # Device Configuration, Connection and Activation
 # ----------------------------------------------------------------------------------------- #
-print fullStamp() + " OPERATION "
+print fullStamp() + " OPERATION: System Status Check "
 print fullStamp() + " Begin device configuration "
 
 # connecting to panel devices
