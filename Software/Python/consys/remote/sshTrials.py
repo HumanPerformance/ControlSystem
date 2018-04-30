@@ -8,7 +8,7 @@ SSH_ADDRESS = "10.171.190.201"
 SSH_USERNAME = "pi"
 SSH_PASSWORD = "raspberry"
 #SSH_COMMAND = "sudo python pd3d/csec/repos/ControlSystem/Software/Python/consys/printme.py"
-SSH_COMMAND = "sudo reboot"
+SSH_COMMAND = "ls"
 
 ssh = miko.SSHClient()
 ssh.set_missing_host_key_policy(miko.AutoAddPolicy())
