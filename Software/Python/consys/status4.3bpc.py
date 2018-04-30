@@ -132,8 +132,8 @@ scenario            = 0                                                         
 # ----------------------------------------------------------------------------------------- #
 # Device Deactivation
 # ----------------------------------------------------------------------------------------- #
-print( fullStamp() + " Closing blood pressure cuff connection " )
-pexpectChild.close()
+#print( fullStamp() + " Closing blood pressure cuff connection " )
+#pexpectChild.close()
 
 print( fullStamp() + " Disconnecting bluetooth devices " )
 if( scenario == 0 ):
