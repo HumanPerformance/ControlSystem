@@ -115,7 +115,7 @@ try:
 except bluetooth.btcommon.BluetoothError as bluetoothError:
     print( fullStamp() + " Stethoscope unavailable " )
     statusDir, stampedDir = create_status_directories( consDir, executionTimeStamp )
-    status_filename = stampedDir + "logo.txt"
+    status_filename = stampedDir + "log.txt"
     write_status_to_file( status_filename, serialError )
     sys.exit( fullStamp() + " ERROR: Device missing " )
 
@@ -135,7 +135,7 @@ except serial.serialutil.SerialException as serialError:
     except serial.serialutil.SerialException as serialError:
         print( fullStamp() + " Smart Holder unavailable " )
         statusDir, stampedDir = create_status_directories( consDir, executionTimeStamp )
-        status_filename = stampedDir + "logo.txt"
+        status_filename = stampedDir + "log.txt"
         write_status_to_file( status_filename, serialError )
         sys.exit( fullStamp() + " ERROR: Device missing " )
 
@@ -194,6 +194,6 @@ if( smartholder_usb_object.is_open ):
 # ----------------------------------------------------------------------------------------- #
 print( fullStamp() + " Status check completed successfully... Ready to Go! " )
 statusDir, stampedDir = create_status_directories( consDir, executionTimeStamp )
-status_filename = stampedDir + "logo.txt"
+status_filename = stampedDir + "log.txt"
 write_status_to_file( status_filename, " System CHECKS! " )
 
