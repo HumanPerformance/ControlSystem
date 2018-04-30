@@ -119,6 +119,7 @@ time.sleep(0.50)                                                                
 simStartTime        = time.time()
 simCurrentTime      = 0                                                                     # seconds
 simDuration         = 20                                                                    # seconds
+warningTime         = 5
 simStopTime         = simDuration                                                           # seconds
 
 smarthandle_data 						= {} 												# dictionary structure to contain incoming smarthandle data
@@ -127,13 +128,23 @@ smarthandle_data[smarthandle_name[1]] 	= []
 
 smartholder_data 						= [] 												# empty array for smart holder data
 
-"""
-dataStream          = []
-dataStreamOne       = []
-dataStreamTwo       = []
-"""
-
 holder_flag         = ([1,1]) 																# flag for presence or absence of device
+
+# ---------------
+# countdown app
+# ---------------
+
+countdownDir = "/home/pi/pd3d/csec/repos/ControlSystem/Software/Processing/countdown/build/armv6hf
+countdownConfigFile = countdownDir + "/data/countdownInit.txt"
+with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
+    # Note: For the countdown application, only two inputs are currently needed: StartTime and WarningTime
+    countdownConfigFileObj.write( "StartTime:" + str(simDuration) )
+    countdownConfigFileObj.write( "WarningTime:" + str(warningTime) )
+
+terminalCommand = "DISPLAY=:0.0 sh " + countdownDir + "/countdown &"
+#time.sleep(5)
+
+# ---------------
 
 print( fullStamp() + " " + str( simDuration ) + " sec. simulation begins now " )                   # Statement confirming simulation start
 while( simCurrentTime < simDuration ):
