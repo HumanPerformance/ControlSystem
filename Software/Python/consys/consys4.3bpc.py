@@ -64,10 +64,16 @@ ap.add_argument( "-s", "--scenario", type=int, default=0,                       
                 help="Select scenario.\nDefault=1" )
 ap.add_argument( "-st", "--simulation_time", type=int, default=45,                                      # debug mode --mo
                 help="Simulation time" )
+ap.add_argument( "-lp", "--lower_pressure", type=int, default=85,                           # set lower pressure limit as an input (for SIM only)
+                help="Lower Pressure Limit (only for SIM)" )
+ap.add_argument( "-hp", "--higher_pressure", type=int, default=145,                         # set higher pressure limit as an input (for SIM only)
+                help="Higher Pressure Limit (only for SIM)" )
 args = vars( ap.parse_args() )
 
 print( fullStamp() + " Scenario = " + str( args["scenario"] ) )
 print( fullStamp() + " Simulation Time = " + str( args["simulation_time"] ) )
+print( fullStamp() + " Lower pressure set to = " + str( args["lower_pressure"] ) )
+print( fullStamp() + " Higher pressure set to = " + str( args["higher_pressure"] ) )
 
 # ========================================================================================= #
 # Functions
@@ -77,8 +83,8 @@ def readGauge( initialCall, Q ):
     # start blood pressure cuff and digital dial ---------------------------------------------- #
     print( fullStamp() + " Connecting to blood pressure cuff " )
     mode            = "SIM"
-    lower_pressure  = 85.0                                                                      # units in mmHg
-    higher_pressure = 145.0                                                                     # ...
+    lower_pressure  = args["lower_pressure"]                                                                      # units in mmHg
+    higher_pressure = args["higher_pressure"]                                                                   # ...
 
     #pexpect.run("DISPLAY:=0")
     #print( bpcuDir )
