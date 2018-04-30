@@ -58,7 +58,7 @@ executionTimeStamp  = fullStamp()
 # Devices
 # ----------------------------------------------
 stethoscope_name        = "Stethoscope"
-stethoscope_bt_address  = (["00:06:66:8C:D3:F6"])
+stethoscope_bt_address  = (["00:06:66:8C:D3:F9"])
 
 
 SOH             			= chr(0x01)                                         # Start of Header
