@@ -84,8 +84,9 @@ print( fullStamp() + " Connecting to panel devices " )
 print( fullStamp() + " Connecting to stethoscope " )
 try:
     stethoscope_bt_object = createBTPort( stethoscope_bt_address[0], 1 )                        # using bluetooth protocol commands
-except bluetooth.btcommon.BluetoothError as e:
-    print(e)
+except bluetooth.btcommon.BluetoothError as error:
+    print( fullStamp() + " Stethoscope unavailable " )
+    sys.exit( fullStamp() + " ERROR: Device missing " )
 
 # connecting to smart holders ------------------------------------------------------------- #
 print( fullStamp() + " Connecting to smart holders " )
