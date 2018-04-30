@@ -86,7 +86,7 @@ def write_status_to_file( status_filename, message ):
 # Devices
 # ----------------------------------------------
 stethoscope_name        = "Stethoscope"
-stethoscope_bt_address  = (["00:06:66:8C:D3:F6"])
+stethoscope_bt_address  = (["00:06:66:D0:E4:94"])
 
 
 SOH             			= chr(0x01)                                         # Start of Header
@@ -196,4 +196,4 @@ print( fullStamp() + " Status check completed successfully... Ready to Go! " )
 statusDir, stampedDir = create_status_directories( consDir, executionTimeStamp )
 status_filename = stampedDir + "log.txt"
 write_status_to_file( status_filename, " System CHECKS! " )
-
+print( fullStamp() + " " + "AOK" )

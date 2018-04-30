@@ -14,6 +14,7 @@ import  sys
 import  os
 import  serial
 import  time
+import  argparse
 import  pexpect
 from    os.path                     import expanduser
 from    os                          import getcwd, path, makedirs
@@ -47,8 +48,26 @@ from    usbProtocol                 import *
 from    smarthandleProtocol         import *
 from    stethoscopeProtocol         import *
 
+# ========================================================================================= #
+# Variables
+# ========================================================================================= #
 
 executionTimeStamp  = fullStamp()
+
+# ----------------------------------------------------------------------------------------- #
+# Constructing argument parser
+# ----------------------------------------------------------------------------------------- #
+
+ap = argparse.ArgumentParser()
+
+ap.add_argument( "-s", "--scenario", type=int, default=0,                               # sampling frequency for pressure measurement
+                help="Select scenario.\nDefault=1" )
+ap.add_argument( "-st", "--simulation_time", type=int, default=45,                                      # debug mode --mo
+                help="Simulation time" )
+args = vars( ap.parse_args() )
+
+print( fullStamp() + " Scenario = " + str( args["scenario"] ) )
+print( fullStamp() + " Simulation Time = " + str( args["simulation_time"] ) )
 
 # ========================================================================================= #
 # Functions
@@ -77,15 +96,11 @@ def readGauge( initialCall, Q ):
 
     #pressure_meter.close()
 
-# ========================================================================================= #
-# Variables
-# ========================================================================================= #
-
 # ----------------------------------------------
 # Devices
 # ----------------------------------------------
 stethoscope_name = "Stethoscope"
-stethoscope_bt_address = (["00:06:66:8C:D3:F6"])
+stethoscope_bt_address = (["00:06:66:D0:E4:94"])
 
 
 SOH             			= chr(0x01)                                         			# Start of Header
@@ -150,7 +165,7 @@ pexpectChild = q_pressure_meter.get()
 # Data Gathering
 # ----------------------------------------------------------------------------------------- #
 # Variables
-scenario            = 0                                                                     # scenario type
+scenario            = args["scenario"]                                                                     # scenario type
 """
 scenario            = 0         # Normal                --no simulation
 scenario            = 1         # stethoscope aug.      --aug. of the stethoscope
@@ -159,7 +174,7 @@ scenario            = 3         # All                   --aug. of all devices
 """
 simStartTime        = time.time()
 simCurrentTime      = 0                                                                     # seconds
-simDuration         = 20                                                                    # seconds
+simDuration         = args["simulation_time"]                                                                    # seconds
 simStopTime         = simDuration                                                           # seconds
 
 smartholder_data    = [] 								    # empty array for smart holder data
