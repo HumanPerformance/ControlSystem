@@ -123,7 +123,8 @@ for i in range(0, N_smarthandles):
         statusDir, stampedDir = create_status_directories( consDir, executionTimeStamp )
         status_filename = stampedDir + "log.txt"
         write_status_to_file( status_filename, serialError )
-        sys.exit( fullStamp() + " ERROR: Device missing " )
+        print( fullStamp() + " ERROR: Device missing " )                                    # this string is specific to ssh communication
+        sys.exit( fullStamp() + " " + "ERR" )
 
 # connecting to smart holders ------------------------------------------------------------- #
 print( fullStamp() + " Connecting to smart holders " )
@@ -139,7 +140,8 @@ except serial.serialutil.SerialException as serialError:
         statusDir, stampedDir = create_status_directories( consDir, executionTimeStamp )
         status_filename = stampedDir + "log.txt"
         write_status_to_file( status_filename, serialError )
-        sys.exit( fullStamp() + " ERROR: Device missing " )
+        print( fullStamp() + " ERROR: Device missing " )                                    # this string is specific to ssh communication
+        sys.exit( fullStamp() + " " + "ERR" )
 
 if smartholder_usb_object.is_open:
     pass
@@ -174,3 +176,4 @@ print( fullStamp() + " Status check completed successfully... Ready to Go! " )
 statusDir, stampedDir = create_status_directories( consDir, executionTimeStamp )
 status_filename = stampedDir + "log.txt"
 write_status_to_file( status_filename, " System CHECKS! " )
+print( fullStamp() + " " + "AOK" )                                                          # this string is specific to ssh communication
