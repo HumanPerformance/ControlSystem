@@ -58,7 +58,7 @@ executionTimeStamp  = fullStamp()
 # Devices
 # ----------------------------------------------
 stethoscope_name        = "Stethoscope"
-stethoscope_bt_address  = (["00:06:66:8C:D3:F9"])
+stethoscope_bt_address  = (["00:06:66:8C:D3:F6"])
 
 
 SOH             			= chr(0x01)                                         # Start of Header
@@ -84,21 +84,26 @@ print( fullStamp() + " Connecting to panel devices " )
 print( fullStamp() + " Connecting to stethoscope " )
 try:
     stethoscope_bt_object = createBTPort( stethoscope_bt_address[0], 1 )                        # using bluetooth protocol commands
-except bluetooth.btcommon.BluetoothError as error:
+except bluetooth.btcommon.BluetoothError as bluetoothError:
     print( fullStamp() + " Stethoscope unavailable " )
     sys.exit( fullStamp() + " ERROR: Device missing " )
 
 # connecting to smart holders ------------------------------------------------------------- #
 print( fullStamp() + " Connecting to smart holders " )
-port = 0
+port = 2
 baud = 115200
 timeout = 1
 notReady = True
 
 try:
     smartholder_usb_object  = createUSBPort( port, baud, timeout )                          # test USB vs ACM port issue
-except:
-    smartholder_usb_object  = createACMPort( port, baud, timeout )
+except serial.serialutil.SerialException as serialError:
+    print( fullStamp() + " Cannot find serial COM Port, testing ACM Port... " )
+    try:
+        smartholder_usb_object  = createACMPort( port, baud, timeout )
+    except serial.serialutil.SerialException as serialError:
+        print( fullStamp() + " Smart Holder unavailable " )
+        sys.exit( fullStamp() + " ERROR: Device missing " )
 
 if smartholder_usb_object.is_open:
     pass
