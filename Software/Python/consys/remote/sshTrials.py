@@ -3,12 +3,11 @@ import sys
 
 ## EDIT SSH DETAILS ##
 
-#SSH_ADDRESS = "192.168.42.46"
 SSH_ADDRESS = "10.171.190.201"
 SSH_USERNAME = "pi"
 SSH_PASSWORD = "raspberry"
-#SSH_COMMAND = "sudo python pd3d/csec/repos/ControlSystem/Software/Python/consys/printme.py"
-SSH_COMMAND = "ls"
+SSH_DIR = "pd3d/csec/repos/ControlSystem/Software/Python/consys/"
+SSH_COMMAND = "python " + SSH_DIR + "status4.3bpc.py"
 
 ssh = miko.SSHClient()
 ssh.set_missing_host_key_policy(miko.AutoAddPolicy())
