@@ -1,8 +1,20 @@
+"""
+statusCheck.py
+
+Script designed to allow a remote status check prior to any system interaction
+
+Fluvio L Lobo Fenoglietto 04/30/2018
+"""
+
+# -------------------------------------------------------------------------------- #
+# Import Modules and Libraries
+# -------------------------------------------------------------------------------- #
 import paramiko as miko
 import sys
 
-## EDIT SSH DETAILS ##
-
+# -------------------------------------------------------------------------------- #
+# Variables
+# -------------------------------------------------------------------------------- #
 SSH_ADDRESS = "10.171.190.91"
 SSH_USERNAME = "pi"
 SSH_PASSWORD = "raspberry"
@@ -14,6 +26,9 @@ ssh.set_missing_host_key_policy(miko.AutoAddPolicy())
 
 ssh_stdin = ssh_stdout = ssh_stderr = None
 
+# -------------------------------------------------------------------------------- #
+# Operation: Communicating with system over ssh
+# -------------------------------------------------------------------------------- #
 try:
     ssh.connect(SSH_ADDRESS, username=SSH_USERNAME, password=SSH_PASSWORD)
     ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(SSH_COMMAND)
