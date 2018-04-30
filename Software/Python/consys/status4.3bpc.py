@@ -74,7 +74,7 @@ def create_status_directories( consDir, executionTimeStamp ):
 
 def write_status_to_file( status_filename, message ):
     with open( status_filename, 'a' ) as dataFile:
-        dataFile.write( fullSatmp() + " " + message )
+        dataFile.write( fullStamp() + " " + message )
 
 # ========================================================================================= #
 # Variables
