@@ -193,6 +193,7 @@ if( smartholder_usb_object.is_open ):
 # END
 # ----------------------------------------------------------------------------------------- #
 print( fullStamp() + " Status check completed successfully... Ready to Go! " )
-create_status_directories( consDir, executionTimeStamp )
-write_status_to_file( "log.txt", " Systems CHECK! " )
+statusDir, stampedDir = create_status_directories( consDir, executionTimeStamp )
+status_filename = stampedDir + "logo.txt"
+write_status_to_file( status_filename, serialError )
 
