@@ -116,7 +116,7 @@ except bluetooth.btcommon.BluetoothError as bluetoothError:
     print( fullStamp() + " Stethoscope unavailable " )
     statusDir, stampedDir = create_status_directories( consDir, executionTimeStamp )
     status_filename = stampedDir + "log.txt"
-    write_status_to_file( status_filename, serialError )
+    write_status_to_file( status_filename, bluetoothError[0] )
     sys.exit( fullStamp() + " ERROR: Device missing " )
 
 # connecting to smart holders ------------------------------------------------------------- #
@@ -136,7 +136,7 @@ except serial.serialutil.SerialException as serialError:
         print( fullStamp() + " Smart Holder unavailable " )
         statusDir, stampedDir = create_status_directories( consDir, executionTimeStamp )
         status_filename = stampedDir + "log.txt"
-        write_status_to_file( status_filename, serialError )
+        write_status_to_file( status_filename, "Serial Error" )
         sys.exit( fullStamp() + " ERROR: Device missing " )
 
 if smartholder_usb_object.is_open:
@@ -150,39 +150,12 @@ while( notReady ):                                                              
         print( "{} [INFO] SOH Received".format( fullStamp() ) )                             # [INFO] Status update
         break                                                                               # ...
 
-time.sleep(0.50)                                                                            # Sleep for stability!
-
-
-# start blood pressure cuff and digital dial ---------------------------------------------- #
-"""
-print( fullStamp() + " Connecting to blood pressure cuff " )
-q_pressure_meter = Queue( maxsize=0 )                                                   # Define queue
-t_pressure_meter = Thread( target=readGauge, args=( True, q_pressure_meter, ) )# Define thread
-t_pressure_meter.daemon = True
-t_pressure_meter.start()                                                                # Start thread
-
-pexpectChild = q_pressure_meter.get()
-"""
-# ----------------------------------------------------------------------------------------- #
-# Data Gathering
-# ----------------------------------------------------------------------------------------- #
-# Variables
-scenario            = 0                                                                     # scenario type
+time.sleep(0.50)
 
 # ----------------------------------------------------------------------------------------- #
 # Device Deactivation
 # ----------------------------------------------------------------------------------------- #
-#print( fullStamp() + " Closing blood pressure cuff connection " )
-#pexpectChild.close()
-
 print( fullStamp() + " Disconnecting bluetooth devices " )
-if( scenario == 0 ):
-    statusEnquiry( stethoscope_bt_object ) # replace with stop recording
-elif( scenario == 1 ):
-    statusEnquiry( stethoscope_bt_object ) # replace with stop recording and blending
-elif( scenario == 2 ):
-    statusEnquiry( stethoscope_bt_object )
-
 stethoscope_bt_object.close()
 
 print( fullStamp() + " Disconnecting usb devices " )
