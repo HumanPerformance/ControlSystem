@@ -118,8 +118,8 @@ time.sleep(0.50)                                                                
 # Variables
 simStartTime        = time.time()
 simCurrentTime      = 0                                                                     # seconds
-simDuration         = 20                                                                    # seconds
-warningTime         = 5
+simDuration         = 1                                                                    # seconds
+warningTime         = 0
 simStopTime         = simDuration                                                           # seconds
 
 smarthandle_data 						= {} 												# dictionary structure to contain incoming smarthandle data
@@ -134,7 +134,7 @@ holder_flag         = ([1,1]) 																# flag for presence or absence of 
 # countdown app
 # ---------------
 
-countdownDir = "/home/pi/pd3d/csec/repos/ControlSystem/Software/Processing/countdown/build/armv6hf
+countdownDir = "/home/pi/pd3d/csec/repos/ControlSystem/Software/Processing/countdown/build/armv6hf"
 countdownConfigFile = countdownDir + "/data/countdownInit.txt"
 with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
     # Note: For the countdown application, only two inputs are currently needed: StartTime and WarningTime
@@ -146,8 +146,8 @@ terminalCommand = "DISPLAY=:0.0 sh " + countdownDir + "/countdown &"
 
 # ---------------
 
-print( fullStamp() + " " + str( simDuration ) + " sec. simulation begins now " )                   # Statement confirming simulation start
-while( simCurrentTime < simDuration ):
+print( fullStamp() + " " + str( simDuration * 60 ) + " sec. simulation begins now " )                   # Statement confirming simulation start
+while( simCurrentTime < ( simDuration * 60 ) ):
 
     holder_data = "{}".format( smartholder_usb_object.readline() )                          # Read until timeout is reached
     #print( holder_data )
