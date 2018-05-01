@@ -119,10 +119,10 @@ for i in range(0, N_smarthandles):
     try:
         smarthandle_bt_object.append( createBTPort( smarthandle_bt_address[i], 1 ) )        # Connecting to bluetooth handle
     except bluetooth.btcommon.BluetoothError as bluetoothError:
-        print( fullStamp() + " Stethoscope unavailable " )
+        print( fullStamp() + " " + smarthandle_name[i] + " unavailable " )
         statusDir, stampedDir = create_status_directories( consDir, executionTimeStamp )
         status_filename = stampedDir + "log.txt"
-        write_status_to_file( status_filename, serialError )
+        write_status_to_file( status_filename, bluetoothError[0] )
         print( fullStamp() + " ERROR: Device missing " )                                    # this string is specific to ssh communication
         sys.exit( fullStamp() + " " + "ERR" )
 
@@ -139,7 +139,7 @@ except serial.serialutil.SerialException as serialError:
         print( fullStamp() + " Smart Holder unavailable " )
         statusDir, stampedDir = create_status_directories( consDir, executionTimeStamp )
         status_filename = stampedDir + "log.txt"
-        write_status_to_file( status_filename, serialError )
+        write_status_to_file( status_filename, "Serial Error" )
         print( fullStamp() + " ERROR: Device missing " )                                    # this string is specific to ssh communication
         sys.exit( fullStamp() + " " + "ERR" )
 
