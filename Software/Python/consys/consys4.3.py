@@ -138,10 +138,11 @@ countdownDir = "/home/pi/pd3d/csec/repos/ControlSystem/Software/Processing/count
 countdownConfigFile = countdownDir + "/data/countdownInit.txt"
 with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
     # Note: For the countdown application, only two inputs are currently needed: StartTime and WarningTime
-    countdownConfigFileObj.write( "StartTime:" + str(simDuration) )
-    countdownConfigFileObj.write( "WarningTime:" + str(warningTime) )
+    countdownConfigFileObj.write( "StartTime:" + str(simDuration) + "\n" )
+    countdownConfigFileObj.write( "WarningTime:" + str(warningTime) + "\n" )
 
 terminalCommand = "DISPLAY=:0.0 sh " + countdownDir + "/countdown &"
+os.system( terminalCommand )
 #time.sleep(5)
 
 # ---------------
