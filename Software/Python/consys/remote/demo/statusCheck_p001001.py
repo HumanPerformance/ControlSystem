@@ -15,7 +15,8 @@ import sys
 # -------------------------------------------------------------------------------- #
 # Variables
 # -------------------------------------------------------------------------------- #
-SSH_ADDRESS = (["10.171.190.91"])
+#SSH_ADDRESS = (["10.171.190.91"])
+SSH_ADDRESS = (["192.168.42.10"])
 SSH_USERNAME = "pi"
 SSH_PASSWORD = "raspberry"
 SSH_DIR = "pd3d/csec/repos/ControlSystem/Software/Python/consys/"
