@@ -12,11 +12,21 @@ echo -e "\n\033[1mPulling in latest changes for all repositories...\033[0m\n"
 
 # Find all git repositories and update it to the master latest revision
 for i in $(find . -name ".git" | cut -c 3-); do
-    echo -e "";
+	echo -e "";
     echo -e "\033[33m"+$i+"\033[0m";
     
     # Extract name of repo
-    j=$(echo $i | cut -d "/" -f 2);
+    # Find everything between those delimeters
+    j=$(echo $i | grep -o -P '(?<=/).*(?=/.git)');
+    
+    # Check whether or not we extracted the name of the directory
+    if [[ $j = *"/"* ]]; then
+        while [[ $j = *"/"* ]]; do
+                j=$(echo $j | grep -o -P '(?<=/).*(?=)'); 
+        done
+    fi
+
+    #echo $j;
 
     # We have to go to the .git parent directory to call the pull command
     cd "$i";
