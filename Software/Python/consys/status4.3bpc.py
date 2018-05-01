@@ -86,7 +86,8 @@ def write_status_to_file( status_filename, message ):
 # Devices
 # ----------------------------------------------
 stethoscope_name        = "Stethoscope"
-stethoscope_bt_address  = (["00:06:66:D0:E4:94"])
+stethoscope_bt_address  = (["00:06:66:8C:D3:F6"])
+#stethoscope_bt_address  = (["00:06:66:D0:E4:94"])
 
 
 SOH             			= chr(0x01)                                         # Start of Header
@@ -158,8 +159,17 @@ if( holder_data == " " ):
     pass
 else:
     split_line = holder_data.split()                                                    # Split incoming data
-    formatted = ( "{} {} {}".format( fullStamp(), split_line[1], split_line[2] ) )      # Construct string
-    #print( formatted.strip('\n') )                                                     # [INFO] Status update
+    if( len(split_line) == 0 ):
+        error_message = fullStamp() + " Stethoscope NOT in holder "
+        print( error_message )
+        statusDir, stampedDir = create_status_directories( consDir, executionTimeStamp )
+        status_filename = stampedDir + "log.txt"
+        write_status_to_file( status_filename, error_message )
+        print( fullStamp() + " ERROR: Device missing " )                                    # this string is specific to ssh communication
+        sys.exit( fullStamp() + " " + "ERR" )
+    else:
+        formatted = ( "{} {} {}".format( fullStamp(), split_line[1], split_line[2] ) )      # Construct string
+        #print( formatted.strip('\n') )                                                    # [INFO] Status update
 
     if( split_line[1] == '1:' and split_line[2] == '0' ):
         error_message = fullStamp() + " Stethoscope NOT in holder "
