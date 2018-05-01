@@ -185,7 +185,9 @@ simStopTime         = simDuration                                               
 
 smartholder_data    = [] 								    # empty array for smart holder data
 holder_flag         = 1                                          			    # single sensor flag
+prev_holder_flag    = 1
 bpc_flag            = 0                                                                     # blood pressure sim region flag
+prev_bpc_flag       = 0                                                                   # blood pressure sim region flag
 
 print( fullStamp() + " " + str( simDuration ) + " sec. simulation begins now " )            # Statement confirming simulation start
 
@@ -226,17 +228,31 @@ while( simCurrentTime < simDuration ):
 
     # interaction ------------------------------------------------------------------------- #
     if( scenario == 0 ):
-        if( holder_flag == 0 ):
-            statusEnquiry( stethoscope_bt_object )
+        if( holder_flag == 0 and holder_flag != prev_holder_falg ):
+            startRecording( stethoscope_bt_object )
+            #statusEnquiry( stethoscope_bt_object )
+            prev_holder_flag = holder_flag
 
     elif( scenario == 1 ):
-        if( holder_flag == 0 ):
-            statusEnquiry( stethoscope_bt_object ) # replace for blending
-
-    elif( scenario == 2 ):
-        if( holder_flag == 0 and bpc_flag == 1):
-            statusEnquiry( stethoscope_bt_object ) # replace for blending
+        if( holder_flag == 0 and holder_flag != prev_holder_flag):
+            fileByte = definitions.ESMSYN
+            startBlending( stethoscope_bt_object, fileByte)
+            #statusEnquiry( stethoscope_bt_object ) # replace for blending
+            prev_holder_flag = holder_flag
+        elif( holder_flag == 1 and holder_flag != prev_holder_flag ):
+            stopBlending( stethoscope_bt_object )
+            prev_holder_flag = holder_flag
             
+    elif( scenario == 2 ):
+        if( holder_flag == 0 ):
+            if( bpc_flag == 1 and bpc_flag != prev_bpc_flag ):
+                fileByte = definitions.KOROT
+                startBlending( stethoscope_bt_object, fileByte)
+                #statusEnquiry( stethoscope_bt_object ) # replace for blending
+                prev_bpc_flag = bpc_flag
+            elif( bpc_flag == 0 and bpc_flag != prev_bpc_flag ):
+                stopBlending( stethoscope_bt_object )
+                prev_bpc_flag = bpc_flag
         
     simCurrentTime = time.time() - simStartTime
 											     
