@@ -156,6 +156,40 @@ while( notReady ):                                                              
 
 time.sleep(0.50)                                                                            # Sleep for stability!
 
+# testing whats in then holders
+for i in range(0, 2):
+    holder_data = "{}".format( smartholder_usb_object.readline() )                              # Read until timeout is reached
+    if( holder_data == " " ):
+        pass
+    else:
+        split_line = holder_data.split()                                                    # Split incoming data
+        formatted = ( "{} {} {}".format( fullStamp(), split_line[1], split_line[2] ) )      # Construct string
+        #print( formatted.strip('\n') )                                                     # [INFO] Status update
+
+        if( split_line[1] == '1:' and split_line[2] == '0' ):
+            error_message = fullStamp() + " " + smarthandle_name[0] + " NOT in holder "
+            print( error_message )
+            statusDir, stampedDir = create_status_directories( consDir, executionTimeStamp )
+            status_filename = stampedDir + "log.txt"
+            write_status_to_file( status_filename, error_message )
+            print( fullStamp() + " ERROR: Device missing " )                                    # this string is specific to ssh communication
+            sys.exit( fullStamp() + " " + "ERR" )
+
+        elif( split_line[1] == '1:' and split_line[2] == '1' ):
+            print( fullStamp() + " " + smarthandle_name[0] + " in holder " )                                                            # device one in the holder		
+
+        elif( split_line[1] == '2:' and split_line[2] == '0' ):
+            error_message = fullStamp() + " " + smarthandle_name[1] + " NOT in holder "
+            print( error_message )
+            statusDir, stampedDir = create_status_directories( consDir, executionTimeStamp )
+            status_filename = stampedDir + "log.txt"
+            write_status_to_file( status_filename, error_message )
+            print( fullStamp() + " ERROR: Device missing " )                                    # this string is specific to ssh communication
+            sys.exit( fullStamp() + " " + "ERR" )
+
+        elif( split_line[1] == '2:' and split_line[2] == '1' ):
+            print( fullStamp() + " " + smarthandle_name[1] + " in holder " )
+
 # ----------------------------------------------------------------------------------------- #
 # Device Deactivation
 # ----------------------------------------------------------------------------------------- #
