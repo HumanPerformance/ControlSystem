@@ -163,8 +163,17 @@ for i in range(0, 2):
         pass
     else:
         split_line = holder_data.split()                                                    # Split incoming data
-        formatted = ( "{} {} {}".format( fullStamp(), split_line[1], split_line[2] ) )      # Construct string
-        #print( formatted.strip('\n') )                                                     # [INFO] Status update
+        if( len(split_line) == 0 ):
+            error_message = fullStamp() + " " + smarthandle_name[i] + " NOT in holder "
+            print( error_message )
+            statusDir, stampedDir = create_status_directories( consDir, executionTimeStamp )
+            status_filename = stampedDir + "log.txt"
+            write_status_to_file( status_filename, error_message )
+            print( fullStamp() + " ERROR: Device missing " )                                    # this string is specific to ssh communication
+            sys.exit( fullStamp() + " " + "ERR" )
+        else:
+            formatted = ( "{} {} {}".format( fullStamp(), split_line[1], split_line[2] ) )      # Construct string
+            #print( formatted.strip('\n') )                                                     # [INFO] Status update
 
         if( split_line[1] == '1:' and split_line[2] == '0' ):
             error_message = fullStamp() + " " + smarthandle_name[0] + " NOT in holder "
