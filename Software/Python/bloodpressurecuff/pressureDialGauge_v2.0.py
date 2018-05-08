@@ -103,7 +103,7 @@ ap.add_argument( "-hp", "--higher_pressure", type=str, default=125,             
                 help="Higher Pressure Limit (only for SIM)" )
 args = vars( ap.parse_args() )
 
-
+##args["debug"] = True
 # ========================================================================================= #
 # Program Configuration
 # ========================================================================================= #
@@ -122,7 +122,7 @@ class MyWindow(QtGui.QMainWindow):
         self.thread = Worker( self )
 
         # Close rfObject socket on exit
-        #self.ui.pushButtonQuit.clicked.connect( self.cleanUp )
+        self.ui.pushButtonQuit.clicked.connect( self.cleanUp )
 
         # Setup gauge-needle dimensions
         self.ui.Dial.setOrigin( 90.0 )
@@ -420,14 +420,14 @@ class Worker( QtCore.QThread ):
         # Use simulated data
         if( self.filterON ):
             if( self.owner.mode == "SIM" ): self.sim_mode( self.P_mmHg )            # Trigger simulations mode (if --mode SIM)
-            else: self.rec_mode()                                                   # Trigger recording   mode (if --mide REC)
+##            else: self.rec_mode()                                                   # Trigger recording   mode (if --mide REC)
             
             return( self.P_mmHg )                                                   # Return pressure readings in mmHg
 
         # Use real data
         else:
             if( self.owner.mode == "SIM" ): self.sim_mode( self.P_mmHg_0 )          # Trigger simulations mode (if --mode SIM)
-            else: self.rec_mode()                                                   # Trigger recording   mode (if --mide REC)
+##            else: self.rec_mode()                                                   # Trigger recording   mode (if --mide REC)
 
             return( self.P_mmHg_0 )                                                 # Return pressure readings in mmHg
 
