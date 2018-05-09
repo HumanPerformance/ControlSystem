@@ -228,9 +228,9 @@ while( simCurrentTime < simDuration ):
 
     # interaction ------------------------------------------------------------------------- #
     if( scenario == 0 ):
-        if( holder_flag == 0 and holder_flag != prev_holder_falg ):
-            startRecording( stethoscope_bt_object )
-            #statusEnquiry( stethoscope_bt_object )
+        if( holder_flag == 0 and holder_flag != prev_holder_flag ):
+            #startRecording( stethoscope_bt_object )
+            statusEnquiry( stethoscope_bt_object )
             prev_holder_flag = holder_flag
 
     elif( scenario == 1 ):
@@ -266,9 +266,9 @@ print( fullStamp() + " Disconnecting bluetooth devices " )
 if( scenario == 0 ):
     statusEnquiry( stethoscope_bt_object ) # replace with stop recording
 elif( scenario == 1 ):
-    statusEnquiry( stethoscope_bt_object ) # replace with stop recording and blending
+    stopBlending( stethoscope_bt_object ) # replace with stop recording and blending
 elif( scenario == 2 ):
-    statusEnquiry( stethoscope_bt_object )
+    stopBlending( stethoscope_bt_object )
 
 stethoscope_bt_object.close()
 
