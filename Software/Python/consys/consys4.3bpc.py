@@ -132,6 +132,7 @@ def check_holder( holder, flag_event ):
 # ----------------------------------------------------------------------------------------- #
 
 def check_ABPC( pressure_queue ):
+    
     while( True ):
         if( pressure_queue.empty() == False ):
             line = pressure_queue.get( block=False )
@@ -146,10 +147,12 @@ def check_ABPC( pressure_queue ):
 
                 elif( bpc_flag == 0 ):
                     print( fullStamp() + " Outside simulated pressure range " )
-
+            else:
+                pass
 # ----------------------------------------------------------------------------------------- #
 
 def interact( stethoscope, flag_event ):
+
     while( True ):
         flag_event.wait()                                                                       # Wait for other thread to indicate that flag is ready
         
@@ -302,72 +305,14 @@ while( simCurrentTime < simDuration ):
     # checking holder data ---------------------------------------------------------------- #
 
 ##    t_check_holder.start()
-    
-##    holder_data = "{}".format( smartholder_usb_object.readline() )                          # Read until timeout is reached
-##
-##    if( holder_data == '' ):                                                                # if the holder data is empty, do nothing
-##        pass
-##    else:
-##        split_line = holder_data.split()                                                    # Split incoming data
-##        formatted = ( "{} {} {}".format( fullStamp(), split_line[1], split_line[2] ) )      # Construct string
-##        #print( formatted.strip('\n') )                                                      # [INFO] Status update
-##
-##        if( split_line[1] == '1:' and split_line[2] == '0' ):
-##            print( fullStamp() + " " + stethoscope_name + " has been removed " )
-##            holder_flag = 0
-##
-##        elif( split_line[1] == '1:' and split_line[2] == '1' ):
-##            print( fullStamp() + " " + stethoscope_name + " has been stored " )
-##            holder_flag = 1
-##
-##        smartholder_data.append( ["%.02f" %simCurrentTime,
-##                                  str( holder_flag ),
-##                                  '\n'])
 
     # checking pressure values ------------------------------------------------------------ #
 
 ##    t_check_ABPC.start()
-    
-##    if( q_pressure_meter.empty() == False ):
-##        line = q_pressure_meter.get( block=False )
-##        split_line = line.split(" ")
-##        if( len( split_line ) <= 2 ):
-##            bpc_flag = int(split_line[1])
-##            if( bpc_flag == 1 ):
-##                print( fullStamp() + " Within simulated pressure range " )
-##            elif( bpc_flag == 0 ):
-##                print( fullStamp() + " Outside simulated pressure range " )
 
     # interaction ------------------------------------------------------------------------- #
 
 ##    t_interact.start()
-    
-##    if( scenario == 0 ):
-##        if( holder_flag == 0 and holder_flag != prev_holder_flag ):
-##            #startRecording( stethoscope_bt_object )
-##            statusEnquiry( stethoscope_bt_object )
-##            prev_holder_flag = holder_flag
-##
-##    elif( scenario == 1 ):
-##        if( holder_flag == 0 and holder_flag != prev_holder_flag):
-##            fileByte = definitions.ESMSYN
-##            startBlending( stethoscope_bt_object, fileByte)
-##            #statusEnquiry( stethoscope_bt_object ) # replace for blending
-##            prev_holder_flag = holder_flag
-##        elif( holder_flag == 1 and holder_flag != prev_holder_flag ):
-##            stopBlending( stethoscope_bt_object )
-##            prev_holder_flag = holder_flag
-##            
-##    elif( scenario == 2 ):
-##        if( holder_flag == 0 ):
-##            if( bpc_flag == 1 and bpc_flag != prev_bpc_flag ):
-##                fileByte = definitions.KOROT
-##                startBlending( stethoscope_bt_object, fileByte)
-##                #statusEnquiry( stethoscope_bt_object ) # replace for blending
-##                prev_bpc_flag = bpc_flag
-##            elif( bpc_flag == 0 and bpc_flag != prev_bpc_flag ):
-##                stopBlending( stethoscope_bt_object )
-##                prev_bpc_flag = bpc_flag
 
     simCurrentTime = time.time() - simStartTime
 

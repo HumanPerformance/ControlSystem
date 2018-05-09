@@ -7,7 +7,7 @@
 * Adapted from: John Harrison's original work
 * Link: http://cratel.wichita.edu/cratel/python/code/SimpleVoltMeter
 *
-* VERSION: 0.6
+* VERSION: 0.6.1
 *   - MODIFIED: This iteration of the pressureDialGauge is not intended
 *               as a standalone program. It is meant to work in conjunction
 *               with the appJar GUI. Attempting to run this program as a
@@ -17,6 +17,8 @@
 *               works as a standalone. Oh well!
 *   - ADDED   : Program functionality now in line with main program in the
 *               AugmentedBloodPressureCuff repo on Github.
+*   - FIXED   : Simulation of bumps not taking place when program is executed
+*               externally.
 *
 * KNOWN ISSUES:
 *   - Nada so far.
@@ -283,9 +285,8 @@ class Worker( QtCore.QThread ):
                 val = self.readPressure()                                           # Read pressure
 
                 # Synthesize pulse if conditions are met
-                if( self.owner.lp <= val and val <= self.owner.hp                   # Check conditions 
-                    and time.time() - self.bumpTrigger >= self.bumpFreq             # ...
-                    and self.filterON ):                                            # ...
+                if( self.playback and self.filterON and                             # Check conditions 
+                    time.time() - self.bumpTrigger >= self.bumpFreq  ):             # ...
 
                     if( args["debug"] ):                                            # [INFO] update
                         print( "\n[INFO] Synthesizing pulse..." )                   # ...
@@ -348,7 +349,10 @@ class Worker( QtCore.QThread ):
                 print( "SIM, 0")                                                    # outside simulated pressure range
             #print( "SIM %r" %(self.playback) )
             self.recent = self.playback
-            
+
+        else:
+            pass
+        
         # Use simulated data
         if( self.filterON ):
             if( self.owner.mode == "SIM" ): self.sim_mode( self.P_mmHg )            # Trigger simulations mode (if --mode SIM)
