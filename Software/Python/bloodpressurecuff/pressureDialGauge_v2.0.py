@@ -7,18 +7,23 @@
 * Adapted from: John Harrison's original work
 * Link: http://cratel.wichita.edu/cratel/python/code/SimpleVoltMeter
 *
-* VERSION: 0.5
+* VERSION: 0.6
 *   - MODIFIED: This iteration of the pressureDialGauge is not intended
 *               as a standalone program. It is meant to work in conjunction
 *               with the appJar GUI. Attempting to run this program as a
 *               standalone will throw so many errors at you you will regret it!!!
+*       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+*   - MODIFIED: Fluvio did NOT head my warnings and modified this script and now it 
+*               works as a standalone. Oh well!
+*   - ADDED   : Program functionality now in line with main program in the
+*               AugmentedBloodPressureCuff repo on Github.
 *
 * KNOWN ISSUES:
 *   - Nada so far.
 * 
 * AUTHOR                    :   Mohammad Odeh
-* DATE                      :   Mar. 07th, 2017 Year of Our Lord
-* LAST CONTRIBUTION DATE    :   Feb. 16th, 2018 Year of Our Lord
+* DATE                      :   Mar.  7th, 2017 Year of Our Lord
+* LAST CONTRIBUTION DATE    :   May.  9th, 2018 Year of Our Lord
 *
 '''
 
@@ -87,13 +92,13 @@ ap.add_argument( "-d", "--debug", action='store_true',                          
 #ap.add_argument( "--directory", type=str, default='output',                                # directory --will remove
 #                help="Set directory" )
 
-ap.add_argument( "--destination", type=str, default="output.txt",
+ap.add_argument( "--destination", type=str, default="output",
                 help="Output directory" )
 
 #ap.add_argument( "--stethoscope", type=str, default="00:06:66:8C:D3:F6",
 #                help="Choose stethoscope" )
 
-ap.add_argument( "-m", "--mode", type=str, default="REC",                                   # reconrding or simulation mode
+ap.add_argument( "-m", "--mode", type=str, default="SIM",                                   # reconrding or simulation mode
                 help="Mode to operate under; SIM: Simulation || REC: Recording" )
 
 ap.add_argument( "-lp", "--lower_pressure", type=str, default=75,                           # set lower pressure limit as an input (for SIM only)
