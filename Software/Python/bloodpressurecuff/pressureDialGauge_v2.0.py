@@ -81,31 +81,25 @@ executionTimeStamp = fullStamp()                                                
 ap = argparse.ArgumentParser()
 
 ap.add_argument( "-s", "--samplingFrequency", type=float, default=0.25,                     # sampling frequency for pressure measurement
-                help="Set sampling frequency (in secs).\nDefault=0.25" )
+                help="Set sampling frequency (in secs).\nDefault=0.25" )                    # ...
 
 ap.add_argument( "-b", "--bumpFrequency", type=float, default=0.75,                         # Simulated bump frequency
-                help="Set synthetic bump frequency (in secs).\nDefault=0.75" )
+                help="Set synthetic bump frequency (in secs).\nDefault=0.75" )              # ...
 
 ap.add_argument( "-d", "--debug", action='store_true',                                      # debug mode --mo
-                help="Invoke flag to enable debugging" )
+                help="Invoke flag to enable debugging" )                                    # ...
 
-#ap.add_argument( "--directory", type=str, default='output',                                # directory --will remove
-#                help="Set directory" )
-
-ap.add_argument( "--destination", type=str, default="output",
-                help="Output directory" )
-
-#ap.add_argument( "--stethoscope", type=str, default="00:06:66:8C:D3:F6",
-#                help="Choose stethoscope" )
+ap.add_argument( "--destination", type=str, default="output",                               # Directory where to store things under
+                help="Output directory" )                                                   # ...
 
 ap.add_argument( "-m", "--mode", type=str, default="SIM",                                   # reconrding or simulation mode
-                help="Mode to operate under; SIM: Simulation || REC: Recording" )
+                help="Mode to operate under; SIM: Simulation || REC: Recording" )           # ...
 
 ap.add_argument( "-lp", "--lower_pressure", type=str, default=75,                           # set lower pressure limit as an input (for SIM only)
-                help="Lower Pressure Limit (only for SIM)" )
+                help="Lower Pressure Limit (only for SIM)" )                                # ...
 
 ap.add_argument( "-hp", "--higher_pressure", type=str, default=125,                         # set higher pressure limit as an input (for SIM only)
-                help="Higher Pressure Limit (only for SIM)" )
+                help="Higher Pressure Limit (only for SIM)" )                               # ...
 args = vars( ap.parse_args() )
 
 ##args["debug"] = True
@@ -153,20 +147,13 @@ class MyWindow(QtGui.QMainWindow):
         self.ui.Dial.setValue( 0 )
 
         # Unpack argumnet parser parameters as attributes
-        # self.directory      = args["directory"]
         self.destination    = args["destination"]
-        # self.address        = args["stethoscope"]
         self.mode           = args["mode"]
         self.lp             = args["lower_pressure"]
         self.hp             = args["higher_pressure"]
 
-        # Boolean to control recording function
-        #self.init_rec = True
-
         # List all available BT devices
         self.ui.Dial.setEnabled( True )
-        #self.ui.pushButtonPair.setEnabled( False )
-        #self.ui.pushButtonPair.setText(QtGui.QApplication.translate("MainWindow", "Paired", None, QtGui.QApplication.UnicodeUTF8))
         
         # set timeout function for updates
         self.ctimer = QtCore.QTimer()                                               # Define timer
@@ -187,38 +174,7 @@ class MyWindow(QtGui.QMainWindow):
         self.setup_log()
 
 # ------------------------------------------------------------------------
-    '''
-    --- v1.0
-    --- Removed as this will be done externally
-    
-    def connectStethoscope( self, address ):
-        """
-        Connect to stethoscope.
-        """
-        
-        self.thread.deviceBTAddress = str( address )                                # Set BT address
-        self.ui.Dial.setEnabled( True )                                             # Enable dial
-        self.ui.pushButtonPair.setEnabled( False )                                  # Disable pushbutton
 
-        # Create logfile
-        self.setup_log()
-        
-        # set timeout function for updates
-        self.ctimer = QtCore.QTimer()                                               # Define timer
-        QtCore.QObject.connect( self.ctimer,                                        # Connect signals...
-                                QtCore.SIGNAL( "timeout()" ),                       # to slots.
-                                self.UpdateDisplay )                                # ...
-        self.ctimer.start( 10 )                                                     # Start timed thread
-
-        # Set timeout function for writing to log
-        millis = int( args["samplingFrequency"]*1000 )                              # Cast into integer
-        self.log_timer = QtCore.QTimer()                                            # Define timer
-        QtCore.QObject.connect( self.log_timer,                                     # Connect signals...
-                                QtCore.SIGNAL( "timeout()" ),                       # to slots.
-                                self.thread.write_log )                             # ...
-        self.log_timer.start( millis )                                              # Start timed thread
-    '''
-# ------------------------------------------------------------------------
  
     def UpdateDisplay( self ):
         """
@@ -231,23 +187,6 @@ class MyWindow(QtGui.QMainWindow):
             self.lastPressureValue = self.pressureValue                             # Update variables
 
 # ------------------------------------------------------------------------
-    '''
-    --- v1.0
-    --- Removed as this will be done externally
-    
-    def scan_rfObject( self ):
-        """
-        Scan for available BT devices.
-        Returns a list of tuples (num, name)
-        """
-        
-        available = []
-        BT_name, BT_address = findSmartDevice( deviceBTAddress[0] )
-        if( BT_name != 0 ):
-            available.append( (BT_name[0], BT_address[0]) )
-            return( available )
-    '''
-# ------------------------------------------------------------------------
 
     def setup_log( self ):
         """
@@ -255,21 +194,17 @@ class MyWindow(QtGui.QMainWindow):
         """
         
         # Create data output folder/file
-        outDir = consDir + "output/"                                                        # find or generate the main output directory
+        outDir = consDir + "output/"                                                # find or generate the main output directory
         if( path.exists( outDir ) == False ):
-            #print( fullStamp() + " Output directory not present " )
-            #print( fullStamp() + " Generating output directory " )
             makedirs( outDir )
-        #else:
-            #print( fullStamp() + " Found output directory " )                          
+        else:
+            pass                         
 
-        stampedDir = outDir + args["destination"] + "/"                                      # find or generate the time-stamped output directory
+        stampedDir = outDir + args["destination"] + "/"                             # find or generate the time-stamped output directory
         if( path.exists( stampedDir ) == False ):
-            #print( fullStamp() + " Time-stamped directory not present " )
-            #print( fullStamp() + " Generating time-stamped directory " )
             makedirs( stampedDir )
-        #else:
-            #print( fullStamp() + " Found time-stamped directory " )
+        else:
+            pass
         
         self.dataFileDir = stampedDir
         self.dataFileName = stampedDir + "bpcu.txt"
@@ -280,7 +215,6 @@ class MyWindow(QtGui.QMainWindow):
             f.write( "Device Name   :  {}\n".format(deviceName)     )               # ...
             f.write( "seconds,    kPa , mmHg Actual, mmHg Simulated, SIM\n" )       # ...
             f.close()                                                               # ...
-            #print( fullStamp() + " Created data output .txt file" )                 # [INFO] Status
 
 # ------------------------------------------------------------------------
 
@@ -289,9 +223,8 @@ class MyWindow(QtGui.QMainWindow):
         Clean up at program exit.
         Stops recording and closes communication with device
         """
-        
-        #print( fullStamp() + " Goodbye!" )
-        QtCore.QThread.sleep( 2 )                               # this delay may be essential
+
+        QtCore.QThread.sleep( 2 )                                                   # this delay may be essential
 
 
 # ========================================================================================= #
@@ -311,19 +244,13 @@ class Worker( QtCore.QThread ):
     
     def __init__( self, parent = None ):
         QtCore.QThread.__init__( self, parent )
-##        self.exiting = False                                                        # Not sure what this line is for
-
-##        print( fullStamp() + " Initializing Worker Thread" )
 
         # Pressure reading variables
         self.P_Pscl     = 0                                                         # Pressure in Pascal
         self.P_mmHg_0   = 0                                                         # Pressure in mmHg (real)
         self.P_mmHg     = 0                                                         # Pressure in mmHg (simulated)
         
-        # LobOdeh and EMA filter stuff
-##        self.m, self.last_m = 0, 0                                                  # Slopes
-##        self.b, self.last_b = 0, 0                                                  # y-intercepts
-##        self.t, self.last_t = 0, 0                                                  # Time step (x-axis)
+        # EMA filter stuff
         self.initialRun = True                                                      # Store initial values at first run
         self.filterON   = False                                                     # Filter boolean
         self.at_marker  = False                                                     # Marker (EMA trigger points) boolean
@@ -356,7 +283,7 @@ class Worker( QtCore.QThread ):
                 val = self.readPressure()                                           # Read pressure
 
                 # Synthesize pulse if conditions are met
-                if( 75 <= val and val <= 125                                        # Check conditions 
+                if( self.owner.lp <= val and val <= self.owner.hp                   # Check conditions 
                     and time.time() - self.bumpTrigger >= self.bumpFreq             # ...
                     and self.filterON ):                                            # ...
 
@@ -464,25 +391,6 @@ class Worker( QtCore.QThread ):
             print( fullStamp() + " Exception or Error Caught" )                     # ...
             print( fullStamp() + " Error Type " + str(type(instance)) )             # Indicate the error
             print( fullStamp() + " Error Arguments " + str(instance.args) )         # ...
-
-# ------------------------------------------------------------------------
-
-    """
-    --- v1.0
-    --- Removed as this will be done externally
-
-    def rec_mode( self ):
-        
-        #In charge of triggering recordings
-        
-        
-        if( self.owner.init_rec == True ):
-            self.owner.init_rec = False
-            #statusEnquiry( self.rfObject )
-            #startCustomRecording( self.rfObject, self.owner.destination )           # If all is good, start recording
-
-        else: pass
-    """   
 
 # ------------------------------------------------------------------------
 
