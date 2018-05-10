@@ -83,16 +83,15 @@ class ROOM(QtCore.QObject):
         self.int2btntoggled.emit(self.identity, self.operatingPanel)
 
     def reviewStats(self, oppanel=["NULL", "NULL"]):
+        # print(self.identity, self.operatingPanel, oppanel)
         self.status = oppanel
 
         if  (self.status[0]=="AOK" and self.status[1]=="AOK" ):
             self.AOKstatus.emit(self.identity, self.operatingPanel)
         elif(self.status[0]=="ERR" and self.status[1]=="AOK" ):
-            pass
+            self.ERRstatus.emit(self.identity, self.operatingPanel)
         elif(self.status[0]=="AOK" and self.status[1]=="ERR" ):
-            pass
-        elif(self.status[0]=="AOK" and self.status[1]=="ERR" ):
-            pass
+            self.ERRstatus.emit(self.identity, self.operatingPanel)
         elif(self.status[0]=="ERR" and self.status[1]=="ERR" ):
             self.ERRstatus.emit(self.identity, self.operatingPanel)
         # elif(self.status[0]=="DONE" and self.status[1]=="DONE" ):
