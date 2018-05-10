@@ -116,6 +116,18 @@ def bt_recv_end( socket, EOL=None ):
         # Return buffer
         return buff.strip(EOL)
 
+def bt_recv_size( socket, EOL='\n', size=1 ):
+    inData = 'null'
+    
+    # Get rid of any chopped/truncated data
+    while inData != ('\n' or '\r' or '\0'):
+        inData = socket.recv(1)
+
+    buff = socket.recv(size)
+
+    # Return buffer
+    return buff.strip(EOL)
+
 
 # [BETA] A More Robust BlueTooth Socket Read Line
 #   [BETA] Read incoming data until an endmarker is reached
