@@ -759,9 +759,7 @@ class GUI(object):
 if __name__ == "__main__":
 
     # ---------------------------------------------------- #
-    # CSEC Testing Setup Properties :
-    PANELS = 10
-    FILE = "ip_addrs.csv"
+    # Standard Commands Available to All Panels
     STDCMDS = {
     "reset"     : "sudo reboot",
     "statuscon" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
@@ -848,6 +846,10 @@ if __name__ == "__main__":
     keyChain = [ roomKey1, roomKey2, roomKey3, roomKey4, roomKey5, roomKey6, roomKey7, roomKey8, roomKey9 ]
 
     # ---------------------------------------------------- #
+    # CSEC Testing Setup Properties :
+    PANELS = 6
+    FILE = "ip_addrs.csv"
+    
     global outputChannel
     outputChannel = []
     for index in range(2*PANELS):
