@@ -630,8 +630,12 @@ class GUI(object):
         _translate = QtCore.QCoreApplication.translate
 
         if state:
-            output = shell(ADDR=PANEL_IP["panel1"], CMD=PANEL_COMMAND["test"])
-            if (output == b'OK\n'):
+            consys = shell(ADDR=PIIP["pi1"], CMD=PANEL_COMMAND["test"])
+            bpc = shell(ADDR=PIIP["pi2"], CMD=PANEL_COMMAND["test"])
+            print(consys, bpc)
+
+            if (consys == b'CONSYS\n' and bpc == b'BPC\n' ):
+
                 self.p1connect.setText(_translate("MainWindow", "Connected"))
                 self.p1.setStyleSheet("background:qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.335, fx:0.5, fy:0.5, stop:0.15 rgba(0, 131, 16, 182), stop:1 rgba(0, 255, 0, 0))")
                 self.p1scene1.setEnabled(True)
@@ -649,8 +653,12 @@ class GUI(object):
         _translate = QtCore.QCoreApplication.translate
 
         if state:
-            output = shell(ADDR=PANEL_IP["panel2"], CMD=PANEL_COMMAND["test"])
-            if (output == b'OK\n'):
+
+            consys = shell(ADDR=PIIP["pi3"], CMD=PANEL_COMMAND["test"])
+            bpc = shell(ADDR=PIIP["pi4"], CMD=PANEL_COMMAND["test"])
+            print(consys, bpc)
+
+            if (consys == b'CONSYS\n' and bpc == b'BPC\n' ):
                 self.p2connect.setText(_translate("MainWindow", "Connected"))
                 self.p2.setStyleSheet("background:qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.335, fx:0.5, fy:0.5, stop:0.15 rgba(0, 131, 16, 182), stop:1 rgba(0, 255, 0, 0))")
                 self.p2scene1.setEnabled(True)
@@ -668,7 +676,7 @@ class GUI(object):
         _translate = QtCore.QCoreApplication.translate
 
         if state:
-            output = shell(ADDR=PANEL_IP["panel3"], CMD=PANEL_COMMAND["test"])
+            output = shell(ADDR=PIIP["pi3"], CMD=PANEL_COMMAND["test"])
             if (output == b'OK\n'):
                 self.p3connect.setText(_translate("MainWindow", "Connected"))
                 self.p3.setStyleSheet("background:qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.335, fx:0.5, fy:0.5, stop:0.15 rgba(0, 131, 16, 182), stop:1 rgba(0, 255, 0, 0))")
@@ -687,7 +695,7 @@ class GUI(object):
         _translate = QtCore.QCoreApplication.translate
 
         if state:
-            output = shell(ADDR=PANEL_IP["panel4"], CMD=PANEL_COMMAND["test"])
+            output = shell(ADDR=PIIP["pi4"], CMD=PANEL_COMMAND["test"])
             if (output == b'OK\n'):
                 self.p4connect.setText(_translate("MainWindow", "Connected"))
                 self.p4.setStyleSheet("background:qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.335, fx:0.5, fy:0.5, stop:0.15 rgba(0, 131, 16, 182), stop:1 rgba(0, 255, 0, 0))")
@@ -706,7 +714,7 @@ class GUI(object):
         _translate = QtCore.QCoreApplication.translate
 
         if state:
-            output = shell(ADDR=PANEL_IP["panel4"], CMD=PANEL_COMMAND["test"])
+            output = shell(ADDR=PIIP["pi5"], CMD=PANEL_COMMAND["test"])
             if (output == b'OK\n'):
                 self.p5connect.setText(_translate("MainWindow", "Connected"))
                 self.p5.setStyleSheet("background:qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.335, fx:0.5, fy:0.5, stop:0.15 rgba(0, 131, 16, 182), stop:1 rgba(0, 255, 0, 0))")
@@ -725,7 +733,7 @@ class GUI(object):
         _translate = QtCore.QCoreApplication.translate
 
         if state:
-            output = shell(ADDR=PANEL_IP["panel4"], CMD=PANEL_COMMAND["test"])
+            output = shell(ADDR=PIIP["pi6"], CMD=PANEL_COMMAND["test"])
             if (output == b'OK\n'):
                 self.p6connect.setText(_translate("MainWindow", "Connected"))
                 self.p6.setStyleSheet("background:qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.335, fx:0.5, fy:0.5, stop:0.15 rgba(0, 131, 16, 182), stop:1 rgba(0, 255, 0, 0))")
@@ -744,7 +752,7 @@ class GUI(object):
         _translate = QtCore.QCoreApplication.translate
 
         if state:
-            output = shell(ADDR=PANEL_IP["panel4"], CMD=PANEL_COMMAND["test"])
+            output = shell(ADDR=PIIP["pi7"], CMD=PANEL_COMMAND["test"])
             if (output == b'OK\n'):
                 self.p7connect.setText(_translate("MainWindow", "Connected"))
                 self.p7.setStyleSheet("background:qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.335, fx:0.5, fy:0.5, stop:0.15 rgba(0, 131, 16, 182), stop:1 rgba(0, 255, 0, 0))")
@@ -763,7 +771,7 @@ class GUI(object):
         _translate = QtCore.QCoreApplication.translate
 
         if state:
-            output = shell(ADDR=PANEL_IP["panel4"], CMD=PANEL_COMMAND["test"])
+            output = shell(ADDR=PIIP["pi8"], CMD=PANEL_COMMAND["test"])
             if (output == b'OK\n'):
                 self.p8connect.setText(_translate("MainWindow", "Connected"))
                 self.p8.setStyleSheet("background:qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.335, fx:0.5, fy:0.5, stop:0.15 rgba(0, 131, 16, 182), stop:1 rgba(0, 255, 0, 0))")
@@ -782,7 +790,7 @@ class GUI(object):
         _translate = QtCore.QCoreApplication.translate
 
         if state:
-            output = shell(ADDR=PANEL_IP["panel4"], CMD=PANEL_COMMAND["test"])
+            output = shell(ADDR=PIIP["pi9"], CMD=PANEL_COMMAND["test"])
             if (output == b'OK\n'):
                 self.p9connect.setText(_translate("MainWindow", "Connected"))
                 self.p9.setStyleSheet("background:qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.335, fx:0.5, fy:0.5, stop:0.15 rgba(0, 131, 16, 182), stop:1 rgba(0, 255, 0, 0))")
@@ -801,7 +809,7 @@ class GUI(object):
         _translate = QtCore.QCoreApplication.translate
 
         if state:
-            output = shell(ADDR=PANEL_IP["panel4"], CMD=PANEL_COMMAND["test"])
+            output = shell(ADDR=PIIP["pi10"], CMD=PANEL_COMMAND["test"])
             if (output == b'OK\n'):
                 self.p10connect.setText(_translate("MainWindow", "Connected"))
                 self.p10.setStyleSheet("background:qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.335, fx:0.5, fy:0.5, stop:0.15 rgba(0, 131, 16, 182), stop:1 rgba(0, 255, 0, 0))")
@@ -819,27 +827,22 @@ class GUI(object):
     # --------------------------
     def p1scene(self, btn):
         if btn==1:
-            output = shell(ADDR=PANEL_IP["panel1"], CMD=PANEL_COMMAND["scene1"])
-            if (output == b'OK\n'):
-                print("Status: OK")
-            else:
-                print(output)
+            CNout = shell(ADDR=PIIP["pi1"], CMD=PANEL_COMMAND["test"])
+            print(CNout)
+
         else:
-            output = shell(ADDR=PANEL_IP["panel1"], CMD=PANEL_COMMAND["scene2"])
-            if (output == b'OK\n'):
-                print("Status: OK")
-            else:
-                print(output)
+            BPout = shell(ADDR=PIIP["pi1"], CMD=PANEL_COMMAND["test"])
+            print(BPout)
 
     def p2scene(self, btn):
         if btn==1:
-            output = shell(ADDR=PANEL_IP["panel2"], CMD=PANEL_COMMAND["scene1"])
+            output = shell(ADDR=PIIP["pi2"], CMD=PANEL_COMMAND["scene1"])
             if (output == b'OK\n'):
                 print("Status: OK")
             else:
                 print(output)
         else:
-            output = shell(ADDR=PANEL_IP["panel2"], CMD=PANEL_COMMAND["scene2"])
+            output = shell(ADDR=PIIP["pi2"], CMD=PANEL_COMMAND["scene2"])
             if (output == b'OK\n'):
                 print("Status: OK")
             else:
@@ -847,13 +850,13 @@ class GUI(object):
 
     def p3scene(self, btn):
         if btn==1:
-            output = shell(ADDR=PANEL_IP["panel3"], CMD=PANEL_COMMAND["scene1"])
+            output = shell(ADDR=PIIP["pi3"], CMD=PANEL_COMMAND["scene1"])
             if (output == b'OK\n'):
                 print("Status: OK")
             else:
                 print(output)
         else:
-            output = shell(ADDR=PANEL_IP["panel3"], CMD=PANEL_COMMAND["scene2"])
+            output = shell(ADDR=PIIP["pi3"], CMD=PANEL_COMMAND["scene2"])
             if (output == b'OK\n'):
                 print("Status: OK")
             else:
@@ -861,13 +864,13 @@ class GUI(object):
 
     def p4scene(self, btn):
         if btn==1:
-            output = shell(ADDR=PANEL_IP["panel4"], CMD=PANEL_COMMAND["scene1"])
+            output = shell(ADDR=PIIP["pi4"], CMD=PANEL_COMMAND["scene1"])
             if (output == b'OK\n'):
                 print("Status: OK")
             else:
                 print(output)
         else:
-            output = shell(ADDR=PANEL_IP["panel4"], CMD=PANEL_COMMAND["scene2"])
+            output = shell(ADDR=PIIP["pi4"], CMD=PANEL_COMMAND["scene2"])
             if (output == b'OK\n'):
                 print("Status: OK")
             else:
@@ -875,13 +878,13 @@ class GUI(object):
 
     def p5scene(self, btn):
         if btn==1:
-            output = shell(ADDR=PANEL_IP["panel5"], CMD=PANEL_COMMAND["scene1"])
+            output = shell(ADDR=PIIP["pi5"], CMD=PANEL_COMMAND["scene1"])
             if (output == b'OK\n'):
                 print("Status: OK")
             else:
                 print(output)
         else:
-            output = shell(ADDR=PANEL_IP["panel5"], CMD=PANEL_COMMAND["scene2"])
+            output = shell(ADDR=PIIP["pi5"], CMD=PANEL_COMMAND["scene2"])
             if (output == b'OK\n'):
                 print("Status: OK")
             else:
@@ -889,13 +892,13 @@ class GUI(object):
 
     def p6scene(self, btn):
         if btn==1:
-            output = shell(ADDR=PANEL_IP["panel6"], CMD=PANEL_COMMAND["scene1"])
+            output = shell(ADDR=PIIP["pi6"], CMD=PANEL_COMMAND["scene1"])
             if (output == b'OK\n'):
                 print("Status: OK")
             else:
                 print(output)
         else:
-            output = shell(ADDR=PANEL_IP["panel6"], CMD=PANEL_COMMAND["scene2"])
+            output = shell(ADDR=PIIP["pi6"], CMD=PANEL_COMMAND["scene2"])
             if (output == b'OK\n'):
                 print("Status: OK")
             else:
@@ -903,13 +906,13 @@ class GUI(object):
 
     def p7scene(self, btn):
         if btn==1:
-            output = shell(ADDR=PANEL_IP["panel7"], CMD=PANEL_COMMAND["scene1"])
+            output = shell(ADDR=PIIP["pi7"], CMD=PANEL_COMMAND["scene1"])
             if (output == b'OK\n'):
                 print("Status: OK")
             else:
                 print(output)
         else:
-            output = shell(ADDR=PANEL_IP["panel7"], CMD=PANEL_COMMAND["scene2"])
+            output = shell(ADDR=PIIP["pi7"], CMD=PANEL_COMMAND["scene2"])
             if (output == b'OK\n'):
                 print("Status: OK")
             else:
@@ -917,13 +920,13 @@ class GUI(object):
 
     def p8scene(self, btn):
         if btn==1:
-            output = shell(ADDR=PANEL_IP["panel8"], CMD=PANEL_COMMAND["scene1"])
+            output = shell(ADDR=PIIP["pi8"], CMD=PANEL_COMMAND["scene1"])
             if (output == b'OK\n'):
                 print("Status: OK")
             else:
                 print(output)
         else:
-            output = shell(ADDR=PANEL_IP["panel8"], CMD=PANEL_COMMAND["scene2"])
+            output = shell(ADDR=PIIP["pi8"], CMD=PANEL_COMMAND["scene2"])
             if (output == b'OK\n'):
                 print("Status: OK")
             else:
@@ -931,13 +934,13 @@ class GUI(object):
 
     def p9scene(self, btn):
         if btn==1:
-            output = shell(ADDR=PANEL_IP["panel9"], CMD=PANEL_COMMAND["scene1"])
+            output = shell(ADDR=PIIP["pi9"], CMD=PANEL_COMMAND["scene1"])
             if (output == b'OK\n'):
                 print("Status: OK")
             else:
                 print(output)
         else:
-            output = shell(ADDR=PANEL_IP["panel9"], CMD=PANEL_COMMAND["scene2"])
+            output = shell(ADDR=PIIP["pi9"], CMD=PANEL_COMMAND["scene2"])
             if (output == b'OK\n'):
                 print("Status: OK")
             else:
@@ -945,13 +948,13 @@ class GUI(object):
 
     def p10scene(self, btn):
         if btn==1:
-            output = shell(ADDR=PANEL_IP["panel10"], CMD=PANEL_COMMAND["scene1"])
+            output = shell(ADDR=PIIP["pi10"], CMD=PANEL_COMMAND["scene1"])
             if (output == b'OK\n'):
                 print("Status: OK")
             else:
                 print(output)
         else:
-            output = shell(ADDR=PANEL_IP["panel10"], CMD=PANEL_COMMAND["scene2"])
+            output = shell(ADDR=PIIP["pi10"], CMD=PANEL_COMMAND["scene2"])
             if (output == b'OK\n'):
                 print("Status: OK")
             else:
@@ -1011,7 +1014,7 @@ def getIPs(file):
     i=1
     with open( file, 'r' ) as f:                # Open file
         for ip in f:                            # Iterate over the contents
-            name = "panel{}".format(i)          # Construct panel name
+            name = "pi{}".format(i)          # Construct panel name
             IPs[ name ] = ip.strip('\n')        # Store into dictionary
             i=i+1                               # Increment counter
 
@@ -1028,16 +1031,17 @@ def run():
     sys.exit(app.exec_())
 
 file = "ip_addrs.csv"
-global PANEL_IP, PANEL_COMMAND
+global PIIP, PANEL_COMMAND
 
-PANEL_IP = getIPs(file)
+PIIP = getIPs(file)
+print(PIIP)
 
 PANEL_COMMAND = {
 "reset"     : "sudo reboot",
-"test"      : "sudo python pd3d/csec/repos/ControlSystem/Software/Python/consys/status.py",
-"consys"    : "sudo python pd3d/csec/repos/ControlSystem/Software/Python/consys/printme.py",
-"scene1"    : "DISPLAY=:0 python pd3d/csec/repos/ControlSystem/Software/Python/consys/consys4.3bpc.py",
-"scene2"    : "sudo ls"
+"test"      : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status.py",
+"consys"    : "DISPLAY=:0 python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
+"scene1"    : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status.py",
+"scene2"    : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status.py"
 }
 
 run()

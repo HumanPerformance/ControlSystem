@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>892</width>
-    <height>795</height>
+    <height>771</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -21,8 +21,8 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../../../Desktop/pd3d/pd3d.png</normaloff>
-    <normalon>../../../Desktop/pd3d/pd3d.png</normalon>../../../Desktop/pd3d/pd3d.png</iconset>
+    <normaloff>../../../../../../../Desktop/pd3d/pd3d.png</normaloff>
+    <normalon>../../../../../../../Desktop/pd3d/pd3d.png</normalon>../../../../../../../Desktop/pd3d/pd3d.png</iconset>
   </property>
   <property name="layoutDirection">
    <enum>Qt::RightToLeft</enum>
@@ -36,152 +36,6 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QGridLayout" name="primaryGrid">
-     <item row="0" column="0" colspan="5">
-      <layout class="QHBoxLayout" name="logoLayout">
-       <item>
-        <widget class="QLabel" name="logo">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>350</width>
-           <height>160</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>350</width>
-           <height>160</height>
-          </size>
-         </property>
-         <property name="baseSize">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true"/>
-         </property>
-         <property name="lineWidth">
-          <number>0</number>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap>../../../Desktop/pd3d/pd3d.png</pixmap>
-         </property>
-         <property name="scaledContents">
-          <bool>true</bool>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-         <property name="margin">
-          <number>0</number>
-         </property>
-         <property name="indent">
-          <number>0</number>
-         </property>
-         <property name="textInteractionFlags">
-          <set>Qt::NoTextInteraction</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="3" column="4">
-      <layout class="QGridLayout" name="gridP6">
-       <property name="spacing">
-        <number>10</number>
-       </property>
-       <item row="2" column="0" colspan="2">
-        <widget class="QPushButton" name="p6connect">
-         <property name="minimumSize">
-          <size>
-           <width>50</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Connect</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QPushButton" name="p6scene2">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>25</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>S1</string>
-         </property>
-         <property name="shortcut">
-          <string notr="true"/>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="QLabel" name="p6">
-         <property name="minimumSize">
-          <size>
-           <width>50</width>
-           <height>50</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>16</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Panel 6</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QPushButton" name="p6scene">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>25</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>S2</string>
-         </property>
-         <property name="shortcut">
-          <string notr="true"/>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
      <item row="2" column="0">
       <layout class="QGridLayout" name="gridP5">
        <property name="spacing">
@@ -281,13 +135,36 @@
        </item>
       </layout>
      </item>
-     <item row="2" column="4">
-      <layout class="QGridLayout" name="gridP1">
+     <item row="3" column="4">
+      <layout class="QGridLayout" name="gridP6">
        <property name="spacing">
         <number>10</number>
        </property>
+       <item row="1" column="0" colspan="2">
+        <widget class="QLabel" name="p6">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Panel 6</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
        <item row="3" column="1">
-        <widget class="QPushButton" name="p1scene2">
+        <widget class="QPushButton" name="p6scene2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -309,7 +186,7 @@
         </widget>
        </item>
        <item row="2" column="0" colspan="2">
-        <widget class="QPushButton" name="p1connect">
+        <widget class="QPushButton" name="p6connect">
          <property name="minimumSize">
           <size>
            <width>50</width>
@@ -322,7 +199,7 @@
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QPushButton" name="p1scene1">
+        <widget class="QPushButton" name="p6scene">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -340,53 +217,18 @@
          </property>
          <property name="shortcut">
           <string notr="true"/>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="QLabel" name="p1">
-         <property name="minimumSize">
-          <size>
-           <width>50</width>
-           <height>50</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>16</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="layoutDirection">
-          <enum>Qt::RightToLeft</enum>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::WinPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
-         <property name="midLineWidth">
-          <number>0</number>
-         </property>
-         <property name="text">
-          <string>Panel 1</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
       </layout>
      </item>
-     <item row="3" column="1">
-      <layout class="QGridLayout" name="gridP9">
+     <item row="3" column="3">
+      <layout class="QGridLayout" name="gridP7">
        <property name="spacing">
         <number>10</number>
        </property>
        <item row="2" column="0" colspan="2">
-        <widget class="QPushButton" name="p9connect">
+        <widget class="QPushButton" name="p7connect">
          <property name="minimumSize">
           <size>
            <width>50</width>
@@ -399,7 +241,7 @@
         </widget>
        </item>
        <item row="1" column="0" colspan="2">
-        <widget class="QLabel" name="p9">
+        <widget class="QLabel" name="p7">
          <property name="minimumSize">
           <size>
            <width>50</width>
@@ -414,37 +256,15 @@
           </font>
          </property>
          <property name="text">
-          <string>Panel 9</string>
+          <string>Panel 7</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
-        <widget class="QPushButton" name="p9scene2">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>25</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>S1</string>
-         </property>
-         <property name="shortcut">
-          <string notr="true"/>
-         </property>
-        </widget>
-       </item>
        <item row="3" column="0">
-        <widget class="QPushButton" name="p9scene1">
+        <widget class="QPushButton" name="p7scene1">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -460,8 +280,24 @@
          <property name="text">
           <string>S2</string>
          </property>
-         <property name="shortcut">
-          <string notr="true"/>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QPushButton" name="p7scene2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>S1</string>
          </property>
         </widget>
        </item>
@@ -554,13 +390,13 @@
        </item>
       </layout>
      </item>
-     <item row="3" column="3">
-      <layout class="QGridLayout" name="gridP7">
+     <item row="3" column="1">
+      <layout class="QGridLayout" name="gridP9">
        <property name="spacing">
         <number>10</number>
        </property>
        <item row="2" column="0" colspan="2">
-        <widget class="QPushButton" name="p7connect">
+        <widget class="QPushButton" name="p9connect">
          <property name="minimumSize">
           <size>
            <width>50</width>
@@ -573,7 +409,7 @@
         </widget>
        </item>
        <item row="1" column="0" colspan="2">
-        <widget class="QLabel" name="p7">
+        <widget class="QLabel" name="p9">
          <property name="minimumSize">
           <size>
            <width>50</width>
@@ -588,7 +424,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Panel 7</string>
+          <string>Panel 9</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -596,7 +432,7 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QPushButton" name="p7scene2">
+        <widget class="QPushButton" name="p9scene2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -612,10 +448,13 @@
          <property name="text">
           <string>S1</string>
          </property>
+         <property name="shortcut">
+          <string notr="true"/>
+         </property>
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QPushButton" name="p7scene1">
+        <widget class="QPushButton" name="p9scene1">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -630,6 +469,9 @@
          </property>
          <property name="text">
           <string>S2</string>
+         </property>
+         <property name="shortcut">
+          <string notr="true"/>
          </property>
         </widget>
        </item>
@@ -722,26 +564,13 @@
        </item>
       </layout>
      </item>
-     <item row="2" column="2">
-      <layout class="QGridLayout" name="gridP3">
+     <item row="2" column="4">
+      <layout class="QGridLayout" name="gridP1">
        <property name="spacing">
         <number>10</number>
        </property>
-       <item row="2" column="0" colspan="2">
-        <widget class="QPushButton" name="p3connect">
-         <property name="minimumSize">
-          <size>
-           <width>50</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Connect</string>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="0" colspan="2">
-        <widget class="QLabel" name="p3">
+        <widget class="QLabel" name="p1">
          <property name="minimumSize">
           <size>
            <width>50</width>
@@ -755,14 +584,26 @@
            <bold>true</bold>
           </font>
          </property>
+         <property name="layoutDirection">
+          <enum>Qt::RightToLeft</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.95, fx:0.5, fy:0.5, stop:0.75 rgba(255, 202, 6, 200), stop:1 rgba(255, 255, 255, 255))</string>
+         </property>
          <property name="frameShape">
           <enum>QFrame::WinPanel</enum>
          </property>
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
+         <property name="midLineWidth">
+          <number>0</number>
+         </property>
          <property name="text">
-          <string>Panel 3</string>
+          <string>Panel 1</string>
+         </property>
+         <property name="scaledContents">
+          <bool>false</bool>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -770,7 +611,7 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QPushButton" name="p3scene2">
+        <widget class="QPushButton" name="p1scene2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -791,8 +632,21 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QPushButton" name="p1connect">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Connect</string>
+         </property>
+        </widget>
+       </item>
        <item row="3" column="0">
-        <widget class="QPushButton" name="p3scene1">
+        <widget class="QPushButton" name="p1scene1">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -913,6 +767,28 @@
        <property name="spacing">
         <number>10</number>
        </property>
+       <item row="4" column="1">
+        <widget class="QPushButton" name="p4scene2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>S1</string>
+         </property>
+         <property name="shortcut">
+          <string notr="true"/>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="0" colspan="2">
         <widget class="QLabel" name="p4">
          <property name="minimumSize">
@@ -942,25 +818,16 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
-        <widget class="QPushButton" name="p4scene2">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
+       <item row="3" column="0" colspan="2">
+        <widget class="QPushButton" name="p4connect">
          <property name="minimumSize">
           <size>
-           <width>25</width>
+           <width>50</width>
            <height>25</height>
           </size>
          </property>
          <property name="text">
-          <string>S1</string>
-         </property>
-         <property name="shortcut">
-          <string notr="true"/>
+          <string>Connect</string>
          </property>
         </widget>
        </item>
@@ -986,8 +853,15 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0" colspan="2">
-        <widget class="QPushButton" name="p4connect">
+      </layout>
+     </item>
+     <item row="2" column="2">
+      <layout class="QGridLayout" name="gridP3">
+       <property name="spacing">
+        <number>10</number>
+       </property>
+       <item row="2" column="0" colspan="2">
+        <widget class="QPushButton" name="p3connect">
          <property name="minimumSize">
           <size>
            <width>50</width>
@@ -999,9 +873,257 @@
          </property>
         </widget>
        </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QLabel" name="p3">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::WinPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <property name="text">
+          <string>Panel 3</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QPushButton" name="p3scene2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>S1</string>
+         </property>
+         <property name="shortcut">
+          <string notr="true"/>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="p3scene1">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>S2</string>
+         </property>
+         <property name="shortcut">
+          <string notr="true"/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="0" colspan="5">
+      <layout class="QHBoxLayout" name="logoLayout">
+       <property name="spacing">
+        <number>10</number>
+       </property>
+       <item>
+        <layout class="QVBoxLayout" name="gridAll">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <property name="leftMargin">
+          <number>10</number>
+         </property>
+         <property name="topMargin">
+          <number>10</number>
+         </property>
+         <property name="rightMargin">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
+          <number>10</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="connectAll">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Old English Text MT</family>
+             <pointsize>16</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Connect All</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="scene1All">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="sizeIncrement">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Rockwell</family>
+             <pointsize>16</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Scene 1</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="scene2All">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Sitka Banner</family>
+             <pointsize>20</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Scene 2</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="fetchAll">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Yu Gothic</family>
+             <pointsize>16</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Fetch All</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="logoLabel">
+         <property name="minimumSize">
+          <size>
+           <width>350</width>
+           <height>160</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>350</width>
+           <height>160</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap>pd3d.png</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="indent">
+          <number>-2</number>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QToolButton" name="toolButton">
+     <property name="minimumSize">
+      <size>
+       <width>100</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="sizeIncrement">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Options</string>
+     </property>
+     <property name="popupMode">
+      <enum>QToolButton::InstantPopup</enum>
+     </property>
+     <property name="toolButtonStyle">
+      <enum>Qt::ToolButtonIconOnly</enum>
+     </property>
+     <property name="autoRaise">
+      <bool>false</bool>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QPushButton" name="quitBtn">
@@ -1014,13 +1136,13 @@
      <property name="minimumSize">
       <size>
        <width>100</width>
-       <height>100</height>
+       <height>75</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
        <width>100</width>
-       <height>100</height>
+       <height>75</height>
       </size>
      </property>
      <property name="layoutDirection">
@@ -1031,7 +1153,7 @@
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>powerbutton.png</normaloff>powerbutton.png</iconset>
+       <normaloff>../../../../../../../Dropbox/IST/Python/powerbutton.png</normaloff>../../../../../../../Dropbox/IST/Python/powerbutton.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1070,6 +1192,22 @@
     <hint type="destinationlabel">
      <x>199</x>
      <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton</sender>
+   <signal>pressed()</signal>
+   <receiver>toolButton</receiver>
+   <slot>showMenu()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>832</x>
+     <y>669</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>832</x>
+     <y>669</y>
     </hint>
    </hints>
   </connection>
