@@ -40,6 +40,7 @@ from    timeStamp                   import fullStamp
 from    bluetoothProtocol_teensy32  import *
 from    usbProtocol                 import *
 from    smarthandleProtocol         import *
+import    sequentialPrompt
 
 
 # ========================================================================================= #
@@ -85,7 +86,7 @@ def check_holder( holder, flag_event, terminate ):
                                       str( holder_flag[0] ),
                                       str( holder_flag[1] ),
                                       '\n'])
-        flag_event.set()                                                                    # Indicate that flag is ready!
+            flag_event.set()                                                                    # Indicate that flag is ready!
 
 # ----------------------------------------------------------------------------------------- #
 
@@ -210,15 +211,15 @@ holder_flag         = ([1,1]) 																# flag for presence or absence of 
 # countdown app
 # ---------------
 
-countdownDir = "/home/pi/pd3d/csec/repos/ControlSystem/Software/Processing/countdown/build/armv6hf"
-countdownConfigFile = countdownDir + "/data/countdownInit.txt"
-with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
-    # Note: For the countdown application, only two inputs are currently needed: StartTime and WarningTime
-    countdownConfigFileObj.write( "StartTime:" + str(simDuration) + "\n" )
-    countdownConfigFileObj.write( "WarningTime:" + str(warningTime) + "\n" )
-
-terminalCommand = "DISPLAY=:0.0 sh " + countdownDir + "/countdown &"
-os.system( terminalCommand )
+##countdownDir = "/home/pi/pd3d/csec/repos/ControlSystem/Software/Processing/countdown/build/armv6hf"
+##countdownConfigFile = countdownDir + "/data/countdownInit.txt"
+##with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
+##    # Note: For the countdown application, only two inputs are currently needed: StartTime and WarningTime
+##    countdownConfigFileObj.write( "StartTime:" + str(simDuration) + "\n" )
+##    countdownConfigFileObj.write( "WarningTime:" + str(warningTime) + "\n" )
+##
+##terminalCommand = "DISPLAY=:0.0 sh " + countdownDir + "/countdown &"
+##os.system( terminalCommand )
 #time.sleep(5)
 
 # ---------------
@@ -227,17 +228,18 @@ print( fullStamp() + " " + str( simDuration * 60 ) + " sec. simulation begins no
 
 t_check_holder.start()
 t_store_data.start()
+sequentialPrompt.timerApp(0, 60, 0, "down")     # This function is blocking by nature, no need for a while loop
 
-while( simCurrentTime < ( simDuration * 60 ) ):
-    # checking holder data ---------------------------------------------------------------- #
-
-##    t_check_holder.start()
-
-    # Data storage ------------------------------------------------------------------------ #
-
-##    t_store_data.start()
-    
-    simCurrentTime = time.time() - simStartTime												# update time
+##while( simCurrentTime < ( simDuration * 60 ) ):
+##    # checking holder data ---------------------------------------------------------------- #
+##
+####    t_check_holder.start()
+##
+##    # Data storage ------------------------------------------------------------------------ #
+##
+####    t_store_data.start()
+##    
+##    simCurrentTime = time.time() - simStartTime												# update time
 
 terminate.set()                                                                             # Set the terminate flag (set's it to True)
 t_check_holder.join(2)                                                                      # Wait 2 seconds before...
