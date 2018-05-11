@@ -16,6 +16,8 @@ import  serial
 import  time
 from    os.path                     import expanduser
 from    os                          import getcwd, path, makedirs
+from    threading                   import Thread, Event
+from    Queue                       import Queue
 
 # PD3D modules
 from    configurationProtocol       import *
@@ -43,7 +45,64 @@ from    smarthandleProtocol         import *
 # ========================================================================================= #
 # Variables
 # ========================================================================================= #
+global smarthandle_data, smarthandle_name, N_smarthandles
+global holder_flag, simCurrentTime
 
+# ========================================================================================= #
+# Functions
+# ========================================================================================= #
+
+def check_holder( holder, flag_event, terminate ):
+    
+    while( terminate.is_set() == False ):                                                   # Loop until we set the event to true
+        holder_data = "{}".format( holder.readline() )                                      # Read until timeout is reached
+
+        if( holder_data == '' ):
+            pass
+
+        else:
+            split_line = holder_data.split()                                                    # Split incoming data
+            formatted = ( "{} {} {}".format( fullStamp(), split_line[1], split_line[2] ) )      # Construct string
+            #print( formatted.strip('\n') )                                                     # [INFO] Status update
+
+            if( split_line[1] == '1:' and split_line[2] == '0' ):
+                print( fullStamp() + " " + smarthandle_name[0] + " has been removed " )
+                holder_flag[0] = 0
+
+            elif( split_line[1] == '1:' and split_line[2] == '1' ):
+                print( fullStamp() + " " + smarthandle_name[0] + " has been stored " )
+                holder_flag[0] = 1                                                              # device one in the holder		
+
+            elif( split_line[1] == '2:' and split_line[2] == '0' ):
+                print( fullStamp() + " " + smarthandle_name[1] + " has been removed " )
+                holder_flag[1] = 0
+
+            elif( split_line[1] == '2:' and split_line[2] == '1' ):
+                print( fullStamp() + " " + smarthandle_name[1] + " has been stored " )
+                holder_flag[1] = 1
+
+            smartholder_data.append( ["%.02f" %simCurrentTime,
+                                      str( holder_flag[0] ),
+                                      str( holder_flag[1] ),
+                                      '\n'])
+        flag_event.set()                                                                    # Indicate that flag is ready!
+
+# ----------------------------------------------------------------------------------------- #
+
+def store_data( smarthandle, flag_event, terminate ):
+    while( terminate.is_set() == False ):                                                   # Loop until we set the event to true
+
+        flag_event.wait()                                                                   # Wait for other thread to indicate that flag is ready
+
+        for i in range(0, N_smarthandles):
+            #print( holder_flag )
+            if( holder_flag[i] == 0 ):
+                # print( fullStamp() + " Streaming data from " + smarthandle_name[i] )
+                smarthandle_data[smarthandle_name[i]].append( ["%.02f" %simCurrentTime,
+                                                               readDataStream( smarthandle[i],
+                                                               '\n' )] )
+        flag_event.clear()                                                                  # Reset flag event
+        
 # ----------------------------------------------
 # Devices
 # ----------------------------------------------
@@ -57,10 +116,11 @@ smarthandle_bt_address      = ([otoscope_bt_address,
                                 ophthalmoscope_bt_address])
 
 
-SOH             			= chr(0x01)                                         			# Start of Header
-ENQ							= chr(0x05)                                         			# Enquiry
-ACK             			= chr(0x06)                                         			# Positive Acknowledgement
-NAK             			= chr(0x15)                                         			# Negative Acknowledgement
+SOH             			= chr(0x01)                                         # Start of Header
+EOT                                     = chr(0x04)                                         # End of Transmission
+ENQ					= chr(0x05)                                         # Enquiry
+ACK             			= chr(0x06)                                         # Positive Acknowledgement
+NAK             			= chr(0x15)                                         # Negative Acknowledgement
 
 
 # ----------------------------------------------
@@ -89,6 +149,7 @@ N_smarthandles = 2
 smarthandle_bt_object = []
 for i in range(0, N_smarthandles):
     smarthandle_bt_object.append( createBTPort( smarthandle_bt_address[i], 1 ) )            # Connecting to bluetooth handle
+    smarthandle_bt_object[i].send( SOH )
     startDataStream( smarthandle_bt_object[i], 20, '\n' )                                   # Starting data streaming
 
 print( fullStamp() + " Connecting to smart holders " )
@@ -112,13 +173,28 @@ while( notReady ):                                                              
 time.sleep(0.50)                                                                            # Sleep for stability!
 
 # ----------------------------------------------------------------------------------------- #
+# Define threads for functions to be run during simulation
+# ----------------------------------------------------------------------------------------- #
+
+flag_ready              = Event()                                                           # Event to wait for flag to be ready
+terminate               = Event()                                                           # Event to signal thread termination
+
+t_check_holder          = Thread( target=check_holder, args=( smartholder_usb_object,
+                                                              flag_ready, terminate, )      )
+t_check_holder.daemon   = True
+
+t_store_data            = Thread( target=store_data,   args=( smarthandle_bt_object,
+                                                              flag_ready, terminate, )      )
+t_store_data.daemon     = True
+
+# ----------------------------------------------------------------------------------------- #
 # Data Gathering
 # ----------------------------------------------------------------------------------------- #
 
 # Variables
 simStartTime        = time.time()
 simCurrentTime      = 0                                                                     # seconds
-simDuration         = 1                                                                    # seconds
+simDuration         = 1                                                                     # seconds
 warningTime         = 0
 simStopTime         = simDuration                                                           # seconds
 
@@ -148,46 +224,24 @@ os.system( terminalCommand )
 # ---------------
 
 print( fullStamp() + " " + str( simDuration * 60 ) + " sec. simulation begins now " )                   # Statement confirming simulation start
+
+t_check_holder.start()
+t_store_data.start()
+
 while( simCurrentTime < ( simDuration * 60 ) ):
+    # checking holder data ---------------------------------------------------------------- #
 
-    holder_data = "{}".format( smartholder_usb_object.readline() )                          # Read until timeout is reached
-    #print( holder_data )
-    if( holder_data == '' ):
-        pass
-    else:
-        split_line = holder_data.split()                                                    # Split incoming data
-        formatted = ( "{} {} {}".format( fullStamp(), split_line[1], split_line[2] ) )      # Construct string
-        #print( formatted.strip('\n') )                                                     # [INFO] Status update
+##    t_check_holder.start()
 
-        if( split_line[1] == '1:' and split_line[2] == '0' ):
-            print( fullStamp() + " " + smarthandle_name[0] + " has been removed " )
-            holder_flag[0] = 0
+    # Data storage ------------------------------------------------------------------------ #
 
-        elif( split_line[1] == '1:' and split_line[2] == '1' ):
-            print( fullStamp() + " " + smarthandle_name[0] + " has been stored " )
-            holder_flag[0] = 1                                                              # device one in the holder		
-
-        elif( split_line[1] == '2:' and split_line[2] == '0' ):
-            print( fullStamp() + " " + smarthandle_name[1] + " has been removed " )
-            holder_flag[1] = 0
-
-        elif( split_line[1] == '2:' and split_line[2] == '1' ):
-            print( fullStamp() + " " + smarthandle_name[1] + " has been stored " )
-            holder_flag[1] = 1
-
-        smartholder_data.append( ["%.02f" %simCurrentTime,
-                                  str( holder_flag[0] ),
-                                  str( holder_flag[1] ),
-                                  '\n'])
-
-    for i in range(0, N_smarthandles):
-        #print( holder_flag )
-        if( holder_flag[i] == 0 ):
-            # print( fullStamp() + " Streaming data from " + smarthandle_name[i] )
-            smarthandle_data[smarthandle_name[i]].append( ["%.02f" %simCurrentTime,
-                                                           readDataStream( smarthandle_bt_object[i],
-                                                           '\n' )] )
+##    t_store_data.start()
+    
     simCurrentTime = time.time() - simStartTime												# update time
+
+terminate.set()                                                                             # Set the terminate flag (set's it to True)
+t_check_holder.join(2)                                                                      # Wait 2 seconds before...
+t_store_data.join(2)                                                                        # terminating threads
 
 # ----------------------------------------------------------------------------------------- #
 # Device Deactivation
@@ -197,7 +251,8 @@ print( fullStamp() + " Disconnecting bluetooth devices " )
 for i in range(0, N_smarthandles):
     time.sleep(0.50)
     stopDataStream( smarthandle_bt_object[i], 20, '\n' )                                    # Stop streaming data
-    smarthandle_bt_object[i].close()                                                        # Closing bluetooth port
+    smarthandle_bt_object[i].send( EOT )                                                    # Trigger EOT
+    closeBTPort( smarthandle_bt_object[i] )                                                 # Closing bluetooth port
 
 print( fullStamp() + " Disconnecting usb devices " )
 if( smartholder_usb_object.is_open ):
