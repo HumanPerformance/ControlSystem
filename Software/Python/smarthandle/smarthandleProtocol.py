@@ -91,19 +91,38 @@ def readDataStream( socket, EOL=None ):
         # Return buffer
         return buff.strip(EOL)   
 
-# stopDataStream -v.2.0
+### stopDataStream -v.2.0
+##def stopDataStream( socket, count, EOL=None ):
+##    for i in range(0, count):
+##        buff = readDataStream( socket, EOL=None )
+##        #print( buff )
+##        if( len( buff ) > ( 2*len( definitions.ID )) ):
+##            socket.send( definitions.STOP )
+##            #print( fullStamp() + " STOP trigger sent to smart handle " )
+##        elif( buff == definitions.ID ):
+##            #print( fullStamp() + " Stopping Completed Successfully " )
+##            break        
+##        elif( i == ( count - 1 )):
+##            #print( fullStamp() + " Stopping Incomplete - Troubleshoot device " )
+##            break
+
+# stopDataStream -v.2.5
 def stopDataStream( socket, count, EOL=None ):
+    
     for i in range(0, count):
         buff = readDataStream( socket, EOL=None )
-        #print( buff )
-        if( len( buff ) > ( 2*len( definitions.ID )) ):
-            socket.send( definitions.STOP )
+        print( buff )
+        
+        if( buff != definitions.ACK ):
+            socket.send( definitions.EOT )
             #print( fullStamp() + " STOP trigger sent to smart handle " )
-        elif( buff == definitions.ID ):
-            #print( fullStamp() + " Stopping Completed Successfully " )
+
+        elif( buff == definitions.ACK ):
+            print( fullStamp() + " Stopping Completed Successfully " )
             break        
+
         elif( i == ( count - 1 )):
-            #print( fullStamp() + " Stopping Incomplete - Troubleshoot device " )
+            print( fullStamp() + " Stopping Incomplete - Troubleshoot device " )
             break
 
 """
