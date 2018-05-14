@@ -132,7 +132,7 @@ def check_holder( holder, flag_event, terminate ):
 
 # ----------------------------------------------------------------------------------------- #
 
-def check_ABPC( pressure_queue, terminate ):
+def check_ABPC( pressure_queue, stethoscope, terminate ):
     
     while( terminate.is_set() == False ):                                                   # Loop until we set the event to true
         if( pressure_queue.empty() == False ):
@@ -150,11 +150,13 @@ def check_ABPC( pressure_queue, terminate ):
                     print( fullStamp() + " Outside simulated pressure range " )
 
             elif( split_line[0] == "MUTE" ): 
-                if( split_line[2] == 0 ):                                                   # If Muting == OFF
-                    statusEnquiry( rfObject )                                               # Send un-muting byte
+                mute_flag = int(split_line[1])
+
+                if( mute_flag == 0 ):                                                       # If Muting == OFF
+                    statusEnquiry( stethoscope )                                            # Send un-muting byte
                     
-                elif( split_line[2] == 1 ):                                                 # If Muting == ON
-                    statusEnquiry( rfObject )                                               # Send muting byte
+                elif( mute_flag == 1 ):                                                     # If Muting == ON
+                    statusEnquiry( stethoscope )                                            # Send muting byte
 
             else:
                 pass
@@ -270,7 +272,8 @@ t_check_holder          = Thread( target=check_holder, args=( smartholder_usb_ob
                                                               flag_ready, terminate, )      )
 t_check_holder.daemon   = True
 
-t_check_ABPC            = Thread( target=check_ABPC  , args=( q_pressure_meter, terminate, ))
+t_check_ABPC            = Thread( target=check_ABPC  , args=( q_pressure_meter, stethoscope_bt_object,
+                                                              terminate, ))
 t_check_ABPC.daemon     = True
 
 t_interact              = Thread( target=interact    , args=( stethoscope_bt_object,
