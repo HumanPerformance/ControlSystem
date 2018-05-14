@@ -58,7 +58,7 @@ smarthandle_bt_address      = ([otoscope_bt_address,
 
 
 SOH             			= chr(0x01)                                         			# Start of Header
-ENQ							= chr(0x05)                                         			# Enquiry
+ENQ					= chr(0x05)                                         			# Enquiry
 ACK             			= chr(0x06)                                         			# Positive Acknowledgement
 NAK             			= chr(0x15)                                         			# Negative Acknowledgement
 
@@ -118,7 +118,7 @@ time.sleep(0.50)                                                                
 # Variables
 simStartTime        = time.time()
 simCurrentTime      = 0                                                                     # seconds
-simDuration         = 1                                                                    # seconds
+simDuration         = 1                                                                     # seconds
 warningTime         = 0
 simStopTime         = simDuration                                                           # seconds
 
@@ -134,16 +134,16 @@ holder_flag         = ([1,1]) 																# flag for presence or absence of 
 # countdown app
 # ---------------
 
-countdownDir = "/home/pi/pd3d/csec/repos/ControlSystem/Software/Processing/countdown/build/armv6hf"
-countdownConfigFile = countdownDir + "/data/countdownInit.txt"
-with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
-    # Note: For the countdown application, only two inputs are currently needed: StartTime and WarningTime
-    countdownConfigFileObj.write( "StartTime:" + str(simDuration) + "\n" )
-    countdownConfigFileObj.write( "WarningTime:" + str(warningTime) + "\n" )
-
-terminalCommand = "DISPLAY=:0.0 sh " + countdownDir + "/countdown &"
-os.system( terminalCommand )
-#time.sleep(5)
+##countdownDir = "/home/pi/pd3d/csec/repos/ControlSystem/Software/Processing/countdown/build/armv6hf"
+##countdownConfigFile = countdownDir + "/data/countdownInit.txt"
+##with open(countdownConfigFile, 'r+') as countdownConfigFileObj:
+##    # Note: For the countdown application, only two inputs are currently needed: StartTime and WarningTime
+##    countdownConfigFileObj.write( "StartTime:" + str(simDuration) + "\n" )
+##    countdownConfigFileObj.write( "WarningTime:" + str(warningTime) + "\n" )
+##
+##terminalCommand = "DISPLAY=:0.0 sh " + countdownDir + "/countdown &"
+##os.system( terminalCommand )
+###time.sleep(5)
 
 # ---------------
 
@@ -188,7 +188,7 @@ while( simCurrentTime < ( simDuration * 60 ) ):
                                                            readDataStream( smarthandle_bt_object[i],
                                                            '\n' )] )
     simCurrentTime = time.time() - simStartTime												# update time
-
+    print simCurrentTime
 # ----------------------------------------------------------------------------------------- #
 # Device Deactivation
 # ----------------------------------------------------------------------------------------- #
