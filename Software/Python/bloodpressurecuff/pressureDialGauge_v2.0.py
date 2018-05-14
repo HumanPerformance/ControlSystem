@@ -328,28 +328,28 @@ class Worker( QtCore.QThread ):
             if( args["debug"] ):                                                    # [INFO] Status
                 print( "[INFO] Filter ON" )                                         # ...
 
-        # Criteria to turn OFF filter
+        # Criteria to turn OFF filter and muting
         elif( self.P_mmHg <= 40 and self.at_marker and self.filterON ):
             self.filterON   = False                                                 # Flag filter to turn OFF
             self.at_marker  = False                                                 # Reset marker flag                                                   
             self.initialRun = True                                                  # Store initial values at first run
 
-            # Send un-mute command from a separate thread
-##            Thread( target=FUNC, args=(self.rfObject, definitions.BYTE,) ).start()
             self.mute       = False                                                 # Reset muting flag
-            
+
             if( args["debug"] ):                                                    # [INFO] Status
                 print( "[INFO] Filter OFF" )                                        # ...
                 print( "[INFO] Muting OFF" )                                        # ...
-
+            else:
+                print( "MUTE, {}".format(int(self.mute)) )
+                
         # Criteria to mute stethoscope sounds
-        elif( self.P_mmHg >= 40 and self.at_marker == False and self.mute == False ):
-            # Send mute command from a separate thread
-##            Thread( target=FUNC, args=(self.rfObject, definitions.BYTE,) ).start()
+        elif( self.P_mmHg_0 >= 40 and self.at_marker == False and self.mute == False ):
             self.mute = True                                                        # Stethoscope is muting
 
             if( args["debug"] ):                                                    # [INFO] Status
-                print( "[INFO] muting ON" )                                         # ...
+                print( "[INFO] Muting ON" )                                         # ...
+            else:
+                print( "MUTE, {}".format(int(self.mute)) )
                 
         # If filter is ON, apply it
         if( self.filterON ):
@@ -384,19 +384,13 @@ class Worker( QtCore.QThread ):
             if (P >= lp) and (P <= hp) and (self.playback == False):
                 self.normal = False                                                 # Turn OFF normal playback
                 self.playback = True                                                # Turn on simulation
-                print( "SIM, 1")                                                    # We are within simulated pressure range
-
-                # Send start playback command from a separate thread
-                Thread( target=startBlending, args=(self.rfObject, definitions.KOROT,) ).start()
+                print( "SIM, {}".format(int(self.playback)) )                       # We are within simulated pressure range
                 
             # Leaving simulation pressure interval
             elif ((P < lp) or (P > hp)) and (self.normal == False):
                 self.normal = True                                                  # Turn ON normal playback
                 self.playback = False                                               # Turn OFF simulation
-                print( "SIM, 0")                                                    # We are outside simulated pressure range
-
-                # Send stop playback command from a separate thread
-                Thread( target=stopBlending, args=(self.rfObject,) ).start()
+                print( "SIM, {}".format(int(self.playback)) )                       # We are outside simulated pressure range
                 
         # Error handling (2)        
         except Exception as instance:

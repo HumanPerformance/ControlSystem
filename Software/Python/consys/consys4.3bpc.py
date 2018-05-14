@@ -138,9 +138,9 @@ def check_ABPC( pressure_queue, terminate ):
         if( pressure_queue.empty() == False ):
             line = pressure_queue.get( block=False )
 
-            split_line = line.split(" ")
+            split_line = line.split(",")
             
-            if( len( split_line ) <= 2 ):
+            if( split_line[0] == "SIM" ):
                 bpc_flag = int(split_line[1])
 
                 if( bpc_flag == 1 ):
@@ -148,6 +148,14 @@ def check_ABPC( pressure_queue, terminate ):
 
                 elif( bpc_flag == 0 ):
                     print( fullStamp() + " Outside simulated pressure range " )
+
+            elif( split_line[0] == "MUTE" ): 
+                if( split_line[2] == 0 ):                                                   # If Muting == OFF
+                    statusEnquiry( rfObject )                                               # Send un-muting byte
+                    
+                elif( split_line[2] == 1 ):                                                 # If Muting == ON
+                    statusEnquiry( rfObject )                                               # Send muting byte
+
             else:
                 pass
 # ----------------------------------------------------------------------------------------- #
