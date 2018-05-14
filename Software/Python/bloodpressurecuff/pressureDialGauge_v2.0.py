@@ -7,7 +7,7 @@
 * Adapted from: John Harrison's original work
 * Link: http://cratel.wichita.edu/cratel/python/code/SimpleVoltMeter
 *
-* VERSION: 0.6.1
+* VERSION: 0.6.2
 *   - MODIFIED: This iteration of the pressureDialGauge is not intended
 *               as a standalone program. It is meant to work in conjunction
 *               with the appJar GUI. Attempting to run this program as a
@@ -19,13 +19,14 @@
 *               AugmentedBloodPressureCuff repo on Github.
 *   - FIXED   : Simulation of bumps not taking place when program is executed
 *               externally.
+*   - ADDED   : Mute stethoscope sounds when passing a certain threshold
 *
 * KNOWN ISSUES:
-*   - Nada so far.
+*   - Amplitude of synthesized pulse is dependent on the current readings
 * 
 * AUTHOR                    :   Mohammad Odeh
 * DATE                      :   Mar.  7th, 2017 Year of Our Lord
-* LAST CONTRIBUTION DATE    :   May.  9th, 2018 Year of Our Lord
+* LAST CONTRIBUTION DATE    :   May. 14th, 2018 Year of Our Lord
 *
 '''
 
@@ -237,8 +238,7 @@ class Worker( QtCore.QThread ):
 
     # Create flags for what mode we are running
     normal      = True                                                              # normal state, out of the simulated pressure range
-    playback    = False                                                             # simulated state, within the simulated pressure range
-    recent      = playback                                                          # most recent state                                                                  
+    playback    = False                                                             # simulated state, within the simulated pressure range                                                                 
     
     # Define sampling frequency (units: sec) controls writing frequency
     wFreq = args["samplingFrequency"]                                               # Frequency at which to write data
@@ -257,6 +257,9 @@ class Worker( QtCore.QThread ):
         self.filterON   = False                                                     # Filter boolean
         self.at_marker  = False                                                     # Marker (EMA trigger points) boolean
 
+        # Stethoscope stuff
+        self.mute       = False                                                     # Determine if we are muting sounds
+        
         # Synthetic bump frequency
         self.bumpFreq = args["bumpFrequency"]                                       # Frequency at which to synthesize a pulse
         self.bumpTrigger = time.time()                                              # Trigger counter ^
@@ -331,41 +334,39 @@ class Worker( QtCore.QThread ):
             self.at_marker  = False                                                 # Reset marker flag                                                   
             self.initialRun = True                                                  # Store initial values at first run
 
+            # Send un-mute command from a separate thread
+##            Thread( target=FUNC, args=(self.rfObject, definitions.BYTE,) ).start()
+            self.mute       = False                                                 # Reset muting flag
+            
             if( args["debug"] ):                                                    # [INFO] Status
                 print( "[INFO] Filter OFF" )                                        # ...
+                print( "[INFO] Muting OFF" )                                        # ...
 
+        # Criteria to mute stethoscope sounds
+        elif( self.P_mmHg >= 40 and self.at_marker == False and self.mute == False ):
+            # Send mute command from a separate thread
+##            Thread( target=FUNC, args=(self.rfObject, definitions.BYTE,) ).start()
+            self.mute = True                                                        # Stethoscope is muting
+
+            if( args["debug"] ):                                                    # [INFO] Status
+                print( "[INFO] muting ON" )                                         # ...
+                
         # If filter is ON, apply it
         if( self.filterON ):
             self.t       = time.time() - self.startTime                             # [DEPRACATED] Used for LobOdeh
             self.P_mmHg  = self.EMA(self.P_mmHg_0, ALPHA=0.03)                      # Apply EMA filter
 
-        else:
-            pass
-
-        if( self.playback is not self.recent ):
-            if( self.playback == True ):
-                print( "SIM, 1")                                                    # within simulated pressure range
-            elif( self.playback == False ):
-                print( "SIM, 0")                                                    # outside simulated pressure range
-            #print( "SIM %r" %(self.playback) )
-            self.recent = self.playback
-
-        else:
-            pass
-        
-        # Use simulated data
-        if( self.filterON ):
             if( self.owner.mode == "SIM" ): self.sim_mode( self.P_mmHg )            # Trigger simulations mode (if --mode SIM)
 ##            else: self.rec_mode()                                                   # Trigger recording   mode (if --mide REC)
-            
-            return( self.P_mmHg )                                                   # Return pressure readings in mmHg
+
+            return( self.P_mmHg )                                                   # Return simulated data in mmHg
 
         # Use real data
         else:
-            if( self.owner.mode == "SIM" ): self.sim_mode( self.P_mmHg_0 )          # Trigger simulations mode (if --mode SIM)
+##            if( self.owner.mode == "SIM" ): self.sim_mode( self.P_mmHg_0 )          # Trigger simulations mode (if --mode SIM)
 ##            else: self.rec_mode()                                                   # Trigger recording   mode (if --mide REC)
 
-            return( self.P_mmHg_0 )                                                 # Return pressure readings in mmHg
+            return( self.P_mmHg_0 )                                                 # Return real data in mmHg
 
 # ------------------------------------------------------------------------
 
@@ -383,12 +384,20 @@ class Worker( QtCore.QThread ):
             if (P >= lp) and (P <= hp) and (self.playback == False):
                 self.normal = False                                                 # Turn OFF normal playback
                 self.playback = True                                                # Turn on simulation
+                print( "SIM, 1")                                                    # We are within simulated pressure range
 
+                # Send start playback command from a separate thread
+                Thread( target=startBlending, args=(self.rfObject, definitions.KOROT,) ).start()
+                
             # Leaving simulation pressure interval
             elif ((P < lp) or (P > hp)) and (self.normal == False):
                 self.normal = True                                                  # Turn ON normal playback
                 self.playback = False                                               # Turn OFF simulation
+                print( "SIM, 0")                                                    # We are outside simulated pressure range
 
+                # Send stop playback command from a separate thread
+                Thread( target=stopBlending, args=(self.rfObject,) ).start()
+                
         # Error handling (2)        
         except Exception as instance:
             print( "" )                                                             # ...
@@ -472,16 +481,20 @@ class Worker( QtCore.QThread ):
         # Increment
         for i in range( 0, 6 ):
             self.owner.pressureValue = val * ( 1 + i/1000. )
-            time.sleep(0.01)
+
             if( args["debug"] ):                                                    # [INFO] Status
                 print( "[INFO] Dial @ {}".format(self.owner.pressureValue) )        # ...
-
+            else:
+                time.sleep(0.01)                                                    # Delay is required for pulses to be visible
+                
         # Decrement
         for i in range( -5, 1 ):
             self.owner.pressureValue = val * -1*( -1 + i/1000. )
-            time.sleep(0.01)
+
             if( args["debug"] ):                                                    # [INFO] Status
                 print( "[INFO] Dial @ {}".format(self.owner.pressureValue) )        # ...
+            else:
+                time.sleep(0.01)                                                    # Delay is required for pulses to be visible
 
             
 # ========================================================================================= #
