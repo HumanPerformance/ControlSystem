@@ -125,6 +125,7 @@ def readGauge( initialCall, Q ):
 # ----------------------------------------------
 stethoscope_name = "Stethoscope"
 stethoscope_bt_address = (["00:06:66:D0:E4:94"])
+#stethoscope_bt_address = (["00:06:66:8C:D3:F6"])
 
 
 SOH             			= chr(0x01)                                         			# Start of Header
