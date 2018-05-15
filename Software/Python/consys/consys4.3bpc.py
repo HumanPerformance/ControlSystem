@@ -229,22 +229,23 @@ while( simCurrentTime < simDuration ):
                                   '\n'])
 
     # checking pressure values ------------------------------------------------------------ #
-    if( q_pressure_meter.empty() == False ):
-        line = q_pressure_meter.get( block=False )
-        split_line = line.split(",")
-        if( split_line[0] == "SIM" ):
-            bpc_flag = int(split_line[1])
-            if( bpc_flag == 1 ):
-                print( fullStamp() + " Within simulated pressure range " )
-            elif( bpc_flag == 0 ):
-                print( fullStamp() + " Outside simulated pressure range " )
-        elif( split_line[0] == "MUTE" ):
-            print split_line
-            mute_flag = int(split_line[1])
-            if( mute_flag == 0 ):
-                statusEnquiry( stethoscope_bt_object ) # replace with new function
-            elif( mute_flag == 1 ):
-                statusEnquiry( stethoscope_bt_object ) 
+    if( scenario == 2 ):
+        if( q_pressure_meter.empty() == False ):
+            line = q_pressure_meter.get( block=False )
+            split_line = line.split(",")
+            if( split_line[0] == "SIM" ):
+                bpc_flag = int(split_line[1])
+                if( bpc_flag == 1 ):
+                    print( fullStamp() + " Within simulated pressure range " )
+                elif( bpc_flag == 0 ):
+                    print( fullStamp() + " Outside simulated pressure range " )
+            elif( split_line[0] == "MUTE" ):
+                print split_line
+                mute_flag = int(split_line[1])
+                if( mute_flag == 0 ):
+                    statusEnquiry( stethoscope_bt_object ) # replace with new function
+                elif( mute_flag == 1 ):
+                    statusEnquiry( stethoscope_bt_object ) 
 
     # interaction ------------------------------------------------------------------------- #
     if( scenario == 0 ):
