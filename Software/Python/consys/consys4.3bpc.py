@@ -18,7 +18,7 @@ import  argparse
 import  pexpect
 from    os.path                     import expanduser
 from    os                          import getcwd, path, makedirs
-from    threading                   import Thread, Event
+from    threading                   import Thread
 from    Queue                       import Queue
 
 # PD3D modules
@@ -60,9 +60,9 @@ executionTimeStamp  = fullStamp()
 
 ap = argparse.ArgumentParser()
 
-ap.add_argument( "-s", "--scenario", type=int, default=0,                                   # sampling frequency for pressure measurement
+ap.add_argument( "-s", "--scenario", type=int, default=0,                               # sampling frequency for pressure measurement
                 help="Select scenario.\nDefault=1" )
-ap.add_argument( "-st", "--simulation_time", type=int, default=45,                          # debug mode --mo
+ap.add_argument( "-st", "--simulation_time", type=int, default=45,                                      # debug mode --mo
                 help="Simulation time" )
 ap.add_argument( "-lp", "--lower_pressure", type=int, default=85,                           # set lower pressure limit as an input (for SIM only)
                 help="Lower Pressure Limit (only for SIM)" )
@@ -75,194 +75,44 @@ print( fullStamp() + " Simulation Time = " + str( args["simulation_time"] ) )
 print( fullStamp() + " Lower pressure set to = " + str( args["lower_pressure"] ) )
 print( fullStamp() + " Higher pressure set to = " + str( args["higher_pressure"] ) )
 
-# Variables
-global scenario
-
-scenario            = 0 #args["scenario"]                                                      # scenario type
-"""
-scenario            = 0         # Normal                --no simulation
-scenario            = 1         # stethoscope aug.      --aug. of the stethoscope
-scenario            = 2         # blood pressure aug.   --aug. of blood pressure
-scenario            = 3         # All                   --aug. of all devices
-"""
-
-
 # ========================================================================================= #
 # Functions
 # ========================================================================================= #
 
-def readGauge( initialCall, pressure_queue ):
-    # start blood pressure cuff and digital dial -------------------------------------------#
+def readGauge( initialCall, Q ):
+    # start blood pressure cuff and digital dial ---------------------------------------------- #
     print( fullStamp() + " Connecting to blood pressure cuff " )
     mode            = "SIM"
-    lower_pressure  = args["lower_pressure"]                                                # units in mmHg
-    higher_pressure = args["higher_pressure"]                                               # ...
+    lower_pressure  = args["lower_pressure"]                                                                      # units in mmHg
+    higher_pressure = args["higher_pressure"]                                                                   # ...
 
-    cmd = "python {}pressureDialGauge_v2.0.py --destination {} --mode SIM --lower_pressure {} --higher_pressure {} --bumpFrequency {}".format(bpcuDir, executionTimeStamp, lower_pressure, higher_pressure, 0.75)
+    #pexpect.run("DISPLAY:=0")
+    #print( bpcuDir )
+    cmd = "python " + bpcuDir + "pressureDialGauge_v2.0.py --destination " + executionTimeStamp + " --mode SIM --lower_pressure " + str(lower_pressure) + " --higher_pressure " + str(higher_pressure)
     pressure_meter = pexpect.spawn( cmd, timeout=None )
 
     if( initialCall ):
-        pressure_queue.put( pressure_meter )                                                # Place variable in queue for retrival
+        Q.put( pressure_meter )                                                                 # Place variable in queue for retrival
         initialCall = False
         
     for line in pressure_meter:
         out = line.strip('\n\r')
-        pressure_queue.put( out )
+        Q.put( out )
         #print( out )
 
     #pressure_meter.close()
 
-# ----------------------------------------------------------------------------------------- #
-
-def check_holder( holder, holder_flag_event, terminate, q_holder_flags ):
-    
-    while( terminate.is_set() == False ):                                                   # Loop until we set the event to true
-        holder_data = "{}".format( holder.readline() )                                      # Read until timeout is reached
-
-        if( holder_data == '' ):                                                            # if the holder data is empty, do nothing
-            pass
-
-        else:
-            split_line = holder_data.split()                                                # Split incoming data
-            formatted = ( "{} {} {}".format( fullStamp(), split_line[1], split_line[2] ) )  # Construct string
-            #print( formatted.strip('\n') )                                                 # [INFO] Status update
-
-            if( split_line[1] == '1:' and split_line[2] == '0' ):
-                print( fullStamp() + " " + stethoscope_name + " has been removed " )
-                holder_flag = 0
-
-            elif( split_line[1] == '1:' and split_line[2] == '1' ):
-                print( fullStamp() + " " + stethoscope_name + " has been stored " )
-                holder_flag = 1
-
-            smartholder_data.append( ["%.02f" %simCurrentTime,
-                                      str( holder_flag ),
-                                      '\n'])
-
-            print holder_flag
-            q_holder_flags.put( holder_flag, block=False )                                  # update holder flag value
-            
-            holder_flag_event.set()                                                         # Indicate that flag is ready!
-            
-
-# ----------------------------------------------------------------------------------------- #
-
-def check_ABPC( pressure_queue, stethoscope, bpc_flag_event, terminate, q_bpc_flags ):
-    
-    while( terminate.is_set() == False ):                                                   # Loop until we set the event to true
-        if( pressure_queue.empty() == False ):
-            line = pressure_queue.get( block=False )
-
-            split_line = line.split(",")
-            
-            if( split_line[0] == "SIM" ):
-                bpc_flag = int(split_line[1])
-                q_bpc_flags.put( bpc_flag, block=False )
-
-                if( bpc_flag == 1 ):
-                    print( fullStamp() + " Within simulated pressure range " )
-
-                elif( bpc_flag == 0 ):
-                    print( fullStamp() + " Outside simulated pressure range " )
-
-                bpc_flag_event.set()
-
-            elif( split_line[0] == "MUTE" ): 
-                mute_flag = int(split_line[1])
-                q_bpc_flags.put( mute_flag, block=False )
-
-                if( mute_flag == 0 ):                                                       # If Muting == OFF
-                    statusEnquiry( stethoscope )                                            # Send un-muting byte
-                    
-                elif( mute_flag == 1 ):                                                     # If Muting == ON
-                    statusEnquiry( stethoscope )                                            # Send muting byte
-
-                bpc_flag_event.set()
-
-            else:
-                pass
-# ----------------------------------------------------------------------------------------- #
-
-def interact( stethoscope, holder_flag_event, bpc_flag_event, terminate, q_holder_flags, q_bpc_flags ):
-
-    while( terminate.is_set() == False ):                                                   # Loop until we set the event to true
-
-        holder_flag_event.wait()                                                                  # Wait for other thread to indicate that flag is ready
-
-        holder_flag         = q_holder_flags.get( block=False )
-        prev_holder_flag    = q_holder_flags.get( block=False )
-
-        print holder_flag
-        #print prev_holder_flag
-        
-        if( scenario == 0 ):
-            if( holder_flag == 0 and holder_flag != prev_holder_flag ):
-                print( "start recording")
-                #startRecording( stethoscope )
-                #statusEnquiry( stethoscope )
-                prev_holder_flag = holder_flag
-                
-            elif( holder_flag == 1 and holder_flag != prev_holder_flag ):
-                print( "stop recording" )
-                prev_holder_flag = holder_flag
-
-            q_holder_flags.put( holder_flag,        block=False )                                   # update latest value of the holder flag
-            q_holder_flags.put( prev_holder_flag,   block=False )                                   # update latest value of the previous-holder flag value
-
-        elif( scenario == 1 ):
-            if( holder_flag == 0 and holder_flag != prev_holder_flag):
-                fileByte = definitions.ESMSYN
-                startBlending( stethoscope, fileByte)
-                #statusEnquiry( stethoscope ) # replace for blending
-                prev_holder_flag = holder_flag
-                
-            elif( holder_flag == 1 and holder_flag != prev_holder_flag ):
-                stopBlending( stethoscope )
-                prev_holder_flag = holder_flag
-
-            q_holder_flags.put( holder_flag,        block=False )                                   # update latest value of the holder flag
-            q_holder_flags.put( prev_holder_flag,   block=False )                                   # update latest value of the previous-holder flag value
-                
-        elif( scenario == 2 ):
-
-            bpc_flag_event.wait()
-            bpc_flag            = q_bpc_flags.get( block=False )
-            prev_bpc_flag       = q_bpc_flags.get( block=False )
-            
-            if( holder_flag == 0 ):
-                if( bpc_flag == 1 and bpc_flag != prev_bpc_flag ):
-                    fileByte = definitions.KOROT
-                    startBlending( stethoscope, fileByte)
-                    #statusEnquiry( stethoscope ) # replace for blending
-                    prev_bpc_flag = bpc_flag
-                    
-                elif( bpc_flag == 0 and bpc_flag != prev_bpc_flag ):
-                    stopBlending( stethoscope )
-                    prev_bpc_flag = bpc_flag
-
-            q_holder_flags.put( holder_flag,        block=False )                                   # update latest value of the holder flag
-            q_holder_flags.put( prev_holder_flag,   block=False )                                   # update latest value of the previous-holder flag value
-
-            q_bpc_flags.put( bpc_flag,      block=False )                                       # update latest value of the bpc flag
-            q_bpc_flags.put( prev_bpc_flag, block=False )                                       # update latest value of the previous-bpc flag value
-
-            bpc_flag_event.clear()
-
-        holder_flag_event.clear()                                                               # Reset flag event
-
 # ----------------------------------------------
 # Devices
 # ----------------------------------------------
-global stethoscope_name, stethoscope_bt_address
-
 stethoscope_name = "Stethoscope"
 stethoscope_bt_address = (["00:06:66:D0:E4:94"])
 
 
-SOH             			= chr(0x01)                                         # Start of Header
-ENQ					= chr(0x05)                                         # Enquiry
-ACK             			= chr(0x06)                                         # Positive Acknowledgement
-NAK             			= chr(0x15)                                         # Negative Acknowledgement
+SOH             			= chr(0x01)                                         			# Start of Header
+ENQ							= chr(0x05)                                         			# Enquiry
+ACK             			= chr(0x06)                                         			# Positive Acknowledgement
+NAK             			= chr(0x15)                                         			# Negative Acknowledgement
 
 
 # ========================================================================================= #
@@ -281,19 +131,6 @@ print( fullStamp() + " Connecting to panel devices " )
 # connecting to stethoscope --------------------------------------------------------------- #
 print( fullStamp() + " Connecting to stethoscope " )
 stethoscope_bt_object = createBTPort( stethoscope_bt_address[0], 1 )                        # using bluetooth protocol commands
-
-# configuring stethoscope data ------------------------------------------------------------ #
-print( fullStamp() + " Generating filename for audio data " )
-randString = genRandString( 4 )
-print( fullStamp() + " Generated : " + randString )
-
-print( fullStamp() + " Parsing generated string : " + randString )
-
-# scenario-specific configuration --------------------------------------------------------- #
-if scenario == 0:
-    print( fullStamp() + " Setting Stethoscope Recording Mode " )
-    recMode = 0
-    setRecordingMode( stethoscope_bt_object, recMode )
 
 # connecting to smart holders ------------------------------------------------------------- #
 print( fullStamp() + " Connecting to smart holders " )
@@ -323,97 +160,101 @@ time.sleep(0.50)                                                                
 
 # start blood pressure cuff and digital dial ---------------------------------------------- #
 print( fullStamp() + " Connecting to blood pressure cuff " )
-q_pressure_meter = Queue( maxsize=0 )                                                       # Define queue
-t_pressure_meter = Thread( target=readGauge, args=( True, q_pressure_meter, ) )             # Define thread
+q_pressure_meter = Queue( maxsize=0 )                                                   # Define queue
+t_pressure_meter = Thread( target=readGauge, args=( True, q_pressure_meter, ) )# Define thread
 t_pressure_meter.daemon = True
-t_pressure_meter.start()                                                                    # Start thread
-
-# Define threads for functions to be run during simulation
-holder_flag_ready       = Event()                                                           # Event to wait for flag to be ready
-bpc_flag_ready          = Event()
-terminate               = Event()                                                           # Event to signal thread termination
-q_holder_flags          = Queue( maxsize=0 )
-q_bpc_flags             = Queue( maxsize=0 )
-
-t_check_holder          = Thread( target=check_holder, args=( smartholder_usb_object,
-                                                              holder_flag_ready,
-                                                              terminate,
-                                                              q_holder_flags, )         )
-t_check_holder.daemon   = True
-
-t_check_ABPC            = Thread( target=check_ABPC  , args=( q_pressure_meter,
-                                                              stethoscope_bt_object,
-                                                              bpc_flag_ready,
-                                                              terminate,
-                                                              q_bpc_flags, )            )
-t_check_ABPC.daemon     = True
-
-t_interact              = Thread( target=interact    , args=( stethoscope_bt_object,
-                                                              holder_flag_ready,
-                                                              bpc_flag_ready,
-                                                              terminate,
-                                                              q_holder_flags,
-                                                              q_bpc_flags, )            )
-t_interact.daemon       = True
-
+t_pressure_meter.start()                                                                # Start thread
 
 pexpectChild = q_pressure_meter.get()
 
 # ----------------------------------------------------------------------------------------- #
 # Data Gathering
 # ----------------------------------------------------------------------------------------- #
-
+# Variables
+scenario            = args["scenario"]                                                                     # scenario type
+"""
+scenario            = 0         # Normal                --no simulation
+scenario            = 1         # stethoscope aug.      --aug. of the stethoscope
+scenario            = 2         # blood pressure aug.   --aug. of blood pressure
+scenario            = 3         # All                   --aug. of all devices
+"""
 simStartTime        = time.time()
 simCurrentTime      = 0                                                                     # seconds
-simDuration         = args["simulation_time"]                                               # seconds
+simDuration         = args["simulation_time"]                                                                    # seconds
 simStopTime         = simDuration                                                           # seconds
 
-#global holder_flag , prev_holder_flag                                                       # Set as global to access...
-#global bpc_flag    , prev_bpc_flag                                                          # from thread functions
-
-# data array
 smartholder_data    = [] 								    # empty array for smart holder data
-
-# flags 
-
 holder_flag         = 1                                          			    # single sensor flag
 prev_holder_flag    = 1
 bpc_flag            = 0                                                                     # blood pressure sim region flag
-prev_bpc_flag       = 0                                                                     # blood pressure sim region flag
-
-q_holder_flags.put( holder_flag         )
-q_holder_flags.put( prev_holder_flag    )
-q_bpc_flags.put(    bpc_flag            )
-q_bpc_flags.put(    prev_bpc_flag       )
-
-
+prev_bpc_flag       = 0                                                                   # blood pressure sim region flag
 
 print( fullStamp() + " " + str( simDuration ) + " sec. simulation begins now " )            # Statement confirming simulation start
-
-t_check_holder.start()                                                                      # Start threads in charge...
-t_check_ABPC.start()                                                                        # of data collection
-t_interact.start()                                                                          # ...
 
 while( simCurrentTime < simDuration ):
 
     # checking holder data ---------------------------------------------------------------- #
+    holder_data = "{}".format( smartholder_usb_object.readline() )                          # Read until timeout is reached
 
-##    t_check_holder.start()
+    if( holder_data == '' ):                                                                # if the holder data is empty, do nothing
+        pass
+    else:
+        split_line = holder_data.split()                                                    # Split incoming data
+        formatted = ( "{} {} {}".format( fullStamp(), split_line[1], split_line[2] ) )      # Construct string
+        #print( formatted.strip('\n') )                                                      # [INFO] Status update
+
+        if( split_line[1] == '1:' and split_line[2] == '0' ):
+            print( fullStamp() + " " + stethoscope_name + " has been removed " )
+            holder_flag = 0
+
+        elif( split_line[1] == '1:' and split_line[2] == '1' ):
+            print( fullStamp() + " " + stethoscope_name + " has been stored " )
+            holder_flag = 1
+
+        smartholder_data.append( ["%.02f" %simCurrentTime,
+                                  str( holder_flag ),
+                                  '\n'])
 
     # checking pressure values ------------------------------------------------------------ #
-
-##    t_check_ABPC.start()
+    if( q_pressure_meter.empty() == False ):
+        line = q_pressure_meter.get( block=False )
+        split_line = line.split(" ")
+        if( len( split_line ) <= 2 ):
+            bpc_flag = int(split_line[1])
+            if( bpc_flag == 1 ):
+                print( fullStamp() + " Within simulated pressure range " )
+            elif( bpc_flag == 0 ):
+                print( fullStamp() + " Outside simulated pressure range " )
 
     # interaction ------------------------------------------------------------------------- #
+    if( scenario == 0 ):
+        if( holder_flag == 0 and holder_flag != prev_holder_flag ):
+            #startRecording( stethoscope_bt_object )
+            statusEnquiry( stethoscope_bt_object )
+            prev_holder_flag = holder_flag
 
-##    t_interact.start()
-
+    elif( scenario == 1 ):
+        if( holder_flag == 0 and holder_flag != prev_holder_flag):
+            fileByte = definitions.ESMSYN
+            startBlending( stethoscope_bt_object, fileByte)
+            #statusEnquiry( stethoscope_bt_object ) # replace for blending
+            prev_holder_flag = holder_flag
+        elif( holder_flag == 1 and holder_flag != prev_holder_flag ):
+            stopBlending( stethoscope_bt_object )
+            prev_holder_flag = holder_flag
+            
+    elif( scenario == 2 ):
+        if( holder_flag == 0 ):
+            if( bpc_flag == 1 and bpc_flag != prev_bpc_flag ):
+                fileByte = definitions.KOROT
+                startBlending( stethoscope_bt_object, fileByte)
+                #statusEnquiry( stethoscope_bt_object ) # replace for blending
+                prev_bpc_flag = bpc_flag
+            elif( bpc_flag == 0 and bpc_flag != prev_bpc_flag ):
+                stopBlending( stethoscope_bt_object )
+                prev_bpc_flag = bpc_flag
+        
     simCurrentTime = time.time() - simStartTime
-
-terminate.set()                                                                             # Set the terminate flag (set's it to True)
-t_check_holder.join(2)                                                                      # Wait 2 seconds before...
-t_check_ABPC.join(2)                                                                        # terminating threads
-t_interact.join(2)                                                                          # ...
 											     
 # ----------------------------------------------------------------------------------------- #
 # Device Deactivation
