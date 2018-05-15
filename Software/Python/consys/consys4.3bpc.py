@@ -75,6 +75,26 @@ print( fullStamp() + " Simulation Time = " + str( args["simulation_time"] ) )
 print( fullStamp() + " Lower pressure set to = " + str( args["lower_pressure"] ) )
 print( fullStamp() + " Higher pressure set to = " + str( args["higher_pressure"] ) )
 
+# Variables
+scenario            = args["scenario"]                                                                     # scenario type
+"""
+scenario            = 0         # Normal                --no simulation
+scenario            = 1         # stethoscope aug.      --aug. of the stethoscope
+scenario            = 2         # blood pressure aug.   --aug. of blood pressure
+scenario            = 3         # All                   --aug. of all devices
+"""
+simStartTime        = time.time()
+simCurrentTime      = 0                                                                     # seconds
+simDuration         = args["simulation_time"]                                                                    # seconds
+simStopTime         = simDuration                                                           # seconds
+
+smartholder_data    = [] 								    # empty array for smart holder data
+holder_flag         = 1                                          			    # single sensor flag
+prev_holder_flag    = 1
+bpc_flag            = 0                                                                     # blood pressure sim region flag
+prev_bpc_flag       = 0                                                                   # blood pressure sim region flag
+
+
 # ========================================================================================= #
 # Functions
 # ========================================================================================= #
@@ -130,6 +150,19 @@ print( fullStamp() + " Connecting to panel devices " )
 print( fullStamp() + " Connecting to stethoscope " )
 stethoscope_bt_object = createBTPort( stethoscope_bt_address[0], 1 )                        # using bluetooth protocol commands
 
+# configuring stethoscope data ------------------------------------------------------------ #
+print( fullStamp() + " Generating filename for audio data " )
+randString = genRandString( 4 )
+print( fullStamp() + " Generated : " + randString )
+
+print( fullStamp() + " Parsing generated string : " + randString )
+
+# scenario-specific configuration --------------------------------------------------------- #
+if scenario == 0:
+    print( fullStamp() + " Setting Stethoscope Recording Mode " )
+    recMode = 0
+    setRecordingMode( stethoscope_bt_object, recMode )
+
 # connecting to smart holders ------------------------------------------------------------- #
 print( fullStamp() + " Connecting to smart holders " )
 port = 0
@@ -168,24 +201,6 @@ pexpectChild = q_pressure_meter.get()
 # ----------------------------------------------------------------------------------------- #
 # Data Gathering
 # ----------------------------------------------------------------------------------------- #
-# Variables
-scenario            = args["scenario"]                                                                     # scenario type
-"""
-scenario            = 0         # Normal                --no simulation
-scenario            = 1         # stethoscope aug.      --aug. of the stethoscope
-scenario            = 2         # blood pressure aug.   --aug. of blood pressure
-scenario            = 3         # All                   --aug. of all devices
-"""
-simStartTime        = time.time()
-simCurrentTime      = 0                                                                     # seconds
-simDuration         = args["simulation_time"]                                                                    # seconds
-simStopTime         = simDuration                                                           # seconds
-
-smartholder_data    = [] 								    # empty array for smart holder data
-holder_flag         = 1                                          			    # single sensor flag
-prev_holder_flag    = 1
-bpc_flag            = 0                                                                     # blood pressure sim region flag
-prev_bpc_flag       = 0                                                                   # blood pressure sim region flag
 
 print( fullStamp() + " " + str( simDuration ) + " sec. simulation begins now " )            # Statement confirming simulation start
 
@@ -234,16 +249,19 @@ while( simCurrentTime < simDuration ):
     # interaction ------------------------------------------------------------------------- #
     if( scenario == 0 ):
         if( holder_flag == 0 and holder_flag != prev_holder_flag ):
-            #startRecording( stethoscope_bt_object )
-            statusEnquiry( stethoscope_bt_object )
+            startRecording( stethoscope_bt_object )
+            prev_holder_flag = holder_flag
+            
+        elif( holder_flag == 1 and holder_flag != prev_holder_flag ):
+            stopRecording( stethoscope_bt_object )
             prev_holder_flag = holder_flag
 
     elif( scenario == 1 ):
         if( holder_flag == 0 and holder_flag != prev_holder_flag):
-            fileByte = definitions.ESMSYN
+            fileByte = definitions.S4GALL
             startBlending( stethoscope_bt_object, fileByte)
-            #statusEnquiry( stethoscope_bt_object ) # replace for blending
             prev_holder_flag = holder_flag
+            
         elif( holder_flag == 1 and holder_flag != prev_holder_flag ):
             stopBlending( stethoscope_bt_object )
             prev_holder_flag = holder_flag
@@ -253,8 +271,8 @@ while( simCurrentTime < simDuration ):
             if( bpc_flag == 1 and bpc_flag != prev_bpc_flag ):
                 fileByte = definitions.KOROT
                 startBlending( stethoscope_bt_object, fileByte)
-                #statusEnquiry( stethoscope_bt_object ) # replace for blending
                 prev_bpc_flag = bpc_flag
+                
             elif( bpc_flag == 0 and bpc_flag != prev_bpc_flag ):
                 stopBlending( stethoscope_bt_object )
                 prev_bpc_flag = bpc_flag
@@ -269,9 +287,9 @@ pexpectChild.close()
 
 print( fullStamp() + " Disconnecting bluetooth devices " )
 if( scenario == 0 ):
-    statusEnquiry( stethoscope_bt_object ) # replace with stop recording
+    stopRecording( stethoscope_bt_object )
 elif( scenario == 1 ):
-    stopBlending( stethoscope_bt_object ) # replace with stop recording and blending
+    stopBlending( stethoscope_bt_object )
 elif( scenario == 2 ):
     stopBlending( stethoscope_bt_object )
 
