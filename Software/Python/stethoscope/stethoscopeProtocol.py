@@ -180,6 +180,28 @@ def statusEnquiry( rfObject ):
         print( fullStamp() + " Please troubleshoot device" )
 
 #
+# set to idle
+def setToIdle( rfObject ):
+    """
+    Set to Idle
+    Sets the stethoscope to IDLE mode
+    """
+    
+    print( fullStamp() + " systemCheck()" )                                                             # Print function name
+
+    outByte = definitions.SETIDLE                                                                           # Send CHK / System Check command - see protocolDefinitions.py                     
+    rfObject.send(outByte)
+    inByte = rfObject.recv(1)                                                                           # Check for response
+
+    if inByte == definitions.ACK:                                                                       # Check for ACK / NAK response found through sendUntilRead()
+        print( fullStamp() + " ACK Stethoscope Set to IDLE" )                                              # If the SD card check is successful, the remote device sends a ACK
+        print( fullStamp() + " ACK Device Ready" )                                                      # ACK, in this case, translates to DEVICE READY
+
+    elif inByte == definitions.NAK:                                                                     # Check for ACK / NAK response found through sendUntilRead()
+        print( fullStamp() + " NAK Stethoscope CANNOT be set to IDLE" )                                              # If the SD card check fails, the remote device sends a NAK
+        print( fullStamp() + " NAK Device NOT Ready" )   
+
+#
 # Operational Functions
 #       These functions deal with the normal operation of the device
 #

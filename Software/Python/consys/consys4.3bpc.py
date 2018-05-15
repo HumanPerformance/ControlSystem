@@ -150,19 +150,13 @@ print( fullStamp() + " Connecting to panel devices " )
 print( fullStamp() + " Connecting to stethoscope " )
 stethoscope_bt_object = createBTPort( stethoscope_bt_address[0], 1 )                        # using bluetooth protocol commands
 
-# configuring stethoscope data ------------------------------------------------------------ #
-print( fullStamp() + " Generating filename for audio data " )
-randString = genRandString( 4 )
-print( fullStamp() + " Generated : " + randString )
-
-print( fullStamp() + " Parsing generated string : " + randString )
-parseString( rfObject, randString )
-
-# scenario-specific configuration --------------------------------------------------------- #
-if scenario == 0:
+# configuring stethoscope ----------------------------------------------------------------- #
+if( scenario == 0 ):
+    print( fullStamp() + " Generating filename for audio data " )
+    randString = genRandString( 4 )
+    print( fullStamp() + " Generated : " + randString )
     print( fullStamp() + " Setting Stethoscope Recording Mode " )
     recMode = 0
-    setRecordingMode( stethoscope_bt_object, recMode )
 
 # connecting to smart holders ------------------------------------------------------------- #
 print( fullStamp() + " Connecting to smart holders " )
@@ -251,6 +245,9 @@ while( simCurrentTime < simDuration ):
     # interaction ------------------------------------------------------------------------- #
     if( scenario == 0 ):
         if( holder_flag == 0 and holder_flag != prev_holder_flag ):
+            print( fullStamp() + " Setting recording mode and filename" )
+            setRecordingMode( stethoscope_bt_object, recMode )
+            parseString( stethoscope_bt_object, randString )
             startRecording( stethoscope_bt_object )
             prev_holder_flag = holder_flag
             
@@ -295,6 +292,10 @@ elif( scenario == 1 ):
 elif( scenario == 2 ):
     stopBlending( stethoscope_bt_object )
 
+print( fullStamp() + " Checking and sending stethoscope to IDLE state" )
+setToIdle( stethoscope_bt_object )
+
+print( fullStamp() + " Closing Stethoscope bluetooth port" )
 stethoscope_bt_object.close()
 
 print( fullStamp() + " Disconnecting usb devices " )

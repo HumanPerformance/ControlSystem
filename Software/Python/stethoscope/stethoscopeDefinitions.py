@@ -36,16 +36,13 @@ STARTBLEND      = chr(0x1F)       # Start Blending
 STOPBLEND       = chr(0x20)       # Stop Blending
 PSTRING         = chr(0x31)       # Parse String
 RECMODE         = chr(0x41)       # Parse recording mode
+SETIDLE         = chr(0x26)       # set to idle
 
 ## Simulation Functions ============================================================================================================= // 
 NHBSYN          = chr(0x1D)       # Playback of Synthetic, Normal Heart Beat                           			[resp: ACK | NAK]
 ESMSYN          = chr(0x1E)       # Playback of Synthetic, Early Systolic Heart Murmur                 			[resp: ACK | NAK]
 NHBREC          = chr(0x21)       # Blend Normal Heart Beat Recorded                                   			[resp: ACK | NAK]
 EHBREC          = chr(0x22)       # Blend Exercised Heart Beat Recorded                                			[resp: ACK | NAK]
-STARTBPNORM     = chr(0x26)       # Start BP Cuff augmentation -- Normal heartrate                     			[resp: ACK | NAK]
-STARTBPBRADY    = chr(0x27)       # Start BP Cuff augmentation -- Bradycardia                          			[resp: ACK | NAK]
-STARTBPTACHY    = chr(0x28)       # Start BP Cuff augmentation -- Tachycardia                          			[resp: ACK | NAK]
-STOPBPALL       = chr(0x29)       # Stop BP Cuff augmentation                                          			[resp: ACK | NAK]
 KOROT           = chr(0x30)       # Playback of Korotkoff Sound                                        			[resp: ACK | NAK]
 EDMSYN          = chr(0x33)       # Playback of Synthetic, Early Diastolic Heart Murmur                			[resp: ACK | NAK]
 ASYSYN          = chr(0x34)       # ........................                                        			[resp: ACK | NAK]
