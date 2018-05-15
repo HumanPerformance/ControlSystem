@@ -156,6 +156,7 @@ randString = genRandString( 4 )
 print( fullStamp() + " Generated : " + randString )
 
 print( fullStamp() + " Parsing generated string : " + randString )
+parseString( rfObject, randString )
 
 # scenario-specific configuration --------------------------------------------------------- #
 if scenario == 0:
