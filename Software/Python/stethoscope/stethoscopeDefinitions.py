@@ -11,7 +11,7 @@ Fluvio L Lobo Fenoglietto
 
 ### ASCII Byte Codes -- used for communication protocol
 ## General Commands
-ENQ				= chr(0x05)       # Enquiry: "Are you ready for commands?"										[resp: ACK | NAK]
+ENQ		= chr(0x05)       # Enquiry: "Are you ready for commands?"										[resp: ACK | NAK]
 ACK             = chr(0x06)       # Positive Acknowledgement: "Command/Action successful."						[resp: ACK | NAK]
 NAK             = chr(0x15)       # Negative Acknowledgement: "Command/Action UNsuccessful."					[resp: ACK | NAK]
 
@@ -21,19 +21,21 @@ DEVICEID       	= chr(0x11)       # Device Identification                       
 SDCHECK         = chr(0x12)       # System Check: "Run system check and report"              					[resp: ACK | NAK]
 SENDWAV         = chr(0x13)       # Send .WAV file (audio recording) via serial port         					[resp: ACK | NAK]
 DELVOLATILE     = chr(0x14)       # Erase volatile files (all)                               					[resp: ACK | NAK]
+SENDRAW         = chr(0x37)       # send raw file...
 
 ## Device-Specific Functions ======================================================================================================== //                     
 STARTREC        = chr(0x16)       # Start Recording                                          				[resp: ACK | NAK]
 STARTCREC       = chr(0x32)       # Start Custom Recording                                                              [resp: ACK | NAK]         
+STARTMREC       = chr(0x38)
 STOPREC         = chr(0x17)       # Stop Recording                                           				[resp: ACK | NAK]
 STARTPLAY       = chr(0x18)       # Start Playback                                           				[resp: ACK | NAK]
 STOPPLAY        = chr(0x19)       # Stop Playback                                            				[resp: ACK | NAK]
-STARTPASSTHRU   = chr(0x1A)       # Start Audio passthrough from mic to ear monitors         				[resp: ACK | NAK]
 STARTHBMONITOR  = chr(0x1B)       # Start Monitoring Heart Beat                              				[resp: ACK | NAK]
 STOPHBMONITOR   = chr(0x1C)       # Stop Monitoring Heart Beat                               				[resp: ACK | NAK]
 STARTBLEND      = chr(0x1F)       # Start Blending
 STOPBLEND       = chr(0x20)       # Stop Blending
 PSTRING         = chr(0x31)       # Parse String
+RECMODE         = chr(0x41)       # Parse recording mode
 
 ## Simulation Functions ============================================================================================================= // 
 NHBSYN          = chr(0x1D)       # Playback of Synthetic, Normal Heart Beat                           			[resp: ACK | NAK]
@@ -49,3 +51,7 @@ EDMSYN          = chr(0x33)       # Playback of Synthetic, Early Diastolic Heart
 ASYSYN          = chr(0x34)       # ........................                                        			[resp: ACK | NAK]
 PEJECT          = chr(0x35)       # ........................                                           			[resp: ACK | NAK]
 PSPLIT          = chr(0x36)       # ........................                                          			[resp: ACK | NAK]
+STARTSIM        = chr(0x39)       # simulation byte
+STOPSIM         = chr(0x40)       # simulation byte
+S4GALL          = chr(0x42)       # S4 gallop
+AORSTE          = chr(0x43)       # Aortic stenosis

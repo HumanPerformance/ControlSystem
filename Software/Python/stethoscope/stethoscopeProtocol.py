@@ -22,6 +22,7 @@ from    bluetoothProtocol_teensy32  import  *
 from    timeStamp                   import  fullStamp
 import  stethoscopeDefinitions      as      definitions
 import  os, sys, serial
+import  random
 
 
 def systemCheck( rfObject ):
@@ -66,6 +67,24 @@ def deviceID( rfObject ):
                 inBytes.append(rfObject.recv(1))
 
     print inBytes
+
+#
+# Generate Rand. String
+#
+def genRandString( length ):
+    """
+    Generate Rand. String
+    This function generates a random string to use as filename
+    """
+
+    print( fullStamp() + " genRandString() " )
+
+    #options = 'abcdefghijklmnopqrstuvwxyz'
+    options = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    randString = ''.join( random.choice( options ) for i in range( length ) )
+
+    return randString
+
 
 #
 # Parse String
@@ -145,6 +164,18 @@ def statusEnquiry( rfObject ):
     elif inByte == definitions.NAK:
         print( fullStamp() + " NAK Device NOT READY" )
 
+    elif inByte == definitions.STARTREC:
+        print( fullStamp() + " Device RECORDING" )
+
+    elif inByte == definitions.STARTPLAYING:
+        print( fullStamp() + " Device PLAYING" )
+
+    elif inByte == definitions.STARTHBMONITORING:
+        print( fullStamp() + " Device MONITORING" )
+
+    elif inByte == definitions.STARTBLENDING:
+        print( fullStamp() + " Device BLENDING" )
+
     else:
         print( fullStamp() + " Please troubleshoot device" )
 
@@ -153,10 +184,61 @@ def statusEnquiry( rfObject ):
 #       These functions deal with the normal operation of the device
 #
 
+def sendRaw( rfObject ):
+    """
+    Send Raw
+    This function requests the retrieval of raw data from the SD card.
+    """
+    
+    print( fullStamp() + " sendRaw()" )
+
+    #outByte = definitions.SENDRAW
+    outByte = definitions.SENDWAV 
+    rfObject.send(outByte)
+    inByte = rfObject.recv(1)                      
+
+    if inByte == definitions.ACK:                     
+        print( fullStamp() + " ACK Device READY" )
+        return True
+    
+    elif inByte == definitions.NAK:
+        print( fullStamp() + " NAK Device NOT READY" )
+
+    else:
+        print( fullStamp() + " Please troubleshoot device" )
+
 #
 # Device-Specific Functions
 #       These functions deal with the device-specific operation or features
 #
+
+#
+# Set Recording Mode
+#
+def setRecordingMode( rfObject, recMode ):
+    """
+    Parse/Set Recording Mode
+    This function passes a string that will set the recording mode of the stethoscope
+    """
+
+    print( fullStamp() + " setRecordingMode()" )
+
+    outByte = definitions.RECMODE
+    rfObject.send( outByte )
+
+    outString = str( recMode )
+    rfObject.send( outString )
+    inByte = rfObject.recv(1)                      
+
+    if inByte == definitions.ACK:                     
+        print( fullStamp() + " ACK Device RECEIVED RECORDING MODE" )
+        return True
+    
+    elif inByte == definitions.NAK:
+        print( fullStamp() + " NAK Device DID NOT RECEIVE RECORDING MODE" )
+
+    else:
+        print( fullStamp() + " Please troubleshoot device" )
 
 def startRecording( rfObject ):
     """
@@ -166,7 +248,7 @@ def startRecording( rfObject ):
     
     print( fullStamp() + " startRecording()" )
 
-    outByte = definitions.STARTREC                  
+    outByte = definitions.STARTCREC                  
     rfObject.send(outByte)
     inByte = rfObject.recv(1)
     
@@ -190,6 +272,32 @@ def startCustomRecording( rfObject, outString ):
     outByte = definitions.STARTCREC
     rfObject.send( outByte )
 
+    #print( fullStamp() + " Parsing custom recording string = " + outString )
+    rfObject.send( outString )
+    inByte = rfObject.recv(1)                      
+
+    if inByte == definitions.ACK:                     
+        print( fullStamp() + " ACK Device will START RECORDING" )
+        print( fullStamp() + " ACK Device will RECORD under the " + outString + " filename")
+        return True
+    
+    elif inByte == definitions.NAK:
+        print( fullStamp() + " NAK Device CANNOT START RECORDING" )
+
+    else:
+        print( fullStamp() + " Please troubleshoot device" )
+
+def startMultiChannelRecording( rfObject, outString ):
+    """
+    Start Multi Channel Recording
+    Begins recording to be saved undr a custom filename
+    """
+
+    print( fullStamp() + " startCustomRecording()" )
+    print( fullStamp() + " Parsing STARTMREC Byte" )
+    outByte = definitions.STARTMREC
+    rfObject.send( outByte )
+    
     #print( fullStamp() + " Parsing custom recording string = " + outString )
     rfObject.send( outString )
     inByte = rfObject.recv(1)                      
@@ -433,89 +541,92 @@ def stopBlending( rfObject ):
         print( fullStamp() + " Please troubleshoot device" )
 
 
-def startBPNorm( rfObject ):
+#
+# Start Simulation
+#
+def startSimulation( rfObject ):
     """
-    Normal Heartrate:
-    This function starts Normal Heartrate playback.
+    Start Simulation:
+    This function starts a scripted simulation in the augmented stethoscope.
     """
     
-    print( fullStamp() + " startBPNorm()" )
+    print( fullStamp() + " startSimulating()" )         
 
-    outByte = definitions.STARTBPNORM
+    # check for simulation function call
+    outByte = definitions.STARTSIM                                 
     rfObject.send(outByte)
     inByte = rfObject.recv(1)
 
-    if inByte == definitions.ACK:
-        print( fullStamp() + " ACK Stethoscope will START NORMAL playback" )    
+    if inByte == definitions.ACK:               
+        print( fullStamp() + " ACK Stethoscope will START SIMULATING scenario 0" )
 
     elif inByte == definitions.NAK:
-        print( fullStamp() + " NAK Stethoscope CANNOT START NORMAL playback" )
+        print( fullStamp() + " NAK Stethoscope CANNOT START SIMULATING scenario 0" )
 
     else:
         print( fullStamp() + " Please troubleshoot device" )
 
+    # check for recording function call
+    byteCheck( rfObject, 1, 5.0 )
 
-def startBPBrady( rfObject ):
+    # check for blending function call
+    byteCheck( rfObject, 1, 5.0 )    
+
+
+# -------------------------------------------------------- #
+# Special Function
+#
+# Byte Check
+
+def byteCheck( rfObject, size, timeout ):
+
+    start_time      = time.time()
+    current_time    = 0
+    while current_time < timeout :
+        inByte = rfObject.recv( size )
+        print( fullStamp() + " Received " + inByte.decode( "utf-8" ) )
+        if inByte == definitions.ACK:               
+            print( fullStamp() + " ACK " )
+            break
+
+        elif inByte == definitions.NAK:
+            print( fullStamp() + " NAK " )
+            break
+
+        current_time = time.time() - start_time
+        print( fullStamp() + " Time elapsed = " + str( current_time ) + " sec." )
+
+    if current_time >= timeout :
+        print( fullStamp() + " Please troubleshoot device " )
+
+# -------------------------------------------------------- #
+
+#
+# Start Simulation
+#
+def stopSimulation( rfObject ):
     """
-    Bradycardia:
-    This function starts Bradycardia playback.
+    Start Simulation:
+    This function starts a scripted simulation in the augmented stethoscope.
     """
     
-    print( fullStamp() + " startBPBrady()" )
+    print( fullStamp() + " startSimulating()" )         
 
-    outByte = definitions.STARTBPBRADY
+    outByte = definitions.STOPSIM                                 
     rfObject.send(outByte)
-    inByte = rfObject.recv(1)
-    
-    if inByte == definitions.ACK:
-        print( fullStamp() + " ACK Stethoscope will START PLAYBACK of BRADYCARDIA" )    
+    inByte = rfObject.recv(1)              
+
+    if inByte == definitions.ACK:               
+        print( fullStamp() + " ACK Stethoscope will STOP SIMULATING scenario 0" )
 
     elif inByte == definitions.NAK:
-        print( fullStamp() + " NAK Stethoscope CANNOT START BRADYCARDIA" )
+        print( fullStamp() + " NAK Stethoscope CANNOT STOP SIMULATING scenario 0" )
 
     else:
         print( fullStamp() + " Please troubleshoot device" )
 
+    # check for the STOP recording function call
+    byteCheck( rfObject, 1, 5.0 )
 
-def startBPTachy( rfObject ):
-    """
-    Tachycardia:
-    This function starts Tachycardia playback.
-    """
-    
-    print( fullStamp() + " startBPTachy()" )
-
-    outByte = definitions.STARTBPTACHY
-    rfObject.send(outByte)
-    inByte = rfObject.recv(1)
-    
-    if inByte == definitions.ACK:
-        print( fullStamp() + " ACK Stethoscope will START PLAYBACK of TACHYCARDIA" )
-            
-    elif inByte == definitions.NAK:
-        print( fullStamp() + " NAK Stethoscope CANNOT START TACHYCARDIA" )
-
-    else:
-        print( fullStamp() + " Please troubleshoot device" )
-
-
-def stopBPAll( rfObject ):
-    """
-    Stop All:
-    This function stops all augmentation.
-    """
-    
-    print( fullStamp() + " stopBPAll()" )
-
-    outByte = definitions.STOPBPALL
-    rfObject.send(outByte)
-    inByte = rfObject.recv(1)
-    
-    if inByte == definitions.ACK:
-        print( fullStamp() + " ACK Stethoscope will STOP AUGMENTING" )
-            
-    elif inByte == definitions.NAK:
-        print( fullStamp() + " NAK Stethoscope CANNOT STOP AUGMENTING" )
-
-    else:
-        print( fullStamp() + " Please troubleshoot device" )
+    # check for the STOP blending function call
+    byteCheck( rfObject, 1, 5.0 )  

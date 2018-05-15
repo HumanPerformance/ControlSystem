@@ -1,5 +1,5 @@
 """
-Stethoscope Demo :: Custom Recording
+Stethoscope Demo :: Random Filename Recording
 
 Fluvio L Lobo Fenoglietto
 12/01/2017
@@ -25,7 +25,7 @@ from    stethoscopeProtocol          import *
 print fullStamp() + " Connecting to the Stethoscope"
 deviceName = "SS"
 portNumber = 1
-deviceBTAddress = "00:06:66:8C:9C:2E"
+deviceBTAddress = "00:06:66:D0:E4:37"
 baudrate = 115200
 attempts = 5
 rfObject = createBTPort(deviceBTAddress,portNumber)
@@ -34,17 +34,20 @@ print fullStamp() + " Enquiring Stethoscope Status"
 time.sleep(1)
 statusEnquiry(rfObject)
 
-print fullStamp() + " Sending String "
-recString = "SP02HHS"
-startCustomRecording(rfObject,recString)
+print fullStamp() + " Generating String "
+randString = genRandString( 4 )
+print fullStamp() + " Generated : " + randString
 
-time.sleep(20)
+print fullStamp() + " Parsing Rand. Generated String "
+startMultiChannelRecording( rfObject, randString )
 
-print fullStamp() + " Stopping Device Recording"
-stopRecording(rfObject)
+time.sleep(10)
 
-print fullStamp() + " Checking SD Card"
-systemCheck(rfObject)
+print fullStamp() + " Stop Recording"
+stopRecording( rfObject )
+
+print fullStamp() + " Quick SD card check"
+systemCheck( rfObject )
 
 print fullStamp() + " Releasing Serial Port"
 time.sleep(1)

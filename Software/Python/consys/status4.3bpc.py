@@ -86,8 +86,8 @@ def write_status_to_file( status_filename, message ):
 # Devices
 # ----------------------------------------------
 stethoscope_name        = "Stethoscope"
-stethoscope_bt_address  = (["00:06:66:8C:D3:F6"])
-#stethoscope_bt_address  = (["00:06:66:D0:E4:94"])
+#stethoscope_bt_address  = (["00:06:66:8C:D3:F6"])
+stethoscope_bt_address  = (["00:06:66:D0:E4:94"])
 
 
 SOH             			= chr(0x01)                                         # Start of Header
