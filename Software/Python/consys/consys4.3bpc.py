@@ -86,9 +86,7 @@ def readGauge( initialCall, Q ):
     lower_pressure  = args["lower_pressure"]                                                                      # units in mmHg
     higher_pressure = args["higher_pressure"]                                                                   # ...
 
-    #pexpect.run("DISPLAY:=0")
-    #print( bpcuDir )
-    cmd = "python " + bpcuDir + "pressureDialGauge_v2.0.py --destination " + executionTimeStamp + " --mode SIM --lower_pressure " + str(lower_pressure) + " --higher_pressure " + str(higher_pressure)
+    cmd = "python {}pressureDialGauge_v2.0.py --destination {} --mode SIM --lower_pressure {} --higher_pressure {} --bumpFrequency {}".format(bpcuDir, executionTimeStamp, lower_pressure, higher_pressure, 0.75)
     pressure_meter = pexpect.spawn( cmd, timeout=None )
 
     if( initialCall ):
@@ -218,13 +216,20 @@ while( simCurrentTime < simDuration ):
     # checking pressure values ------------------------------------------------------------ #
     if( q_pressure_meter.empty() == False ):
         line = q_pressure_meter.get( block=False )
-        split_line = line.split(" ")
-        if( len( split_line ) <= 2 ):
+        split_line = line.split(",")
+        if( split_line[0] == "SIM" ):
             bpc_flag = int(split_line[1])
             if( bpc_flag == 1 ):
                 print( fullStamp() + " Within simulated pressure range " )
             elif( bpc_flag == 0 ):
                 print( fullStamp() + " Outside simulated pressure range " )
+        elif( split_line[0] == "MUTE" ):
+            print split_line
+            mute_flag = int(split_line[1])
+            if( mute_flag == 0 ):
+                statusEnquiry( stethoscope_bt_object ) # replace with new function
+            elif( mute_flag == 1 ):
+                statusEnquiry( stethoscope_bt_object ) 
 
     # interaction ------------------------------------------------------------------------- #
     if( scenario == 0 ):
