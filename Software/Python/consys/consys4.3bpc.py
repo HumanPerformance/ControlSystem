@@ -341,12 +341,11 @@ if( t_pressure_meter.isAlive() ):
     t_pressure_meter.join(2.0)
 
 # zipping output
-print( fullStamp() + " Compressing data " )
-os.system("cd " + consDir + "; sudo zip -r " + consDir + "output.zip output")
+##print( fullStamp() + " Compressing data " )
+##os.system("cd " + consDir + "; sudo zip -r " + consDir + "output.zip output")
 
 # ----------------------------------------------------------------------------------------- #
 # END
 # ----------------------------------------------------------------------------------------- #
 print( fullStamp() + " Program completed " )
-
-
+print( fullStamp() + " " + "AOK" )
