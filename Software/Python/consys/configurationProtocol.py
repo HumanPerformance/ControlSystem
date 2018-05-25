@@ -54,9 +54,9 @@ def addPaths(paths):
     return response
 
 # ================================================================================= #
-# Panel Self Identification
+# Get MAC address
 #
-# Function for the self identification of the panel based on its MAC address
+# Function to retrieve MAC address
 #
 # Fluvio L Lobo Fenoglietto 05/25/2018
 # ================================================================================= #
