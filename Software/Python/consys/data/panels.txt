@@ -1,0 +1,3 @@
+# augmented device panel information
+# panel number, ethernet MAC address
+1, 
