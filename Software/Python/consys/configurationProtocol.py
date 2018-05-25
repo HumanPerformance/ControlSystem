@@ -26,14 +26,19 @@ def definePaths(device):
     baseDir = expanduser("~")                                                       # get main/root or base directory for the operating system in use
     rootDir = "/root"                                                                           # root directory for Linux - Raspbian
     if baseDir == rootDir:
-        homeDir = "/home/pi"
-        pythonDir = homeDir + "/pd3d/csec/repos/ControlSystem/Software/Python"
-        deviceDir = pythonDir + "/" + device + "/"
+        homeDir     = "/home/pi"
+        pythonDir   = homeDir + "/pd3d/csec/repos/ControlSystem/Software/Python"
+        deviceDir   = pythonDir + "/" + device + "/"
+        outputDir   = pythonDir + "/consys/output"
+        dataDir     = pythonDir + "/consys/data"
     else:
         homeDir = "/home/pi"
         pythonDir = homeDir + "/pd3d/csec/repos/ControlSystem/Software/Python"
         deviceDir = pythonDir + "/" + device + "/"
-    return homeDir, pythonDir, deviceDir
+        outputDir   = pythonDir + "/consys/output"
+        dataDir     = pythonDir + "/consys/data"
+
+    return homeDir, pythonDir, deviceDir, outputDir, dataDir
 
 # ================================================================================= #
 # Insert Paths
@@ -69,3 +74,14 @@ def getMAC(interface):
         return address
     except:
         print( fullStamp() + " Failed to find address, check input interface" )
+
+# ================================================================================= #
+# Self Identification
+#
+# Function to self-identify the panel using a MAC address
+#
+# Fluvio L Lobo Fenoglietto 05/28/2018
+# ================================================================================= #
+def selfID(id_file_path, device_address):
+    print( fullStamp() + " selfID()" )
+    
