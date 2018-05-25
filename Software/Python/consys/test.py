@@ -22,4 +22,4 @@ print( fullStamp() )
 device_address = getMAC("eth0")
 
 id_file_path = dataDir + "/panels.txt"
-panel_id_list, panel_address_list, panel_id, panel_address = selfID(id_file_path, device_address)
+panel_id_list, panel_address_list, panel_id, panel_address = panelSelfID(id_file_path, device_address)

@@ -82,7 +82,7 @@ def getMAC(interface):
 #
 # Fluvio L Lobo Fenoglietto 05/28/2018
 # ================================================================================= #
-def selfID(id_file_path, device_address):
+def panelSelfID(id_file_path, device_address):
     print( fullStamp() + " selfID()" )                                              # signals execution of the function
 
     dataFile = open( id_file_path, 'r' )                                            # opens data file with panel information
@@ -100,8 +100,9 @@ def selfID(id_file_path, device_address):
             panel_id_list.append( split_line[0] )                                   # append the first element as the number id
             panel_address_list.append( split_line[1] )                              # append the second element as the MAC address
             if split_line[1] == device_address:                                     # compare each address to the input panel/device MAC address
-                panel_id        = line_num                                          # if so ... store id number
+                panel_id        = panel_id_list[line_num]                           # if so ... store id number
                 panel_address   = panel_address_list[line_num]                      # if so ... associate address too ...
+                print( fullStamp() + " Self identified as PANEL" + str(panel_id) )
 
             line_num = line_num + 1
 
