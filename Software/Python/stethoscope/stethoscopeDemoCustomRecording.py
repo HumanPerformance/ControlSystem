@@ -22,8 +22,6 @@ from    bluetoothProtocol_teensy32   import *
 from    stethoscopeProtocol          import *
 
 # Operation
-
-
 print fullStamp() + " Connecting to the Stethoscope"
 deviceName = "SS"
 portNumber = 1

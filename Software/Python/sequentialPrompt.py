@@ -9,11 +9,11 @@ Date: Dec. 20th 2016
 # t is time in seconds
 # direction is up/down for stopwatch/countdown
 '''
-from Tkinter import *
-from timeStamp import *
-import time
-import threading
-import StopWatchModule
+from    threading           import Timer
+from    Tkinter             import *
+from    timeStamp           import *
+import  time
+import  StopWatchModule
 
 def phaseOne(t1):
     #print fullStamp() + " Phase 1 Passed"
@@ -74,26 +74,26 @@ def timerApp(t0,t1,t2,direction):
         mode = 'stopWatch'
         sw.Start()
 
-        x = threading.Timer(t0, phaseOne, args=(0,))
+        x = Timer(t0, phaseOne, args=(0,))
         x.start()
 
-        y = threading.Timer(t0+t1, phaseTwo, args=(0,))
+        y = Timer(t0+t1, phaseTwo, args=(0,))
         y.start()   
 
-        z = threading.Timer(t0+t1+t2, phaseThree)
+        z = Timer(t0+t1+t2, phaseThree)
         z.start()
     
     elif direction is 'down':
         mode = 'countDown'
         sw.countDown(t0)
         
-        x = threading.Timer(t0, phaseOne, args=(t1,))
+        x = Timer(t0, phaseOne, args=(t1,))
         x.start()
         
-        y = threading.Timer(t0+t1, phaseTwo, args=(t2,))
+        y = Timer(t0+t1, phaseTwo, args=(t2,))
         y.start()   
 
-        z = threading.Timer(t0+t1+t2, phaseThree)
+        z = Timer(t0+t1+t2, phaseThree)
         z.start()
 
     root.mainloop()

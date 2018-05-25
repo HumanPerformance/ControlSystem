@@ -27,7 +27,7 @@ from    stethoscopeProtocol          import *
 print fullStamp() + " Connecting to the Stethoscope"
 deviceName = "SS"
 portNumber = 1  # cannot use port 0 for sockets
-deviceBTAddress = "00:06:66:8C:9C:2E"
+deviceBTAddress = "00:06:66:D0:E4:94"
 baudrate = 115200
 attempts = 5
 #rfObject = createPort(deviceName,portNumber,deviceBTAddress,baudrate,attempts)
@@ -43,13 +43,15 @@ time.sleep(1)
 
 print fullStamp() + " Triggering EARLY SYSTOLIC HEART MURMUR OVERLAY"
 time.sleep(1)
-#fileByte = definitions.ESMSYN
-fileByte = definitions.KOROT
+#fileByte = definitions.EDMSYN
+#fileByte = definitions.KOROT
+#fileByte = definitions.S4GALL
+fileByte = definitions.AORSTE
 startBlending(rfObject,fileByte)
 
-tracking_stop_time = 40
+tracking_stop_time = 20
 print fullStamp() + " Playback for %.03f seconds" %tracking_stop_time
-time.sleep(40)
+time.sleep(20)
 
 print fullStamp() + " Stopping EARLY SYSTOLIC HEART MURMUR OVERLAY"
 time.sleep(1)
