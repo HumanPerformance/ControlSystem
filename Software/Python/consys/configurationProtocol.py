@@ -83,7 +83,7 @@ def getMAC(interface):
 # Fluvio L Lobo Fenoglietto 05/28/2018
 # ================================================================================= #
 def panelSelfID(id_file_path, device_address):
-    print( fullStamp() + " selfID()" )                                              # signals execution of the function
+    print( fullStamp() + " panelSelfID()" )                                         # signals execution of the function
 
     dataFile = open( id_file_path, 'r' )                                            # opens data file with panel information
     line_num             = 0
@@ -108,3 +108,42 @@ def panelSelfID(id_file_path, device_address):
 
     return panel_id_list, panel_address_list, panel_id, panel_address
     
+# ================================================================================= #
+# Device Identification
+#
+# Function to identify devices associated with the operating panel
+#
+# Fluvio L Lobo Fenoglietto 05/28/2018
+# ================================================================================= #
+def panelDeviceID(id_file_path, panel_id):
+    print( fullStamp() + " panelDeviceID()" )
+
+    dataFile = open( id_file_path, 'r' )
+    
+    line_num                = 0
+    device_id_list          = []
+    device_name_list        = []
+    device_bt_address_list  = []
+    
+    for line in dataFile:                                                           # for each line in the file ...
+        if len(line) <= 1:                                                          # if nothing in line ... pass
+            pass
+        elif line[0] == "#":                                                        # if line starts with number sign (= comment) ... pass
+            pass
+        else:
+            trim_line = line[:-1]                                                   # trim line by ignoring "end of line" character
+            split_line = trim_line.split(",")                                       # split line with comma delimiter (default)
+            device_id_list.append( split_line[0] )
+            device_name_list.append( split_line[1] )
+            device_bt_address_list.append( split_line[2] )
+
+            line_num = line_num + 1
+
+    return device_id_list, device_name_list, device_bt_address_list
+            
+
+
+
+
+
+

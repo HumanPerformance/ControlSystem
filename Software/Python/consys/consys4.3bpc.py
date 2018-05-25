@@ -29,11 +29,11 @@ shol    = "smartholder"
 stet    = "stethoscope"
 bpcu    = "bloodpressurecuff"
 
-homeDir, pythonDir, consDir = definePaths(cons)
-homeDir, pythonDir, shanDir = definePaths(shan)
-homeDir, pythonDir, sholDir = definePaths(shol)
-homeDir, pythonDir, stetDir = definePaths(stet)
-homeDir, pythonDir, bpcuDir = definePaths(bpcu)
+homeDir, pythonDir, consDir, outputDir, dataDir = definePaths(cons)
+homeDir, pythonDir, shanDir, outputDir, dataDir = definePaths(shan)
+homeDir, pythonDir, sholDir, outputDir, dataDir = definePaths(shol)
+homeDir, pythonDir, stetDir, outputDir, dataDir = definePaths(stet)
+homeDir, pythonDir, bpcuDir, outputDir, dataDir = definePaths(bpcu)
 
 response = addPaths(pythonDir)
 response = addPaths(consDir)
@@ -126,9 +126,16 @@ def readGauge( initialCall, Q ):
 # ----------------------------------------------
 # Devices
 # ----------------------------------------------
-stethoscope_name = "Stethoscope"
-stethoscope_bt_address = (["00:06:66:D0:E4:94"])
-#stethoscope_bt_address = (["00:06:66:8C:D3:F6"])
+device_address = getMAC("eth0")
+
+panel_id_file_path = dataDir + "/panels.txt"
+panel_id_list, panel_address_list, panel_id, panel_address = panelSelfID(panel_id_file_path, device_address)
+
+devices_id_file_path = dataDir + "/panel" + str( panel_id ) + "devices.txt"
+device_id_list, device_name_list, device_bt_address_list = panelDeviceID(devices_id_file_path, panel_id)
+
+stethoscope_name = device_name_list[0]
+stethoscope_bt_address = ([device_bt_address_list[0]])
 
 
 SOH             			= chr(0x01)                                         			# Start of Header

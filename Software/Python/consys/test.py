@@ -21,5 +21,8 @@ from    timeStamp                   import fullStamp
 print( fullStamp() )
 device_address = getMAC("eth0")
 
-id_file_path = dataDir + "/panels.txt"
-panel_id_list, panel_address_list, panel_id, panel_address = panelSelfID(id_file_path, device_address)
+panel_id_file_path = dataDir + "/panels.txt"
+panel_id_list, panel_address_list, panel_id, panel_address = panelSelfID(panel_id_file_path, device_address)
+
+devices_id_file_path = dataDir + "/panel" + str( panel_id ) + "devices.txt"
+device_id_list, device_name_list, device_bt_address_list = panelDeviceID(devices_id_file_path, panel_id)
