@@ -253,10 +253,11 @@ for i in range(0, len( N_lines )):
 
 
 # zipping output
-print( fullStamp() + " Compressing data " )
-os.system("cd " + consDir + "; sudo zip -r " + consDir + "output.zip output")
+##print( fullStamp() + " Compressing data " )
+##os.system("cd " + consDir + "; sudo zip -r " + consDir + "output.zip output")
 
 # ----------------------------------------------------------------------------------------- #
 # END
 # ----------------------------------------------------------------------------------------- #
 print( fullStamp() + " Program completed " )
+print( fullStamp() + " " + "AOK" )

@@ -361,5 +361,4 @@ if( t_pressure_meter.isAlive() ):
 # END
 # ----------------------------------------------------------------------------------------- #
 print( fullStamp() + " Program completed " )
-print( fullStamp() + " " + "AOK" )   
-
+print( fullStamp() + " " + "AOK" )
