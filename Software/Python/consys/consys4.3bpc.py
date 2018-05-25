@@ -23,24 +23,9 @@ from    Queue                       import Queue
 
 # PD3D modules
 from    configurationProtocol                   import *
-cons    = "consys"
-shan    = "smarthandle"
-shol    = "smartholder"
-stet    = "stethoscope"
-bpcu    = "bloodpressurecuff"
 
-homeDir, pythonDir, consDir, outputDir, dataDir = definePaths(cons)
-homeDir, pythonDir, shanDir, outputDir, dataDir = definePaths(shan)
-homeDir, pythonDir, sholDir, outputDir, dataDir = definePaths(shol)
-homeDir, pythonDir, stetDir, outputDir, dataDir = definePaths(stet)
-homeDir, pythonDir, bpcuDir, outputDir, dataDir = definePaths(bpcu)
-
-response = addPaths(pythonDir)
-response = addPaths(consDir)
-response = addPaths(shanDir)
-response = addPaths(sholDir)
-response = addPaths(stetDir)
-response = addPaths(bpcuDir)
+paths, pythonDir, consDir, stetDir, shanDir, sholDir, bpcuDir, outputDir, dataDir = definePaths()
+response = addPaths(paths)
 
 from    timeStamp                   import fullStamp
 from    bluetoothProtocol_teensy32  import *
@@ -328,15 +313,14 @@ if( smartholder_usb_object.is_open ):
 # ========================================================================================= #
 print( fullStamp() + " Writting data to file " )
 
-outDir = consDir + "output/"
-if( path.exists( outDir ) == False ):
+if( path.exists( outputDir ) == False ):
     print( fullStamp() + " Output directory not present " )
     print( fullStamp() + " Generating output directory " )
-    makedirs( outDir )
+    makedirs( outputDir )
 else:
     print( fullStamp() + " Found output directory " )
 
-stampedDir = outDir + executionTimeStamp + "/"
+stampedDir = outputDir + executionTimeStamp + "/"
 if( path.exists( stampedDir ) == False ):
     print( fullStamp() + " Time-stamped directory not present " )
     print( fullStamp() + " Generating time-stamped directory " )

@@ -15,14 +15,13 @@ import  sys
 from    timeStamp   import fullStamp
 
 # ================================================================================= #
-# Define Paths
+# Define Path
 #
-# Define and insert paths to directories with required documentation for the
-# device scripts
+# Define single device path
 #
 # Fluvio L Lobo Fenoglietto 11/15/2017
 # ================================================================================= #
-def definePaths(device):
+def definePath(device):
     baseDir = expanduser("~")                                                       # get main/root or base directory for the operating system in use
     rootDir = "/root"                                                                           # root directory for Linux - Raspbian
     if baseDir == rootDir:
@@ -41,11 +40,60 @@ def definePaths(device):
     return homeDir, pythonDir, deviceDir, outputDir, dataDir
 
 # ================================================================================= #
-# Insert Paths
+# Define Paths
 #
-# Insert defined directory paths into the python directory
+# Define all paths of importance
+#
+# Fluvio L Lobo Fenoglietto 05/25/2018
+# ================================================================================= #
+def definePaths():
+    print( fullStamp() + " definePaths()" )
+    paths       = []
+    paths.append( "/home/pi" )
+    paths.append( paths[0] + "/pd3d/csec/repos/ControlSystem/Software/Python" )
+    paths.append( paths[1] + "/consys/" )
+    paths.append( paths[1] + "/stethoscope/" )
+    paths.append( paths[1] + "/smarthandle/" )
+    paths.append( paths[1] + "/smartholder/" )
+    paths.append( paths[1] + "/bloodpressurecuff/" )
+    paths.append( paths[1] + "/consys/output" )
+    paths.append( paths[1] + "/consys/data" )
+
+    pythonDir   = paths[1]
+    consDir     = paths[2]
+    stetDir     = paths[3]
+    shanDir     = paths[4]
+    sholDir     = paths[5]
+    bpcuDir     = paths[6]
+    outputDir   = paths[7]
+    dataDir     = paths[8]
+
+    return paths, pythonDir, consDir, stetDir, shanDir, sholDir, bpcuDir, outputDir, dataDir
+
+# ================================================================================= #
+# Insert Path
+#
+# Insert defined directory path into the python directory
 #
 # Fluvio L Lobo Fenoglietto 11/15/2017
+# ================================================================================= #
+def addPath(path):
+    if isinstance(path, list):
+        Npaths = len(path)
+        for i in range(0, Npath):
+            sys.path.insert(0, path[i])
+        response = True
+    else:
+        sys.path.insert(0, path)
+        response = False
+    return response
+
+# ================================================================================= #
+# Insert Paths
+#
+# Insert all paths within input array python directory
+#
+# Fluvio L Lobo Fenoglietto 05/25/2018
 # ================================================================================= #
 def addPaths(paths):
     if isinstance(paths, list):
@@ -57,6 +105,7 @@ def addPaths(paths):
         sys.path.insert(0, paths)
         response = False
     return response
+
 
 # ================================================================================= #
 # Get MAC address
