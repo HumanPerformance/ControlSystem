@@ -321,7 +321,7 @@ class Worker( QtCore.QThread ):
         self.P_mmHg_0   = self.P_Pscl*760/101.3                                     # Convert SI pressure to mmHg (0==original)
 
         # Criteria to turn ON  filter
-        if( self.owner.mode == "SIM" and self.P_mmHg_0 >= 180 and self.at_marker == False):
+        if( self.P_mmHg_0 >= 180 and self.at_marker == False):
             self.filterON   = True                                                  # Flag filter to turn ON
             self.at_marker  = True                                                  # Flag that we hit the marker
 
@@ -329,7 +329,7 @@ class Worker( QtCore.QThread ):
                 print( "[INFO] Filter ON" )                                         # ...
 
         # Criteria to turn OFF filter and muting
-        elif( self.owner.mode == "SIM" and self.P_mmHg <= 40 and self.at_marker and self.filterON ):
+        elif( self.P_mmHg <= 40 and self.at_marker and self.filterON ):
             self.filterON   = False                                                 # Flag filter to turn OFF
             self.at_marker  = False                                                 # Reset marker flag                                                   
             self.initialRun = True                                                  # Store initial values at first run
@@ -343,7 +343,7 @@ class Worker( QtCore.QThread ):
                 print( "MUTE, {}".format(int(self.mute)) )
                 
         # Criteria to mute stethoscope sounds
-        elif( self.owner.mode == "SIM" and self.P_mmHg_0 >= 40 and self.at_marker == False and self.mute == False ):
+        elif( self.P_mmHg_0 >= 40 and self.at_marker == False and self.mute == False ):
             self.mute = True                                                        # Stethoscope is muting
 
             if( args["debug"] ):                                                    # [INFO] Status
@@ -357,8 +357,7 @@ class Worker( QtCore.QThread ):
             self.P_mmHg  = self.EMA(self.P_mmHg_0, ALPHA=0.03)                      # Apply EMA filter
 
             if( self.owner.mode == "SIM" ): self.sim_mode( self.P_mmHg )            # Trigger simulations mode (if --mode SIM)
-            else:
-                pass                                                                # do nothing 
+##            else: self.rec_mode()                                                   # Trigger recording   mode (if --mide REC)
 
             return( self.P_mmHg )                                                   # Return simulated data in mmHg
 

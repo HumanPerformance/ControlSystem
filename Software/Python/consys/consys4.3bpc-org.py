@@ -60,12 +60,10 @@ executionTimeStamp  = fullStamp()
 
 ap = argparse.ArgumentParser()
 
-ap.add_argument( "-s", "--scenario", type=int, default=0,                                   # sampling frequency for pressure measurement
+ap.add_argument( "-s", "--scenario", type=int, default=0,                               # sampling frequency for pressure measurement
                 help="Select scenario.\nDefault=1" )
-ap.add_argument( "-st", "--simulation_time", type=int, default=45,                          # debug mode --mo
+ap.add_argument( "-st", "--simulation_time", type=int, default=45,                                      # debug mode --mo
                 help="Simulation time" )
-ap.add_argument( "-m", "--mode", type=str, default="SIM",                                  # set lower pressure limit as an input (for SIM only)
-                help="Operation Mode (NORMal and SIMulation)" )
 ap.add_argument( "-lp", "--lower_pressure", type=int, default=85,                           # set lower pressure limit as an input (for SIM only)
                 help="Lower Pressure Limit (only for SIM)" )
 ap.add_argument( "-hp", "--higher_pressure", type=int, default=145,                         # set higher pressure limit as an input (for SIM only)
@@ -74,12 +72,11 @@ args = vars( ap.parse_args() )
 
 print( fullStamp() + " Scenario = " + str( args["scenario"] ) )
 print( fullStamp() + " Simulation Time = " + str( args["simulation_time"] ) )
-print( fullStamp() + " Operation Mode = " + args["mode"] )
 print( fullStamp() + " Lower pressure set to = " + str( args["lower_pressure"] ) )
 print( fullStamp() + " Higher pressure set to = " + str( args["higher_pressure"] ) )
 
 # Variables
-scenario            = args["scenario"]                                                      # scenario type
+scenario            = args["scenario"]                                                                     # scenario type
 """
 scenario            = 0         # Normal                --no simulation
 scenario            = 1         # stethoscope aug.      --aug. of the stethoscope
@@ -88,14 +85,14 @@ scenario            = 3         # All                   --aug. of all devices
 """
 simStartTime        = time.time()
 simCurrentTime      = 0                                                                     # seconds
-simDuration         = args["simulation_time"]                                               # seconds
+simDuration         = args["simulation_time"]                                                                    # seconds
 simStopTime         = simDuration                                                           # seconds
 
 smartholder_data    = [] 								    # empty array for smart holder data
 holder_flag         = 1                                          			    # single sensor flag
 prev_holder_flag    = 1
 bpc_flag            = 0                                                                     # blood pressure sim region flag
-prev_bpc_flag       = 0                                                                     # blood pressure sim region flag
+prev_bpc_flag       = 0                                                                   # blood pressure sim region flag
 
 
 # ========================================================================================= #
@@ -105,11 +102,11 @@ prev_bpc_flag       = 0                                                         
 def readGauge( initialCall, Q ):
     # start blood pressure cuff and digital dial ---------------------------------------------- #
     print( fullStamp() + " Connecting to blood pressure cuff " )
-    mode            = args["mode"]
+    mode            = "SIM"
     lower_pressure  = args["lower_pressure"]                                                                      # units in mmHg
     higher_pressure = args["higher_pressure"]                                                                   # ...
 
-    cmd = "python {}pressureDialGauge_v2.0.py --destination {} --mode {} --lower_pressure {} --higher_pressure {} --bumpFrequency {}".format(bpcuDir, executionTimeStamp, mode, lower_pressure, higher_pressure, 0.75)
+    cmd = "python {}pressureDialGauge_v2.0.py --destination {} --mode SIM --lower_pressure {} --higher_pressure {} --bumpFrequency {}".format(bpcuDir, executionTimeStamp, lower_pressure, higher_pressure, 0.75)
     pressure_meter = pexpect.spawn( cmd, timeout=None )
 
     if( initialCall ):
@@ -161,10 +158,6 @@ if( scenario == 0 ):
     print( fullStamp() + " Generated : " + randString )
     print( fullStamp() + " Setting Stethoscope Recording Mode " )
     recMode = 0
-    print( fullStamp() + " Setting recording mode and filename" )
-    setRecordingMode( stethoscope_bt_object, recMode )
-    parseString( stethoscope_bt_object, randString )
-    startRecording( stethoscope_bt_object )
 
 # connecting to smart holders ------------------------------------------------------------- #
 print( fullStamp() + " Connecting to smart holders " )
@@ -232,7 +225,7 @@ while( simCurrentTime < simDuration ):
                                   '\n'])
 
     # checking pressure values ------------------------------------------------------------ #
-    if( scenario == 3 ):
+    if( scenario == 2 ):
         if( q_pressure_meter.empty() == False ):
             line = q_pressure_meter.get( block=False )
             split_line = line.split(",")
@@ -251,12 +244,18 @@ while( simCurrentTime < simDuration ):
                     statusEnquiry( stethoscope_bt_object ) 
 
     # interaction ------------------------------------------------------------------------- #
-
-    # scenario 0 = recording.
     if( scenario == 0 ):
-        pass
+        if( holder_flag == 0 and holder_flag != prev_holder_flag ):
+            print( fullStamp() + " Setting recording mode and filename" )
+            setRecordingMode( stethoscope_bt_object, recMode )
+            parseString( stethoscope_bt_object, randString )
+            startRecording( stethoscope_bt_object )
+            prev_holder_flag = holder_flag
+            
+        elif( holder_flag == 1 and holder_flag != prev_holder_flag ):
+            stopRecording( stethoscope_bt_object )
+            prev_holder_flag = holder_flag
 
-    # scenario 1 = S4 Gallop
     elif( scenario == 1 ):
         if( holder_flag == 0 and holder_flag != prev_holder_flag):
             fileByte = definitions.S4GALL
@@ -266,20 +265,8 @@ while( simCurrentTime < simDuration ):
         elif( holder_flag == 1 and holder_flag != prev_holder_flag ):
             stopBlending( stethoscope_bt_object )
             prev_holder_flag = holder_flag
-
-    # scenario 2 = Aortic Stenosis
-    elif( scenario == 2 ):
-        if( holder_flag == 0 and holder_flag != prev_holder_flag):
-            fileByte = definitions.AORSTE
-            startBlending( stethoscope_bt_object, fileByte)
-            prev_holder_flag = holder_flag
             
-        elif( holder_flag == 1 and holder_flag != prev_holder_flag ):
-            stopBlending( stethoscope_bt_object )
-            prev_holder_flag = holder_flag
-
-    # scenario 3 = KOROT
-    elif( scenario == 3 ):
+    elif( scenario == 2 ):
         if( holder_flag == 0 ):
             if( bpc_flag == 1 and bpc_flag != prev_bpc_flag ):
                 fileByte = definitions.KOROT
@@ -361,5 +348,5 @@ if( t_pressure_meter.isAlive() ):
 # END
 # ----------------------------------------------------------------------------------------- #
 print( fullStamp() + " Program completed " )
-print( fullStamp() + " " + "AOK" )   
+print( fullStamp() + " " + "AOK" )
 
