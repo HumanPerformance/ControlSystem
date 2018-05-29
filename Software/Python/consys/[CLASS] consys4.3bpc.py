@@ -71,12 +71,13 @@ ap.add_argument( "-hp", "--higher_pressure", type=int, default=145,         # Hi
                 help="Higher Pressure Limit (only for SIM)" )
 args = vars( ap.parse_args() )
 
-print( "========== GENERAL INFO ==========" )
+print( "\n================== GENERAL INFO ==================" )
 print( "{} Scenario                 = {:3}".format(fS(), args["scenario"] )       )
 print( "{} Simulation Time          = {:3}".format(fS(), args["simulation_time"]) )
 print( "{} Operation Mode           = {:3}".format(fS(), args["mode"])            )
 print( "{} Lower  pressure set to   = {:3}".format(fS(), args["lower_pressure"])  )
-print( "{} Higher pressure set to   = {:3}\n".format(fS(), args["higher_pressure"]) )
+print( "{} Higher pressure set to   = {:3}".format(fS(), args["higher_pressure"]) )
+print( "==================================================\n" )
 
 # ========================================================================================= #
 # Define Class
@@ -85,12 +86,17 @@ print( "{} Higher pressure set to   = {:3}\n".format(fS(), args["higher_pressure
 class data_acquisition( object ):
 
     # Here you define whatever parameters you want to pass into your class
-    def __init__( self, args, stet_name, stethoscope_BT, smartholder_USB, paramN=None ):
+    def __init__( self, args, stet_name, stethoscope_BT, smartholder_USB, timeStamp, paramN=None ):
 
+        # Stethoscope/holder stuff
         self.stet_name          = stet_name                                                 # Store stethoscope ID
         self.stethoscope        = stethoscope_BT                                            # Store stethoscope BT  object
         self.smartholder        = smartholder_USB                                           # Store smartholder USB object
-        
+
+        # Unify execution timestamp to make sure both .txt outputs are stored in one place
+        self.executionTimeStamp = timeStamp
+
+        # Anything else
         self.something_else     = paramN                                                    # Store whatever it is you want
 
         # Run the setup function
@@ -127,7 +133,7 @@ class data_acquisition( object ):
         self.mode               = args["mode"]                                              # ...
         self.pressureLO         = args["lower_pressure"]                                    # Units in mmHg
         self.pressureHI         = args["higher_pressure"]                                   # Same ^
-        
+
         # Now define the global variables that ALL your functions need to access
         self.holder_flag_new    = 0                                                         # Whether device is in/out of holder
         self.holder_flag_old    = 0                                                         # Previous state of ^
@@ -141,11 +147,10 @@ class data_acquisition( object ):
         # start blood pressure cuff and digital dial -------------------------------------- #
         print( "{} Connecting to blood pressure cuff ".format(fS()) )                                                                   # ...
 
-        executionTimeStamp  = fS()
         prog = "python {}pressureDialGauge_v2.0.py".format(bpcuDir)
         args = (
                 " --destination {} -m {} "
-                "-lp {} -hp {} -b {}" ).format( executionTimeStamp, self.mode,
+                "-lp {} -hp {} -b {}" ).format( self.executionTimeStamp, self.mode,
                                                 self.pressureLO, self.pressureHI, 0.75 )
         cmd  = prog + args
         self.pressure_meter = pexpect.spawn( cmd, timeout=None )
@@ -171,8 +176,6 @@ class data_acquisition( object ):
         if( self.t_ABPC.isAlive() ):
             print( "{} Shutting down ABPC thread".format(fS()) )
             self.t_ABPC.join(2.0)
-
-        return( self.smartholder_data )
     
 # ----------------------------------------------------------------------------------------- #
 
@@ -342,9 +345,12 @@ time.sleep(0.50)                                                                
 # Data Gathering
 # ========================================================================================= #
 
-smartholder_data = data_acquisition( args, stethoscope_name,
-                                     stethoscope_bt_object ,
-                                     smartholder_usb_object )
+output = data_acquisition( args, stethoscope_name,
+                           stethoscope_bt_object ,
+                           smartholder_usb_object,
+                           executionTimeStamp     )
+
+smartholder_data = output.smartholder_data
 
 # ----------------------------------------------------------------------------------------- #
 # Device Deactivation
@@ -380,7 +386,7 @@ if( path.exists( outputDir ) == False ):
 else:
     print( "{} Found output directory ".format(fS()) )
 
-stampedDir = outputDir + executionTimeStamp + "/"
+stampedDir = outputDir + "/" + executionTimeStamp + "/"
 if( path.exists( stampedDir ) == False ):
     print( "{} Time-stamped directory not present ".format(fS()) )
     print( "{} Generating time-stamped directory ".format(fS()) )
