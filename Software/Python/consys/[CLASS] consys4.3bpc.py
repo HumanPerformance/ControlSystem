@@ -1,10 +1,24 @@
-"""
-consys4.py
-
-Latest version of the control system execution software
-            
-Fluvio L. Lobo Fenoglietto 04/18/2018
-"""
+'''
+* consys5.py
+*
+* Latest version of the control system execution software
+*
+* VERSION: 5.0
+*   - ADDED   : Awesomeness!!
+*   - MODIFIED: Rewrote certain parts of the code into a class
+*   - FIXED   : Fluvio's horrible, horrible coding skills.
+*               Oh God, what did we do to deserve this?
+*
+* KNOWN ISSUES:
+*   - Nothing visible atm
+*
+* AUTHOR                    :   Fluvio L. Lobo Fenoglietto
+* WRITTEN                   :   04/18/2018
+*
+* MODIFIED BY               :   The Great Mohammad Odeh
+* DATE                      :   May. 29th, 2018 Year of Our Lord
+*
+'''
 
 # ========================================================================================= #
 # Import Libraries and/or Modules
@@ -22,7 +36,7 @@ from    threading                   import Thread
 from    Queue                       import Queue
 
 # PD3D modules
-from    configurationProtocol                   import *
+from    configurationProtocol       import *
 
 paths, pythonDir, consDir, stetDir, shanDir, sholDir, bpcuDir, outputDir, dataDir = definePaths()
 response = addPaths(paths)
@@ -126,7 +140,8 @@ class data_acquisition( object ):
     def ABPC( self ):
         # start blood pressure cuff and digital dial -------------------------------------- #
         print( "{} Connecting to blood pressure cuff ".format(fS()) )                                                                   # ...
-        
+
+        executionTimeStamp  = fS()
         prog = "python {}pressureDialGauge_v2.0.py".format(bpcuDir)
         args = (
                 " --destination {} -m {} "
@@ -153,7 +168,7 @@ class data_acquisition( object ):
 
         print( "{} Closing blood pressure cuff connection ".format(fS()) )
         self.pressure_meter.close()                                                         # Close the pexpect pipe
-        if( t_ABPC.isAlive() ):
+        if( self.t_ABPC.isAlive() ):
             print( "{} Shutting down ABPC thread".format(fS()) )
             self.t_ABPC.join(2.0)
 
