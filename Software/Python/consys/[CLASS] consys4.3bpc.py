@@ -153,7 +153,7 @@ class data_acquisition( object ):
 
         print( "{} Closing blood pressure cuff connection ".format(fS()) )
         self.pressure_meter.close()                                                         # Close the pexpect pipe
-        if( t_pressure_meter.isAlive() ):
+        if( t_ABPC.isAlive() ):
             print( "{} Shutting down ABPC thread".format(fS()) )
             self.t_ABPC.join(2.0)
 
