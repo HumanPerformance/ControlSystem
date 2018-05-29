@@ -57,11 +57,12 @@ ap.add_argument( "-hp", "--higher_pressure", type=int, default=145,         # Hi
                 help="Higher Pressure Limit (only for SIM)" )
 args = vars( ap.parse_args() )
 
-print( "{} Scenario                 = {}".format(fS(), args["scenario"] )       )
-print( "{} Simulation Time          = {}".format(fS(), args["simulation_time"]) )
-print( "{} Operation Mode           = {}".format(fS(), args["mode"])            )
-print( "{} Lower  pressure set to   = {}".format(fS(), args["lower_pressure"])  )
-print( "{} Higher pressure set to   = {}".format(fS(), args["higher_pressure"]) )
+print( "========== GENERAL INFO ==========" )
+print( "{} Scenario                 = {:3}".format(fS(), args["scenario"] )       )
+print( "{} Simulation Time          = {:3}".format(fS(), args["simulation_time"]) )
+print( "{} Operation Mode           = {:3}".format(fS(), args["mode"])            )
+print( "{} Lower  pressure set to   = {:3}".format(fS(), args["lower_pressure"])  )
+print( "{} Higher pressure set to   = {:3}\n".format(fS(), args["higher_pressure"]) )
 
 # ========================================================================================= #
 # Define Class
@@ -70,7 +71,8 @@ print( "{} Higher pressure set to   = {}".format(fS(), args["higher_pressure"]) 
 class data_acquisition( object ):
 
     # Here you define whatever parameters you want to pass into your class
-    def __init__( self, stet_name, stethoscope_BT, smartholder_USB, paramN=None ):
+    def __init__( self, args, stet_name, stethoscope_BT, smartholder_USB, paramN=None ):
+
         self.stet_name          = stet_name                                                 # Store stethoscope ID
         self.stethoscope        = stethoscope_BT                                            # Store stethoscope BT  object
         self.smartholder        = smartholder_USB                                           # Store smartholder USB object
@@ -78,7 +80,7 @@ class data_acquisition( object ):
         self.something_else     = paramN                                                    # Store whatever it is you want
 
         # Run the setup function
-        self.setup()                                                                        # Declare various variables
+        self.setup( args )                                                                  # Declare various variables
 
         # Start the ABPC thread
         self.t_ABPC = Thread( target=self.ABPC, args=() )                                   # Start ABPC pexpect thread
@@ -91,7 +93,7 @@ class data_acquisition( object ):
 # ----------------------------------------------------------------------------------------- #
 
     # Here is where you start defining your functions
-    def setup( self ):
+    def setup( self, args ):
         '''
         Setup program by gathering all the required
         arguments/timers/addresses/etc... and declaring
@@ -107,7 +109,10 @@ class data_acquisition( object ):
         """
         self.scenario           = args["scenario"]                                          # Store scenario
         self.simDuration        = args["simulation_time"]                                   # Durtation of simluation in seconds
-
+        self.mode               = args["mode"]                                              # ...
+        self.pressureLO         = args["lower_pressure"]                                    # Units in mmHg
+        self.pressureHI         = args["higher_pressure"]                                   # Same ^
+        
         # Now define the global variables that ALL your functions need to access
         self.holder_flag_new    = 0                                                         # Whether device is in/out of holder
         self.holder_flag_old    = 0                                                         # Previous state of ^
@@ -119,16 +124,13 @@ class data_acquisition( object ):
 
     def ABPC( self ):
         # start blood pressure cuff and digital dial -------------------------------------- #
-        print( "{} Connecting to blood pressure cuff ".format(fS()) )
-        mode            = args["mode"]
-        lower_pressure  = args["lower_pressure"]                                                                      # units in mmHg
-        higher_pressure = args["higher_pressure"]                                                                   # ...
+        print( "{} Connecting to blood pressure cuff ".format(fS()) )                                                                   # ...
         
         prog = "python {}pressureDialGauge_v2.0.py".format(bpcuDir)
         args = (
                 " --destination {} -m {} "
-                "-lp {} -hp {} -b {}" ).format( executionTimeStamp, mode,
-                                                lower_pressure, higher_pressure, 0.75 )
+                "-lp {} -hp {} -b {}" ).format( executionTimeStamp, self.mode,
+                                                self.pressureLO, self.pressureHI, 0.75 )
         cmd  = prog + args
         self.pressure_meter = pexpect.spawn( cmd, timeout=None )
     
@@ -324,8 +326,8 @@ time.sleep(0.50)                                                                
 # Data Gathering
 # ========================================================================================= #
 
-smartholder_data = data_acquisition( stethoscope_name,
-                                     stethoscope_bt_object,
+smartholder_data = data_acquisition( args, stethoscope_name,
+                                     stethoscope_bt_object ,
                                      smartholder_usb_object )
 
 # ----------------------------------------------------------------------------------------- #
