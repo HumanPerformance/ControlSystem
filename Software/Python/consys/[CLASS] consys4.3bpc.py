@@ -88,6 +88,7 @@ class data_acquisition( object ):
         self.t_ABPC.start()                                                                 # ...
 
         # Start data gathering
+        time.sleep( 0.25 )                                                                  # Prevent thread and data collection from interfering
         self.run()                                                                          # Run timed loop
         
 # ----------------------------------------------------------------------------------------- #
@@ -160,7 +161,7 @@ class data_acquisition( object ):
     
 # ----------------------------------------------------------------------------------------- #
 
-    def check_cholder( self ):
+    def check_holder( self ):
         # NOTE:-
         #
         # Anything that doesn't start with "self" gets destroyed and garbage
