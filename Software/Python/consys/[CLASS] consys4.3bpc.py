@@ -81,7 +81,8 @@ class data_acquisition( object ):
         self.setup()                                                                        # Declare various variables
 
         # Start the ABPC thread
-        self.t_ABPC = Thread( target=ABPC, args=(self,) )                                   # Start ABPC pexpect thread
+        self.t_ABPC = Thread( target=self.ABPC, args=() )                                   # Start ABPC pexpect thread
+        self.t_ABPC.deamon = True                                                           # Allow program to shutdown even if thread is running
         self.t_ABPC.start()                                                                 # ...
 
         # Start data gathering
