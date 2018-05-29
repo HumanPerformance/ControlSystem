@@ -350,43 +350,43 @@ smartholder_data = data_acquisition( args, stethoscope_name,
 # Device Deactivation
 # ----------------------------------------------------------------------------------------- #
 
-print( fullStamp() + " Disconnecting bluetooth devices " )
-if( scenario == 0 ):
+print( "{} Disconnecting bluetooth devices ".format(fS()) )
+if( args["scenario"] == 0 ):
     stopRecording( stethoscope_bt_object )
-elif( scenario == 1 ):
+elif( args["scenario"] == 1 ):
     stopBlending( stethoscope_bt_object )
-elif( scenario == 2 ):
+elif( args["scenario"] == 2 ):
     stopBlending( stethoscope_bt_object )
 
-print( fullStamp() + " Checking and sending stethoscope to IDLE state" )
+print( "{} Checking and sending stethoscope to IDLE state".format(fS()) )
 setToIdle( stethoscope_bt_object )
 
-print( fullStamp() + " Closing Stethoscope bluetooth port" )
+print( "{} Closing Stethoscope bluetooth port".format(fS()) )
 stethoscope_bt_object.close()
 
-print( fullStamp() + " Disconnecting usb devices " )
+print( "{} Disconnecting usb devices ".format(fS()) )
 if( smartholder_usb_object.is_open ):
     smartholder_usb_object.close()
 
 # ========================================================================================= #
 # Output
 # ========================================================================================= #
-print( fullStamp() + " Writting data to file " )
+print( "{} Writting data to file ".format(fS()) )
 
 if( path.exists( outputDir ) == False ):
-    print( fullStamp() + " Output directory not present " )
-    print( fullStamp() + " Generating output directory " )
+    print( "{} Output directory not present ".format(fS()) )
+    print( "{} Generating output directory ".format(fS()) )
     makedirs( outputDir )
 else:
-    print( fullStamp() + " Found output directory " )
+    print( "{} Found output directory ".format(fS()) )
 
 stampedDir = outputDir + executionTimeStamp + "/"
 if( path.exists( stampedDir ) == False ):
-    print( fullStamp() + " Time-stamped directory not present " )
-    print( fullStamp() + " Generating time-stamped directory " )
+    print( "{} Time-stamped directory not present ".format(fS()) )
+    print( "{} Generating time-stamped directory ".format(fS()) )
     makedirs( stampedDir )
 else:
-    print( fullStamp() + " Found time-stamped directory " )
+    print( "{} Found time-stamped directory ".format(fS()) )
 
 smartholder_output_filename = stampedDir + "holder.txt"
 
@@ -407,5 +407,5 @@ for i in range(0, N_lines):
 # ----------------------------------------------------------------------------------------- #
 # END
 # ----------------------------------------------------------------------------------------- #
-print( fullStamp() + " Program completed " )
-print( fullStamp() + " " + "AOK" )
+print( "{} Program completed ".format(fS()) )
+print( "{} AOK".format(fS()) )
