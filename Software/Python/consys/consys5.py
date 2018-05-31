@@ -61,7 +61,7 @@ ap = argparse.ArgumentParser()
 
 ap.add_argument( "-s", "--scenario", type=int, default=0,                   # Scenario
                 help="Select scenario.\nDefault=0" )
-ap.add_argument( "-st", "--simulation_time", type=int, default=45,          # Length of simulation
+ap.add_argument( "-st", "--simulation_time", type=int, default=60,          # Length of simulation
                 help="Simulation time" )
 ap.add_argument( "-m", "--mode", type=str, default="SIM",                   # Mode of operation (SIM vs NORM)
                 help="Operation Mode (NORMal and SIMulation)" )
@@ -335,10 +335,10 @@ class data_acquisition( object ):
                     self.bpc_flag_old = self.bpc_flag_new
     
         for device_ID, device_BT in self.smartHandle.iteritems():
-            if( self.SH_holder_flag_new[ device_ID ] == 0 ):
-                self.smartHandle_data[ device_ID ].append( ["%.02f" %self.simCurrentTime,
-                                                            readDataStream( device_BT,
-                                                            '\n' )] )
+##            if( self.SH_holder_flag_new[ device_ID ] == 0 ):
+            self.smartHandle_data[ device_ID ].append( ["%.02f" %self.simCurrentTime,
+                                                        readDataStream( device_BT,
+                                                                        '\n' )] )
 
 # ========================================================================================= #
 # Setup program
@@ -398,18 +398,24 @@ for i in range( 0, 2 ):
 print( "==================================================\n" )
 
 # configuring stethoscope ----------------------------------------------------------------- #
-if( args["scenario"] == 0 ):
-    print( "============== CONFIGURING  DEVICES ==============" )
-    print( "{} Generating filename for audio data ".format(fS()) )
-    randString = genRandString( 4 )
-    print( "{} Generated : {}".format(fS(), randString) )
-    print( "{} Setting Stethoscope Recording Mode ".format(fS()) )
-    recMode = 0
-    print( "{} Setting recording mode and filename".format(fS()) )
-    setRecordingMode( smartdevice["stethoscope"], recMode )
-    parseString( smartdevice["stethoscope"], randString )
-    startRecording( smartdevice["stethoscope"] )
-    print( "==================================================\n" )
+print( "============== CONFIGURING  DEVICES ==============" )
+for device_ID, device_BT_Obj in smartdevice.iteritems():
+    if( device_ID == "stethoscope" ):
+        if( args["scenario"] == 0 ):
+            print( "{} Generating filename for audio data ".format(fS()) )
+            randString = genRandString( 4 )
+            print( "{} Generated : {}".format(fS(), randString) )
+            print( "{} Setting Stethoscope Recording Mode ".format(fS()) )
+            recMode = 0
+            print( "{} Setting recording mode and filename".format(fS()) )
+            setRecordingMode( device_BT_Obj, recMode )
+            parseString( device_BT_Obj, randString )
+            startRecording( device_BT_Obj )
+            
+    else:
+        print( "{} Triggering {}".format(fS(), device_ID) )
+        startDataStream( device_BT_Obj, 20, '\n' )
+print( "==================================================\n" )
 
 # ========================================================================================= #
 # Data Gathering
@@ -438,11 +444,14 @@ elif( args["scenario"] == 1 ):
 elif( args["scenario"] == 2 ):
     stopBlending( smartdevice["stethoscope"] )
 
-print( "{} Checking and sending stethoscope to IDLE state".format(fS()) )
-setToIdle( smartdevice["stethoscope"] )
+print( "{} Placing devices in IDLE mode and closing ports".format(fS()) )
+for device_ID, device_BT_Obj in smartdevice.iteritems():
+    if( device_ID == "stethoscope" ):
+        setToIdle( device_BT_Obj )
+    else:
+        stopDataStream( device_BT_Obj, 20, '\n' )
 
-print( "{} Closing Stethoscope bluetooth port".format(fS()) )
-smartdevice["stethoscope"].close()
+    device_BT_Obj.close()
 
 print( "{} Disconnecting USB devices ".format(fS()) )
 for ID in smartholder:    
