@@ -3,11 +3,12 @@
 *
 * Latest version of the control system execution software
 *
-* VERSION: 5.0
+* VERSION: 5.1
 *   - ADDED   : Awesomeness!!
 *   - MODIFIED: Rewrote certain parts of the code into a class
 *   - FIXED   : Fluvio's horrible, horrible coding skills.
 *               Oh God, what did we do to deserve this?
+*   - ADDED   : Merge consys4.3 and consys4.3bpc
 *
 * KNOWN ISSUES:
 *   - Nothing visible atm
@@ -16,7 +17,7 @@
 * WRITTEN                   :   04/18/2018
 *
 * MODIFIED BY               :   The Great Mohammad Odeh
-* DATE                      :   May. 29th, 2018 Year of Our Lord
+* DATE                      :   May. 31st, 2018 Year of Our Lord
 *
 '''
 
@@ -33,7 +34,6 @@ import  pexpect
 from    os.path                     import expanduser
 from    os                          import getcwd, path, makedirs
 from    threading                   import Thread
-from    Queue                       import Queue
 
 # PD3D modules
 from    configurationProtocol       import *
@@ -84,17 +84,23 @@ print( "==================================================\n" )
 # ========================================================================================= #
 
 class data_acquisition( object ):
-
+    
     # Here you define whatever parameters you want to pass into your class
-    def __init__( self, args, stet_name, stethoscope_BT, smartholder_USB, timeStamp, paramN=None ):
-
+    def __init__( self, args, devices_name, devices_BT, smartholder_USB, timeStamp, paramN=None ):
+        
         # Stethoscope/holder stuff
-        self.stet_name          = stet_name                                                 # Store stethoscope ID
-        self.stethoscope        = stethoscope_BT                                            # Store stethoscope BT  object
-        self.smartholder        = smartholder_USB                                           # Store smartholder USB object
+        self.stet_name          = devices_name[0]                                           # Store stethoscope ID
+        self.stethoscope        = devices_BT["stethoscope"]                                 # Store stethoscope BT  object
 
+        self.smartHandle_name   = ( devices_name[1], devices_name[2] )
+        self.smartHandle        = { devices_name[1]: devices_BT[devices_name[1]],
+                                    devices_name[2]: devices_BT[devices_name[2]] }
+
+        self.smartholder_STH    = smartholder_USB["STH"]                                    # Store smartholder USB object
+        self.smartholder_SHH    = smartholder_USB["SHH"]                                    # ...
+        
         # Unify execution timestamp to make sure both .txt outputs are stored in one place
-        self.executionTimeStamp = timeStamp
+        self.executionTimeStamp = timeStamp                                                 # This will be used as directory name
 
         # Anything else
         self.something_else     = paramN                                                    # Store whatever it is you want
@@ -135,12 +141,19 @@ class data_acquisition( object ):
         self.pressureHI         = args["higher_pressure"]                                   # Same ^
 
         # Now define the global variables that ALL your functions need to access
-        self.holder_flag_new    = 0                                                         # Whether device is in/out of holder
-        self.holder_flag_old    = 0                                                         # Previous state of ^
+        self.ST_holder_flag_new = 0                                                         # Whether device is in/out of holder
+        self.ST_holder_flag_old = 0                                                         # Previous state of ^
         self.bpc_flag_new       = 0                                                         # same
         self.bpc_flag_old       = 0                                                         # saim
-        self.smartholder_data   = []                                                        # ...
+        self.ST_holder_data     = []                                                        # ...
 
+        self.SH_holder_flag_new = [1,1]                                                     # SmartHandle holder flags
+        self.SH_holder_flag_new = { self.smartHandle_name[0]: 1,
+                                    self.smartHandle_name[1]: 1 }
+        self.SH_holder_flag_old = []                                                        # Not sure we will need this
+        self.SH_holder_data     = []                                                        # SmartHandle holder data
+        self.smartHandle_data 	= dict()
+        
 # ----------------------------------------------------------------------------------------- #
 
     def ABPC( self ):
@@ -163,9 +176,13 @@ class data_acquisition( object ):
     def run( self ):
         print( "{} {} sec. simulation begins now ".format(fS(), self.simDuration) )         # Statement confirming simulation start
 
+        self.smartHandle_data[ self.smartHandle_name[0] ] 	= []
+        self.smartHandle_data[ self.smartHandle_name[1] ] 	= []
+
         self.simCurrentTime, simStartTime = 0, time.time()
         while( self.simCurrentTime < self.simDuration ):
-            self.check_holder()
+            self.check_ST_holder()
+            self.check_SH_holder()
             self.check_pressure()
             self.interactions()
 
@@ -179,7 +196,7 @@ class data_acquisition( object ):
     
 # ----------------------------------------------------------------------------------------- #
 
-    def check_holder( self ):
+    def check_ST_holder( self ):
         # NOTE:-
         #
         # Anything that doesn't start with "self" gets destroyed and garbage
@@ -187,28 +204,66 @@ class data_acquisition( object ):
         # don't care about as a sort of optimization.
         # Things you want to update across the entire class should start with
         # "self".
-        inData = "{}".format( self.smartholder.readline() )
+        inData = "{}".format( self.smartholder_STH.readline() )
+
+        if( inData == '' ):                                                                 # If empty line
+            pass                                                                            # do nothing
+
+        else:
+            split_line = inData.split()                                                     # Split incoming data
+
+            if( split_line[1] == '1:' and split_line[2] == '0' ):
+                print( "{} {} has been removed ".format(fS(),
+                                                        self.stet_name) )
+                self.ST_holder_flag_new = 0                                                 # Set the holder flag to 0
+
+            elif( split_line[1] == '1:' and split_line[2] == '1' ):
+                print( "{} {} has been stored ".format(fS(),
+                                                       self.stet_name) )
+                self.ST_holder_flag_new = 1                                                 # Set the holder flag to 1
+
+            self.ST_holder_data.append( ["%.02f" %self.simCurrentTime,
+                                         str( self.ST_holder_flag_new ),
+                                         '\n'] )
+# ----------------------------------------------------------------------------------------- #
+
+    def check_SH_holder( self ):
+        
+        inData = "{}".format( self.smartholder_SHH.readline() )
 
         if( inData == '' ):                                             # If empty line
             pass                                                        # do nothing
 
         else:
+            ID0 = self.smartHandle_name[0]
+            ID1 = self.smartHandle_name[1]
             split_line = inData.split()                                 # Split incoming data
 
             if( split_line[1] == '1:' and split_line[2] == '0' ):
-                print( "{} {} has been removed ".format(fS(),
-                                                        self.stet_name) )
-                self.holder_flag_new = 0                                # Set the holder flag to 0
+                print( "{} {} has been removed".format(fS(),
+                                                       ID0) )
+                self.SH_holder_flag_new[ ID0 ] = 0
 
             elif( split_line[1] == '1:' and split_line[2] == '1' ):
                 print( "{} {} has been stored ".format(fS(),
-                                                       self.stet_name) )
-                self.holder_flag_new = 1                                # Set the holder flag to 1
+                                                       ID0) )
+                self.SH_holder_flag_new[ ID0 ] = 1   # device one in the holder		
 
-            self.smartholder_data.append( ["%.02f" %self.simCurrentTime,
-                                          str( self.holder_flag_new ),
-                                          '\n'] )
+            elif( split_line[1] == '2:' and split_line[2] == '0' ):
+                print( "{} {} has been removed".format(fS(),
+                                                       ID1 ) )
+                self.SH_holder_flag_new[ ID1 ] = 0
 
+            elif( split_line[1] == '2:' and split_line[2] == '1' ):
+                print( "{} {} has been stored ".format(fS(),
+                                                       ID1) )
+                self.SH_holder_flag_new[ ID1 ] = 1
+
+            self.SH_holder_data.append( ["%.02f" %self.simCurrentTime,
+                                         str( self.SH_holder_flag_new[ ID0 ] ),
+                                         str( self.SH_holder_flag_new[ ID1 ] ),
+                                         '\n'])
+            
 # ----------------------------------------------------------------------------------------- #
 
     def check_pressure( self ):
@@ -243,33 +298,33 @@ class data_acquisition( object ):
 
         # scenario 1 = S4 Gallop
         elif( self.scenario == 1 ):
-            if( self.holder_flag_new != self.holder_flag_old ):
+            if( self.ST_holder_flag_new != self.ST_holder_flag_old ):
                 
-                if( self.holder_flag_new == 0 ):
+                if( self.ST_holder_flag_new == 0 ):
                     fileByte = definitions.S4GALL
                     startBlending( self.stethoscope, fileByte)
-                    self.holder_flag_old = self.holder_flag_new
+                    self.ST_holder_flag_old = self.ST_holder_flag_new
                     
-                elif( self.holder_flag_new == 1 ):
+                elif( self.ST_holder_flag_new == 1 ):
                     stopBlending( self.stethoscope )
-                    self.holder_flag_old = self.holder_flag_new
+                    self.ST_holder_flag_old = self.ST_holder_flag_new
 
         # scenario 2 = Aortic Stenosis
         elif( self.scenario == 2 ):
-            if( self.holder_flag_new != self.holder_flag_old ):
+            if( self.ST_holder_flag_new != self.ST_holder_flag_old ):
 
-                if( self.holder_flag_new == 0 ):
+                if( self.ST_holder_flag_new == 0 ):
                     fileByte = definitions.AORSTE
                     startBlending( self.stethoscope, fileByte )
-                    self.holder_flag_old = self.holder_flag_new
+                    self.ST_holder_flag_old = self.ST_holder_flag_new
                     
-                elif( self.holder_flag_new == 1 ):
+                elif( self.ST_holder_flag_new == 1 ):
                     stopBlending( self.stethoscope )
-                    self.holder_flag_old = self.holder_flag_new
+                    self.ST_holder_flag_old = self.ST_holder_flag_new
 
         # scenario 3 = KOROT
         elif( self.scenario == 3 ):
-            if( self.holder_flag_new == 0 ):
+            if( self.ST_holder_flag_new == 0 ):
                 if( self.bpc_flag_new == 1 and self.bpc_flag_new != self.bpc_flag_old ):
                     fileByte = definitions.KOROT
                     startBlending( self.stethoscope, fileByte)
@@ -278,105 +333,128 @@ class data_acquisition( object ):
                 elif( self.bpc_flag_new == 0 and self.bpc_flag_new != self.bpc_flag_old ):
                     stopBlending( self.stethoscope )
                     self.bpc_flag_old = self.bpc_flag_new
-                
+    
+        for device_ID, device_BT in self.smartHandle.iteritems():
+            if( self.SH_holder_flag_new[ device_ID ] == 0 ):
+                self.smartHandle_data[ device_ID ].append( ["%.02f" %self.simCurrentTime,
+                                                            readDataStream( device_BT,
+                                                            '\n' )] )
+
 # ========================================================================================= #
 # Setup program
 # ========================================================================================= #
 
 # Get device info
+print( "============= DEVICE  IDENTIFICATION =============" )
 panel_id_file_path = dataDir + "/panels.txt"
 _, _, panel_id, _ = panelSelfID( panel_id_file_path, getMAC("eth0") )
 
 devices_id_file_path = dataDir + "/panel" + str( panel_id ) + "devices.txt"
 _, device_name_list, device_bt_address_list = panelDeviceID( devices_id_file_path, panel_id )
 
-stethoscope_name = device_name_list[0]
-stethoscope_bt_address = ([device_bt_address_list[0]])
+smarthandle_name            = ( device_name_list[1],
+                                device_name_list[2] )
+smarthandle_bt_address      = ( [device_bt_address_list[1]],
+                                [device_bt_address_list[2]] )
+print( "==================================================\n" )
 
-# Create BT and USB connections
-print( "{} OPERATION ".format(fS()) )
-print( "{} Begin device configuration ".format(fS()) )
 
-# connecting to panel devices
-print( "{} Connecting to panel devices ".format(fS()) )
+print( "============ ESTABLISHING  CONNECTION ============" )
+# connecting to smartdevices (stethoscope/handles) ---------------------------------------- #
+smartdevice = dict()
+print( "{} Connecting to SmartDevices".format(fS()) )
+for i in range( 0, 3 ):
+    smartdevice[ device_name_list[i] ] = createBTPort( device_bt_address_list[i], 1 )       # Connect BT device
 
-# connecting to stethoscope --------------------------------------------------------------- #
-print( "{} Connecting to stethoscope ".format(fS()) )
-stethoscope_bt_object = createBTPort( stethoscope_bt_address[0], 1 )                        # using bluetooth protocol commands
+# connecting to smart holders ------------------------------------------------------------- #
+print( "{} Connecting to smartholders ".format(fS()) )
+baud, timeout = 115200, 1
+notReady    = True
+STH, SHH    = chr(0x41), chr(0x42)                                                          # Holder Identifier
+smartholder = dict()
+
+for i in range( 0, 2 ):
+    try:
+        USB  = createUSBPort( i, baud, timeout )                                            # Create USB connection
+    except:
+        USB  = createACMPort( i, baud, timeout )
+    finally:
+        if( USB.is_open == False ): USB.open()
+
+    while( notReady ):                                                                      # Loop until we receive SOH
+        inData = USB.read( size=1 )                                                         # ...
+        if( inData == STH or inData == SHH ):                                               # ...
+            if  ( inData == STH ):
+                inData  = "STH"
+                portSTH = i
+            elif( inData == SHH ):
+                inData  = "SHH"
+                portSHH = i
+            print( "{} [INFO] Holder identified as {}".format(fS(), inData) )               # [INFO] Status update
+            smartholder[ inData ] = USB
+            break                                                                           # ...
+        
+    time.sleep(0.50)                                                                        # Sleep for stability!
+print( "==================================================\n" )
 
 # configuring stethoscope ----------------------------------------------------------------- #
 if( args["scenario"] == 0 ):
+    print( "============== CONFIGURING  DEVICES ==============" )
     print( "{} Generating filename for audio data ".format(fS()) )
     randString = genRandString( 4 )
     print( "{} Generated : {}".format(fS(), randString) )
     print( "{} Setting Stethoscope Recording Mode ".format(fS()) )
     recMode = 0
     print( "{} Setting recording mode and filename".format(fS()) )
-    setRecordingMode( stethoscope_bt_object, recMode )
-    parseString( stethoscope_bt_object, randString )
-    startRecording( stethoscope_bt_object )
-
-# connecting to smart holders ------------------------------------------------------------- #
-print( "{} Connecting to smart holders ".format(fS()) )
-port = 0
-baud = 115200
-timeout = 1
-notReady = True
-
-try:
-    smartholder_usb_object  = createUSBPort( port, baud, timeout )                          # test USB vs ACM port issue
-except:
-    smartholder_usb_object  = createACMPort( port, baud, timeout )
-finally:
-    if( smartholder_usb_object.is_open == False ):
-        smartholder_usb_object.open()
-
-SOH = chr(0x01)                                         # Start of Header
-while( notReady ):                                                                          # Loop until we receive SOH
-    inData = smartholder_usb_object.read( size=1 )                                          # ...
-    if( inData == SOH ):                                                                    # ...
-        print( "{} [INFO] SOH Received".format(fS()) )                             # [INFO] Status update
-        break                                                                               # ...
-
-time.sleep(0.50)                                                                            # Sleep for stability!
-
+    setRecordingMode( smartdevice["stethoscope"], recMode )
+    parseString( smartdevice["stethoscope"], randString )
+    startRecording( smartdevice["stethoscope"] )
+    print( "==================================================\n" )
 
 # ========================================================================================= #
 # Data Gathering
 # ========================================================================================= #
 
-output = data_acquisition( args, stethoscope_name,
-                           stethoscope_bt_object ,
-                           smartholder_usb_object,
+print( "================= DATA GATHERING =================" )
+output = data_acquisition( args, device_name_list,
+                           smartdevice, smartholder,
                            executionTimeStamp     )
 
-smartholder_data = output.smartholder_data
+ST_holder_data      = output.ST_holder_data
+SH_holder_data      = output.SH_holder_data
+smarthandle_data    = output.smartHandle_data
+print( "==================================================\n" )
 
 # ----------------------------------------------------------------------------------------- #
 # Device Deactivation
 # ----------------------------------------------------------------------------------------- #
 
+print( "============== DEVICE  DEACTIVATION ==============" )
 print( "{} Disconnecting bluetooth devices ".format(fS()) )
 if( args["scenario"] == 0 ):
-    stopRecording( stethoscope_bt_object )
+    stopRecording( smartdevice["stethoscope"] )
 elif( args["scenario"] == 1 ):
-    stopBlending( stethoscope_bt_object )
+    stopBlending( smartdevice["stethoscope"] )
 elif( args["scenario"] == 2 ):
-    stopBlending( stethoscope_bt_object )
+    stopBlending( smartdevice["stethoscope"] )
 
 print( "{} Checking and sending stethoscope to IDLE state".format(fS()) )
-setToIdle( stethoscope_bt_object )
+setToIdle( smartdevice["stethoscope"] )
 
 print( "{} Closing Stethoscope bluetooth port".format(fS()) )
-stethoscope_bt_object.close()
+smartdevice["stethoscope"].close()
 
-print( "{} Disconnecting usb devices ".format(fS()) )
-if( smartholder_usb_object.is_open ):
-    smartholder_usb_object.close()
+print( "{} Disconnecting USB devices ".format(fS()) )
+for ID in smartholder:    
+    if( smartholder[ ID ].is_open ):
+        smartholder[ ID ].close()
+print( "==================================================\n" )
 
 # ========================================================================================= #
 # Output
 # ========================================================================================= #
+
+print( "================== STORING DATA ==================" )
 print( "{} Writting data to file ".format(fS()) )
 
 if( path.exists( outputDir ) == False ):
@@ -394,21 +472,53 @@ if( path.exists( stampedDir ) == False ):
 else:
     print( "{} Found time-stamped directory ".format(fS()) )
 
-smartholder_output_filename = stampedDir + "holder.txt"
+smartholder_output_filename = stampedDir + "ST_holder.txt"
 
-N_lines = len( smartholder_data )
+N_lines = len( ST_holder_data )
 
 for i in range(0, N_lines):
-        if( i == 0 ):
-                with open(smartholder_output_filename, 'a') as dataFile:
-                        dataFile.write( fullStamp() + " Smart Holder for = " + stethoscope_name + '\n' )
-                        dataFile.write( fullStamp() + " COM Port = " + str( port ) + '\n')
+    if( i == 0 ):
         with open(smartholder_output_filename, 'a') as dataFile:
-                dataFile.write( smartholder_data[i][0] + "," + smartholder_data[i][1] + '\n' )
+            dataFile.write( fullStamp() + " Smart Holder for = " + device_name_list[0] + '\n' )
+            dataFile.write( fullStamp() + " COM Port = " + str( portSTH ) + '\n')
+    with open(smartholder_output_filename, 'a') as dataFile:
+        dataFile.write( ST_holder_data[i][0] + "," + ST_holder_data[i][1] + '\n' )
+
+# -------------------------------------SMARTHANDLES---------------------------------------- #
+
+smarthandle_output_filename = ([ stampedDir + "oto.txt",
+                                 stampedDir + "ophtho.txt" ])
+smartholder_output_filename = stampedDir + "holder.txt"
+
+N_lines = ([ len( smarthandle_data[smarthandle_name[0]] ),
+             len( smarthandle_data[smarthandle_name[1]] ),
+             len( SH_holder_data ) ])
+
+N_smarthandles = 2
+for i in range(0, len( N_lines )):
+    if( i < N_smarthandles ):
+        for j in range(0, N_lines[i]):
+            if( j == 0 ):
+                with open(smarthandle_output_filename[i], 'a') as dataFile:
+                    dataFile.write( fullStamp() + " Smart Handle = " + smarthandle_name[i] + '\n' )
+                    dataFile.write( fullStamp() + " Bluetooth Address = " + smarthandle_bt_address[i] + '\n')
+            with open(smarthandle_output_filename[i], 'a') as dataFile:
+                dataFile.write( smarthandle_data[smarthandle_name[i]][j][0] + "," + smarthandle_data[smarthandle_name[i]][j][1] + '\n' )
+    else:
+        for j in range(0, N_lines[i]):
+            if( j == 0 ):
+                with open(smartholder_output_filename, 'a') as dataFile:
+                    dataFile.write( fullStamp() + " Smart Holder " + '\n' )
+                    dataFile.write( fullStamp() + " COM Port = " + str( portSHH ) + '\n')
+            with open(smartholder_output_filename, 'a') as dataFile:
+                dataFile.write( SH_holder_data[j][0] + "," + SH_holder_data[j][1] + "," + SH_holder_data[j][2] + '\n' )
+
+
 
 # zipping output
 #print( fullStamp() + " Compressing data " )
 #os.system("cd " + consDir + "; sudo zip -r " + consDir + "output.zip output")
+print( "==================================================\n" )
 
 # ----------------------------------------------------------------------------------------- #
 # END
