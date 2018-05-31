@@ -1,3 +1,0 @@
-2018-05-25-18-28-24 Smart Holder for = stethoscope
-2018-05-25-18-28-24 COM Port = 0
-0.00,1

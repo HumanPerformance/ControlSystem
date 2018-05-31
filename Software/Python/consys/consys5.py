@@ -488,7 +488,7 @@ for i in range(0, N_lines):
 
 smarthandle_output_filename = ([ stampedDir + "oto.txt",
                                  stampedDir + "ophtho.txt" ])
-smartholder_output_filename = stampedDir + "holder.txt"
+smartholder_output_filename = stampedDir + "SH_holder.txt"
 
 N_lines = ([ len( smarthandle_data[smarthandle_name[0]] ),
              len( smarthandle_data[smarthandle_name[1]] ),
@@ -501,7 +501,7 @@ for i in range(0, len( N_lines )):
             if( j == 0 ):
                 with open(smarthandle_output_filename[i], 'a') as dataFile:
                     dataFile.write( fullStamp() + " Smart Handle = " + smarthandle_name[i] + '\n' )
-                    dataFile.write( fullStamp() + " Bluetooth Address = " + smarthandle_bt_address[i] + '\n')
+                    dataFile.write( fullStamp() + " Bluetooth Address = " + str(smarthandle_bt_address[i]) + '\n')
             with open(smarthandle_output_filename[i], 'a') as dataFile:
                 dataFile.write( smarthandle_data[smarthandle_name[i]][j][0] + "," + smarthandle_data[smarthandle_name[i]][j][1] + '\n' )
     else:
