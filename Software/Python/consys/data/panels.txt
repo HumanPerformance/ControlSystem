@@ -2,7 +2,7 @@
 # panel number, ethernet MAC address
 1,b8:27:eb:25:05:91
 2,b8:27:eb:6f:f3:a9
-3,b8:27:eb:c4:a2:f8
+3,b8:27:eb:cb:ce:37
 4,b8:27:eb:b3:81:17
 5,b8:27:eb:77:b5:2c
 6,b8:27:eb:c4:a2:f8
