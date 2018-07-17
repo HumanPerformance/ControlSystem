@@ -1,4 +1,4 @@
-# devices associated with panel 2
+# devices associated with panel 5
 # device number, device name, device BT MAC address
 1,stethoscope,00:06:66:d0:e4:37
 2,otoscope,00:06:66:83:8b:5b
