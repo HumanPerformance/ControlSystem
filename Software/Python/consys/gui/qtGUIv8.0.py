@@ -1,6 +1,6 @@
 '''
 Author  : Edward Daniel Nichols
-Date    : July 22nd, 2018 AD
+Date    : May 8th, 2018 AD
 
 Proprietor:
 PD3D, Institute for Simulation and Training
@@ -8,7 +8,7 @@ University of Central Florida
 '''
 from PyQt5 import QtCore, QtGui, QtWidgets
 import paramiko as miko
-import sys, time
+import sys
 
 # ---------------------------------------------------- #
 class TUNNEL(QtCore.QThread):
@@ -27,8 +27,8 @@ class TUNNEL(QtCore.QThread):
     def __init__(self, channel):
         super(TUNNEL, self).__init__()
         self.chnl = channel
-        self.usr  = "root"
-        self.pwrd = "dietpi"
+        self.usr  = "pi"
+        self.pwrd = "raspberry"
         self.ssh = miko.SSHClient()
         self.ssh.set_missing_host_key_policy(miko.AutoAddPolicy())
         self.ssh_stdin  = None
@@ -129,7 +129,6 @@ class PANEL(QtCore.QObject):
         self.CONSYSthread.outputrdy.connect(lambda: self.pulloutput("CON"))
         self.CONSYSthread.start()
 
-        time.sleep(10)
         self.BPCthread = TUNNEL(self.BPCchnl)
         self.BPCthread.direct(self.commands["statusbpc"], self.BPCaddr)
         self.BPCthread.outputrdy.connect(lambda: self.pulloutput("BPC"))
@@ -141,7 +140,6 @@ class PANEL(QtCore.QObject):
         self.CONSYSthread.outputrdy.connect(lambda: self.pulloutput("CON"))
         self.CONSYSthread.start()
 
-        time.sleep(10)
         self.BPCthread = TUNNEL(self.BPCchnl)
         self.BPCthread.direct(self.roomKey["int1bpc"], self.BPCaddr)
         self.BPCthread.outputrdy.connect(lambda: self.pulloutput("BPC"))
@@ -153,7 +151,6 @@ class PANEL(QtCore.QObject):
         self.CONSYSthread.outputrdy.connect(lambda: self.pulloutput("CON"))
         self.CONSYSthread.start()
 
-        time.sleep(10)
         self.BPCthread = TUNNEL(self.BPCchnl)
         self.BPCthread.direct(self.roomKey["int2bpc"], self.BPCaddr)
         self.BPCthread.outputrdy.connect(lambda: self.pulloutput("BPC"))
@@ -707,7 +704,7 @@ class GUI(object):
         message = edits.replace("\\n", "\n")
 
         if(subSys == "CON"):
-            if( rawMessage == "b'CONSYS\n'" ):
+            if( rawMessage == "b'CONSYS\\n'" ):
                 self.panel_status[panelIdx][0] = "CONSYS"
             else:
                 if any("AOK" in s for s in review):
@@ -718,7 +715,7 @@ class GUI(object):
                     self.panel_status[panelIdx][0] = "ERR"
 
         if(subSys == "BPC"):
-            if( rawMessage == "b'BPC\n'" ):
+            if( rawMessage == "b'BPC\\n'" ):
                 self.panel_status[panelIdx][1] = "BPC"
             else:
                 if any("AOK" in s for s in review):
@@ -750,8 +747,8 @@ if __name__ == "__main__":
     # Standard Commands Available to All Panels
     STDCMDS = {
     "reset"     : "sudo reboot",
-    "statuscon" : "python /home/ControlSystem/Software/Python/consys/single.py",
-    "statusbpc" : "python /home/ControlSystem/Software/Python/consys/single.py",
+    "statuscon" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "statusbpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
     "normcon"   : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/consys4.3.py",
     "normbpc"   : "DISPLAY=:0 python pd3d/csec/repos/ControlSystem/Software/Python/consys/consys4.3bpc.py -s 0 -st 30 -lp 85 -hp 145",
     "test"      : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status.py"
@@ -760,95 +757,95 @@ if __name__ == "__main__":
     # ---------------------------------------------------- #
     # Room 1 Shell Command Key :
     roomKey1 = {
-    "int1con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int1bpc" : "python /home/ControlSystem/Software/Python/consys/single.py",
-    "int2con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int2bpc" : "python /home/ControlSystem/Software/Python/consys/single.py"
+    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
+    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
     }
 
     # Room 2 Shell Command Key :
     roomKey2 = {
-    "int1con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int1bpc" : "python /home/ControlSystem/Software/Python/consys/single.py",
-    "int2con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int2bpc" : "python /home/ControlSystem/Software/Python/consys/single.py"
+    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
+    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
     }
 
     # Room 3 Shell Command Key :
     roomKey3 = {
-    "int1con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int1bpc" : "python /home/ControlSystem/Software/Python/consys/single.py",
-    "int2con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int2bpc" : "python /home/ControlSystem/Software/Python/consys/single.py"
+    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
+    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
     }
 
     # Room 4 Shell Command Key :
     roomKey4 = {
-    "int1con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int1bpc" : "python /home/ControlSystem/Software/Python/consys/single.py",
-    "int2con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int2bpc" : "python /home/ControlSystem/Software/Python/consys/single.py"
+    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
+    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
     }
 
     # Room 5 Shell Command Key :
     roomKey5 = {
-    "int1con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int1bpc" : "python /home/ControlSystem/Software/Python/consys/single.py",
-    "int2con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int2bpc" : "python /home/ControlSystem/Software/Python/consys/single.py"
+    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
+    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
     }
 
     # Room 6 Shell Command Key :
     roomKey6 = {
-    "int1con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int1bpc" : "python /home/ControlSystem/Software/Python/consys/single.py",
-    "int2con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int2bpc" : "python /home/ControlSystem/Software/Python/consys/single.py"
+    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
+    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
     }
 
     # Room 7 Shell Command Key :
     roomKey7 = {
-    "int1con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int1bpc" : "python /home/ControlSystem/Software/Python/consys/single.py",
-    "int2con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int2bpc" : "python /home/ControlSystem/Software/Python/consys/single.py"
+    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
+    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
     }
 
     # Room 8 Shell Command Key :
     roomKey8 = {
-    "int1con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int1bpc" : "python /home/ControlSystem/Software/Python/consys/single.py",
-    "int2con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int2bpc" : "python /home/ControlSystem/Software/Python/consys/single.py"
+    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
+    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
     }
 
     # Room 9 Shell Command Key :
     roomKey9 = {
-    "int1con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int1bpc" : "python /home/ControlSystem/Software/Python/consys/single.py",
-    "int2con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int2bpc" : "python /home/ControlSystem/Software/Python/consys/single.py"
+    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
+    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
     }
 
     roomKey10 = {
-    "int1con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int1bpc" : "python /home/ControlSystem/Software/Python/consys/single.py",
-    "int2con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int2bpc" : "python /home/ControlSystem/Software/Python/consys/single.py"
+    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
+    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
     }
 
     roomKey11 = {
-    "int1con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int1bpc" : "python /home/ControlSystem/Software/Python/consys/single.py",
-    "int2con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int2bpc" : "python /home/ControlSystem/Software/Python/consys/single.py"
+    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
+    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
     }
 
     roomKey12 = {
-    "int1con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int1bpc" : "python /home/ControlSystem/Software/Python/consys/single.py",
-    "int2con" : "python /home/ControlSystem/Software/Python/consys/single2.py",
-    "int2bpc" : "python /home/ControlSystem/Software/Python/consys/single.py"
+    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
+    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
+    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
     }
 
 

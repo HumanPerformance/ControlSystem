@@ -3,7 +3,7 @@ import sys
 
 ## EDIT SSH DETAILS ##
 
-SSH_ADDRESS = "192.168.0.12"
+SSH_ADDRESS = "192.168.0.27"
 SSH_USERNAME = "root"
 SSH_PASSWORD = "dietpi"
 SSH_DIR = "/home/git/ControlSystem/Software/Python/consys/"
