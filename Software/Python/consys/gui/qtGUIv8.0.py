@@ -869,6 +869,7 @@ if __name__ == "__main__":
         ControlSystem = QtWidgets.QWidget()
         CSEC = GUI(PANELS, FILE, STDCMDS)
         CSEC.setup(ControlSystem)
+        print("here")
         ControlSystem.show()
 
         sys.exit(appplication.exec_())

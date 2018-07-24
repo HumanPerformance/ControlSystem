@@ -151,8 +151,9 @@ class GUI(object):
 
         self.panels=[]
         for index in range(self.systems):
+            CONSYSkey = "pi" + str(index+1)
             self.panels.append( PANEL( index+1,
-                                       self.ipADDRS[index+1],
+                                       self.ipADDRS[CONSYSkey],
                                        self.commands) )
 
         self.panel_status=[]
@@ -459,10 +460,10 @@ class GUI(object):
         self.controlLayout.addLayout(self.optionsLayout)
         self.primaryGrid.addLayout(self.controlLayout, 0, 0, 4, 1)
         self.windowLayout.addLayout(self.primaryGrid)
-
+        
         # -------------------------- Translate Text to Locality Language:
         self.initTranslateGUI(ControlSystem)
-
+        
         # -------------------------- Arrange Connections:
         for index in range(self.systems):
             self.panels[index].rawOutput.connect(self.panelEndJob)
@@ -491,19 +492,19 @@ class GUI(object):
             self.statusR[index].setText(_translate("ControlSystem", "Connect"))
             self.int1R[index].setText(_translate("ControlSystem", "Int: 1"))
             self.int2R[index].setText(_translate("ControlSystem", "Int: 2"))
-
+        
         self.connectAll.setText(_translate("ControlSystem", "Connect All"))
         self.int1All.setText(_translate("ControlSystem", "Interaction 1"))
         self.int2All.setText(_translate("ControlSystem", "Interaction 2"))
-
+        
         for index in range(0,self.systems):
             pnames = "P" + str(index+1)
             panel = "Panel IP:\t\t\t\t\t" + self.ipADDRS["pi"+str(index+1)]
-
+            
             self.paddr[index].setText(_translate("ControlSystem", panel))
-            self.poutput[index].setText(_translate("ControlSystem", self.panel_status[index][3]))
+            self.poutput[index].setText(_translate("ControlSystem", self.panel_status[index][2]))
             self.panelTabs.setTabText(self.panelTabs.indexOf(self.ptab[index]), _translate("ControlSystem", pnames))
-
+        
         self.advancedOpt.setText(_translate("ControlSystem", "Adv.\nOptions"))
         self.quitProg.setShortcut(_translate("ControlSystem", "Ctrl+C"))
 
@@ -826,8 +827,11 @@ if __name__ == "__main__":
         appplication.setStyle('Fusion')
 
         ControlSystem = QtWidgets.QWidget()
+        print("hola")
         CSEC = GUI(PANELS, FILE, STDCMDS)
+        print("here0")
         CSEC.setup(ControlSystem)
+        print("here")
         ControlSystem.show()
 
         sys.exit(appplication.exec_())
