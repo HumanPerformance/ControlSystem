@@ -70,32 +70,38 @@ def findSmartDevice( address_device2find ):
     return 0, 0
 
 #   Create Port
-def createBTPort( bt_addr, port ):
+def createBTPort( bt_addr, port, attempts=20 ):
     print( fullStamp() + " createBTPort()" )
     if bluetooth.is_valid_address(bt_addr) is True:                 # Check if address is valid
         socket = bluetooth.BluetoothSocket( bluetooth.RFCOMM )      # Create a BT socket
         socket.connect( (bt_addr, port) )                           # Connect to socket
         time.sleep(1)
-        BTconnectionCheck( socket )
+        BTconnectionCheck( socket, attempts )
         return(socket)
     else:
         print( fullStamp() + " Invalid BT address" )
         return 0
 
 #   Connection Check
-def BTconnectionCheck( socket ):
+def BTconnectionCheck( socket, attempts ):
     outByte = definitions.ENQ
     socket.send(outByte)
     inByte = socket.recv(1)     # recv(buffersize)
 
     if inByte == definitions.ACK:
         print( fullStamp() + " ACK Connection Established" )
+        return 1
     
     elif inByte == definitions.NAK:
         print( fullStamp() + " NAK device NOT READY" )
+        return 0
 
     else:
-        print( fullStamp() + " Please troubleshoot devices" )
+        if( attempts != 0 ):
+            return BTconnectionCheck( socket, attempts-1 )
+        else:
+            print( fullStamp() + " Please troubleshoot devices" )
+            return -1
 
 #   Why not?
 def closeBTPort( socket ):
