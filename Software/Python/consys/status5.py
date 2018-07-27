@@ -178,7 +178,6 @@ for i in range( 0, 3 ):
         status_filename = stampedDir + "log.txt"
         write_status_to_file( status_filename, bluetoothError[0] )
         sys.exit( fS() + " " + "ERR" )
-print( "==================================================\n" )
 
 # connecting to smart holders ------------------------------------------------------------- #
 
@@ -218,6 +217,7 @@ for i in range( 0, 2 ):
             break                                                                           # ...
         
     time.sleep(0.50)                                                                        # Sleep for stability!
+print( "==================================================\n" )
 
 print( "============== SYSTEMS STATUS CHECK ==============" )
 # testing whats in then holders

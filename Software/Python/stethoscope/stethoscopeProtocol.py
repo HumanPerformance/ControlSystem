@@ -187,7 +187,7 @@ def setToIdle( rfObject ):
     Sets the stethoscope to IDLE mode
     """
     
-    print( fullStamp() + " systemCheck()" )                                                             # Print function name
+    print( fullStamp() + " setToIdle()" )                                                             # Print function name
 
     outByte = definitions.SETIDLE                                                                           # Send CHK / System Check command - see protocolDefinitions.py                     
     rfObject.send(outByte)
