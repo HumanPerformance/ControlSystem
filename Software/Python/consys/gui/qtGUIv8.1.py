@@ -1,11 +1,13 @@
 '''
-Author  : Edward Daniel Nichols
-Date    : July 22nd, 2018 AD
-
-Proprietor:
-PD3D, Institute for Simulation and Training
+The Control System Graphical User Interface built for the sponsors of
+PD3D, at the Institute for Simulation and Training
 University of Central Florida
+@RestrictedLicense
+
+Author  : Edward Daniel Nichols
+Date    : July 28nd, 2018 AD
 '''
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 import paramiko as miko
 import sys, time
@@ -13,20 +15,33 @@ import sys, time
 # ---------------------------------------------------- #
 class TUNNEL(QtCore.QThread):
     '''
-    Open an SSH terminal at the address specified and send the command specified.
-    Within the context of a QThread
+    PURPOSE:
+    Thread object to setup and complete independent SSH session with a server for a single command at a time.
+    It must be initialized, directed, and then run. Within the context of a QThread; SSH client based on paramiko.
+
     INPUTS:
-        - outputChannel: Indicator where to place the output, within a GLOBAL array. (Int)
-        - ADDR: The IP address of the SSH server to access. (String)
-        - CMD: The single command, in the proper format, that is to be executed. (String)
+    __init___()
+        - chnl: Index of GLOBAL array where to place the output.                                             (Int from PANEL.[command])
+    direct()
+        - ADDR: The IP address of the SSH server to access.                                                  (String from PANEL.[command])
+        - CMD: The single command, in the proper format, that is to be executed.                             (String from PANEL.[command])
+
     OUTPUT:
-        - output: Reading from the socket's stdout, or else an error message.  (String)
+    run()
+        - outputChannel[self.chnl]: Reading from the socket's stdout, or else an error message.              (String to GLOBAL Array)
+        - outputrdy: Flag prompting panel object to read output placed in outputChannel.                     (Signal to PANEL.pulloutput)
+
+    DIRECT REFERENCE:
+        - PANEL.checkstatus: For a PANEL within a ROOM, send the "status" command string to SSH terminal.    (Class Method: Input)
+        - PANEL.interaction1: For a PANEL within a ROOM, send the "int1" command string to SSH terminal.     (Class Method: Input)
+        - PANEL.interaction2: For a PANEL within a ROOM, send the "int2" command string to SSH terminal.     (Class Method: Input)
+        - PANEL.pulloutput: For a PANEL within a ROOM, read prepared output and pass to ROOM object.         (Class Method: Output(s))
     '''
     outputrdy = QtCore.pyqtSignal()
     # ----------------------
-    def __init__(self, channel):
+    def __init__(self, chnl):
         super(TUNNEL, self).__init__()
-        self.chnl = channel
+        self.chnl = chnl
         self.usr  = "pi"
         self.pwrd = "raspberry"
         self.ssh = miko.SSHClient()
@@ -41,26 +56,178 @@ class TUNNEL(QtCore.QThread):
     # ----------------------
     def run(self):
         try:
+            print("Debugging_TUNNEL_panel" + str(self.chnl+1) + "_cmd: \t\t" + str(self.cmd))
             self.ssh.connect(self.addr, username= self.usr, password= self.pwrd)
             self.ssh_stdin, self.ssh_stdout, self.ssh_stderr = self.ssh.exec_command(self.cmd)
+
         except Exception as e:
             sys.stderr.write("SSH connection error: {0}".format(e))
-            outputChannel[self.chnl] = "ERROR: SSH Connection Failed"
+            outputChannel[self.chnl] = "FATAL: SSH Connection Failed"
             self.outputrdy.emit()
 
         if self.ssh_stdout:
+
             output =  self.ssh_stdout.read()
             outputChannel[self.chnl] = output
             self.outputrdy.emit()
+            print("Debugging_TUNNEL_panel" + str(self.chnl+1) + "_outputrdy:\t" + str(output) )
             self.ssh.close()
         else:
             outputChannel[self.chnl] = "ERROR: NULL"
             self.outputrdy.emit()
+            print("Debugging_TUNNEL_panel" + str(self.chnl+1) + "_outputrdy: ERROR: NULL")
             self.ssh.close()
 
+# ---------------------------------------------------- #
+class PANEL(QtCore.QObject):
+    '''
+    PURPOSE:
+    The core CSEC augmented device panel concept. Holds the methods required of a panel, to conduct
+    distinct augmented device "interactions" with a user and pass the output to the system.
+    It leverages the TUNNEL threading object to open an SSH terminal with a panel. It must be
+    initialized, and given a room key as it is placed into a ROOM where its methods become connected to
+    the GUI buttons of the ROOM it is in. When TUNNEL output ready flag is raised after running a
+    button command, the panel object then pulls the output from the global outputChannel array to actually
+    send it to the system for status review. Within the context of a QObject.
+
+    INPUTS:
+    __init__()
+        - panelIdentity: Unique ID of the PANEL, based on order of IP address list for panels.               (Int from GUI.__init__)
+        - panelAddr: The IP address of the PANEL (SSH) server to access, probably a Raspberry Pi             (String from GUI.__init__)
+        - commands: The dictionary of standard commands available to all PANELs.                             (Dict from GUI.__init__)
+    setRoomkey()
+        - roomKey: The dictionary of the specific commands available to the PANEL as a result of             (Dict from GUI.retrievePanel)
+                     which ROOM it is in.
+
+    OUTPUT:
+    pulloutput()
+        - rawOutput: Flag with box containing the ID of the panel and the result from the terminal           (Signal [Int, String] to GUI.panelEndJob)
+                     at the end of a TUNNEL prompting the system "panelEndJob" sequence to set the
+                     status of the panel - which determines GUI color for a PANEL in a ROOM.
+
+    DIRECT REFERENCE:
+        - GUI.__init__: Initialize the control system, loading the initial configuration including           (Class Method: Input(s))
+                     number of panels, their IP addresses, and the commands available.
+        - GUI.retrievePanel: When a panel is associated with a new ROOM, panel recieves the ROOM's           (Class Method: Input)
+                     specified dictionary for available commands.
+        - self.checkstatus/interaction1/interaction2: When GUI button is pressed, execute the panel          (Class Method: Output)
+                     command by starting a TUNNEL. The local TUNNEL flag is connected.
+                     When TUNNEL has recieved a reply, flag is raised and the raw message is emitted as
+                     part of a new system-wide flag.
+
+    '''
+    rawOutput = QtCore.pyqtSignal(int, str)
+
+    def __init__(self, panelIdentity, panelAddr, commands):
+        super(PANEL, self).__init__()
+        self.panel = panelIdentity
+        self.panelAddr = panelAddr
+        self.panelChnl = panelIdentity-1
+
+        self.commands = dict()
+        self.commands = commands
+
+    def setRoomkey(self, roomKey ):
+        self.roomKey = dict()
+        self.roomKey = roomKey
+
+    def pulloutput(self):
+        print("Debugging_pulloutput to in emit.rawOutput to panelEndJob")
+        self.rawOutput.emit( self.panel, str( outputChannel[self.panelChnl] ) )
+
+    def checkstatus(self):
+        print("Debugging_sending connect command to generate a rawOutput")
+        self.thread = TUNNEL(self.panelChnl)
+        self.thread.direct(self.commands["status"], self.panelAddr)
+        self.thread.outputrdy.connect(lambda: self.pulloutput())
+        self.thread.start()
+
+    def interaction1(self):
+        print("Debugging_sending int1 command to generate a rawOutput")
+        self.thread = TUNNEL(self.panelChnl)
+        self.thread.direct(self.roomKey["int1"], self.panelAddr)
+        self.thread.outputrdy.connect(lambda: self.pulloutput())
+        self.thread.start()
+
+    def interaction2(self):
+        print("Debugging_sending int2 command to generate a rawOutput")
+        self.thread = TUNNEL(self.panelChnl)
+        self.thread.direct(self.roomKey["int2"], self.panelAddr)
+        self.thread.outputrdy.connect(lambda: self.pulloutput())
+        self.thread.start()
+
+    def reboot(self):
+        print("Debugging_sending reboot command to generate a rawOutput")
+        self.thread = TUNNEL(self.panelChnl)
+        self.thread.direct(self.commands["reboot"], self.panelAddr)
+        self.thread.outputrdy.connect(lambda: self.pulloutput())
+        self.thread.start()
 
 # ---------------------------------------------------- #
 class ROOM(QtCore.QObject):
+    '''
+    PURPOSE:
+    The system monitor for each room under the control system; wherein every room has its own dictionary of
+    available commands, set as a room key. It is a host that directly routes its GUI button signals
+    to the appropriate panel and reviews its status when the commands are complete - if a panel is
+    actually associated. It raises a flag and prompts a GUI action when it identifies certain status strings.
+    It must be initialized, setup with a room number, associated with a panel, and connected to GUI buttons
+    in the grid of the same index. Within the context of a QObject.
+
+    INPUTS:
+    setup()
+        - roomNumber: The internal ID of the room, identical to the index of the roomMonitor and the         (Int from GUI.setup)
+                     index of the grid of GUI widgets associated with the room.
+    associatePanel()
+        - panel: The index of the panel from the selection drop down menu in the GUI grid for the room.      (Int from GUI.selectPanelR[])
+                     The input is prompted by the flag raised when the user makes a selection. The value
+                     is stored, so that the room remembers which panel it is hosting.
+    reviewStats()
+        - operation: The string written to the panel_status array to summarize the state of the panel        (String from GUI.XXX_Condition)
+                     itself. It is based on predefined keywords agreed upon by convention; where each
+                     keyword prompts a unique action. One of the places to update when creating new
+                     user interactions or panel functions.
+
+    OUTPUT:
+    associatePanel()
+        - retrieve: A flag containing the room number and the index of the PANEL object for the panel        (Signal [Int, Int] to GUI.retrievePanel)
+                     being associated - raised when the user selects a panel from the room's panel
+                     selection drop down menu. Counter-intuitive, but it prompts the system to make a
+                     new set of commands available to the new and appropriate PANEL object.
+    statuscheck_btn()/int1_btn()/int2_btn()
+        - XXX_btntoggled: A flag containing the room number and the PANEL that is on file as being           (Signal [Int, Int] to GUI.XXX_btnCondition)
+                     associated with the room. It is raised when one of the room's GUI buttons are
+                     pressed and is routed through to the system to execute the appropriate command on
+                     the associated PANEL itself.
+    reviewStats()
+        - XXX_status: A flag containing the room number and the PANEL object that is on file as being        (Signal [Int, Int] to GUI.XXX_statusCondition)
+                     associated with the room. It is raised when the TUNNEL object the associated
+                     PANEL created to fulfill a command directed by the system finishes running and
+                     it raises its output ready flag local to the PANEL object. This signal directs the
+                     system to update the GUI grid for the room with the panel in it to a COLOR depending
+                     on the conclusion of the TUNNEL. Based on the specific output keyword.
+
+                     **KEYWORDS**
+                     AOK:   Successful Panel Event                              GREEN
+                     SSH:   SSH Error                                           RED
+                     ERR:   Panel Event Error                                   RED
+                     UPD:   Panel Updating.                                     YELLOW
+                     REST:  Panel Reseting
+                     INT0:  Panel attempting to connect.                        YELLOW
+                     INT1:  Panel conducting interaction1.                      BLUE
+                     INT2:  Panel conducting interaction2.                      PURPLE
+
+    DIRECT REFERENCE:
+        - GUI.setup(): The GUI.roomMonitor array houses the ROOM objects for each of the room grids in the   (Class Method: Input(s))
+                     the layout of the GUI. The drop down menu's index is connected to the associatePanel
+                     function which activates the system retrievePanel function.
+        - GUI.retrievePanel(): This function pushes the roomKey of the same room number to the PANEL         (Class Method: Output)
+                     object being associated with the ROOM object. It is called when the retrieve flag
+                     is emitted by the ROOM object when a new room is associated.
+        - GUI.XXX_Condition(): This is the function that updates the panel_status array to reflect the
+                     action the PANEL object is in the process of conducting.
+
+    '''
     retrieve = QtCore.pyqtSignal(int, int)
     statbtntoggled = QtCore.pyqtSignal(int, int)
     int1btntoggled = QtCore.pyqtSignal(int, int)
@@ -84,10 +251,11 @@ class ROOM(QtCore.QObject):
     def int2_btn(self):
         self.int2btntoggled.emit(self.identity, self.operatingPanel)
 
-    def reviewStats(self, oppanel="NULL"):
-        self.status = oppanel
+    def reviewStats(self, operation="NULL"):
+        print("Debugging_reviewStats\t\t for panel" + str(self.operatingPanel) + " in room" + str(self.identity+1) )
+        self.status = operation
 
-        if  (self.status=="AOK"):
+        if  (self.status=="AOK" or self.status=="CNCT"):
             self.AOKstatus.emit(self.identity, self.operatingPanel)
         elif(self.status=="ERR"):
             self.ERRstatus.emit(self.identity, self.operatingPanel)
@@ -95,52 +263,33 @@ class ROOM(QtCore.QObject):
             pass
 
 # ---------------------------------------------------- #
-class PANEL(QtCore.QObject):
-    rawOutput = QtCore.pyqtSignal(int, str, str)
-
-    def __init__(self, panelIdentity, panelAddr, commands):
-        super(PANEL, self).__init__()
-        self.panel = panelIdentity
-        self.panelAddr = panelAddr
-        self.panelChnl = panelIdentity-1
-
-        self.commands = dict()
-        self.commands = commands
-
-    def setRoomkey(self, roomKey ):
-        self.roomKey = dict()
-        self.roomKey = roomKey
-
-    def pulloutput(self, subSys):
-        self.rawOutput.emit( self.panel, subSys, str( outputChannel[self.panelChnl] ) )
-
-    def checkstatus(self):
-        self.thread = TUNNEL(self.panelChnl)
-        self.thread.direct(self.commands["statuscon"], self.panelAddr)
-        self.thread.outputrdy.connect(lambda: self.pulloutput("MAIN"))
-        self.thread.start()
-
-    def interaction1(self):
-        self.thread = TUNNEL(self.panelChnl)
-        self.thread.direct(self.roomKey["int1con"], self.panelAddr)
-        self.thread.outputrdy.connect(lambda: self.pulloutput("MAIN"))
-        self.thread.start()
-
-    def interaction2(self):
-        self.thread = TUNNEL(self.panelChnl)
-        self.thread.direct(self.roomKey["int2con"], self.panelAddr)
-        self.thread.outputrdy.connect(lambda: self.pulloutput("MAIN"))
-        self.thread.start()
-
-# ---------------------------------------------------- #
 class GUI(object):
+    '''
+    PURPOSE:
+    Explanation of the reason for the object. Then, a description of the procedure required for the
+    object to properly achieve its purpose; give the order of how the methods the object contains are
+    employed. Mention package or module specific dependencies.
+
+    INPUTS:
+    function1()
+        - input1 required for function 1: description&purpose                                                    (Type)
+        - input2 required for function 1: description&purpose                                                    (Type)
+    function2()
+        - input3 required for function 2: description&purpose                                                    (Type)
+
+    OUTPUT:
+    function1()
+        - output1 given by function1: description&purpose                                                        (Type)
+    function3()
+        - output2 given by function3: description&purpose                                                        (Type)
+
+    DIRECT REFERENCE:
+        - OBJECT1.functionA(): description of relationship, purpose for call                                     (Scope: Relation)
+        - OBJECT1.functionB(): description of relationship, purpose for call                                     (Scope: Relation)
+        - OBJECT2.functionA(): description of relationship, purpose for call                                     (Scope: Relation)
+    '''
 
     def __init__(self, systems, file, commands):
-        '''
-        The Control System Graphical User Interface built for the sponsors of
-        PD3D, at the University of Central Florida
-        @RestrictedLicense
-        '''
         self.systems = systems
 
         self.commands = dict()
@@ -151,9 +300,9 @@ class GUI(object):
 
         self.panels=[]
         for index in range(self.systems):
-            CONSYSkey = "pi" + str(index+1)
+            panelID = "panel" + str(index+1)
             self.panels.append( PANEL( index+1,
-                                       self.ipADDRS[CONSYSkey],
+                                       self.ipADDRS[panelID],
                                        self.commands) )
 
         self.panel_status=[]
@@ -301,8 +450,8 @@ class GUI(object):
                 self.roomMonitor[index].setup(index)
                 self.roomMonitor[index].retrieve.connect(self.retrievePanel)
                 self.roomMonitor[index].statbtntoggled.connect(self.statbtnCondition)
-                self.roomMonitor[index].int1btntoggled.connect(self.interaction1statusCondition)
-                self.roomMonitor[index].int2btntoggled.connect(self.interaction2statusCondition)
+                self.roomMonitor[index].int1btntoggled.connect(self.interaction1btnCondition)
+                self.roomMonitor[index].int2btntoggled.connect(self.interaction2btnCondition)
                 self.roomMonitor[index].AOKstatus.connect(self.AOKstatusCondition)
                 self.roomMonitor[index].ERRstatus.connect(self.ERRstatusCondition)
                 self.selectPanelR[index].currentIndexChanged.connect(self.roomMonitor[index].associatePanel)
@@ -429,19 +578,18 @@ class GUI(object):
 
         # -------------------------- Options Menu in Button:
         menu = QtWidgets.QMenu("Options")
+
+        # menu.addSeparator()
+        # menu.addAction("Fetch Data from All", ControlSystem.close)
+        # for index in range(0,12):
+        #     actionItem = "Fetch from Room " + str(index+1)
+        #     menu.addAction(actionItem, ControlSystem.close)
+        for index in range(0, self.systems):
+            actionItem = "Reset Panel " + str(index+1)
+            menu.addAction(actionItem, self.panels[index].reboot)
+        menu.addSeparator()
         menu.addAction("Show Full Screen", ControlSystem.showFullScreen)
         menu.addAction("Show Window", ControlSystem.showNormal)
-        menu.addSeparator()
-        menu.addAction("Fetch Data from All", ControlSystem.close)
-        for index in range(0,12):
-            actionItem = "Fetch from Room " + str(index+1)
-            menu.addAction(actionItem, ControlSystem.close)
-        menu.addSeparator()
-        for index in range(0, self.systems):
-            actionItem = "Test Panel " + str(index+1)
-            menu.addAction(actionItem)
-        menu.addSeparator()
-        menu.addAction("Reboot All Panels")
         self.advancedOpt.setMenu(menu)
 
         # -------------------------- "Quit Program" Button:
@@ -460,10 +608,10 @@ class GUI(object):
         self.controlLayout.addLayout(self.optionsLayout)
         self.primaryGrid.addLayout(self.controlLayout, 0, 0, 4, 1)
         self.windowLayout.addLayout(self.primaryGrid)
-        
+
         # -------------------------- Translate Text to Locality Language:
         self.initTranslateGUI(ControlSystem)
-        
+
         # -------------------------- Arrange Connections:
         for index in range(self.systems):
             self.panels[index].rawOutput.connect(self.panelEndJob)
@@ -492,19 +640,19 @@ class GUI(object):
             self.statusR[index].setText(_translate("ControlSystem", "Connect"))
             self.int1R[index].setText(_translate("ControlSystem", "Int: 1"))
             self.int2R[index].setText(_translate("ControlSystem", "Int: 2"))
-        
+
         self.connectAll.setText(_translate("ControlSystem", "Connect All"))
         self.int1All.setText(_translate("ControlSystem", "Interaction 1"))
         self.int2All.setText(_translate("ControlSystem", "Interaction 2"))
-        
+
         for index in range(0,self.systems):
             pnames = "P" + str(index+1)
-            panel = "Panel IP:\t\t\t\t\t" + self.ipADDRS["pi"+str(index+1)]
-            
+            panel = "Panel IP:\t\t\t\t\t" + self.ipADDRS["panel"+str(index+1)]
+
             self.paddr[index].setText(_translate("ControlSystem", panel))
             self.poutput[index].setText(_translate("ControlSystem", self.panel_status[index][2]))
             self.panelTabs.setTabText(self.panelTabs.indexOf(self.ptab[index]), _translate("ControlSystem", pnames))
-        
+
         self.advancedOpt.setText(_translate("ControlSystem", "Adv.\nOptions"))
         self.quitProg.setShortcut(_translate("ControlSystem", "Ctrl+C"))
 
@@ -522,13 +670,14 @@ class GUI(object):
         i=1
         with open( file, 'r' ) as f:                # Open file
             for ip in f:                            # Iterate over the contents
-                name = "pi{}".format(i)             # Construct panel name
+                name = "panel{}".format(i)             # Construct panel name
                 IPs[ name ] = ip.strip('\n')        # Store into dictionary
                 i=i+1                               # Increment counter
         return IPs
 
     # ---------------------------------------------------- #
     def retrievePanel(self, roomID, panelID):
+        print("Debugging_retrievePanel for selection index" + str(panelID) + "_for room" + str(roomID+1))
         if panelID == -1:
             _translate = QtCore.QCoreApplication.translate
             if self.statusR[roomID].isChecked():
@@ -541,7 +690,7 @@ class GUI(object):
         else:
             self.statusR[roomID].setEnabled(True)
 
-            if  (self.panel_status[panelID][0] == "NULL"):
+            if  (self.panel_status[panelID][1] == "NULL"):
                 self.statusR[roomID].clicked.connect(lambda: self.roomMonitor[roomID].statuscheck_btn() )
                 self.int1R[roomID].clicked.connect(lambda: self.roomMonitor[roomID].int1_btn())
                 self.int2R[roomID].clicked.connect(lambda: self.roomMonitor[roomID].int2_btn())
@@ -553,6 +702,7 @@ class GUI(object):
                 self.statusR[prevAssoc].clicked.disconnect()
                 self.int1R[prevAssoc].clicked.disconnect()
                 self.int2R[prevAssoc].clicked.disconnect()
+
                 self.statusR[roomID].clicked.connect(lambda: self.roomMonitor[roomID].statuscheck_btn() )
                 self.int1R[roomID].clicked.connect(lambda: self.roomMonitor[roomID].int1_btn())
                 self.int2R[roomID].clicked.connect(lambda: self.roomMonitor[roomID].int2_btn())
@@ -561,6 +711,7 @@ class GUI(object):
 
     # ---------------------------------------------------- #
     def AOKstatusCondition(self, roomID, panelID):
+        print("Debugging_AOKstatusCondition\t for panel" + str(panelID) + " in room" + str(roomID+1) )
         panelIdx = panelID - 1
         _translate = QtCore.QCoreApplication.translate
 
@@ -577,6 +728,7 @@ class GUI(object):
 
     # ---------------------------------------------------- #
     def ERRstatusCondition(self, roomID, panelID):
+        print("Debugging_ERRstatusCondition\t for panel" + str(panelID) + " in room" + str(roomID+1) )
         panelIdx = panelID - 1
         _translate = QtCore.QCoreApplication.translate
 
@@ -593,16 +745,17 @@ class GUI(object):
 
     # ---------------------------------------------------- #
     def statbtnCondition(self, roomID, panelID):
+        print("Debugging_statbtnCondition\t for panel" + str(panelID) + " in room" + str(roomID+1) )
         panelIdx = panelID - 1
         _translate = QtCore.QCoreApplication.translate
         if self.statusR[roomID].isChecked():
+            self.room[roomID].setStyleSheet(self.yellowbg)
+
             self.statusR[roomID].setEnabled(False)
+            self.statusR[roomID].setStyleSheet(self.yellowbg)
             self.statusR[roomID].setText(_translate("ControlSystem", "Connecting..."))
 
-            self.panel_status[panelIdx][0] = "INT0"
-            oppanel = "INT0"
-            self.roomMonitor[roomID].reviewStats(oppanel)
-
+            self.panel_status[panelIdx][0] = "CNCT"
             self.panel_status[panelIdx][2] = "Connecting...\n"
             self.poutput[panelIdx].setText(_translate("ControlSystem", self.panel_status[panelIdx][2]))
             self.panels[panelIdx].checkstatus()
@@ -614,7 +767,8 @@ class GUI(object):
             self.int2R[roomID].setEnabled(False)
 
     # ---------------------------------------------------- #
-    def interaction1statusCondition(self, roomID, panelID):
+    def interaction1btnCondition(self, roomID, panelID):
+        print("Debugging_int1btnCondition\t for panel" + str(panelID) + " in room" + str(roomID+1) )
         panelIdx = panelID - 1
         _translate = QtCore.QCoreApplication.translate
 
@@ -629,9 +783,6 @@ class GUI(object):
             self.int2R[roomID].setEnabled(False)
 
             self.panel_status[panelIdx][0] = "INT1"
-            oppanel = "INT1"
-            self.roomMonitor[roomID].reviewStats(oppanel)
-
             self.panel_status[panelIdx][2] = "Interaction 1...\n"
             self.poutput[panelIdx].setText(_translate("ControlSystem", self.panel_status[panelIdx][2]))
             self.panels[panelIdx].interaction1()
@@ -640,7 +791,8 @@ class GUI(object):
             pass
 
     # ---------------------------------------------------- #
-    def interaction2statusCondition(self, roomID, panelID):
+    def interaction2btnCondition(self, roomID, panelID):
+        print("Debugging_int2btnCondition\t for panel" + str(panelID) + " in room" + str(roomID+1) )
         panelIdx = panelID - 1
         _translate = QtCore.QCoreApplication.translate
 
@@ -655,9 +807,6 @@ class GUI(object):
             self.int2R[roomID].setEnabled(False)
 
             self.panel_status[panelIdx][0] = "INT2"
-            oppanel = "INT2"
-            self.roomMonitor[roomID].reviewStats(oppanel)
-
             self.panel_status[panelIdx][2] = "Interaction 2...\n"
             self.poutput[panelIdx].setText(_translate("ControlSystem", self.panel_status[panelIdx][2]))
             self.panels[panelIdx].interaction2()
@@ -666,38 +815,41 @@ class GUI(object):
             pass
 
     # ---------------------------------------------------- #
-    def panelEndJob(self, panelID, subSys, rawMessage):
+    def panelEndJob(self, panelID, rawMessage):
+        print("Debugging_panelEndJob\t\t for panel" + str(panelID))
         panelIdx = panelID - 1
         _translate = QtCore.QCoreApplication.translate
+
         edits = rawMessage.strip("b'")
         review = edits.split("\\n")
         message = edits.replace("\\n", "\n")
+        message = "\n" + message
 
-        if(subSys == "MAIN"):
-            if( rawMessage == "b'TEST\\n'" ):
-                self.panel_status[panelIdx][0] = "TEST"
+        if( rawMessage == "b'CNCT\\n'" ):
+            self.panel_status[panelIdx][0] = "CNCT"
+            message = "Connected to Panel " + str(panelID) + "..."
+        else:
+            # **KEYWORDS**
+            # AOK:   Successful Panel Event                              GREEN
+            # SSH:   SSH Error                                           RED
+            # ERR:   Panel Event Error                                   RED
+            # DONE:  Panel Updating.                                     YELLOW
+
+            if any("AOK" in s for s in review):
+                self.panel_status[panelIdx][0] = "AOK"
+            elif any("DONE" in s for s in review):
+                self.panel_status[panelIdx][0] = "DONE"
             else:
-                # These are the output tags.
-                # AOK : message went through.
-                # DONE : task complete.
-                # SET : message .
-                # SET : message .
-
-                if any("AOK" in s for s in review):
-                    self.panel_status[panelIdx][0] = "AOK"
-                elif any("DONE" in s for s in review):
-                    self.panel_status[panelIdx][0] = "DONE"
-                else:
-                    self.panel_status[panelIdx][0] = "ERR"
+                self.panel_status[panelIdx][0] = "ERR"
 
         if(self.panel_status[panelIdx][1] == "NULL"):
             pass
         else:
-            oppanel= self.panel_status[panelIdx][0]
+            operation = self.panel_status[panelIdx][0]
             roomID = int( self.panel_status[panelIdx][1].strip('R') )
-            self.roomMonitor[roomID].reviewStats(oppanel)
+            self.roomMonitor[roomID].reviewStats(operation)
 
-        self.panel_status[panelIdx][2] = self.panel_status[panelIdx][2] + "\Panel Output:\n" + message
+        self.panel_status[panelIdx][2] = self.panel_status[panelIdx][2] + "Panel Output:\n" + message
         self.poutput[panelIdx].setText(_translate("ControlSystem", self.panel_status[panelIdx][2]))
 
 # -------------------------------------------------------------------------------------------------------- #
@@ -706,106 +858,80 @@ if __name__ == "__main__":
     # ---------------------------------------------------- #
     # Standard Commands Available to All Panels
     STDCMDS = {
-    "reset"     : "sudo reboot",
-    "statuscon" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "statusbpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
+    "reboot"    : "sudo reboot",
+    "status"    : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/connectionTest.py",
     "normcon"   : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/consys4.3.py",
     "normbpc"   : "DISPLAY=:0 python pd3d/csec/repos/ControlSystem/Software/Python/consys/consys4.3bpc.py -s 0 -st 30 -lp 85 -hp 145",
-    "test"      : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status.py"
     }
 
     # ---------------------------------------------------- #
     # Room 1 Shell Command Key :
     roomKey1 = {
-    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
-    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
+    "int1" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status5.py",
+    "int2" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/aokTest.py"
     }
 
     # Room 2 Shell Command Key :
     roomKey2 = {
-    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
-    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
+    "int1" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/connectionTest.py",
+    "int2" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status5.py"
     }
 
     # Room 3 Shell Command Key :
     roomKey3 = {
-    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
-    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
+    "int1" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status5.py",
+    "int2" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/errorTest.py"
     }
 
     # Room 4 Shell Command Key :
     roomKey4 = {
-    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
-    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
+    "int1" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/aokTest.py",
+    "int2" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/errorTest.py"
     }
 
     # Room 5 Shell Command Key :
     roomKey5 = {
-    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
-    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
+    "int1" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/connectionTest.py",
+    "int2" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/aokTest.py"
     }
 
     # Room 6 Shell Command Key :
     roomKey6 = {
-    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
-    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
+    "int1" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/aokTest.py",
+    "int2" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/aokTest.py"
     }
 
     # Room 7 Shell Command Key :
     roomKey7 = {
-    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
-    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
+    "int1" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/aokTest.py",
+    "int2" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/connectionTest.py"
     }
 
     # Room 8 Shell Command Key :
     roomKey8 = {
-    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
-    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
+    "int1" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/errorTest.py",
+    "int2" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/errorTest.py"
     }
 
     # Room 9 Shell Command Key :
     roomKey9 = {
-    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
-    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
+    "int1" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/errorTest.py",
+    "int2" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/aokTest.py"
     }
 
     roomKey10 = {
-    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
-    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
+    "int1" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/aokTest.py",
+    "int2" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/errorTest.py"
     }
 
     roomKey11 = {
-    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
-    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
+    "int1" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/connectionTest.py",
+    "int2" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/errorTest.py"
     }
 
     roomKey12 = {
-    "int1con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int1bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py",
-    "int2con" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3.py",
-    "int2bpc" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status4.3bpc.py"
+    "int1" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/errorTest.py",
+    "int2" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/connectionTest.py"
     }
 
 
@@ -814,12 +940,12 @@ if __name__ == "__main__":
 
     # ---------------------------------------------------- #
     # CSEC Testing Setup Properties :
-    PANELS = 8
-    FILE = "ip_addrs.csv"
+    PANELS = 12
+    FILE = "AddressBook.csv"
 
     global outputChannel
     outputChannel = []
-    for index in range(2*PANELS):
+    for index in range(PANELS):
         outputChannel.append("NULL")
 
     try:
@@ -827,11 +953,8 @@ if __name__ == "__main__":
         appplication.setStyle('Fusion')
 
         ControlSystem = QtWidgets.QWidget()
-        print("hola")
         CSEC = GUI(PANELS, FILE, STDCMDS)
-        print("here0")
         CSEC.setup(ControlSystem)
-        print("here")
         ControlSystem.show()
 
         sys.exit(appplication.exec_())

@@ -854,7 +854,7 @@ if __name__ == "__main__":
 
     # ---------------------------------------------------- #
     # CSEC Testing Setup Properties :
-    PANELS = 8
+    PANELS = 12
     FILE = "ip_addrs.csv"
 
     global outputChannel
