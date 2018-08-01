@@ -39,16 +39,17 @@ RECMODE         = chr(0x41)       # Parse recording mode
 SETIDLE         = chr(0x26)       # set to idle
 
 ## Simulation Functions ============================================================================================================= // 
-NHBSYN          = chr(0x1D)       # Playback of Synthetic, Normal Heart Beat                           			[resp: ACK | NAK]
-ESMSYN          = chr(0x1E)       # Playback of Synthetic, Early Systolic Heart Murmur                 			[resp: ACK | NAK]
-NHBREC          = chr(0x21)       # Blend Normal Heart Beat Recorded                                   			[resp: ACK | NAK]
-EHBREC          = chr(0x22)       # Blend Exercised Heart Beat Recorded                                			[resp: ACK | NAK]
-KOROT           = chr(0x30)       # Playback of Korotkoff Sound                                        			[resp: ACK | NAK]
-EDMSYN          = chr(0x33)       # Playback of Synthetic, Early Diastolic Heart Murmur                			[resp: ACK | NAK]
-ASYSYN          = chr(0x34)       # ........................                                        			[resp: ACK | NAK]
-PEJECT          = chr(0x35)       # ........................                                           			[resp: ACK | NAK]
-PSPLIT          = chr(0x36)       # ........................                                          			[resp: ACK | NAK]
-STARTSIM        = chr(0x39)       # simulation byte
-STOPSIM         = chr(0x40)       # simulation byte
-S4GALL          = chr(0x42)       # S4 gallop
-AORSTE          = chr(0x43)       # Aortic stenosis
+AORSTE          = chr(0x50)         # Aortic stenosis
+S4GALL          = chr(0x51)         # S4 gallop
+ESMSYN          = chr(0x52)         # Playback of Synthetic, Early Systolic Heart Murmur                 			[resp: ACK | NAK]
+KOROT1          = chr(0x53)         # Playback of Korotkoff Sound                                        			[resp: ACK | NAK]
+KOROT2          = chr(0x54)         # Playback of Korotkoff Sound                                        			[resp: ACK | NAK]
+KOROT3          = chr(0x55)         # Playback of Korotkoff Sound                                        			[resp: ACK | NAK]
+KOROT4          = chr(0x56)         # Playback of Korotkoff Sound                                        			[resp: ACK | NAK]
+RECAOR          = chr(0x57)         # ...
+RECMIT          = chr(0x58)         # ...
+RECPUL          = chr(0x59)         # ...
+RECTRI          = chr(0x60)         # ...
+
+STARTSIM        = chr(0x70)       # simulation byte
+STOPSIM         = chr(0x71)       # simulation byte
