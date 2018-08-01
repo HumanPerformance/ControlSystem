@@ -45,7 +45,7 @@ print fullStamp() + " Triggering EARLY SYSTOLIC HEART MURMUR OVERLAY"
 time.sleep(1)
 #fileByte = definitions.ESMSYN
 #fileByte = definitions.KOROT3
-fileByte = chr(0x33)
+fileByte = '0x33'
 #fileByte = definitions.S4GALL
 #fileByte = definitions.AORSTE
 startBlending(rfObject,fileByte)

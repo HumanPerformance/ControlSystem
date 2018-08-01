@@ -39,17 +39,30 @@ RECMODE         = chr(0x41)       # Parse recording mode
 SETIDLE         = chr(0x26)       # set to idle
 
 ## Simulation Functions ============================================================================================================= // 
-AORSTE          = chr(0x50)         # Aortic stenosis
-S4GALL          = chr(0x51)         # S4 gallop
-ESMSYN          = chr(0x52)         # Playback of Synthetic, Early Systolic Heart Murmur                 			[resp: ACK | NAK]
-KOROT1          = chr(0x53)         # Playback of Korotkoff Sound                                        			[resp: ACK | NAK]
-KOROT2          = chr(0x54)         # Playback of Korotkoff Sound                                        			[resp: ACK | NAK]
-KOROT3          = chr(0x55)         # Playback of Korotkoff Sound                                        			[resp: ACK | NAK]
-KOROT4          = chr(0x56)         # Playback of Korotkoff Sound                                        			[resp: ACK | NAK]
-RECAOR          = chr(0x57)         # ...
-RECMIT          = chr(0x58)         # ...
-RECPUL          = chr(0x59)         # ...
-RECTRI          = chr(0x60)         # ...
-
 STARTSIM        = chr(0x70)       # simulation byte
 STOPSIM         = chr(0x71)       # simulation byte
+
+## Blending Audio Files and Reference Bytes ========================================================================================= //
+### Blending Files
+n_blend_files       = 11
+blendFiles          = (["AORSTE",
+                        "S4GALL",
+                        "ESMSYN",
+                        "KOROT1",
+                        "KOROT2",
+                        "KOROT3",
+                        "KOROT4",
+                        "RECAOR",
+                        "RECMIT",
+                        "RECPUL",
+                        "RECTRI"])
+
+### Associated Bytes (self-assembling)
+n_blend_bytes       = n_blend_files
+blend_byte_offset   = 50
+blendInt            = []
+blendByte           = []
+for i in range( 0, n_blend_bytes ):
+    blendInt.append(  blend_byte_offset + i )
+    blendByte.append( chr( blend_byte_offset + i ) )
+
