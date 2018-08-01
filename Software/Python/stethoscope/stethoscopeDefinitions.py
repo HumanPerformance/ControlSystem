@@ -59,10 +59,18 @@ blendFiles          = (["AORSTE",
 
 ### Associated Bytes (self-assembling)
 n_blend_bytes       = n_blend_files
-blend_byte_offset   = 50
+blend_byte_offset   = 60
 blendInt            = []
 blendByte           = []
 for i in range( 0, n_blend_bytes ):
     blendInt.append(  blend_byte_offset + i )
     blendByte.append( chr( blend_byte_offset + i ) )
 
+### Associated Matching Function
+def blendByteMatching( blendFileName, blendFiles ):
+    matchIndex = -1
+    n_blend_files = len( blendFiles )
+    for i in range( 0, n_blend_files ):
+        if blendFiles[i] == blendFileName:
+            matchIndex = i
+    return matchIndex

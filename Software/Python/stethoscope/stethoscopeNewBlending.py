@@ -18,7 +18,7 @@ device = "stethoscope"
 homeDir, pythonDir, deviceDir = definePaths(device)
 response = addPaths(pythonDir)
 
-import  stethoscopeDefinitions       as     definitions
+from    stethoscopeDefinitions       import *
 from    os.path                      import expanduser
 from    bluetoothProtocol_teensy32   import *
 from    stethoscopeProtocol          import *
@@ -45,9 +45,13 @@ print fullStamp() + " Triggering EARLY SYSTOLIC HEART MURMUR OVERLAY"
 time.sleep(1)
 #fileByte = definitions.ESMSYN
 #fileByte = definitions.KOROT3
-fileByte = '0x33'
 #fileByte = definitions.S4GALL
 #fileByte = definitions.AORSTE
+
+blendFileName = 'AORSTE'
+matchIndex = blendByteMatching( blendFileName, blendFiles )
+fileByte = chr( blendInt[matchIndex] )
+
 startBlending(rfObject,fileByte)
 
 tracking_stop_time = 20
