@@ -7,7 +7,8 @@
 * Adapted from: John Harrison's original work
 * Link: http://cratel.wichita.edu/cratel/python/code/SimpleVoltMeter
 *
-* VERSION: 0.6.2
+* VERSION: 0.6.5
+*   - ADDED   : Subdivide simulation region into smaller regions
 *   - MODIFIED: This iteration of the pressureDialGauge is not intended
 *               as a standalone program. It is meant to work in conjunction
 *               with the appJar GUI. Attempting to run this program as a
@@ -26,7 +27,7 @@
 * 
 * AUTHOR                    :   Mohammad Odeh
 * DATE                      :   Mar.  7th, 2017 Year of Our Lord
-* LAST CONTRIBUTION DATE    :   May. 14th, 2018 Year of Our Lord
+* LAST CONTRIBUTION DATE    :   Aug.  2nd, 2018 Year of Our Lord
 *
 '''
 
@@ -376,22 +377,36 @@ class Worker( QtCore.QThread ):
         In charge of triggering simulations
         """
         
-        lp = float( args["lower_pressure"] )
-        hp = float( args["higher_pressure"] )
+        lp      = float( args["lower_pressure"]  )
+        hp      = float( args["higher_pressure"] )
+        quart_1 = float( lp + 0.1*lp )                                              # Region of 10% after lower limit
+        quart_2 = float( lp + 0.5*lp )                                              # Region of 50% after lower limit
+        quart_3 = float( lp + 0.9*lp )                                              # Region of 90% after lower limit
         
         # Error handling (1)
         try:
             # Entering simulation pressure interval
             if (P >= lp) and (P <= hp) and (self.playback == False):
                 self.normal = False                                                 # Turn OFF normal playback
-                self.playback = True                                                # Turn on simulation
-                print( "SIM, {}".format(int(self.playback)) )                       # We are within simulated pressure range
+                self.playback = True                                                # Turn ON simulation
+
+                if  ( (P >= lp) and (P <= quart_1) ):                               #   If we are within the 0 - 10 % region
+                    print( "SIM, {}".format(int(self.playback)+0) )                 #       We are within simulated pressure range
+
+                elif( (P >= quart_1) and (P <= quart_2) ):                          #   If we are within the 10 - 50 % region
+                    print( "SIM, {}".format(int(self.playback)+1) )                 #       We are within simulated pressure range
+
+                elif( (P >= quart_2) and (P <= quart_3) ):                          #   If we are within the 50 - 90 % region
+                    print( "SIM, {}".format(int(self.playback)+2) )                 #       We are within simulated pressure range
+
+                elif( (P >= quart_3) and (P <= hp) ):                               #   If we are within the 90 - 100% region
+                    print( "SIM, {}".format(int(self.playback)+3) )                 #       We are within simulated pressure range
                 
             # Leaving simulation pressure interval
             elif ((P < lp) or (P > hp)) and (self.normal == False):
                 self.normal = True                                                  # Turn ON normal playback
-                self.playback = False                                               # Turn OFF simulation
-                print( "SIM, {}".format(int(self.playback)) )                       # We are outside simulated pressure range
+                self.playback = False                                               #   Turn OFF simulation
+                print( "SIM, {}".format(int(self.playback)) )                       #   We are outside simulated pressure range
                 
         # Error handling (2)        
         except Exception as instance:

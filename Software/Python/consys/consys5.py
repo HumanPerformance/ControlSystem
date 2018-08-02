@@ -3,7 +3,9 @@
 *
 * Latest version of the control system execution software
 *
-* VERSION: 5.1
+* VERSION: 5.2
+*   - ADDED   : Implemented ABPC update to script and it
+*               now handles multiple simulation regions.
 *   - ADDED   : Awesomeness!!
 *   - MODIFIED: Rewrote certain parts of the code into a class
 *   - FIXED   : Fluvio's horrible, horrible coding skills.
@@ -17,7 +19,7 @@
 * WRITTEN                   :   04/18/2018
 *
 * MODIFIED BY               :   The Great Mohammad Odeh
-* DATE                      :   May. 31st, 2018 Year of Our Lord
+* DATE                      :   Aug.  2nd, 2018 Year of Our Lord
 *
 '''
 
@@ -231,13 +233,13 @@ class data_acquisition( object ):
         
         inData = "{}".format( self.smartholder_SHH.readline() )
 
-        if( inData == '' ):                                             # If empty line
-            pass                                                        # do nothing
+        if( inData == '' ):                                                                 # If empty line
+            pass                                                                            # do nothing
 
         else:
             ID0 = self.smartHandle_name[0]
             ID1 = self.smartHandle_name[1]
-            split_line = inData.split()                                 # Split incoming data
+            split_line = inData.split()                                                     # Split incoming data
 
             if( split_line[1] == '1:' and split_line[2] == '0' ):
                 print( "{} {} has been removed".format(fS(),
@@ -247,7 +249,7 @@ class data_acquisition( object ):
             elif( split_line[1] == '1:' and split_line[2] == '1' ):
                 print( "{} {} has been stored ".format(fS(),
                                                        ID0) )
-                self.SH_holder_flag_new[ ID0 ] = 1   # device one in the holder		
+                self.SH_holder_flag_new[ ID0 ] = 1                                          # device one in the holder		
 
             elif( split_line[1] == '2:' and split_line[2] == '0' ):
                 print( "{} {} has been removed".format(fS(),
@@ -324,15 +326,29 @@ class data_acquisition( object ):
 
         # scenario 3 = KOROT
         elif( self.scenario == 3 ):
-            if( self.ST_holder_flag_new == 0 ):
-                if( self.bpc_flag_new == 1 and self.bpc_flag_new != self.bpc_flag_old ):
-                    fileByte = definitions.KOROT
-                    startBlending( self.stethoscope, fileByte)
-                    self.bpc_flag_old = self.bpc_flag_new
-                    
-                elif( self.bpc_flag_new == 0 and self.bpc_flag_new != self.bpc_flag_old ):
-                    stopBlending( self.stethoscope )
-                    self.bpc_flag_old = self.bpc_flag_new
+            if( self.ST_holder_flag_new == 0 ):                                             # If stethoscope is not in holder
+                if( self.bpc_flag_new != self.bpc_flag_old ):                               #   ...and ABPC status changed
+
+                    if  ( self.bpc_flag_new == 0 ):                                         #       If we are not within simulation
+                        stopBlending( self.stethoscope )                                    #       ...region, don't play anything
+
+                    elif( self.bpc_flag_new == 1 ):                                         #       If we are within the 1st region
+                        fileByte = definitions.KOROT                                        #       ...play this file
+                        startBlending( self.stethoscope, fileByte)                          #       Send the trigger command
+
+                    elif( self.bpc_flag_new == 2 ):                                         #       If we are within the 2nd region
+                        fileByte = definitions.KOROT                                        #       ...play this file
+                        startBlending( self.stethoscope, fileByte)                          #       Send the trigger command
+
+                    elif( self.bpc_flag_new == 3 ):                                         #       If we are within the 3rd region
+                        fileByte = definitions.KOROT                                        #       ...play this file
+                        startBlending( self.stethoscope, fileByte)                          #       Send the trigger command
+
+                    elif( self.bpc_flag_new == 4 ):                                         #       If we are within the 4th region
+                        fileByte = definitions.KOROT                                        #       ...play this file
+                        startBlending( self.stethoscope, fileByte)                          #       Send the trigger command
+                        
+                    self.bpc_flag_old = self.bpc_flag_new                                   #   Update flag
     
         for device_ID, device_BT in self.smartHandle.iteritems():
 ##            if( self.SH_holder_flag_new[ device_ID ] == 0 ):
@@ -437,12 +453,10 @@ print( "==================================================\n" )
 
 print( "============== DEVICE  DEACTIVATION ==============" )
 print( "{} Disconnecting bluetooth devices ".format(fS()) )
-if( args["scenario"] == 0 ):
-    stopRecording( smartdevice["stethoscope"] )
-elif( args["scenario"] == 1 ):
-    stopBlending( smartdevice["stethoscope"] )
-elif( args["scenario"] == 2 ):
-    stopBlending( smartdevice["stethoscope"] )
+
+if  ( args["scenario"] == 0 ): stopRecording( smartdevice["stethoscope"] )
+elif( args["scenario"] == 1 ): stopBlending ( smartdevice["stethoscope"] )
+elif( args["scenario"] == 2 ): stopBlending ( smartdevice["stethoscope"] )
 
 print( "{} Placing devices in IDLE mode and closing ports".format(fS()) )
 for device_ID, device_BT_Obj in smartdevice.iteritems():
