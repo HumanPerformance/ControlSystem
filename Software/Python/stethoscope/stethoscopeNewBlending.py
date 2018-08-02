@@ -48,7 +48,7 @@ time.sleep(1)
 #fileByte = definitions.S4GALL
 #fileByte = definitions.AORSTE
 
-blendFileName = 'AORSTE'
+blendFileName = 'DEARAT'
 matchIndex = blendByteMatching( blendFileName, blendFiles )
 fileByte = chr( blendInt[matchIndex] )
 
