@@ -27,7 +27,10 @@ from    stethoscopeProtocol          import *
 print fullStamp() + " Connecting to the Stethoscope"
 deviceName = "SS"
 portNumber = 1  # cannot use port 0 for sockets
-deviceBTAddress = "00:06:66:D0:E4:37"
+deviceBTAddress = "00:06:66:D0:C9:BC" # stet 003
+#deviceBTAddress = "00:06:66:D0:E4:37" # stet 005
+#deviceBTAddress = "00:06:66:D0:C9:A5" # stet 009
+#deviceBTAddress = "00:06:66:D0:C9:AE" # stet 010
 baudrate = 115200
 attempts = 5
 #rfObject = createPort(deviceName,portNumber,deviceBTAddress,baudrate,attempts)
@@ -48,7 +51,7 @@ time.sleep(1)
 #fileByte = definitions.S4GALL
 #fileByte = definitions.AORSTE
 
-blendFileName = 'DEARAT'
+blendFileName = 'WHEEZI'
 matchIndex = blendByteMatching( blendFileName, blendFiles )
 fileByte = chr( blendInt[matchIndex] )
 
