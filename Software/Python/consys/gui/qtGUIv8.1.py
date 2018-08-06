@@ -875,7 +875,7 @@ if __name__ == "__main__":
     # Standard Commands Available to All Panels
     STDCMDS = {
     "reboot"    : "sudo reboot",
-    "status"    : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status5.py",
+    "status"    : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/connectionTest.py",
     "normcon"   : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/consys4.3.py",
     "normbpc"   : "DISPLAY=:0 python pd3d/csec/repos/ControlSystem/Software/Python/consys/consys4.3bpc.py -s 0 -st 30 -lp 85 -hp 145",
     }
@@ -883,14 +883,14 @@ if __name__ == "__main__":
     # ---------------------------------------------------- #
     # Room 1 Shell Command Key :
     roomKey1 = {
-    "int1" : "DISPLAY=:0 python pd3d/csec/repos/ControlSystem/Software/Python/consys/consys5.py",
-    "int2" : "DISPLAY=:0 python pd3d/csec/repos/ControlSystem/Software/Python/consys/consys5.py -s 1 -st 10"
+    "int1" : "DISPLAY=:0 python pd3d/csec/repos/ControlSystem/Software/Python/consys/status5.py",
+    "int2" : "DISPLAY=:0 python pd3d/csec/repos/ControlSystem/Software/Python/consys/consys5.py -s 1 -st 30"
     }
 
     # Room 2 Shell Command Key :
     roomKey2 = {
-    "int1" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/connectionTest.py",
-    "int2" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status5.py"
+    "int1" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status5.py",
+    "int2" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/consys5.py -s 2 -st 30"
     }
 
     # Room 3 Shell Command Key :
