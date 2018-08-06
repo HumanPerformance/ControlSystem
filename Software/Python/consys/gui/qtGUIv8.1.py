@@ -59,11 +59,13 @@ class TUNNEL(QtCore.QThread):
             print("Debugging_TUNNEL_panel" + str(self.chnl+1) + "_cmd: \t\t" + str(self.cmd))
             self.ssh.connect(self.addr, username= self.usr, password= self.pwrd)
             self.ssh_stdin, self.ssh_stdout, self.ssh_stderr = self.ssh.exec_command(self.cmd)
+            print("Hi debugger")   # mod
 
         except Exception as e:
             sys.stderr.write("SSH connection error: {0}".format(e))
             outputChannel[self.chnl] = "FATAL: SSH Connection Failed"
             self.outputrdy.emit()
+            
 
         if self.ssh_stdout:
 
@@ -72,11 +74,13 @@ class TUNNEL(QtCore.QThread):
             self.outputrdy.emit()
             print("Debugging_TUNNEL_panel" + str(self.chnl+1) + "_outputrdy:\t" + str(output) )
             self.ssh.close()
+            print("Hi debugger im down here")   # mod
         else:
             outputChannel[self.chnl] = "ERROR: NULL"
             self.outputrdy.emit()
             print("Debugging_TUNNEL_panel" + str(self.chnl+1) + "_outputrdy: ERROR: NULL")
             self.ssh.close()
+            print("Hi debugger actually im wayyyy down here")   # mod
 
 # ---------------------------------------------------- #
 class PANEL(QtCore.QObject):
@@ -148,6 +152,7 @@ class PANEL(QtCore.QObject):
         self.thread.direct(self.roomKey["int1"], self.panelAddr)
         self.thread.outputrdy.connect(lambda: self.pulloutput())
         self.thread.start()
+        print("whats up")  # mod
 
     def interaction2(self):
         print("Debugging_sending int2 command to generate a rawOutput")
@@ -257,9 +262,12 @@ class ROOM(QtCore.QObject):
 
         if  (self.status=="AOK" or self.status=="CNCT"):
             self.AOKstatus.emit(self.identity, self.operatingPanel)
+            print( "I am here - AOK" ) # mod
         elif(self.status=="ERR"):
             self.ERRstatus.emit(self.identity, self.operatingPanel)
+            print( "I am here - ERR" ) # mod
         else:
+            print( "I do not know where I am ", self.status ) # mod
             pass
 
 # ---------------------------------------------------- #
@@ -310,6 +318,7 @@ class GUI(object):
         for index in range(systems):
             # Format: PANEL_STATE, ROOM_ASSOC, OUTPUT_STRING
             self.panel_status.append(["NULL", "NULL", ""])
+
 
     def setup(self, ControlSystem):
         # ---------------------------------------------------- #
@@ -783,6 +792,7 @@ class GUI(object):
             self.int2R[roomID].setEnabled(False)
 
             self.panel_status[panelIdx][0] = "INT1"
+            print("Self Status Check #6 ", self.panel_status[panelIdx][0])  # mod
             self.panel_status[panelIdx][2] = "Interaction 1...\n"
             self.poutput[panelIdx].setText(_translate("ControlSystem", self.panel_status[panelIdx][2]))
             self.panels[panelIdx].interaction1()
@@ -813,10 +823,11 @@ class GUI(object):
 
         else:
             pass
-
+        
     # ---------------------------------------------------- #
     def panelEndJob(self, panelID, rawMessage):
         print("Debugging_panelEndJob\t\t for panel" + str(panelID))
+        print("Self Status Check #7 ")  # mod
         panelIdx = panelID - 1
         _translate = QtCore.QCoreApplication.translate
 
@@ -828,6 +839,7 @@ class GUI(object):
         if( rawMessage == "b'CNCT\\n'" ):
             self.panel_status[panelIdx][0] = "CNCT"
             message = "Connected to Panel " + str(panelID) + "..."
+            print("Self Status Check #8 ", self.panel_status[panelIdx][0])  # mod
         else:
             # **KEYWORDS**
             # AOK:   Successful Panel Event                              GREEN
@@ -837,15 +849,19 @@ class GUI(object):
 
             if any("AOK" in s for s in review):
                 self.panel_status[panelIdx][0] = "AOK"
+                print ("status check here AOK ")# self.panel_status[panelIdx][0])   #mod
             elif any("DONE" in s for s in review):
                 self.panel_status[panelIdx][0] = "DONE"
+                print ("status check here DONE ")# self.panel_status[panelIdx][0])   #mod
             else:
                 self.panel_status[panelIdx][0] = "ERR"
+                print ("status check here ERR ") #, self.panel_status[panelIdx][0])   #mod
 
         if(self.panel_status[panelIdx][1] == "NULL"):
             pass
         else:
             operation = self.panel_status[panelIdx][0]
+            print("Operation check again ", operation)   # mod
             roomID = int( self.panel_status[panelIdx][1].strip('R') )
             self.roomMonitor[roomID].reviewStats(operation)
 
@@ -859,7 +875,7 @@ if __name__ == "__main__":
     # Standard Commands Available to All Panels
     STDCMDS = {
     "reboot"    : "sudo reboot",
-    "status"    : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/connectionTest.py",
+    "status"    : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status5.py",
     "normcon"   : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/consys4.3.py",
     "normbpc"   : "DISPLAY=:0 python pd3d/csec/repos/ControlSystem/Software/Python/consys/consys4.3bpc.py -s 0 -st 30 -lp 85 -hp 145",
     }
@@ -867,8 +883,8 @@ if __name__ == "__main__":
     # ---------------------------------------------------- #
     # Room 1 Shell Command Key :
     roomKey1 = {
-    "int1" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/status5.py",
-    "int2" : "python pd3d/csec/repos/ControlSystem/Software/Python/consys/aokTest.py"
+    "int1" : "DISPLAY=:0 python pd3d/csec/repos/ControlSystem/Software/Python/consys/consys5.py",
+    "int2" : "DISPLAY=:0 python pd3d/csec/repos/ControlSystem/Software/Python/consys/consys5.py -s 1 -st 10"
     }
 
     # Room 2 Shell Command Key :
