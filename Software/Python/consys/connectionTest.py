@@ -1,0 +1,5 @@
+"""
+Connection Test
+"""
+
+print( "AOK" )
