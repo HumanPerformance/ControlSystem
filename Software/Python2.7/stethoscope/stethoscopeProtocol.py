@@ -18,7 +18,8 @@ Changes:-
 
 # Import Libraries and/or Modules
 from    configurationProtocol       import  *
-from    bluetoothProtocol_teensy32  import  *
+#from    bluetoothProtocol_teensy32  import  *
+from    stethoscopeBTProtocol  import  *
 from    timeStamp                   import  fullStamp
 import  stethoscopeDefinitions      as      definitions
 import  os, sys, serial

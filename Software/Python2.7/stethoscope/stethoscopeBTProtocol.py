@@ -19,7 +19,7 @@ import bluetooth
         >> sudp apt-get install python-bluez
 """
 import  os, time, serial
-import  protocolDefinitions as definitions
+import  stethoscopeDefinitions as definitions
 from    timeStamp           import *
 
 # Find RF Device
