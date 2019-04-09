@@ -18,10 +18,11 @@ device = "stethoscope"
 homeDir, pythonDir, deviceDir = definePaths(device)
 response = addPaths(pythonDir)
 
-import  stethoscopeDefinitions       as     definitions
-from    os.path                      import expanduser
-from    bluetoothProtocol_teensy32   import *
-from    stethoscopeProtocol          import *
+import  stethoscopeDefinitions          as     definitions
+from    os.path                         import expanduser
+#from    bluetoothProtocol_teensy32   import *
+from    stethoscopeBTProtocol           import *
+from    stethoscopeProtocol             import *
 
 # Demo Operation
 print fullStamp() + " Connecting to the Stethoscope"
