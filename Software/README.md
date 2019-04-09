@@ -7,7 +7,7 @@ The following links will guide you directly to the device-specific sub-directory
 * Smart Holder (for AMDs)
 * Control System
 * Augmented Video Scopes (Otoscope/Ophthalmoscope)
-* [Augmented Stethoscope](https://github.com/pd3d/ControlSystem/Software/Python2.7/stethoscope)
+* [Augmented Stethoscope](https://github.com/pd3d/ControlSystem/tree/stethoscope/Software/Python2.7/stethoscope)
 * Augmented Blood Pressure Cuff
 * Augmented Device Tracking System
 * Augmented Thermometer
