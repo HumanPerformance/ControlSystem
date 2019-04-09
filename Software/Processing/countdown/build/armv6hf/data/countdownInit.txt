@@ -1,3 +1,0 @@
-StartTime:1
-WarningTime:0
-0
