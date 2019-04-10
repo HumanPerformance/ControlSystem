@@ -15,3 +15,7 @@ More than a suite of devices, our team has developed an ecosystem of nine (9) AM
 * Augmented Device Tracking System
 * Augmented Thermometer
 * Augmented Pulse Oximeter
+
+
+## References
+1.  **Stubbs, J., Lobo F., Stubbs, K.**, Leblanc, K. (2018) _Medical training and performance assessment instruments, methods, and systems_.  Assigned to NATIONAL BOARD OF MEDICAL EXAMINERS, EDUCATIONAL COMMISSION FOR FOREIGN MEDICAL GRADUATES. U.S. Patent Office Application Number [15/846,438](https://patents.google.com/patent/US20180174488A1/en), Publication Number [US20180174488A1](https://patents.google.com/patent/US20180174488A1/en). Published on June 21, 2018.
