@@ -10,7 +10,7 @@ More than a suite of devices, our team has developed an ecosystem of nine (9) AM
 * Smart Holder (for AMDs)
 * Control System
 * Augmented Video Scopes (Otoscope/Ophthalmoscope)
-* Augmented Stethoscope
+* [Augmented Stethoscope](https://github.com/pd3d/ControlSystem/tree/master/Software/Python2.7/stethoscope)
 * Augmented Blood Pressure Cuff
 * Augmented Device Tracking System
 * Augmented Thermometer
