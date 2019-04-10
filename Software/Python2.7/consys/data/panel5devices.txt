@@ -1,0 +1,7 @@
+# devices associated with panel 5
+# device number, device name, device BT MAC address
+1,stethoscope,00:06:66:d0:e4:37
+2,otoscope,00:06:66:da:08:1d
+3,ophthalmoscope,00:06:66:7d:80:d0
+4,thermometer,0
+5,pulseoximeter,0

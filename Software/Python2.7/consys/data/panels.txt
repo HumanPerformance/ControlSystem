@@ -1,0 +1,13 @@
+# augmented device panel information
+# panel number, ethernet MAC address
+1,b8:27:eb:25:05:91
+2,b8:27:eb:6f:f3:a9
+3,b8:27:eb:cb:ce:37
+4,b8:27:eb:b3:81:17
+5,b8:27:eb:77:b5:2c
+6,b8:27:eb:c4:a2:f8
+7,b8:27:eb:ee:5f:7a
+8,b8:27:eb:0e:23:93
+9,b8:27:eb:3e:26:13
+10,b8:27:eb:fe:5e:84
+
